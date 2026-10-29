@@ -1492,18 +1492,59 @@ window.VFMotion = window.VFMotion || (() => {
   document.addEventListener('vf:sound', e => play(e.detail?.name, e.detail));
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => set(on, true)); else set(on, true);
 
-  // Фон: тихое тиканье часов («тик-так» из набора звуков), пока включены звук и фон. Запоминается отдельно от звука.
-  let ambOn = false, ambTimer = null, tock = false;
+  // Фон: ход механических часов, пока включены звук и фон. Запоминается отдельно от звука.
+  // Это не «тик-так» из набора звуков, а синтез хода калибра 28 800 полуколебаний в час (8 ударов в секунду): на каждый удар
+  // два коротких щелчка анкерной вилки (импульс и «падение»), металлический звон тонких деталей и глухой отклик корпуса.
+  // Удары чуть различаются по высоте, поэтому слышно не «тик-так», а ровный сухой ход. Файлов не нужно, буфер считается один раз.
+  const BPS = 8;
+  let ambOn = false, ambTimer = null, beatBufs = null, nextBeat = 0, beatN = 0;
   try { ambOn = localStorage.getItem('vf-ambient') === 'on'; } catch {}
-  const ambTick = () => { if (!on || !ambOn || document.hidden) return; play('tick', { volume: 0.14, rate: tock ? 0.82 : 1 }); tock = !tock; };
+  function makeBeats() {
+    const a = ac(), sr = a.sampleRate, len = Math.round(sr * 0.07);
+    const noise = () => Math.random() * 2 - 1;
+    const click = (out, at, amp, f0, q, tau) => {                 // шумовой удар через резонатор: сухой щелчок с «цветом» f0
+      const th = 2 * Math.PI * f0 / sr, r = 1 - Math.PI * f0 / (q * sr), c1 = 2 * r * Math.cos(th), c2 = -r * r;
+      let y1 = 0, y2 = 0;
+      for (let i = Math.round(at * sr); i < out.length; i++) {
+        const t = (i / sr) - at, x = noise() * Math.exp(-t / tau);
+        const y = c1 * y1 + c2 * y2 + x * 0.05; y2 = y1; y1 = y; out[i] += y * amp;
+      }
+    };
+    const ring = (out, at, amp, f, tau) => { for (let i = Math.round(at * sr); i < out.length; i++) { const t = i / sr - at; out[i] += amp * Math.sin(2 * Math.PI * f * t) * Math.exp(-t / tau); } };
+    return [1, 0.93].map((k, n) => {                              // два чуть разных удара: «правый» и «левый» ход вилки
+      const d = new Float32Array(len);
+      click(d, 0, n ? 0.8 : 1, 4300 * k, 2.2, 0.0011);              // импульс: палета входит в зуб
+      click(d, 0.0085 + n * 0.0012, n ? 0.42 : 0.55, 2900 * k, 1.8, 0.0014);   // «падение»: зуб падает на палету
+      ring(d, 0.0003, 0.07, 6100 * k, 0.0045); ring(d, 0.0003, 0.045, 9300 * k, 0.003);   // звон тонких деталей
+      ring(d, 0.0006, 0.1, 1450 * k, 0.012);                        // отклик платины
+      ring(d, 0.0007, 0.16, 210 * k, 0.009);                        // глухой удар корпуса
+      let peak = 0; for (const v of d) peak = Math.max(peak, Math.abs(v));
+      for (let i = 0; i < d.length; i++) d[i] = Math.tanh(d[i] / peak * 1.1) * 0.8;
+      const b = a.createBuffer(1, len, sr); b.copyToChannel(d, 0); return b;
+    });
+  }
+  function ambPump() {
+    if (!ambOn) return;
+    if (!on || document.hidden || !ctx || ctx.state !== 'running') { nextBeat = 0; return; }
+    if (!beatBufs) beatBufs = makeBeats();
+    const t = ctx.currentTime;
+    if (!nextBeat || nextBeat < t - 0.05) nextBeat = t + 0.03;
+    while (nextBeat < t + 0.25) {                                    // планируем на 250 мс вперёд: ход ровный, даже если вкладка тормозит
+      const src = ctx.createBufferSource(), g = ctx.createGain();
+      src.buffer = beatBufs[beatN++ & 1]; g.gain.value = 0.34 * (0.94 + Math.random() * 0.1);
+      src.connect(g).connect(ctx.destination); src.start(nextBeat);
+      nextBeat += 1 / BPS;
+    }
+  }
   function ambient(state) {
     ambOn = !!state;
     try { localStorage.setItem('vf-ambient', ambOn ? 'on' : 'off'); } catch {}
-    clearInterval(ambTimer); if (ambOn) ambTimer = setInterval(ambTick, 1000);
+    clearInterval(ambTimer); nextBeat = 0;
+    if (ambOn) { if (on && !ctx) ac(); ambTimer = setInterval(ambPump, 80); }
   }
-  if (ambOn) ambTimer = setInterval(ambTick, 1000);
+  if (ambOn) ambTimer = setInterval(ambPump, 80);
 
-  window.VFSound = { play, set, ambient, get enabled() { return on; }, get ambientOn() { return ambOn; } };
+  window.VFSound = { play, set, ambient, beats: () => (beatBufs ||= makeBeats()), get enabled() { return on; }, get ambientOn() { return ambOn; } };
 })();
 
 </script>

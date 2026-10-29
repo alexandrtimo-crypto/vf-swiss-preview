@@ -39,7 +39,8 @@
 .d-kicker { font: 600 6.2pt/1.2 Montserrat, sans-serif; letter-spacing: .22em; white-space: nowrap; text-transform: uppercase; color: var(--gold-hi); }
 .d-name { font: 600 21pt/1.05 Cinzel, Georgia, serif; letter-spacing: .06em; color: #f1e3bf; margin: 2mm 0 1.6mm; }
 .d-tag { font: 500 6.2pt/1.2 Montserrat, sans-serif; letter-spacing: .18em; white-space: nowrap; text-transform: uppercase; color: #cdbb93; }
-.d-contacts { font-size: 7.6pt; line-height: 1.6; text-align: right; color: #eadfc6; }
+.d-contacts { font-size: 7.4pt; line-height: 1.55; text-align: right; color: #eadfc6; max-width: 64mm; }
+.d-legal { margin-bottom: .8mm; color: var(--gold-hi); font-weight: 500; }
 .d-qr { width: 22mm; height: 22mm; padding: 1.4mm; background: #fff; border-radius: 1.6mm; }
 .d-qr img, .d-qr canvas { width: 100% !important; height: 100% !important; display: block; }
 
@@ -97,11 +98,13 @@
 .d-note p { margin: 0; font-size: 7.8pt; color: #3e392f; }
 .d-confirm { margin: 2mm 14mm 0; font-size: 7.8pt; color: #3e392f; }
 
-.d-signs { display: grid; grid-template-columns: 1fr 1fr; gap: 12mm; padding: 0 14mm; margin-top: auto; }
-.d-signs > div { position: relative; padding-top: 14mm; }
-.d-line { display: block; border-bottom: .3mm solid var(--ink); }
-.d-signs small { display: block; margin-top: 1.2mm; font-size: 6.8pt; color: var(--muted); }
-.d-signs em { position: absolute; right: 0; top: 3mm; font-style: normal; font-size: 6.6pt; color: #b9b1a1; width: 18mm; height: 18mm; border: .25mm dashed #cfc6b3; border-radius: 50%; display: grid; place-content: center; }
+.d-signs { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12mm; padding: 0 14mm; margin-top: auto; align-items: end; }
+.d-sg { display: flex; align-items: flex-end; gap: 2.4mm; padding-top: 8mm; }
+.d-sg span { flex: none; font-size: 7.6pt; color: var(--muted); white-space: nowrap; }
+.d-sg b { flex: 1; min-width: 0; min-height: 5mm; padding: 0 1mm .4mm; border-bottom: .3mm solid var(--ink); font: 500 8.8pt/1.2 Montserrat, Arial, sans-serif; overflow-wrap: anywhere; }
+.d-sg--wide { grid-column: 1 / -1; }
+.d-mp { display: grid; justify-items: end; padding-top: 3mm; }
+.d-mp em { font-style: normal; font-size: 6.6pt; color: #b9b1a1; width: 20mm; height: 20mm; border: .25mm dashed #cfc6b3; border-radius: 50%; display: grid; place-content: center; }
 
 .d-foot { position: absolute; left: 0; right: 0; bottom: 5mm; text-align: center; font: 500 6.4pt/1 Montserrat, sans-serif; letter-spacing: .4em; text-transform: uppercase; color: var(--gold); }
 .d-foot::before, .d-foot::after { content: ''; display: inline-block; vertical-align: middle; width: 30mm; height: .25mm; background: var(--gold); margin: 0 4mm; }
@@ -138,3 +141,60 @@
 .vcard__code { margin-top: 2.4mm; font: 400 12pt/1 Forum, Georgia, serif; letter-spacing: .12em; color: #d9bb72; }
 .vcard__qr { width: 23mm; height: 23mm; padding: 1.4mm; background: #fff; border-radius: 1.2mm; }
 .vcard__qr img, .vcard__qr canvas { width: 100% !important; height: 100% !important; display: block; }
+
+/* Акт приёма: пункты осмотра с галочками */
+.d-grid--4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.d-cb { display: inline-flex; align-items: center; gap: 1.3mm; margin-right: 3.2mm; white-space: nowrap; font-size: 7.8pt; line-height: 1.5; }
+.d-cb i { flex: none; position: relative; width: 3.1mm; height: 3.1mm; border: .3mm solid var(--ink); border-radius: .5mm; background: #fff; }
+.d-cb.is-on { font-weight: 600; }
+.d-cb.is-on i { background: var(--ink); }
+.d-cb.is-on i::after { content: ''; position: absolute; left: .75mm; top: .1mm; width: .8mm; height: 1.7mm; border: solid #fff; border-width: 0 .35mm .35mm 0; transform: rotate(40deg); }
+.d-owner { padding: 1mm 14mm 0; display: flex; gap: 8mm; flex-wrap: wrap; }
+.d-line-cb { margin-top: 2.4mm; display: flex; flex-wrap: wrap; align-items: center; }
+.d-line-cb b { margin-right: 3mm; font-weight: 600; font-size: 7.8pt; }
+.d-sec--insp { padding-top: 1.6mm; }
+.d-insp { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0; padding: .9mm 0; border-bottom: .2mm solid var(--rule); }
+.d-insp b { flex: none; width: 29mm; font-weight: 600; font-size: 7.8pt; }
+.d-insp .d-cb { margin-right: 3mm; }
+.d-text--s { margin: 1.6mm 0 0; font-size: 7.8pt; }
+.is-bw .d-cb i { border-color: #000; }
+.is-bw .d-cb.is-on i { background: #000; }
+.is-bw .d-legal { color: #000; }
+
+/* Плотная вёрстка (акт приёма и акт работ): всё вместе с осмотром, фото и подписями помещается на A4 */
+.is-compact { padding-bottom: 9mm; }
+.is-compact .d-head { min-height: 31mm; padding: 3.6mm 14mm; }
+.is-compact .d-emblem img { width: 26mm; }
+.is-compact .d-title { padding: 3.6mm 14mm 0; }
+.is-compact .d-title h1 { font-size: 14.5pt; }
+.is-compact .d-title p { margin-top: .8mm; }
+.is-compact .d-title::after { margin-top: 1.8mm; }
+.is-compact .d-sec { padding: 1.5mm 14mm; }
+.d-client { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; padding: 2.4mm 14mm 1mm; }
+.d-client p { margin: 0; line-height: 1.55; }
+.d-client .d-owner { padding: 4.6mm 0 0; display: grid; gap: 1.2mm; align-content: start; }
+.d-client .d-owner span { font-size: 7.8pt; color: var(--muted); margin-top: .4mm; }
+.is-intake .d-insp { padding: .5mm 0; }
+.is-intake .d-photos { gap: 2.4mm; }
+.is-intake .d-photos img { height: 19mm; }
+.is-compact .d-note { padding: 1.6mm 14mm 0; }
+.is-compact .d-note p { font-size: 7.4pt; line-height: 1.38; }
+.is-compact .d-note p + p { margin-top: .8mm; }
+.is-compact .d-cab { margin: 1.4mm 14mm 0; padding: 1.2mm 3mm; grid-template-columns: 13mm 1fr; }
+.is-compact .d-qr--cab { width: 13mm; height: 13mm; }
+.is-compact .d-cab p { font-size: 6.8pt; }
+.is-compact .d-sg { padding-top: 5mm; }
+.is-compact .d-mp { padding-top: 1mm; }
+.is-compact .d-mp em { width: 16mm; height: 16mm; }
+.is-intake .d-line-cb { margin-top: 1.6mm; }
+
+.is-compact .d-warranty { margin: 2mm 14mm; padding: 2.4mm 4mm; grid-template-columns: 19mm 1fr; }
+.is-compact .d-warranty__badge { width: 17mm; height: 17mm; }
+.is-compact .d-warranty__badge b { font-size: 14pt; }
+.is-compact .d-confirm { margin: 1.4mm 14mm 0; font-size: 7.2pt; }
+.is-compact .d-works td { padding: 1mm 1.6mm; }
+.is-compact .d-total { margin-top: 1.4mm; }
+.is-compact .d-grid { gap: 1.4mm 6mm; }
+.is-intake .d-cb { font-size: 7.4pt; margin-right: 2.6mm; }
+.is-intake .d-photos img { height: 16mm; }
+.is-intake .d-insp b { font-size: 7.4pt; width: 33mm; }

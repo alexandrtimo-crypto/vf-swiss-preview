@@ -38,6 +38,8 @@
   const set = (obj, path, v) => { const ks = path.split('.'); const last = ks.pop(); ks.reduce((o, k) => (o[k] ??= {}), obj)[last] = v; };
   const total = o => o.works.reduce((s, r) => s + (Number(r.qty) || 1) * (Number(r.price) || 0), 0);
   const watchTitle = o => [o.watch.brand, o.watch.model].filter(Boolean).join(' ') || 'Часы не указаны';
+  // заказы, созданные до появления отчества и пунктов осмотра, дополняем пустыми полями
+  const norm = o => { if (!o) return o; o.client = { patronymic: '', email: '', owner: '', ...o.client }; o.inspect ??= {}; return o; };
   const toLocalDate = iso => (iso ? iso.slice(0, 10) : '');
 
   // ---------- Сохранение ----------
@@ -56,19 +58,19 @@
   async function renderHome() {
     const orders = await Store.listOrders();
     view.innerHTML = `
-      <button class="new-order" id="new"><span class="new-order__plus">+</span><span><b>Принять часы</b><span>Новая карточка заказа и квитанция</span></span></button>
+      <button class="new-order" id="new"><span class="new-order__plus">+</span><span><b>Принять часы</b><span>Новая карточка заказа и акт приёма</span></span></button>
       <a class="btn btn--wide cabs-link" href="#/cabinets">Карточки-кабинеты клиентов</a>
       ${orders.length ? '<input class="search" id="q" type="search" placeholder="Поиск: номер, имя, телефон, марка, карточка">' : ''}
       <div class="orders" id="list"></div>`;
     const list = document.getElementById('list');
     const draw = q => {
       q = (q || '').toLowerCase().trim();
-      const items = orders.filter(o => !q || [o.num, o.client.name, o.client.phone, o.watch.brand, o.watch.model, o.watch.serial, o.cabinet?.code].join(' ').toLowerCase().includes(q));
+      const items = orders.filter(o => !q || [o.num, Docs.fullName(o.client), o.client.phone, o.watch.brand, o.watch.model, o.watch.serial, o.cabinet?.code].join(' ').toLowerCase().includes(q));
       list.innerHTML = items.length ? items.map(o => `
         <a class="order-card" href="#/order/${o.id}">
           <span class="order-card__num">${esc(o.num)} · ${Docs.dmy(new Date(o.created))}${o.cabinet ? ` · <span class="nowrap">${esc(o.cabinet.code)}</span>` : ''}</span>
           <span class="chip chip--${o.status}">${STATUS[o.status]}</span>
-          <span class="order-card__who">${esc(o.client.name) || 'Клиент без имени'}</span><span></span>
+          <span class="order-card__who">${esc(Docs.fullName(o.client)) || 'Клиент без имени'}</span><span></span>
           <span class="order-card__what">${esc(watchTitle(o))}${o.works.length ? ` · ${total(o).toLocaleString('ru-RU')} ₽` : ''}</span>
         </a>`).join('')
         : `<div class="empty">${orders.length ? 'Ничего не найдено' : 'Заказов пока нет. Нажмите «Принять часы», когда клиент принесёт часы.'}</div>`;
@@ -84,6 +86,13 @@
   const area = (path, label, ph = '', cls = 'f--wide') =>
     `<label class="f ${cls}"><span>${label}</span><textarea data-path="${path}" placeholder="${esc(ph)}">${esc(get(order, path))}</textarea></label>`;
 
+  // Выбор галочками: один вариант (single) или несколько; «без дефектов» исключает остальные
+  const chip = (on, text, attrs) => `<button type="button" class="chip-opt${on ? ' is-on' : ''}" aria-pressed="${on}" ${attrs}>${esc(text)}</button>`;
+  const inspectGroup = g => {
+    const cur = order.inspect[g.id] || [];
+    return `<div class="insp" data-g="${g.id}"><h4>${g.label}</h4><div class="chips">${g.opts.map((t, i) => chip(cur.includes(t), t, `data-i="${i}"`)).join('')}</div></div>`;
+  };
+
   function workRow(r, i) {
     return `<div class="work" data-i="${i}">
       <label class="f f--name"><span>Работа или деталь</span><input data-w="name" value="${esc(r.name)}" placeholder="Например, замена стекла"></label>
@@ -95,7 +104,7 @@
   }
 
   async function renderOrder(id) {
-    order = await Store.getOrder(id);
+    order = norm(await Store.getOrder(id));
     if (!order) { location.hash = '#/'; return; }
     const stepIdx = STEPS.findIndex(s => s.id === order.status);
     const wm = order.warrantyMonths ?? settings.warrantyMonths;
@@ -108,8 +117,12 @@
       <section class="card cab" id="cab">${cabinetBlock()}</section>
 
       <section class="card"><h3>Клиент</h3><div class="fields">
-        ${inp('client.name', 'Имя и фамилия', 'autocomplete="off" placeholder="Иван Петров"')}
+        ${inp('client.name', 'Фамилия и имя', 'autocomplete="off" placeholder="Петров Иван"')}
+        ${inp('client.patronymic', 'Отчество', 'autocomplete="off" placeholder="Сергеевич"')}
         ${inp('client.phone', 'Телефон', 'type="tel" inputmode="tel" placeholder="+7 (___) ___-__-__"')}
+        ${inp('client.email', 'Email', 'type="email" inputmode="email" autocomplete="off" placeholder="необязательно"')}
+        <div class="f f--wide"><span>Кто сдаёт часы</span><div class="chips" id="owner">
+          ${chip(order.client.owner === 'owner', 'Владелец часов', 'data-v="owner"')}${chip(order.client.owner === 'other', 'Не являюсь владельцем часов', 'data-v="other"')}</div></div>
         <div class="f f--wide"><span>Как связаться</span><div class="seg" id="contact">
           <button type="button" data-v="call" class="${order.client.contact !== 'telegram' ? 'is-on' : ''}">Звонок</button>
           <button type="button" data-v="telegram" class="${order.client.contact === 'telegram' ? 'is-on' : ''}">Telegram</button></div></div>
@@ -119,18 +132,22 @@
         ${inp('watch.brand', 'Марка', 'list="brands" placeholder="Rolex"')}
         ${inp('watch.model', 'Модель', 'placeholder="Submariner Date"')}
         ${inp('watch.ref', 'Референс', 'placeholder="126610LN"')}
-        ${inp('watch.serial', 'Номер корпуса', 'placeholder="Серийный номер"')}
-        <label class="f"><span>Механизм</span><select data-path="watch.movement">
-          ${['', 'Механика, ручной завод', 'Механика, автоподзавод', 'Кварц', 'Хронограф'].map(v => `<option${order.watch.movement === v ? ' selected' : ''}>${v}</option>`).join('')}
-        </select></label>
+        ${inp('watch.serial', 'Серийный номер', 'placeholder="Номер корпуса"')}
+        <div class="f f--wide"><span>Тип механизма</span><div class="chips" id="movement">
+          ${Docs.MOVEMENTS.map(t => chip(order.watch.movement === t || (t === 'иной' && order.watch.movement && !Docs.MOVEMENTS.includes(order.watch.movement)), t, `data-v="${t}"`)).join('')}</div></div>
         ${inp('watch.material', 'Материал корпуса / браслета', 'placeholder="Сталь, браслет Oyster"')}
         ${inp('watch.kit', 'Комплектность', 'placeholder="Часы, коробка, документы, 2 звена"', 'f--wide')}
-        ${area('watch.condition', 'Внешний вид при приёмке', 'Царапины на безеле, потёртости браслета, стекло без сколов, часы идут / стоят')}
-        <div class="f f--wide"><span>Фото при приёмке <small>(попадут в квитанцию, до 4)</small></span>
+        
+        <div class="f f--wide"><span>Фото при приёмке <small>(попадут в акт приёма, до 4)</small></span>
           <div class="photos" id="photos">${order.photos.map((p, i) => `<div class="photo"><img src="${p}" alt="Фото ${i + 1}"><button data-ph="${i}" aria-label="Удалить фото">✕</button></div>`).join('')}
             <label class="photo-add">＋<br>Фото<input type="file" accept="image/*" capture="environment" multiple id="photoIn"></label></div>
         </div>
       </div></section>
+
+      <section class="card" id="inspect"><h3>Осмотр при приёме <small>отмечайте пальцем, как в бумажном акте</small></h3>
+        ${Docs.INSPECT.map(inspectGroup).join('')}
+        ${area('watch.condition', 'Примечание к осмотру', 'Если нужно, опишите подробнее')}
+      </section>
 
       <section class="card"><h3>Неисправность и оценка</h3><div class="fields">
         ${area('issue', 'Со слов клиента', 'Остановились после падения, отстают на 2 минуты в сутки')}
@@ -155,7 +172,7 @@
       <datalist id="brands">${['Rolex', 'Patek Philippe', 'Audemars Piguet', 'Vacheron Constantin', 'Breguet', 'Cartier', 'Breitling', 'Franck Muller', 'Blancpain', 'Omega', 'IWC', 'Jaeger-LeCoultre', 'Panerai', 'Tudor', 'TAG Heuer', 'Hublot', 'Longines'].map(b => `<option value="${b}">`).join('')}</datalist>
 
       <nav class="dock" aria-label="Документы">
-        <a class="btn" href="#/doc/${order.id}/intake">Квитанция</a>
+        <a class="btn" href="#/doc/${order.id}/intake">Акт приёма</a>
         <a class="btn btn--gold" href="#/doc/${order.id}/act">Акт работ</a>
       </nav>`;
     bindOrder();
@@ -167,7 +184,7 @@
     const c = order.cabinet;
     if (c) return `<h3>Кабинет клиента</h3>
       <div class="cab__row"><span class="cab__code">${esc(c.code)}</span>
-        <span class="cab__text">Клиент видит статус ремонта, квитанцию, акт и гарантию по QR на своей карточке.</span>
+        <span class="cab__text">Клиент видит статус ремонта, акт приёма, акт работ и гарантию по QR на своей карточке.</span>
         <a class="btn" href="${esc(cabinetUrl(c.token))}" target="_blank" rel="noopener">Открыть кабинет</a></div>`;
     return `<h3>Кабинет клиента</h3>
       <p class="hint">Выдайте клиенту карточку с QR и отсканируйте её — заказ появится в его кабинете. Постоянный клиент — отсканируйте его карточку, данные подставятся сами.</p>
@@ -205,6 +222,29 @@
         set(order, el.dataset.path, el.value);
         scheduleSave();
       });
+    });
+
+    view.querySelector('#owner').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      order.client.owner = order.client.owner === b.dataset.v ? '' : b.dataset.v;
+      view.querySelectorAll('#owner .chip-opt').forEach(x => { const on = x.dataset.v === order.client.owner; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', on); });
+      scheduleSave();
+    });
+    view.querySelector('#movement').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      order.watch.movement = order.watch.movement === b.dataset.v ? '' : b.dataset.v;
+      view.querySelectorAll('#movement .chip-opt').forEach(x => { const on = x.dataset.v === order.watch.movement; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', on); });
+      scheduleSave();
+    });
+    view.querySelector('#inspect').addEventListener('click', e => {
+      const b = e.target.closest('.chip-opt'); if (!b) return;
+      const grp = Docs.INSPECT.find(g => g.id === b.closest('.insp').dataset.g), text = grp.opts[+b.dataset.i];
+      let cur = order.inspect[grp.id] || [];
+      if (cur.includes(text)) cur = cur.filter(x => x !== text);
+      else cur = text === Docs.OK ? [Docs.OK] : [...cur.filter(x => x !== Docs.OK), text];
+      order.inspect[grp.id] = cur;
+      b.closest('.chips').querySelectorAll('.chip-opt').forEach((x, i) => { const on = cur.includes(grp.opts[i]); x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', on); });
+      scheduleSave();
     });
 
     view.querySelector('#contact').addEventListener('click', e => {
@@ -276,7 +316,7 @@
 
   // ---------- Документ ----------
   async function renderDoc(id, type) {
-    order = await Store.getOrder(id);
+    order = norm(await Store.getOrder(id));
     if (!order || !Docs.TYPES[type]) { location.hash = '#/'; return; }
     const p = prefs();
     let mode = p.mode || 'color', copies = p.copies || 1;
@@ -547,7 +587,7 @@
       <div class="order-head"><h2>Настройки</h2><a class="saved" href="#/">← к заказам</a></div>
       <section class="card"><h3>Шапка документов</h3><div class="fields">
         ${row('company', 'Название')}
-        ${row('master', 'Мастер (для подписи)', 'placeholder="Владислав …"')}
+        ${row('master', 'Подпись исполнителя: «ИП …»', 'placeholder="Голосов В. А."')}
         ${box('legal', 'Реквизиты: ИП/ООО, ИНН, ОГРН')}
         ${row('address', 'Адрес', '', 'f--wide')}
         ${row('phone', 'Телефон')}
@@ -557,7 +597,8 @@
       <section class="card"><h3>Тексты <small>черновик — проверить у юриста</small></h3><div class="fields">
         ${row('warrantyMonths', 'Гарантия по умолчанию, месяцев', 'type="number" min="0" max="60"')}
         ${box('warrantyText', 'Условия гарантии (в акте)')}
-        ${box('intakeText', 'Условия приёма (в квитанции)')}
+        ${box('diagText', 'Дополнительная информация (в акте приёма)')}
+        ${box('photoText', 'Про фото-видео фиксацию (в акте приёма)')}
       </div></section>
       <section class="card"><h3>Резервная копия</h3>
         <p class="hint">Заказы хранятся только в этом браузере. Раз в неделю сохраняйте копию в файл — её можно открыть на другом устройстве.</p>
@@ -599,6 +640,10 @@
     else { order = null; await renderHome(); }
     window.scrollTo(0, 0);
   }
+  // Текущее время в шапке (для актов и звонков клиентам)
+  const clock = document.getElementById('clock');
+  const tick = () => { const d = new Date(); clock.textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; clock.dateTime = d.toISOString(); };
+  tick(); setInterval(tick, 15000);
   window.addEventListener('hashchange', route);
   route();
 })();

@@ -16,6 +16,8 @@ window.Store = (() => {
   const DEFAULT_SETTINGS = Docs.DEFAULTS;
 
   const me = () => api('GET', 'me');
+  // Бесплатный хостинг усыпляет сервис после 15 минут тишины и сбрасывает базу: пока страница открыта и видна, раз в 4 минуты будим его
+  setInterval(() => { if (!document.hidden) fetch('/api/me', { credentials: 'same-origin' }).catch(() => {}); }, 240000);
   const login = password => api('POST', 'login', { password });
 
   const getSettings = async () => ({ ...DEFAULT_SETTINGS, ...(await api('GET', 'settings')) });
@@ -35,8 +37,9 @@ window.Store = (() => {
       created: now,
       status: 'priem',
       cabinet: null,         // { code: 'K-0001', token } после привязки карточки
-      client: { name: '', phone: '', contact: 'call' },
+      client: { name: '', patronymic: '', phone: '', email: '', owner: '', contact: 'call' },
       watch: { brand: '', model: '', ref: '', serial: '', movement: '', material: '', kit: '', condition: '' },
+      inspect: {},        // пункты осмотра: { corpus: ['царапины/вмятины'], … }
       photos: [],
       issue: '',
       estimate: '',

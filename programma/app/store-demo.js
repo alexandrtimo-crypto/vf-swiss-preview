@@ -1,7 +1,7 @@
 // Демо-хранилище для показа без сервера (GitHub Pages): тот же интерфейс, что у store.js, данные — в localStorage браузера.
 // Приложение мастера и кабинет клиента лежат на одном адресе и видят одну базу: изменения в заказе сразу видны в кабинете.
 window.Store = (() => {
-  const KEY = 'vf-demo-v1';
+  const KEY = 'vf-demo-v2';
   const TOTAL = 500;
   const DAY = 864e5;
   const ago = d => new Date(Date.now() - d * DAY).toISOString();
@@ -10,30 +10,31 @@ window.Store = (() => {
   const code = n => `K-${String(n).padStart(4, '0')}`;
   const tokenOf = n => `demo${String(n).padStart(4, '0')}`;
 
+  const OK = 'без дефектов';
   function seed() {
     const order = (num, created, status, cab, client, watch, extra) => ({
       id: 'demo-' + num, num: `VF-2026-${String(num).padStart(4, '0')}`, created: ago(created), status,
       cabinet: cab ? { code: code(cab), token: tokenOf(cab) } : null,
-      client, watch, photos: [], issue: '', estimate: '', due: '', works: [], warrantyMonths: null, issued: '', conditionOut: '',
+      client, watch, inspect: {}, photos: [], issue: '', estimate: '', due: '', works: [], warrantyMonths: null, issued: '', conditionOut: '',
       history: [{ at: ago(created), status: 'priem' }], ...extra,
     });
-    const andrey = { name: 'Андрей Петров', phone: '+7 (916) 123-45-67', contact: 'tg' };
-    const maria = { name: 'Мария Соколова', phone: '+7 (925) 765-43-21', contact: 'call' };
+    const andrey = { name: 'Петров Андрей', patronymic: 'Сергеевич', phone: '+7 (916) 123-45-67', email: 'a.petrov@example.com', owner: 'owner', contact: 'telegram' };
+    const maria = { name: 'Соколова Мария', patronymic: 'Игоревна', phone: '+7 (925) 765-43-21', email: '', owner: 'owner', contact: 'call' };
     const orders = [
       order(1, 24, 'done', 1, andrey,
-        { brand: 'Rolex', model: 'Datejust 41', ref: '126333', serial: '7K2…', movement: 'Автоподзавод, кал. 3235', material: 'Сталь и жёлтое золото', kit: 'Часы, коробка', condition: 'Потёртости на браслете, царапина на безеле в районе 2 часов' },
-        { photos: [photo('a'), photo('b')], issue: 'Отстают на 40 секунд в сутки, дата переключается не в полночь', estimate: '28 000 – 35 000 ₽', due: ahead(-10),
+        { brand: 'Rolex', model: 'Datejust 41', ref: '126333', serial: '7K2…', movement: 'автоподзавод', material: 'Сталь и жёлтое золото', kit: 'Часы, коробка', condition: 'Потёртости на браслете, царапина на безеле в районе 2 часов' },
+        { inspect: { corpus: ['царапины/вмятины'], glass: [OK], bezel: ['царапины/вмятины'], dial: [OK], strap: ['царапины и глубокие вмятины'], clasp: [OK], crown: [OK], work: ['часы отстают', 'часы не обслуживали больше 5 лет'] }, photos: [photo('a'), photo('b')], issue: 'Отстают на 40 секунд в сутки, дата переключается не в полночь', estimate: '28 000 – 35 000 ₽', due: ahead(-10),
           works: [{ name: 'Полное техническое обслуживание механизма', kind: 'work', qty: 1, price: 24000 },
                   { name: 'Комплект уплотнителей', kind: 'part', qty: 1, price: 3500 },
                   { name: 'Полировка корпуса и браслета', kind: 'work', qty: 1, price: 6500 }],
           issued: ago(9), conditionOut: 'Ход +2 с/сутки, водозащита проверена' }),
       order(2, 6, 'work', 1, andrey,
-        { brand: 'Omega', model: 'Speedmaster Professional', ref: '310.30.42.50.01.001', serial: '', movement: 'Ручной завод, кал. 3861', material: 'Сталь', kit: 'Часы', condition: 'Без видимых повреждений' },
-        { photos: [photo('c')], issue: 'Хронограф не сбрасывается в ноль', estimate: '15 000 – 22 000 ₽', due: ahead(8),
+        { brand: 'Omega', model: 'Speedmaster Professional', ref: '310.30.42.50.01.001', serial: '', movement: 'механический', material: 'Сталь', kit: 'Часы', condition: 'Без видимых повреждений' },
+        { inspect: { corpus: [OK], glass: [OK], bezel: [OK], dial: [OK], strap: [OK], clasp: [OK], crown: ['не работает кнопка'], work: ['часы не работают'] }, photos: [photo('c')], issue: 'Хронограф не сбрасывается в ноль', estimate: '15 000 – 22 000 ₽', due: ahead(8),
           works: [{ name: 'Ремонт узла хронографа', kind: 'work', qty: 1, price: 16000 }] }),
       order(3, 1, 'diag', 3, maria,
-        { brand: 'Cartier', model: 'Tank Française', ref: 'WSTA0005', serial: '', movement: 'Кварц', material: 'Сталь', kit: 'Часы, документы', condition: 'Мелкие волосяные царапины на стекле' },
-        { photos: [photo('d')], issue: 'Остановились, замена батарейки не помогла', estimate: 'после диагностики', due: ahead(5) }),
+        { brand: 'Cartier', model: 'Tank Française', ref: 'WSTA0005', serial: '', movement: 'кварцевый', material: 'Сталь', kit: 'Часы, документы', condition: 'Мелкие волосяные царапины на стекле' },
+        { inspect: { corpus: [OK], glass: ['царапины'], bezel: [OK], dial: [OK], strap: ['ремешок с трещинами'], clasp: [OK], crown: [OK], work: ['часы не работают', 'часы не обслуживали больше 5 лет'] }, photos: [photo('d')], issue: 'Остановились, замена батарейки не помогла', estimate: 'после диагностики', due: ahead(5) }),
     ];
     return { seq: 3, settings: {}, orders, bound: { [code(1)]: andrey, [code(3)]: maria } };
   }
@@ -67,8 +68,9 @@ window.Store = (() => {
     const o = {
       id: 'demo-' + Date.now().toString(36), num: `VF-${new Date().getFullYear()}-${String(++db.seq).padStart(4, '0')}`,
       created: now, status: 'priem', cabinet: null,
-      client: { name: '', phone: '', contact: 'call' },
+      client: { name: '', patronymic: '', phone: '', email: '', owner: '', contact: 'call' },
       watch: { brand: '', model: '', ref: '', serial: '', movement: '', material: '', kit: '', condition: '' },
+      inspect: {},
       photos: [], issue: '', estimate: '', due: '', works: [], warrantyMonths: null, issued: '', conditionOut: '',
       history: [{ at: now, status: 'priem' }],
     };

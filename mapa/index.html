@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru" data-sound-pack="zen">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b0f13">
+<title>Как пройти · VF swiss</title>
+<link rel="icon" href="../kit/icons/favicon.png">
+<link rel="stylesheet" href="../kit/fonts/fonts.css">
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<link rel="stylesheet" href="mapa.css">
+</head>
+<body>
+<div class="app" id="app" data-view="gl">
+  <div class="stage">
+    <div id="map" class="map" aria-hidden="true"></div>
+    <div id="svgmap" class="svgmap" hidden></div>
+    <div id="veil" class="veil" aria-hidden="true"></div>
+  </div>
+
+  <header class="bar">
+    <a class="bar__back" href="../" id="back">← Обзор</a>
+    <h1 class="bar__title">Как пройти</h1>
+    <div class="seg" id="base" role="group" aria-label="Вид карты"><button type="button" data-b="hybrid" aria-pressed="true">Гибрид</button><button type="button" data-b="scheme" aria-pressed="false">Схема</button></div>
+    <button class="bar__btn" id="replay" type="button" hidden aria-label="Повторить выход на улицу">↻</button>
+  </header>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+  <section class="sheet" id="sheet" aria-labelledby="sheet-h">
+    <div class="sheet__grip" aria-hidden="true"></div>
+    <h2 class="sheet__h" id="sheet-h">Пешком от метро</h2>
+    <p class="sheet__addr">Москва, ул. Петровка, 23/10, стр. 5</p>
+    <div class="opts" id="opts" role="radiogroup" aria-label="Варианты маршрута"></div>
+    <div class="route" id="route" hidden>
+      <div class="route__head"><b id="route-t"></b><span id="route-m"></span></div>
+      <p class="chk" id="chk"></p>
+      <ol class="steps" id="steps"></ol>
+      <div class="links" id="links"></div>
+    </div>
+    <p class="note" id="note"></p>
+    <div class="reach">
+      <span>Не нашли? Позвоните:</span>
+      <a href="tel:+79651716996">8 (965) 171-69-96</a>
+      <a href="https://t.me/VFswissboutique" target="_blank" rel="noopener">Telegram</a>
+    </div>
+  </section>
+</div>
+<script src="vendor/maplibre-gl.js"></script>
+<script src="vendor/earcut.min.js"></script>
+<script src="tex3d.js"></script>
+<script src="mode.js"></script>
+<script src="sound.js"></script>
+<script src="mapa.js"></script>
+</body>
+</html>

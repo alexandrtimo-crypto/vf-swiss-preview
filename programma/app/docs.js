@@ -2,11 +2,11 @@
 window.Docs = (() => {
   const DEFAULTS = {
     company: 'VF swiss',
-    legal: '',               // ИП / ООО, ИНН, ОГРН — заполняет владелец
-    address: 'Москва, ул. Петровка, 23/10 стр. 5',
-    phone: '8 (965) 171-69-96',
+    legal: 'ИП Голосов Владислав Александрович\nИНН 332913314576',   // из акта, который прислал владелец
+    address: 'г. Москва, ул. Петровка 23/10 стр. 5, этаж 3, офис 1',
+    phone: '+7 965 171 69 96',
     telegram: '@VFswissboutique',
-    master: '',
+    master: 'Голосов В. А.',
     warrantyMonths: 24,
     warrantyText:
       'Гарантия распространяется на выполненные работы и детали, установленные Исполнителем. ' +
@@ -14,12 +14,29 @@ window.Docs = (() => {
       'последствия попадания влаги при нарушении правил эксплуатации, естественный износ ремешков, браслетов и покрытий. ' +
       'Для гарантийного обращения сохраните этот акт.',
     intakeText:
-      'Стоимость и срок ремонта определяются после диагностики и согласовываются с Заказчиком до начала работ. ' +
-      'Диагностика — бесплатно. Изделие выдаётся по предъявлении этой квитанции. ' +
-      'Заказчик подтверждает, что описание внешнего вида и комплектности изделия указано верно.',
+      'Стоимость и срок ремонта определяются после диагностики и согласовываются с Клиентом до начала работ. ' +
+      'Изделие выдаётся по предъявлении акта приёма. ' +
+      'Клиент подтверждает, что описание внешнего вида и комплектности изделия указано верно.',
+    diagText:
+      'Часы принимаются для проведения диагностики и последующего технического обслуживания. Перечень работ, сроки, стоимость согласовываются ' +
+      'после оценки технического состояния изделия, оставленного на диагностику. Диагностика проводится в течение 3-х (трёх) рабочих дней.',
+    photoText: 'В момент приёма часов выполняется фото-видео фиксация, данные отправляются в мессенджер клиенту.',
     logo: '',
     publicUrl: '',
   };
+  // Пункты предварительного осмотра как в акте владельца (его образец: «Акт приёма-передачи часов на диагностику»)
+  const MOVEMENTS = ['механический', 'автоподзавод', 'кварцевый', 'иной'];
+  const INSPECT = [
+    { id: 'corpus', label: 'Корпус', opts: ['царапины/вмятины', 'был удар', 'корпус разбит', 'есть следы вскрытия', 'без дефектов'] },
+    { id: 'glass', label: 'Стекло', opts: ['царапины', 'сколы', 'разбито', 'трещины на стекле', 'утеряно', 'не оригинал', 'без дефектов'] },
+    { id: 'bezel', label: 'Безель/рант', opts: ['царапины/вмятины', 'стёрто покрытие PVD', 'утерян', 'не крутится', 'без дефектов'] },
+    { id: 'dial', label: 'Циферблат/стрелки', opts: ['царапины на стрелках', 'следы попадания влаги/коррозия', 'без дефектов'] },
+    { id: 'strap', label: 'Браслет/ремень', opts: ['разбито звено', 'царапины и глубокие вмятины', 'браслет сломан', 'ремешок с трещинами', 'отсутствует винт', 'ремень не оригинал', 'ремня/браслета нет', 'без дефектов'] },
+    { id: 'clasp', label: 'Клипса', opts: ['царапины/вмятины', 'стёрто покрытие', 'сломана', 'утеряна', 'не оригинал', 'утеряна часть раскладной клипсы', 'деформирована', 'нет винта/штифта/втулки', 'без дефектов'] },
+    { id: 'crown', label: 'Головка/кнопки', opts: ['утеряна головка', 'сломан переводной вал, обломок внутри головки', 'утеряна кнопка хронографа', 'головка не закручивается', 'не работает кнопка', 'без дефектов'] },
+    { id: 'work', label: 'Работоспособность', opts: ['часы не работают', 'был удар', 'часы уронили', 'часы отстают', 'влага внутри механизма', 'часы спешат', 'часы не обслуживали больше 5 лет', 'без дефектов'] },
+  ];
+  const OK = 'без дефектов';
   // Абсолютный путь: документы рисуются и в приложении, и в кабинете /k/…; в демо (GitHub Pages) всё лежит в подпапке
   const DEMO = window.VF_DEMO || null;
   const ASSETS = DEMO ? DEMO.root + 'app/assets/' : '/app/assets/';
@@ -32,6 +49,10 @@ window.Docs = (() => {
   const dmy = d => (d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}` : '');
   const longDate = d => (d ? `«${String(d.getDate()).padStart(2, '0')}» ${MONTHS[d.getMonth()]} ${d.getFullYear()} г.` : '«___» ____________ 20__ г.');
   const money = n => Number(n || 0).toLocaleString('ru-RU', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  const hm = d => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  const fullName = c => [c?.name, c?.patronymic].map(x => (x || '').trim()).filter(Boolean).join(' ');
+  // «Заказчик» в сохранённых раньше текстах настроек → «Клиент»
+  const cl = t => String(t ?? '').replace(/Заказчиком/g, 'Клиентом').replace(/Заказчика/g, 'Клиента').replace(/Заказчику/g, 'Клиенту').replace(/Заказчик/g, 'Клиент');
   const blank = (v, w = 40) => (v ? esc(v) : `<span class="d-blank" style="width:${w}mm"></span>`);
 
   // Сумма прописью: 12 500 → «Двенадцать тысяч пятьсот рублей 00 копеек»
@@ -79,7 +100,7 @@ window.Docs = (() => {
   // Логотип владельца: цветной для цветной печати, серый для ч/б
   function emblem(settings) {
     if (settings.logo) return `<div class="d-emblem"><img src="${settings.logo}" alt="VF swiss"></div>`;
-    return `<div class="d-emblem"><img class="for-color" src="${ASSETS}logo-color.png" alt="VF swiss"><img class="for-bw" src="${ASSETS}logo-gray.png" alt="VF swiss"></div>`;
+    return `<div class="d-emblem"><img class="for-color" src="${ASSETS}logo-color.png" alt="VF swiss"><img class="for-bw" src="${ASSETS}logo-bw.png" alt="VF swiss"></div>`;
   }
 
   function header(settings) {
@@ -89,9 +110,9 @@ window.Docs = (() => {
       <div class="d-brand">
         <div class="d-kicker">Швейцарский часовой сервис</div>
         <div class="d-name">VF SWISS</div>
-        <div class="d-tag">Ремонт · Реставрация · Полировка</div>
       </div>
       <div class="d-contacts">
+        ${settings.legal ? `<div class="d-legal">${nl(settings.legal)}</div>` : ''}
         <div>${esc(settings.address)}</div>
         <div>${esc(settings.phone)}</div>
         <div>${esc(settings.telegram)}</div>
@@ -101,6 +122,8 @@ window.Docs = (() => {
   }
 
   const field = (label, value, cls = '') => `<div class="d-f ${cls}"><span>${label}</span><b>${value || '<i class="d-dash">—</i>'}</b></div>`;
+  const cb = (on, text) => `<span class="d-cb${on ? ' is-on' : ''}"><i></i>${esc(text)}</span>`;
+  const chosen = (o, id) => (o.inspect && Array.isArray(o.inspect[id]) ? o.inspect[id] : []);
 
   function watchBlock(o, withCondition) {
     const w = o.watch;
@@ -115,19 +138,33 @@ window.Docs = (() => {
     </section>`;
   }
 
-  function parties(o, settings, clientLabel) {
+  function parties(o, settings) {
     const c = o.client;
     const how = c.contact === 'telegram' ? 'Telegram' : 'звонок';
     return `<section class="d-parties">
       <div><h3>Исполнитель</h3><p><b>${esc(settings.company)}</b>${settings.legal ? `<br>${nl(settings.legal)}` : ''}<br>${esc(settings.address)}</p></div>
-      <div><h3>${clientLabel}</h3><p><b>${blank(c.name, 60)}</b><br>Тел.: ${blank(c.phone, 40)}<br>Связь: ${how}</p></div>
+      <div><h3>Клиент</h3><p><b>${blank(fullName(c), 60)}</b><br>Тел.: ${blank(c.phone, 40)}${c.email ? `<br>Email: ${esc(c.email)}` : ''}<br>Связь: ${how}</p></div>
     </section>`;
   }
 
-  function signs(left, right, settings, o) {
+  // Блок клиента: реквизиты исполнителя уже в шапке, поэтому здесь только клиент (и пометка «владелец», если это акт приёма)
+  function clientBlock(o, ownerRow) {
+    const c = o.client, owner = c.owner || '';
+    return `<section class="d-client">
+      <div><h3>Клиент</h3><p><b>${blank(fullName(c), 70)}</b><br>Тел.: ${blank(c.phone, 40)}<br>Email: ${c.email ? esc(c.email) : blank('', 44)}</p></div>
+      <div class="d-owner">${ownerRow ? cb(owner === 'owner', 'Владелец часов') + cb(owner === 'other', 'Не являюсь владельцем часов') : ''}<span>Связь: ${c.contact === 'telegram' ? 'Telegram' : 'звонок'}</span></div>
+    </section>`;
+  }
+
+  // Подписи: ФИО и подпись клиента, ниже подпись исполнителя и место для печати; дата и время
+  function signs(o, settings, dateLabel, date) {
+    const exec = settings.master ? `ИП ${esc(settings.master.replace(/^ИП\s+/i, ''))}` : 'Исполнитель';
     return `<section class="d-signs">
-      <div><span class="d-line"></span><small>${left}${settings.master ? ` · ${esc(settings.master)}` : ''}</small><em>М.П.</em></div>
-      <div><span class="d-line"></span><small>${right}${o.client.name ? ` · ${esc(o.client.name)}` : ''}</small></div>
+      <div class="d-sg"><span>ФИО клиента</span><b>${esc(fullName(o.client))}</b></div>
+      <div class="d-sg"><span>Подпись клиента</span><b></b></div>
+      <div class="d-sg"><span>${exec}</span><b></b></div>
+      <div class="d-mp"><em>М.П.</em></div>
+      <div class="d-sg d-sg--wide"><span>${dateLabel}</span><b>${date}</b></div>
     </section>`;
   }
 
@@ -138,29 +175,39 @@ window.Docs = (() => {
     </section>` : '');
 
   const copyLabel = copy => (copy ? `<div class="d-copy">${copy}</div>` : '');
+  const when = d => `${longDate(d)}, ${hm(d)}`;
 
+  // Акт приёма-передачи часов на диагностику: пункты как в образце владельца, отмечаются галочками
   function intake(o, settings, copy) {
     const created = asDate(o.created);
-    return `<article class="sheet">
+    const mv = o.watch.movement || '';
+    const owner = o.client.owner || '';
+    const rows = INSPECT.map(g => `<div class="d-insp"><b>${g.label}</b>${g.opts.map(t => cb(chosen(o, g.id).includes(t), t)).join('')}</div>`).join('');
+    return `<article class="sheet is-compact is-intake">
       ${header(settings)}
       <div class="d-title">
-        <h1>Квитанция о приёме в ремонт</h1>
-        <p>№ ${esc(o.num)} от ${longDate(created)}</p>${copyLabel(copy)}
+        <h1>Акт приёма-передачи часов на диагностику</h1>
+        <p>№ ${esc(o.num)} · ${when(created)}</p>${copyLabel(copy)}
       </div>
-      ${parties(o, settings, 'Заказчик')}
-      ${watchBlock(o, true)}
+      ${clientBlock(o, true)}
       <section class="d-sec">
-        <h3>Со слов Заказчика</h3>
-        <p class="d-text">${o.issue ? nl(o.issue) : '<span class="d-blank d-blank--full"></span>'}</p>
-        <div class="d-grid d-grid--2">
-          ${field('Предварительная оценка', esc(o.estimate) || 'после бесплатной диагностики')}
-          ${field('Ориентировочный срок', o.due ? dmy(asDate(o.due)) : 'сообщим после диагностики')}
+        <h3>Описание часов</h3>
+        <div class="d-grid d-grid--4">
+          ${field('Бренд', esc(o.watch.brand))}${field('Модель', esc(o.watch.model))}${field('Референс', esc(o.watch.ref))}${field('Серийный номер', esc(o.watch.serial))}
         </div>
+        <div class="d-line-cb"><b>Тип механизма</b>${MOVEMENTS.map(t => cb(mv === t || (t === 'иной' && mv && !MOVEMENTS.includes(mv)), t)).join('')}</div>
+        ${o.watch.kit || o.watch.material ? `<div class="d-grid d-grid--2">${field('Материал', esc(o.watch.material))}${field('Комплектность', esc(o.watch.kit))}</div>` : ''}
       </section>
-      ${o.photos?.length ? `<section class="d-sec"><h3>Фото при приёмке</h3><div class="d-photos">${o.photos.slice(0, 4).map(src => `<img src="${src}" alt="">`).join('')}</div></section>` : ''}
-      <section class="d-note"><h3>Условия</h3><p>${nl(settings.intakeText)}</p></section>
+      <section class="d-sec d-sec--insp">
+        <h3>Предварительный осмотр часов в момент приёма на диагностику</h3>
+        ${rows}
+        ${o.watch.condition ? `<p class="d-text d-text--s"><b>Примечание:</b> ${nl(o.watch.condition)}</p>` : ''}
+        ${o.issue ? `<p class="d-text d-text--s"><b>Со слов клиента:</b> ${nl(o.issue)}</p>` : ''}
+      </section>
+      ${o.photos?.length ? `<section class="d-sec"><div class="d-photos">${o.photos.slice(0, 4).map(src => `<img src="${src}" alt="">`).join('')}</div></section>` : ''}
+      <section class="d-note"><h3>Дополнительная информация</h3><p>${nl(cl(settings.diagText || DEFAULTS.diagText))}</p><p>${nl(cl(settings.photoText || DEFAULTS.photoText))}</p></section>
       ${cabinetBlock(o, settings)}
-      ${signs('Изделие принял', 'Изделие сдал, с описанием согласен', settings, o)}
+      ${signs(o, settings, 'Дата приёма часов', when(created))}
       <footer class="d-foot">Точность. Качество. Надёжность.</footer>
     </article>`;
   }
@@ -171,16 +218,19 @@ window.Docs = (() => {
     const until = new Date(issued); until.setMonth(until.getMonth() + months);
     const rows = o.works.filter(r => r.name);
     const total = rows.reduce((s, r) => s + (Number(r.qty) || 1) * (Number(r.price) || 0), 0);
-    return `<article class="sheet">
+    const now = new Date();
+    const today = issued.toDateString() === now.toDateString();
+    const stamp = today ? `${longDate(issued)}, ${hm(now)}` : longDate(issued);
+    return `<article class="sheet is-compact">
       ${header(settings)}
       <div class="d-title">
         <h1>Акт выполненных работ</h1>
-        <p>№ ${esc(o.num)} от ${longDate(issued)} · к квитанции от ${dmy(asDate(o.created))}</p>${copyLabel(copy)}
+        <p>№ ${esc(o.num)} от ${stamp} · к акту приёма от ${dmy(asDate(o.created))}</p>${copyLabel(copy)}
       </div>
-      ${parties(o, settings, 'Заказчик')}
+      ${clientBlock(o, false)}
       ${watchBlock(o, false)}
       <section class="d-sec">
-        <h3>Выполненные работы и установленные детали</h3>
+        <h3>Наименование работ и запчастей</h3>
         <table class="d-works">
           <thead><tr><th>№</th><th>Наименование</th><th>Кол-во</th><th>Цена, ₽</th><th>Сумма, ₽</th></tr></thead>
           <tbody>${rows.length ? rows.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.name)}${r.kind === 'part' ? ' <i>деталь</i>' : ''}</td><td>${Number(r.qty) || 1}</td><td>${money(r.price)}</td><td>${money((Number(r.qty) || 1) * (Number(r.price) || 0))}</td></tr>`).join('')
@@ -191,27 +241,27 @@ window.Docs = (() => {
       </section>
       <section class="d-warranty">
         <div class="d-warranty__badge"><b>${months}</b><span>мес.<br>гарантии</span></div>
-        <div><h3>Гарантия до ${dmy(until)}</h3><p>${nl(settings.warrantyText)}</p></div>
+        <div><h3>Гарантия до ${dmy(until)}</h3><p>${nl(cl(settings.warrantyText))}</p></div>
       </section>
-      <p class="d-confirm">Работы выполнены в полном объёме. Изделие получено, внешний вид, комплектность и работоспособность проверены в присутствии Исполнителя${o.conditionOut ? ` (${esc(o.conditionOut)})` : ''}. Претензий к объёму, качеству и срокам работ Заказчик не имеет.</p>
+      <p class="d-confirm">Работы выполнены в полном объёме. Изделие получено, внешний вид, комплектность и работоспособность проверены в присутствии Исполнителя${o.conditionOut ? ` (${esc(o.conditionOut)})` : ''}. Претензий к объёму, качеству и срокам работ Клиент не имеет.</p>
       ${cabinetBlock(o, settings)}
-      ${signs('Работы сдал', 'Работы принял, изделие получил', settings, o)}
+      ${signs(o, settings, 'Дата выдачи', stamp)}
       <footer class="d-foot">Точность. Качество. Надёжность.</footer>
     </article>`;
   }
 
   const TYPES = {
-    intake: { title: 'Квитанция о приёме', file: 'Квитанция', render: intake },
+    intake: { title: 'Акт приёма-передачи на диагностику', file: 'Акт_приёма', render: intake },
     act: { title: 'Акт выполненных работ', file: 'Акт', render: act },
   };
 
-  // Две копии: для Заказчика и для мастерской
+  // Две копии: для клиента и для мастерской
   function render(type, o, settings, copies, mode = 'color', pdf = false) {
     const t = TYPES[type];
     const cls = `sheet${mode === 'bw' ? ' is-bw' : ''}${pdf ? ' is-pdf' : ''}`;
     return (copies === 2
-      ? t.render(o, settings, 'Экземпляр Заказчика') + t.render(o, settings, 'Экземпляр Исполнителя')
-      : t.render(o, settings, '')).replace(/class="sheet"/g, `class="${cls}"`);
+      ? t.render(o, settings, 'Экземпляр клиента') + t.render(o, settings, 'Экземпляр Исполнителя')
+      : t.render(o, settings, '')).replace(/class="sheet( [^"]*)?"/g, (m, extra) => `class="${cls}${extra || ''}"`);
   }
 
   function cards(cabs, settings, base) {
@@ -242,5 +292,5 @@ window.Docs = (() => {
     });
   }
 
-  return { DEFAULTS, TYPES, render, cards, mountQr, rublesInWords, telegramUrl, dmy, esc, cabUrl, ASSETS };
+  return { DEFAULTS, INSPECT, MOVEMENTS, OK, fullName, TYPES, render, cards, mountQr, rublesInWords, telegramUrl, dmy, esc, cabUrl, ASSETS };
 })();

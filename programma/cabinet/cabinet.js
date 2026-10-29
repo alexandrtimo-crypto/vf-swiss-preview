@@ -48,7 +48,7 @@
       <div class="facts">${facts.map(f => `<span>${f}</span>`).join('')}</div>
       ${warranty}
       <p class="hint" style="margin:14px 0 0">Документы, PDF</p><div class="docs-row" style="margin-top:8px">
-        <button class="btn" data-doc="intake" data-i="${i}">Квитанция</button>
+        <button class="btn" data-doc="intake" data-i="${i}">Акт приёма</button>
         ${o.status === 'done' && o.works?.length ? `<button class="btn btn--gold" data-doc="act" data-i="${i}">Акт и гарантия</button>` : ''}
       </div>
     </article>`;
