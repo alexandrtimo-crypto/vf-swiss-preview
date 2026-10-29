@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru" data-recipe="fd-lux">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Марки строкой · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400%3B0,700%3B1,400&display=swap">
+<style>
+/* title: fd-lux — эмаль и воронёная сталь */
+/* fonts: Old Standard TT:ital,wght@0,400%3B0,700%3B1,400 */
+:root {
+  --vf-bg: #EDEFF1;          /* эмаль циферблата */
+  --vf-bg-2: #E3E6EA;
+  --vf-surface: #F6F7F8;
+  --vf-text: #1C2340;        /* чернила */
+  --vf-text-2: #3A4260;
+  --vf-muted: #59607A;
+  --vf-line: #C9CDD6;
+  --vf-accent: #22388A;      /* воронёная сталь */
+  --vf-accent-2: #121C3E;    /* ночь — тёмные полосы */
+  --vf-on-accent: #F3F4F6;
+  --vf-danger: #A3261D;
+  --vf-metal: #A8823A;       /* золото механизма: только линии и декор */
+  --vf-metal-on-dark: #CDAA63;
+  --vf-font-display: 'Old Standard TT', 'Times New Roman', serif;
+  --vf-font-text: 'Old Standard TT', 'Times New Roman', serif;
+  --vf-font-mono: 'Old Standard TT', serif;
+  --vf-radius: 3px;
+  --vf-radius-lg: 6px;
+  --vf-ease: cubic-bezier(.2, .7, .2, 1);
+  /* шкала Брингхерста: 14 16 18 21 24 36 48 60 72 */
+  --fd-s1: 14px; --fd-s2: 16px; --fd-s3: 18px; --fd-s4: 21px; --fd-s5: 24px;
+  --fd-s6: 36px; --fd-s7: 48px; --fd-s8: 60px; --fd-s9: 72px;
+}
+html { background: var(--vf-bg); -webkit-text-size-adjust: 100%; scroll-padding-top: 84px; }
+body.vf-page { margin: 0; background: var(--vf-bg); color: var(--vf-text); font: 400 18px/1.65 var(--vf-font-text); font-kerning: normal; text-rendering: optimizeLegibility; }
+body.vf-page :focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* title: fd-lux — кнопки: воронёная сталь */
+.vf-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5em; min-height: 52px; padding: 0 28px; border: 1px solid var(--vf-accent); border-radius: var(--vf-radius); background: transparent; color: var(--vf-accent); font: 400 18px/1 var(--vf-font-display); letter-spacing: .01em; text-decoration: none; cursor: pointer; transition: background-color .2s var(--vf-ease), color .2s var(--vf-ease); }
+.vf-btn:hover { background: color-mix(in srgb, var(--vf-accent) 8%, transparent); }
+.vf-btn--primary { background: var(--vf-accent); color: var(--vf-on-accent); }
+.vf-btn--primary:hover { background: color-mix(in srgb, var(--vf-accent) 86%, #000); }
+.vf-btn--ghost { border-color: currentColor; color: inherit; }
+.vf-btn--sm { min-height: 40px; padding: 0 18px; font-size: 16px; }
+.vf-btn:focus-visible { outline: 2px solid var(--vf-metal, #A8823A); outline-offset: 3px; }
+
+/* title: fd-lux — поля: строка на эмали */
+.vf-field { display: grid; gap: 6px; }
+.vf-field > span, .vf-field > label { font: italic 400 16px/1.3 var(--vf-font-text); color: inherit; opacity: .85; }
+.vf-input { width: 100%; box-sizing: border-box; min-height: 52px; padding: 12px 2px; border: 0; border-bottom: 1px solid currentColor; border-radius: 0; background: transparent; color: inherit; font: 400 20px/1.3 var(--vf-font-text); }
+textarea.vf-input { min-height: 96px; resize: vertical; }
+.vf-input::placeholder { color: inherit; opacity: .5; }
+.vf-input:focus { outline: none; border-bottom-width: 2px; border-bottom-color: var(--vf-metal-on-dark, #CDAA63); }
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); }
+.vf-field__err { font: 400 15px/1.4 var(--vf-font-text); color: inherit; }
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── fd-lux-brands ── */
+[data-part="fd-lux-brands"] { padding: 96px 40px 112px; background: var(--vf-bg-2); }
+[data-part="fd-lux-brands"] .fd-lux-brands__in { max-width: 1200px; margin: 0 auto; }
+[data-part="fd-lux-brands"] .fd-lux-brands__title { margin: 0 0 28px; font: 400 var(--fd-s4, 21px)/1.3 var(--vf-font-display); color: var(--vf-muted); }
+[data-part="fd-lux-brands"] .fd-lux-brands__list { margin: 0; max-width: 22em; font: italic 400 var(--fd-s8, 60px)/1.12 var(--vf-font-display); letter-spacing: -.01em; color: var(--vf-accent); text-wrap: pretty; }
+@media (max-width: 900px) {
+  [data-part="fd-lux-brands"] { padding: 64px 20px 72px; }
+  [data-part="fd-lux-brands"] .fd-lux-brands__list { font-size: var(--fd-s6, 36px); }
+}
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Марки строкой</span><a href="../../v/fd-lux/#fd-lux-brands" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<section data-part="fd-lux-brands" data-slot="brands" class="fd-lux-brands" id="brands">
+  <div class="fd-lux-brands__in">
+    <h2 class="fd-lux-brands__title">Марки, с&nbsp;которыми работает мастер</h2>
+    <p class="fd-lux-brands__list">Rolex, Patek Philippe, Audemars Piguet, Vacheron Constantin, Breguet, Cartier, Breitling, Franck Muller, Blancpain и&nbsp;другие швейцарские часы.</p>
+  </div>
+</section>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+
+<script>
+
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>

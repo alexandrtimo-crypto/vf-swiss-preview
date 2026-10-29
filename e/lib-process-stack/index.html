@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="ru" data-recipe="lib-on-r3-easy" data-sound-pack="zen">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Как мы работаем · листы стопкой · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@400..800&family=Sofia+Sans+Condensed:wght@600..900&display=swap">
+<style>
+/* title: Р3 · Бирка на верстаке */
+/* fonts: Sofia Sans:wght@400..800; Sofia Sans Condensed:wght@600..900 */
+/* Видение r3-easy: синий антистатический коврик верстака — поле страницы;
+   манильский картон бирок с красной типографской печатью и чёрными цифрами нумератора.
+   Общие токены --vf-*; материалы мира — --vf-tag-* (компоненты берут их с запасным значением). */
+:root {
+  --vf-bg: #2B5F9E;            /* коврик верстака */
+  --vf-bg-2: #224F86;          /* тот же коврик в тени */
+  --vf-surface: #E8C886;       /* манильский картон */
+  --vf-text: #F7F8FA;
+  --vf-text-2: #CFDBEE;        /* вторичный текст на коврике, из его же синего */
+  --vf-muted: rgba(247, 248, 250, .16);
+  --vf-line: rgba(247, 248, 250, .32);
+  --vf-accent: #B8301C;        /* красная печать бирки — действие */
+  --vf-accent-2: #E8C886;
+  --vf-on-accent: #FFFFFF;
+  --vf-danger: #9A2614;
+  --vf-font-display: "Sofia Sans Condensed", "Arial Narrow", sans-serif;
+  --vf-font-text: "Sofia Sans", "Segoe UI", Roboto, sans-serif;
+  --vf-font-mono: "Sofia Sans Condensed", "Arial Narrow", sans-serif; /* цифры нумератора — табличные */
+  --vf-radius: 6px;
+  --vf-radius-lg: 12px;
+  --vf-ease: cubic-bezier(.16, 1, .3, 1);
+
+  /* материалы мира */
+  --vf-tag-card: #E8C886;      /* манила */
+  --vf-tag-card-2: #DDB873;    /* манила, усиливающее кольцо и тень сгиба */
+  --vf-tag-ink: #1E1A14;       /* чёрная краска нумератора */
+  --vf-tag-ink-2: #5B4A2A;     /* вторичный текст на маниле */
+  --vf-tag-red: #B8301C;       /* красная печать: линии, крупные слова */
+  --vf-tag-red-text: #9A2614;  /* красная печать для мелкого текста */
+  --vf-tag-paper: #FAFAF7;     /* белая карточка K, поля фото */
+  --vf-tag-thread: #EFE9DC;    /* хлопковая нитка */
+  --vf-tag-shadow: 0 1px 1px rgba(10, 24, 48, .18), 0 10px 22px -8px rgba(10, 24, 48, .45), 0 28px 48px -24px rgba(10, 24, 48, .5);
+  --vf-gutter: clamp(16px, 4.2vw, 64px);
+  --vf-max: 1320px;
+
+  color-scheme: light;
+  accent-color: var(--vf-accent);
+  caret-color: var(--vf-tag-red);
+  scrollbar-color: var(--vf-tag-card) var(--vf-bg-2);
+}
+
+/* ---------- основа страницы ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 12px; }
+.vf-page {
+  margin: 0; background: var(--vf-bg); color: var(--vf-text);
+  font-family: var(--vf-font-text); font-size: 17px; line-height: 1.5; font-weight: 400;
+  font-feature-settings: "tnum" 0; overflow-x: hidden;
+  /* матовая фактура коврика */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:where(.vf-page a) { color: inherit; text-underline-offset: .2em; text-decoration-thickness: 1px; }
+:where(.vf-page a:hover) { text-decoration-thickness: 2px; }
+:where(.vf-page button) { font: inherit; color: inherit; cursor: pointer; }
+:where(.vf-page img, .vf-page video, .vf-page svg) { display: block; max-width: 100%; }
+:where(.vf-page h1, .vf-page h2, .vf-page h3) { margin: 0; font-family: var(--vf-font-display); font-weight: 800; line-height: 1; letter-spacing: -.01em; text-wrap: balance; }
+:where(.vf-page p) { margin: 0; text-wrap: pretty; }
+.vf-page ::selection { background: var(--vf-tag-card); color: var(--vf-tag-ink); }
+:where(.vf-page) :focus-visible { outline: 3px solid var(--vf-tag-card); outline-offset: 3px; border-radius: 4px; }
+.vf-page ::-webkit-scrollbar { width: 12px; height: 10px; }
+.vf-page ::-webkit-scrollbar-track { background: var(--vf-bg-2); }
+.vf-page ::-webkit-scrollbar-thumb { background: var(--vf-tag-card); border-radius: 6px; border: 3px solid var(--vf-bg-2); }
+.vf-page .vf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}
+
+/* title: Р3 · Кнопки · печать бирки */
+/* Кнопка — вырубка из картона с красной печатью: прямые углы со скруглением 6px,
+   мягкая бумажная тень, нажатие прижимает к коврику. Контекст может задать
+   --vf-btn-bg / --vf-btn-fg / --vf-btn-line (например, на манильской бирке). */
+.vf-btn {
+  --vf-btn-bg: var(--vf-tag-paper, #FAFAF7);
+  --vf-btn-fg: var(--vf-tag-ink, #1E1A14);
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 56px; padding: 0 24px; border-radius: var(--vf-radius, 6px); border: 0;
+  font-family: var(--vf-font-display); font-weight: 700; font-size: 20px; line-height: 1.1; letter-spacing: .005em;
+  text-decoration: none; cursor: pointer; text-align: center;
+  background: var(--vf-btn-bg); color: var(--vf-btn-fg);
+  box-shadow: 0 1px 0 rgba(10, 24, 48, .22), 0 6px 14px -8px rgba(10, 24, 48, .55);
+  transition: transform .18s var(--vf-ease), box-shadow .18s var(--vf-ease), background-color .18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.vf-btn:hover { box-shadow: 0 1px 0 rgba(10, 24, 48, .22), 0 10px 20px -8px rgba(10, 24, 48, .6); transform: translateY(-1px); }
+.vf-btn:active { transform: translateY(1px); box-shadow: 0 0 0 rgba(10, 24, 48, .2), 0 2px 4px -2px rgba(10, 24, 48, .5); }
+.vf-btn:focus-visible { outline: 3px solid var(--vf-btn-line, var(--vf-tag-ink, #1E1A14)); outline-offset: 3px; }
+.vf-btn:disabled, .vf-btn[aria-disabled="true"] { opacity: .55; cursor: default; transform: none; }
+.vf-btn > svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.vf-btn--primary { --vf-btn-bg: var(--vf-accent); --vf-btn-fg: var(--vf-on-accent); }
+.vf-btn--primary:hover { --vf-btn-bg: color-mix(in srgb, var(--vf-accent) 86%, #000); }
+
+.vf-btn--ghost {
+  --vf-btn-bg: transparent; --vf-btn-fg: currentColor;
+  box-shadow: inset 0 0 0 1.5px var(--vf-btn-line, currentColor);
+}
+.vf-btn--ghost:hover { --vf-btn-bg: color-mix(in srgb, currentColor 8%, transparent); box-shadow: inset 0 0 0 2px var(--vf-btn-line, currentColor); transform: none; }
+.vf-btn--ghost:active { box-shadow: inset 0 0 0 2px var(--vf-btn-line, currentColor); }
+
+.vf-btn--sm { min-height: 44px; padding: 0 16px; font-size: 17px; gap: 8px; }
+.vf-btn--sm > svg { width: 18px; height: 18px; }
+
+/* title: Р3 · Поля · графа бирки */
+/* Поле — напечатанная графа: подпись красной печатью, строка для записи чёрной линией.
+   Контекст задаёт --vf-field-fg (текст, линия), --vf-field-label (подпись), --vf-field-accent (фокус). */
+.vf-field { display: grid; gap: 4px; min-width: 0; }
+.vf-field > label, .vf-field__label {
+  font: 600 14px/1.25 var(--vf-font-text); letter-spacing: .01em;
+  color: var(--vf-field-label, var(--vf-tag-red-text, #9A2614));
+}
+.vf-input {
+  width: 100%; min-height: 52px; padding: 10px 2px 6px; margin: 0;
+  font: 600 22px/1.2 var(--vf-font-display); font-variant-numeric: tabular-nums; letter-spacing: .01em;
+  color: var(--vf-field-fg, var(--vf-tag-ink, #1E1A14));
+  background: transparent; border: 0; border-radius: 0; outline: none;
+  border-bottom: 2px solid color-mix(in srgb, var(--vf-field-fg, var(--vf-tag-ink, #1E1A14)) 70%, transparent);
+  transition: border-color .2s, box-shadow .2s, background-color .2s;
+  -webkit-appearance: none; appearance: none;
+}
+.vf-input::placeholder { color: color-mix(in srgb, var(--vf-field-fg, var(--vf-tag-ink, #1E1A14)) 42%, transparent); font-weight: 500; }
+.vf-input:hover { border-bottom-color: var(--vf-field-fg, var(--vf-tag-ink, #1E1A14)); }
+.vf-input:focus, .vf-input:focus-visible {
+  outline: none; border-bottom-color: var(--vf-field-accent, var(--vf-accent));
+  box-shadow: 0 2px 0 var(--vf-field-accent, var(--vf-accent));
+  background: color-mix(in srgb, var(--vf-field-accent, var(--vf-accent)) 6%, transparent);
+}
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); box-shadow: 0 2px 0 var(--vf-danger); }
+textarea.vf-input { resize: vertical; min-height: 80px; font-size: 19px; line-height: 1.35; }
+.vf-field__err { font: 600 14px/1.3 var(--vf-font-text); color: var(--vf-danger); }
+.vf-field__err:empty { display: none; }
+.vf-field__hint { font: 400 14px/1.35 var(--vf-font-text); color: var(--vf-field-hint, var(--vf-tag-ink-2, #5B4A2A)); }
+
+/* title: Иконки · Tabler (MIT, линия 2px) */
+/* MIT © Paweł Kuna (tabler-icons). Сборка: kit/icons/build-icons.mjs */
+.vf-i { display: inline-block; width: 1em; height: 1em; flex: none; vertical-align: -0.125em; background-color: currentColor; -webkit-mask: var(--vf-i) center / contain no-repeat; mask: var(--vf-i) center / contain no-repeat; }
+.vf-i--phone { --vf-i: url("../../kit/icons/tabler/phone.svg"); }
+.vf-i--telegram { --vf-i: url("../../kit/icons/tabler/telegram.svg"); }
+.vf-i--map-pin { --vf-i: url("../../kit/icons/tabler/map-pin.svg"); }
+.vf-i--route { --vf-i: url("../../kit/icons/tabler/route.svg"); }
+.vf-i--copy { --vf-i: url("../../kit/icons/tabler/copy.svg"); }
+.vf-i--clock { --vf-i: url("../../kit/icons/tabler/clock.svg"); }
+.vf-i--calendar { --vf-i: url("../../kit/icons/tabler/calendar.svg"); }
+.vf-i--shield-check { --vf-i: url("../../kit/icons/tabler/shield-check.svg"); }
+.vf-i--wrench { --vf-i: url("../../kit/icons/tabler/wrench.svg"); }
+.vf-i--search { --vf-i: url("../../kit/icons/tabler/search.svg"); }
+.vf-i--microscope { --vf-i: url("../../kit/icons/tabler/microscope.svg"); }
+.vf-i--droplet { --vf-i: url("../../kit/icons/tabler/droplet.svg"); }
+.vf-i--battery { --vf-i: url("../../kit/icons/tabler/battery.svg"); }
+.vf-i--watch { --vf-i: url("../../kit/icons/tabler/watch.svg"); }
+.vf-i--sparkles { --vf-i: url("../../kit/icons/tabler/sparkles.svg"); }
+.vf-i--camera { --vf-i: url("../../kit/icons/tabler/camera.svg"); }
+.vf-i--photo { --vf-i: url("../../kit/icons/tabler/photo.svg"); }
+.vf-i--upload { --vf-i: url("../../kit/icons/tabler/upload.svg"); }
+.vf-i--check { --vf-i: url("../../kit/icons/tabler/check.svg"); }
+.vf-i--close { --vf-i: url("../../kit/icons/tabler/close.svg"); }
+.vf-i--arrow-right { --vf-i: url("../../kit/icons/tabler/arrow-right.svg"); }
+.vf-i--arrow-left { --vf-i: url("../../kit/icons/tabler/arrow-left.svg"); }
+.vf-i--chevron-down { --vf-i: url("../../kit/icons/tabler/chevron-down.svg"); }
+.vf-i--menu { --vf-i: url("../../kit/icons/tabler/menu.svg"); }
+.vf-i--qr-code { --vf-i: url("../../kit/icons/tabler/qr-code.svg"); }
+.vf-i--file-text { --vf-i: url("../../kit/icons/tabler/file-text.svg"); }
+.vf-i--user { --vf-i: url("../../kit/icons/tabler/user.svg"); }
+.vf-i--message { --vf-i: url("../../kit/icons/tabler/message.svg"); }
+.vf-i--info { --vf-i: url("../../kit/icons/tabler/info.svg"); }
+.vf-i--alert { --vf-i: url("../../kit/icons/tabler/alert.svg"); }
+.vf-i--gauge { --vf-i: url("../../kit/icons/tabler/gauge.svg"); }
+.vf-i--award { --vf-i: url("../../kit/icons/tabler/award.svg"); }
+.vf-i--ruble { --vf-i: url("../../kit/icons/tabler/ruble.svg"); }
+.vf-i--settings { --vf-i: url("../../kit/icons/tabler/settings.svg"); }
+.vf-i--hand { --vf-i: url("../../kit/icons/tabler/hand.svg"); }
+.vf-i--volume { --vf-i: url("../../kit/icons/tabler/volume.svg"); }
+.vf-i--volume-off { --vf-i: url("../../kit/icons/tabler/volume-off.svg"); }
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── lib-process-stack ── */
+/* Этапы ремонта листами: ScrollStack (React Bits) на sticky. Цвета только --vf-* */
+.lps { --gut: var(--vf-gut, var(--vf-gutter, clamp(16px, 4vw, 56px))); --top: clamp(72px, 11vh, 120px); --step: 18px;
+  background: var(--vf-bg); color: var(--vf-text); padding: clamp(48px, 7vw, 104px) var(--gut) clamp(64px, 9vw, 120px); }
+.lps *, .lps *::before, .lps *::after { box-sizing: border-box; }
+.lps__title { margin: 0 0 clamp(20px, 3vw, 40px); font: 400 clamp(28px, 4vw, 52px)/1.05 var(--vf-font-display); }
+.lps__stack { list-style: none; margin: 0 auto; padding: 0; max-width: 1180px; }
+.lps__sheet { position: sticky; top: calc(var(--top) + var(--i) * var(--step)); margin: 0 0 clamp(36px, 14vh, 140px); transform-origin: 50% 0; will-change: transform; }
+.lps__sheet:last-child { margin-bottom: 0; }
+.lps__card { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); min-height: clamp(300px, 44vh, 420px);
+  background: var(--vf-surface); color: var(--vf-text); border: 1px solid var(--vf-line); border-radius: var(--vf-radius-lg, 4px); overflow: hidden; }
+.lps__text { padding: clamp(24px, 4vw, 56px); display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+.lps__h { margin: 0; font: 400 clamp(26px, 3.2vw, 44px)/1.08 var(--vf-font-display); letter-spacing: 0; text-wrap: balance; }
+.lps__p { margin: 0; max-width: 34em; font: 400 clamp(16px, 1.3vw, 18px)/1.55 var(--vf-font-text); color: var(--vf-text-2, var(--vf-text)); }
+.lps__pic { position: relative; min-height: 100%; background: var(--vf-bg-2, var(--vf-bg)); }
+.lps__pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.lps__shade { position: absolute; inset: 0; background: var(--vf-bg); opacity: var(--dim, 0); pointer-events: none; }
+@media (max-width: 720px) {
+  .lps { --top: 68px; --step: 12px; }
+  .lps__card { grid-template-columns: 1fr; grid-template-rows: 150px auto; min-height: 0; }
+  .lps__pic { order: -1; min-height: 150px; }
+  .lps__text { padding: 20px 18px 24px; gap: 10px; }
+  .lps__sheet { margin-bottom: 40px; }
+}
+
+
+/* ── lib-sound-toggle ── */
+.lib-sound-toggle { position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 60; }
+.lib-sound-toggle__btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+  font: 500 13px/1 var(--vf-font-text); color: var(--vf-text); background: var(--vf-surface, var(--vf-bg-2)); border: 1px solid var(--vf-line);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .18); }
+.lib-sound-toggle__btn:hover { border-color: var(--vf-accent); }
+.lib-sound-toggle__btn:focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+.lib-sound-toggle__on, .lib-sound-toggle__btn[data-state="on"] .lib-sound-toggle__off { display: none; }
+.lib-sound-toggle__btn[data-state="on"] .lib-sound-toggle__on { display: inline-block; color: var(--vf-accent); }
+/* Телефон: не плавает поверх текста — тихая строка в конце страницы (над нижней панелью связи) */
+@media (max-width: 720px) { .lib-sound-toggle { position: static; display: flex; justify-content: center; padding: 16px 16px calc(96px + env(safe-area-inset-bottom)); } .lib-sound-toggle__btn { box-shadow: none; } }
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Как мы работаем · листы стопкой</span><a href="../../v/lib-on-r3-easy/#lib-process-stack" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<section data-part="lib-process-stack" data-slot="process" class="lps" aria-labelledby="lps-title">
+  <h2 class="lps__title" id="lps-title" data-reveal>Как мы работаем</h2>
+  <ol class="lps__stack">
+    <li class="lps__sheet" style="--i:0">
+      <article class="lps__card">
+        <div class="lps__text">
+          <h3 class="lps__h">Приёмка</h3>
+          <p class="lps__p">Принимаем часы и оформляем квитанцию.</p>
+        </div>
+        <div class="lps__pic" data-glare><img src="../../media/img/ex_1.webp" width="600" height="800" alt="Часы на столе мастерской" loading="lazy"></div>
+        <span class="lps__shade" aria-hidden="true"></span>
+      </article>
+    </li>
+    <li class="lps__sheet" style="--i:1">
+      <article class="lps__card">
+        <div class="lps__text">
+          <h3 class="lps__h">Бесплатная диагностика</h3>
+          <p class="lps__p">Мастер выясняет, что с часами. Диагностика бесплатна.</p>
+        </div>
+        <div class="lps__pic" data-glare><img src="../../media/img/ex_21.webp" width="600" height="800" alt="Часы под осмотром мастера" loading="lazy"></div>
+        <span class="lps__shade" aria-hidden="true"></span>
+      </article>
+    </li>
+    <li class="lps__sheet" style="--i:2">
+      <article class="lps__card">
+        <div class="lps__text">
+          <h3 class="lps__h">Согласование цены и срока до начала работ</h3>
+          <p class="lps__p">Цену и срок называем до начала работ — работы начинаются после вашего согласия.</p>
+        </div>
+        <div class="lps__pic" data-glare><img src="../../media/img/ex_20.webp" width="600" height="800" alt="Часы перед ремонтом" loading="lazy"></div>
+        <span class="lps__shade" aria-hidden="true"></span>
+      </article>
+    </li>
+    <li class="lps__sheet" style="--i:3">
+      <article class="lps__card">
+        <div class="lps__text">
+          <h3 class="lps__h">Ремонт</h3>
+          <p class="lps__p">Полная разборка механизма «до последнего винта», оригинальные комплектующие.</p>
+        </div>
+        <div class="lps__pic" data-glare><img src="../../media/img/ex_3.webp" width="600" height="800" alt="Механизм в руках мастера: пинцет" loading="lazy"></div>
+        <span class="lps__shade" aria-hidden="true"></span>
+      </article>
+    </li>
+    <li class="lps__sheet" style="--i:4">
+      <article class="lps__card">
+        <div class="lps__text">
+          <h3 class="lps__h">Проверка</h3>
+          <p class="lps__p">Ход проверяем на таймграфере, герметичность — на тестере герметичности.</p>
+        </div>
+        <div class="lps__pic" data-glare><img src="../../media/img/ex_33.webp" width="1200" height="900" alt="Таймграфер с часами на подставке" loading="lazy"></div>
+        <span class="lps__shade" aria-hidden="true"></span>
+      </article>
+    </li>
+    <li class="lps__sheet" style="--i:5">
+      <article class="lps__card">
+        <div class="lps__text">
+          <h3 class="lps__h">Выдача и гарантия</h3>
+          <p class="lps__p">Возвращаем часы с гарантией до двух лет.</p>
+        </div>
+        <div class="lps__pic" data-glare><img src="../../media/img/ex_24.webp" width="600" height="800" alt="Готовые часы" loading="lazy"></div>
+        <span class="lps__shade" aria-hidden="true"></span>
+      </article>
+    </li>
+  </ol>
+</section>
+
+<div data-part="lib-sound-toggle" data-slot="overlay" class="lib-sound-toggle">
+  <button type="button" class="lib-sound-toggle__btn" data-sound-toggle aria-pressed="false" aria-label="Звук интерфейса">
+    <i class="vf-i vf-i--volume-off lib-sound-toggle__off" aria-hidden="true"></i>
+    <i class="vf-i vf-i--volume lib-sound-toggle__on" aria-hidden="true"></i>
+    <span class="lib-sound-toggle__label">Звук</span>
+  </button>
+</div>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+<script>
+// VF kit · общий слой движения. Источники: идеи Magnet и GlareHover (React Bits, MIT + Commons Clause, переписаны на vanilla),
+// Anime.js 4.5.0 (MIT) и AutoAnimate 0.10.0 (MIT) подгружаются с jsDelivr по требованию.
+// Подключается в meta.json компонента: "needs": ["../../kit/lib/motion.js"]. Поведения — по атрибутам:
+//   data-magnet · data-glare · data-reveal · data-autoanimate.  Всё отключается при prefers-reduced-motion: reduce.
+window.VFMotion = window.VFMotion || (() => {
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  const fine = matchMedia('(pointer: fine)');
+  const reduced = () => mq.matches;
+  const load = (src) => new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src; s.async = true; s.onload = res; s.onerror = () => rej(new Error('не загрузилось: ' + src));
+    document.head.appendChild(s);
+  });
+
+  let animeP, autoP;
+  // Promise с глобальным anime (v4: anime.animate, anime.createTimeline, anime.spring…)
+  const anime = () => animeP || (animeP = window.anime && window.anime.animate
+    ? Promise.resolve(window.anime)
+    : load('https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js').then(() => window.anime));
+  // Вешает AutoAnimate на контейнер; возвращает Promise (ошибка загрузки не ломает страницу)
+  const autoAnimate = (el, opts) => {
+    if (reduced()) return Promise.resolve(null);
+    autoP = autoP || import('https://cdn.jsdelivr.net/npm/@formkit/auto-animate@0.10.0/index.mjs');
+    return autoP.then(m => m.default(el, opts || { duration: 240, easing: 'ease-out' })).catch(() => null);
+  };
+
+  const style = document.createElement('style');
+  style.id = 'vfm-style';
+  style.textContent = `
+.vfm-hide { opacity: 0; translate: 0 16px; filter: blur(4px); }
+.vfm-in { transition: opacity .7s cubic-bezier(.22,1,.36,1), translate .7s cubic-bezier(.22,1,.36,1), filter .7s cubic-bezier(.22,1,.36,1); }
+.vfm-magnet-on { transition: translate .5s cubic-bezier(.22,1,.36,1); }
+.vfm-glare { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; z-index: 2; }
+.vfm-glare::before { content: ''; position: absolute; inset: 0;
+  background: linear-gradient(-50deg, transparent 38%, var(--vf-glare, rgba(255,255,255,.35)) 50%, transparent 62%) no-repeat;
+  background-size: 300% 300%; background-position: -100% -100%; transition: background-position 0s; }
+.vfm-glare.is-on::before { background-position: 100% 100%; transition: background-position .8s cubic-bezier(.22,1,.36,1); }
+`;
+  document.head.appendChild(style);
+
+  // ── Magnet: элемент слегка тянется к курсору в радиусе (только pointer: fine) ──
+  const magnets = new Set();
+  let magRaf = 0, mx = 0, my = 0, magBound = false;
+  const magStep = () => {
+    magRaf = 0;
+    magnets.forEach(el => {
+      const r = el.getBoundingClientRect();
+      const pad = +(el.dataset.magnet) || 56;
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const dx = mx - cx, dy = my - cy;
+      const near = Math.abs(dx) < r.width / 2 + pad && Math.abs(dy) < r.height / 2 + pad;
+      el.style.translate = near ? `${(dx * .22).toFixed(1)}px ${(dy * .22).toFixed(1)}px` : '';
+    });
+  };
+  const magnet = el => {
+    if (reduced() || !fine.matches) return;
+    el.classList.add('vfm-magnet-on');
+    magnets.add(el);
+    if (magBound) return;
+    magBound = true;
+    addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; if (!magRaf) magRaf = requestAnimationFrame(magStep); }, { passive: true });
+    document.addEventListener('pointerleave', () => { magnets.forEach(m => { m.style.translate = ''; }); });
+  };
+
+  // ── GlareHover: блик проходит по поверхности при наведении ──
+  const glare = el => {
+    if (reduced()) return;
+    if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+    const g = document.createElement('span');
+    g.className = 'vfm-glare'; g.setAttribute('aria-hidden', 'true');
+    el.appendChild(g);
+    el.addEventListener('pointerenter', () => { g.classList.remove('is-on'); void g.offsetWidth; g.classList.add('is-on'); });
+    el.addEventListener('pointerleave', () => g.classList.remove('is-on'));
+  };
+
+  // ── Reveal: одна схема появления (opacity + 16px вверх + blur→0), без каскадов ──
+  let io;
+  const reveal = el => {
+    if (reduced() || !('IntersectionObserver' in window)) return;
+    const r = el.getBoundingClientRect();
+    if (r.top < innerHeight * .92 && r.bottom > 0) return; // уже на экране — не прячем
+    io = io || new IntersectionObserver(list => list.forEach(en => {
+      if (!en.isIntersecting) return;
+      io.unobserve(en.target);
+      en.target.classList.add('vfm-in');
+      requestAnimationFrame(() => en.target.classList.remove('vfm-hide'));
+    }), { rootMargin: '0px 0px -8% 0px' });
+    el.classList.add('vfm-hide');
+    io.observe(el);
+  };
+
+  const scan = (root = document) => {
+    const each = (sel, fn) => root.querySelectorAll(sel).forEach(el => { const k = '__vfm_' + sel; if (el[k]) return; el[k] = 1; fn(el); });
+    each('[data-magnet]', magnet);
+    each('[data-glare]', glare);
+    each('[data-reveal]', reveal);
+    each('[data-autoanimate]', el => autoAnimate(el));
+  };
+  // сборщик ставит скрипты в конец body: к DOMContentLoaded вся разметка уже есть
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => scan());
+  else scan();
+
+  return { anime, autoAnimate, scan, reduced, load };
+})();
+
+</script>
+<script>
+// VF kit · звуковой слой. По умолчанию ВЫКЛЮЧЕН: включает посетитель (переключатель [data-sound-toggle]),
+// выбор запоминается. Звук только в ответ на действие: [data-sound="click|tick|wind|stamp|tear|paper|success|error"].
+// Файлы — kit/sounds/<имя>.{ogg,mp3} (CC0, источники — kit/sounds/SOURCES.md); если файла нет — короткий синтез Web Audio.
+(() => {
+  if (window.VFSound) return;
+  const KEY = 'vf-sound';
+  const PACK = () => document.documentElement.dataset.soundPack || 'mechanical';
+  let ctx = null, on = false;
+  const buffers = new Map();
+  try { on = localStorage.getItem(KEY) === 'on'; } catch {}
+
+  const ac = () => (ctx ||= new (window.AudioContext || window.webkitAudioContext)());
+
+  async function load(name) {
+    if (buffers.has(name)) return buffers.get(name);
+    const p = (async () => {
+      for (const ext of ['ogg', 'mp3']) {
+        try {
+          const r = await fetch(`../../kit/sounds/${PACK()}/${name}.${ext}`);
+          if (r.ok) return await ac().decodeAudioData(await r.arrayBuffer());
+        } catch {}
+      }
+      return null;
+    })();
+    buffers.set(name, p);
+    return p;
+  }
+
+  // Синтез на случай отсутствия файла: короткий механический щелчок/тик
+  function synth(name, gain) {
+    const a = ac(), t = a.currentTime;
+    const freq = { tick: 3200, click: 1800, wind: 900, stamp: 140, tear: 600, paper: 500, success: 880, error: 220 }[name] || 1500;
+    const len = name === 'stamp' ? 0.12 : name === 'success' ? 0.18 : 0.035;
+    const osc = a.createOscillator(), g = a.createGain();
+    osc.type = name === 'stamp' || name === 'error' ? 'triangle' : 'square';
+    osc.frequency.setValueAtTime(freq, t);
+    if (name === 'success') osc.frequency.exponentialRampToValueAtTime(freq * 1.5, t + len);
+    g.gain.setValueAtTime(gain * 0.25, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+    osc.connect(g).connect(a.destination);
+    osc.start(t); osc.stop(t + len + 0.02);
+  }
+
+  async function play(name, { volume = 0.35, rate = 1 } = {}) {
+    if (!on || !name) return;
+    const a = ac(); if (a.state === 'suspended') await a.resume().catch(() => {});
+    const buf = await load(name);
+    if (!buf) return synth(name, volume);
+    const src = a.createBufferSource(), g = a.createGain();
+    src.buffer = buf; src.playbackRate.value = rate * (0.97 + Math.random() * 0.06); // живой разброс
+    g.gain.value = volume;
+    src.connect(g).connect(a.destination); src.start();
+  }
+
+  function set(state, silent = false) {
+    on = state;
+    try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch {}
+    document.querySelectorAll('[data-sound-toggle]').forEach(b => { b.setAttribute('aria-pressed', on); b.dataset.state = on ? 'on' : 'off'; });
+    if (on && !silent) play('click');
+  }
+
+  // Делегирование: звук по атрибуту на любом элементе, без правки компонентов
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-sound-toggle]');
+    if (t) { set(!on); return; }
+    const s = e.target.closest('[data-sound]');
+    if (s) play(s.dataset.sound);
+  });
+  // События компонентов: vf:sound { detail: { name } } — например, отрыв талона или штамп после анимации
+  document.addEventListener('vf:sound', e => play(e.detail?.name, e.detail));
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => set(on, true)); else set(on, true);
+
+  window.VFSound = { play, set, get enabled() { return on; } };
+})();
+
+</script>
+<script>
+/* ── lib-process-stack ── */
+;(() => {
+// Источник: ScrollStack (React Bits, MIT + Commons Clause) — переписано на vanilla: нативный скролл, sticky + масштаб/затемнение предыдущих листов, без Lenis.
+VFKit.register('lib-process-stack', root => {
+  const sheets = [...root.querySelectorAll('.lps__sheet')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const n = sheets.length;
+  let raf = 0, visible = true;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  function update() {
+    raf = 0;
+    if (reduce.matches) { sheets.forEach(s => { s.style.transform = ''; s.querySelector('.lps__shade').style.setProperty('--dim', 0); }); return; }
+    // прогресс перекрытия каждого листа следующим: 0 — следующий ещё внизу, 1 — лёг на место
+    for (let i = 0; i < n - 1; i++) {
+      const cur = sheets[i], nxt = sheets[i + 1];
+      const h = cur.offsetHeight || 1;
+      const stickTop = parseFloat(getComputedStyle(nxt).top) || 0;
+      const p = clamp(1 - (nxt.getBoundingClientRect().top - stickTop) / h, 0, 1);
+      cur.__p = p;
+    }
+    for (let i = 0; i < n; i++) {
+      let buried = 0;
+      for (let j = i; j < n - 1; j++) buried += sheets[j].__p || 0;
+      sheets[i].style.transform = buried ? `scale(${(1 - buried * .035).toFixed(4)})` : '';
+      sheets[i].querySelector('.lps__shade').style.setProperty('--dim', Math.min(.45, buried * .16).toFixed(3));
+    }
+  }
+  const req = () => { if (!raf && visible) raf = requestAnimationFrame(update); };
+  addEventListener('scroll', req, { passive: true });
+  addEventListener('resize', req);
+  if ('IntersectionObserver' in window) new IntersectionObserver(([en]) => { visible = en.isIntersecting; req(); }, { rootMargin: '200px' }).observe(root);
+  update();
+  if (window.VFMotion) VFMotion.scan(root);
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>

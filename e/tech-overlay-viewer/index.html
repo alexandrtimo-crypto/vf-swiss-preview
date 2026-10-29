@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ru" data-recipe="tech">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Просмотрщик снимков (полный экран) · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300..700&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* title: Современно-технологично */
+/* fonts: Onest:wght@300..700; IBM Plex Mono:wght@400; IBM Plex Mono:wght@500 */
+/* Тема «живой прибор»: графит и один люминесцентный акцент. Глобальные правила сайта — только здесь. */
+:root{
+  --vf-bg:#05070a;
+  --vf-bg-2:#0a0e11;
+  --vf-surface:#10161a;
+  --vf-text:#eaf1f2;
+  --vf-text-2:#93a0a5;
+  --vf-muted:#5b676d;
+  --vf-line:rgba(214,236,240,.09);
+  --vf-accent:#6ff2d0;
+  --vf-accent-2:#b9fff0;
+  --vf-on-accent:#03140f;
+  --vf-danger:#ff8a7a;
+  --vf-font-display:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --vf-font-text:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --vf-font-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --vf-radius:18px;
+  --vf-radius-lg:26px;
+  --vf-ease:cubic-bezier(.2,.7,.1,1);
+  /* особые токены видения tech (компоненты читают их с запасным значением) */
+  --vf-surface-2:#080b0d;
+  --vf-line-2:rgba(214,236,240,.16);
+  --vf-tint:#d6ecf0;
+  --vf-danger-soft:#ff9d8f;
+  --vf-pad:clamp(20px,5.5vw,88px);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:90px}
+.vf-page{margin:0;background:var(--vf-bg);color:var(--vf-text);font-family:var(--vf-font-text);font-weight:400;font-size:17px;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.vf-page::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+img,video,canvas,svg{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit}
+.mono{font-family:var(--vf-font-mono);font-feature-settings:"zero" 1;letter-spacing:0}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:2px solid var(--vf-accent);outline-offset:3px;border-radius:8px}
+sup{color:var(--vf-accent);font-size:.7em;margin-left:1px}
+@media (max-width:820px){.vf-page{font-size:16px}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+
+/* title: Кнопки · технологично */
+/* Капсулы: люминесцентная основная со свечением и «стеклянная» второстепенная. */
+.vf-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:48px;padding:0 22px;border-radius:999px;border:0;text-decoration:none;font-family:var(--vf-font-text);font-weight:500;font-size:16px;line-height:1.2;cursor:pointer;white-space:nowrap;transition:transform .35s var(--vf-ease),box-shadow .35s var(--vf-ease),background .35s}
+.vf-btn--primary{background:var(--vf-accent);color:var(--vf-on-accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--vf-accent-2) 60%,transparent) inset,0 10px 40px -8px color-mix(in srgb,var(--vf-accent) 55%,transparent)}
+.vf-btn--primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.7) inset,0 16px 60px -6px color-mix(in srgb,var(--vf-accent) 75%,transparent)}
+.vf-btn--ghost{background:color-mix(in srgb,var(--vf-text) 6%,transparent);color:var(--vf-text);box-shadow:inset 0 0 0 1px var(--vf-line-2,var(--vf-line));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.vf-btn--ghost:hover{background:color-mix(in srgb,var(--vf-text) 10%,transparent);transform:translateY(-2px)}
+.vf-btn--sm{height:42px}
+.vf-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+@media (prefers-reduced-motion:reduce){.vf-btn{transition:none}}
+
+/* title: Поля · технологично */
+/* Крупные поля-«экраны» прибора: тонкая рамка, при фокусе — люминесцентный контур. */
+.vf-field{display:block;border:0;margin:0;padding:0;min-width:0}
+.vf-input{width:100%;height:68px;padding:0 22px;border-radius:var(--vf-radius);border:0;background:color-mix(in srgb,var(--vf-text) 4%,transparent);box-shadow:inset 0 0 0 1px var(--vf-line-2,var(--vf-line));color:var(--vf-text);font:400 24px/1 var(--vf-font-text);transition:box-shadow .3s,background .3s}
+.vf-input::placeholder{color:var(--vf-muted)}
+.vf-input:focus{outline:0;background:color-mix(in srgb,var(--vf-accent) 5%,transparent);box-shadow:inset 0 0 0 1.5px var(--vf-accent),0 0 40px -12px color-mix(in srgb,var(--vf-accent) 60%,transparent)}
+.vf-input[aria-invalid="true"]{box-shadow:inset 0 0 0 1.5px var(--vf-danger)}
+textarea.vf-input{height:auto;min-height:110px;padding:18px 22px;font-size:19px;line-height:1.4;resize:vertical}
+@media (max-width:820px){.vf-input,textarea.vf-input{height:60px;font-size:20px}}
+@media (prefers-reduced-motion:reduce){.vf-input{transition:none}}
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── tech-overlay-viewer ── */
+/* tech-overlay-viewer — VF kit, видение tech. Цвета/шрифты — общие токены --vf-*, особые tech-токены с запасным значением. */
+.tech-overlay-viewer{--t-tint:var(--vf-tint,var(--vf-text));--t-line2:var(--vf-line-2,var(--vf-line));--t-pad:var(--vf-pad,clamp(20px,5.5vw,88px))}
+:where(.tech-overlay-viewer),:where(.tech-overlay-viewer) *{box-sizing:border-box}
+:where(.tech-overlay-viewer) :where(h1,h2,h3,p){margin:0}
+:where(.tech-overlay-viewer) :where(img,video,canvas,svg){display:block;max-width:100%}
+:where(.tech-overlay-viewer) :where(a){color:inherit}
+:where(.tech-overlay-viewer) :where(button){font:inherit;color:inherit}
+:where(.tech-overlay-viewer) .mono{font-family:var(--vf-font-mono);font-feature-settings:"zero" 1;letter-spacing:0}
+:where(.tech-overlay-viewer) .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:where(.tech-overlay-viewer) sup{color:var(--vf-accent);font-size:.7em;margin-left:1px}
+.tech-overlay-viewer{border:0;padding:0;margin:0;width:100vw;height:100dvh;max-width:none;max-height:none;background:color-mix(in srgb,var(--vf-bg) 40%,#000);color:var(--vf-text)}
+.tech-overlay-viewer::backdrop{background:#000}
+.tech-overlay-viewer .viewer-scroll{position:absolute;inset:0;overflow:auto;display:grid;place-items:center;-webkit-overflow-scrolling:touch}
+.tech-overlay-viewer .viewer-scroll img{width:100%;height:auto;max-height:100%;object-fit:contain;cursor:zoom-in;transition:width .3s var(--vf-ease)}
+.tech-overlay-viewer.zoom .viewer-scroll{place-items:start}
+.tech-overlay-viewer.zoom .viewer-scroll img{width:260%;max-height:none;max-width:none;cursor:zoom-out}
+.tech-overlay-viewer .viewer-hint{position:absolute;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);font-size:12px;color:var(--vf-text-2);pointer-events:none}
+.tech-overlay-viewer .v-btn{position:absolute;width:52px;height:52px;border-radius:50%;border:0;background:color-mix(in srgb,var(--vf-surface) 75%,transparent);box-shadow:inset 0 0 0 1px var(--t-line2);font-size:20px;cursor:pointer;backdrop-filter:blur(10px)}
+.tech-overlay-viewer .v-close{top:calc(14px + env(safe-area-inset-top));right:14px}
+.tech-overlay-viewer .v-prev{left:14px;top:50%;margin-top:-26px}
+.tech-overlay-viewer .v-next{right:14px;top:50%;margin-top:-26px}
+.tech-overlay-viewer:not([open]){display:none}
+.tech-overlay-viewer .v-btn{color:var(--vf-text)}
+@media (prefers-reduced-motion:reduce){
+  .tech-overlay-viewer,.tech-overlay-viewer *,.tech-overlay-viewer *::before,.tech-overlay-viewer *::after{animation:none!important;transition:none!important}
+}
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Просмотрщик снимков (полный экран)</span><a href="../../v/tech/#tech-overlay-viewer" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<dialog data-part="tech-overlay-viewer" data-slot="overlay" class="tech-overlay-viewer" aria-label="Просмотр снимка">
+  <div class="viewer-scroll"><img class="viewer-img" src="" alt=""></div>
+  <p class="viewer-hint mono">коснитесь, чтобы увеличить</p>
+  <button class="v-btn v-close" type="button" aria-label="Закрыть">✕</button>
+  <button class="v-btn v-prev" type="button" aria-label="Предыдущий снимок">←</button>
+  <button class="v-btn v-next" type="button" aria-label="Следующий снимок">→</button>
+</dialog>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+
+<script>
+/* ── tech-overlay-viewer ── */
+;(() => {
+/* Полноэкранный просмотрщик снимков. Слушает vf:viewer { items:[{src,alt}], index }.
+   Касание — увеличить в точке, листание свайпом или стрелками. */
+VFKit.register('tech-overlay-viewer', root => {
+  const vImg = root.querySelector('.viewer-img'), vScroll = root.querySelector('.viewer-scroll');
+  let list = [], vi = 0;
+  function setViewer(i) {
+    if (!list.length) return;
+    vi = (i + list.length) % list.length;
+    vImg.src = list[vi].src; vImg.alt = list[vi].alt || ''; root.classList.remove('zoom');
+  }
+  document.addEventListener('vf:viewer', e => {
+    const d = e.detail || {};
+    if (!Array.isArray(d.items) || !d.items.length) return;
+    e.preventDefault();
+    list = d.items; setViewer(d.index || 0);
+    if (typeof root.showModal === 'function') { if (!root.open) root.showModal(); } else root.setAttribute('open', '');
+  });
+  vImg.addEventListener('click', e => {
+    if (root.classList.contains('zoom')) { root.classList.remove('zoom'); return; }
+    const r = vImg.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+    root.classList.add('zoom');
+    requestAnimationFrame(() => {
+      const W = vImg.offsetWidth, H = vImg.offsetHeight;
+      vScroll.scrollLeft = fx * W - vScroll.clientWidth / 2; vScroll.scrollTop = fy * H - vScroll.clientHeight / 2;
+    });
+  });
+  const close = () => { if (typeof root.close === 'function') root.close(); else root.removeAttribute('open'); };
+  root.querySelector('.v-close').addEventListener('click', close);
+  root.querySelector('.v-prev').addEventListener('click', () => setViewer(vi - 1));
+  root.querySelector('.v-next').addEventListener('click', () => setViewer(vi + 1));
+  root.addEventListener('keydown', e => { if (e.key === 'ArrowRight') setViewer(vi + 1); if (e.key === 'ArrowLeft') setViewer(vi - 1); });
+  let tx0 = null;
+  vScroll.addEventListener('touchstart', e => { tx0 = root.classList.contains('zoom') ? null : e.touches[0].clientX; }, { passive: true });
+  vScroll.addEventListener('touchend', e => {
+    if (tx0 === null) return; const dx = e.changedTouches[0].clientX - tx0;
+    if (Math.abs(dx) > 60) setViewer(vi + (dx < 0 ? 1 : -1)); tx0 = null;
+  });
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>

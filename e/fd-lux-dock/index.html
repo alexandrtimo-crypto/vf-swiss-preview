@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ru" data-recipe="fd-lux">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Панель связи (телефон) · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400%3B0,700%3B1,400&display=swap">
+<style>
+/* title: fd-lux — эмаль и воронёная сталь */
+/* fonts: Old Standard TT:ital,wght@0,400%3B0,700%3B1,400 */
+:root {
+  --vf-bg: #EDEFF1;          /* эмаль циферблата */
+  --vf-bg-2: #E3E6EA;
+  --vf-surface: #F6F7F8;
+  --vf-text: #1C2340;        /* чернила */
+  --vf-text-2: #3A4260;
+  --vf-muted: #59607A;
+  --vf-line: #C9CDD6;
+  --vf-accent: #22388A;      /* воронёная сталь */
+  --vf-accent-2: #121C3E;    /* ночь — тёмные полосы */
+  --vf-on-accent: #F3F4F6;
+  --vf-danger: #A3261D;
+  --vf-metal: #A8823A;       /* золото механизма: только линии и декор */
+  --vf-metal-on-dark: #CDAA63;
+  --vf-font-display: 'Old Standard TT', 'Times New Roman', serif;
+  --vf-font-text: 'Old Standard TT', 'Times New Roman', serif;
+  --vf-font-mono: 'Old Standard TT', serif;
+  --vf-radius: 3px;
+  --vf-radius-lg: 6px;
+  --vf-ease: cubic-bezier(.2, .7, .2, 1);
+  /* шкала Брингхерста: 14 16 18 21 24 36 48 60 72 */
+  --fd-s1: 14px; --fd-s2: 16px; --fd-s3: 18px; --fd-s4: 21px; --fd-s5: 24px;
+  --fd-s6: 36px; --fd-s7: 48px; --fd-s8: 60px; --fd-s9: 72px;
+}
+html { background: var(--vf-bg); -webkit-text-size-adjust: 100%; scroll-padding-top: 84px; }
+body.vf-page { margin: 0; background: var(--vf-bg); color: var(--vf-text); font: 400 18px/1.65 var(--vf-font-text); font-kerning: normal; text-rendering: optimizeLegibility; }
+body.vf-page :focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* title: fd-lux — кнопки: воронёная сталь */
+.vf-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5em; min-height: 52px; padding: 0 28px; border: 1px solid var(--vf-accent); border-radius: var(--vf-radius); background: transparent; color: var(--vf-accent); font: 400 18px/1 var(--vf-font-display); letter-spacing: .01em; text-decoration: none; cursor: pointer; transition: background-color .2s var(--vf-ease), color .2s var(--vf-ease); }
+.vf-btn:hover { background: color-mix(in srgb, var(--vf-accent) 8%, transparent); }
+.vf-btn--primary { background: var(--vf-accent); color: var(--vf-on-accent); }
+.vf-btn--primary:hover { background: color-mix(in srgb, var(--vf-accent) 86%, #000); }
+.vf-btn--ghost { border-color: currentColor; color: inherit; }
+.vf-btn--sm { min-height: 40px; padding: 0 18px; font-size: 16px; }
+.vf-btn:focus-visible { outline: 2px solid var(--vf-metal, #A8823A); outline-offset: 3px; }
+
+/* title: fd-lux — поля: строка на эмали */
+.vf-field { display: grid; gap: 6px; }
+.vf-field > span, .vf-field > label { font: italic 400 16px/1.3 var(--vf-font-text); color: inherit; opacity: .85; }
+.vf-input { width: 100%; box-sizing: border-box; min-height: 52px; padding: 12px 2px; border: 0; border-bottom: 1px solid currentColor; border-radius: 0; background: transparent; color: inherit; font: 400 20px/1.3 var(--vf-font-text); }
+textarea.vf-input { min-height: 96px; resize: vertical; }
+.vf-input::placeholder { color: inherit; opacity: .5; }
+.vf-input:focus { outline: none; border-bottom-width: 2px; border-bottom-color: var(--vf-metal-on-dark, #CDAA63); }
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); }
+.vf-field__err { font: 400 15px/1.4 var(--vf-font-text); color: inherit; }
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── fd-lux-hero ── */
+[data-part="fd-lux-hero"] { --fd-win: min(560px, 42vw); padding: 56px 40px 96px; }
+[data-part="fd-lux-hero"] .fd-lux-hero__in { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) var(--fd-win); gap: 64px; align-items: center; }
+[data-part="fd-lux-hero"] .fd-lux-hero__title { margin: 0 0 28px; font: 400 var(--fd-s9, 72px)/1.04 var(--vf-font-display); letter-spacing: -.012em; color: var(--vf-accent); max-width: 11ch; text-wrap: balance; }
+[data-part="fd-lux-hero"] .fd-lux-hero__lead { margin: 0 0 40px; max-width: 34em; font-size: var(--fd-s4, 21px); line-height: 1.6; color: var(--vf-text-2); }
+[data-part="fd-lux-hero"] .fd-lux-hero__acts { display: flex; flex-wrap: wrap; gap: 14px; }
+[data-part="fd-lux-hero"] .fd-lux-hero__window { position: relative; margin: 0; width: var(--fd-win); }
+[data-part="fd-lux-hero"] .fd-lux-hero__dial { position: relative; aspect-ratio: 1; }
+[data-part="fd-lux-hero"] .fd-lux-hero__glass { position: absolute; top: 0; left: 0; width: 84%; margin: 8%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--vf-accent-2); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vf-metal, #A8823A) 70%, transparent), 0 30px 60px -30px rgba(18, 28, 62, .55); }
+[data-part="fd-lux-hero"] .fd-lux-hero__glass::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(120% 80% at 30% 15%, rgba(255,255,255,.22), transparent 45%); pointer-events: none; }
+[data-part="fd-lux-hero"] .fd-lux-hero__vid { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.12); }
+[data-part="fd-lux-hero"] .fd-lux-hero__track { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--vf-metal, #A8823A); }
+[data-part="fd-lux-hero"] .fd-lux-hero__track line { stroke: currentColor; stroke-width: .5; }
+[data-part="fd-lux-hero"] .fd-lux-hero__track line.h { stroke-width: 1.1; }
+[data-part="fd-lux-hero"] .fd-lux-hero__track circle { fill: none; stroke: currentColor; stroke-width: .4; }
+[data-part="fd-lux-hero"] figcaption { margin: 10px auto 0; max-width: 30em; text-align: center; font-style: italic; font-size: var(--fd-s2, 16px); color: var(--vf-muted); }
+/* единственный оркестрованный момент: минутная дорожка «набирается» при загрузке */
+@keyframes fd-lux-hero-tick { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fd-lux-hero-glass { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+[data-part="fd-lux-hero"] .fd-lux-hero__track line { animation: fd-lux-hero-tick .5s var(--vf-ease) both; animation-delay: calc(var(--i) * 18ms + .2s); }
+[data-part="fd-lux-hero"] .fd-lux-hero__glass { animation: fd-lux-hero-glass 1.2s var(--vf-ease) both .1s; }
+@media (prefers-reduced-motion: reduce) {
+  [data-part="fd-lux-hero"] .fd-lux-hero__track line, [data-part="fd-lux-hero"] .fd-lux-hero__glass { animation: none; }
+}
+@media (max-width: 980px) {
+  [data-part="fd-lux-hero"] { --fd-win: min(400px, 78vw); padding: 16px 24px 72px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__in { grid-template-columns: 1fr; gap: 8px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__window { order: -1; margin: 0 auto; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__title { font-size: clamp(40px, 10.4vw, 60px); max-width: 12ch; margin-top: 16px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__lead { font-size: var(--fd-s3, 18px); margin-bottom: 28px; }
+}
+@media (max-width: 600px) {
+  [data-part="fd-lux-hero"] { padding: 8px 20px 64px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__acts .vf-btn { flex: 1 1 100%; }
+  [data-part="fd-lux-hero"] figcaption { font-size: 14px; }
+}
+
+
+/* ── fd-lux-dock ── */
+[data-part="fd-lux-dock"] { display: none; }
+@media (max-width: 760px) {
+  [data-part="fd-lux-dock"] { position: fixed; z-index: 40; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: 1fr 1fr 1.2fr; border-radius: var(--vf-radius-lg); overflow: hidden; background: var(--vf-accent-2); box-shadow: 0 12px 30px -12px rgba(18, 28, 62, .6); border: 1px solid color-mix(in srgb, var(--vf-metal-on-dark, #CDAA63) 40%, transparent); }
+  [data-part="fd-lux-dock"] a { display: flex; align-items: center; justify-content: center; min-height: 54px; font: 400 17px/1 var(--vf-font-display); color: #E7E9EF; text-decoration: none; }
+  [data-part="fd-lux-dock"] a + a { border-left: 1px solid rgba(255, 255, 255, .12); }
+  [data-part="fd-lux-dock"] .fd-lux-dock__book { background: var(--vf-metal-on-dark, #CDAA63); color: var(--vf-accent-2); }
+}
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Панель связи (телефон)</span><a href="../../v/fd-lux/#fd-lux-dock" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<section data-part="fd-lux-hero" data-slot="hero" class="fd-lux-hero" id="top">
+  <div class="fd-lux-hero__in">
+    <div class="fd-lux-hero__text">
+      <h1 class="fd-lux-hero__title">Мастерская швейцарских часов на&nbsp;Петровке</h1>
+      <p class="fd-lux-hero__lead">Владислав разбирает механизм до&nbsp;последнего винта, проверяет ход на&nbsp;таймграфере и&nbsp;ставит оригинальные детали. Диагностика бесплатно, гарантия до&nbsp;двух лет.</p>
+      <div class="fd-lux-hero__acts">
+        <a class="vf-btn vf-btn--primary" href="#booking" data-book>Записаться на диагностику</a>
+        <a class="vf-btn" href="https://t.me/VFswissboutique" rel="noopener">Написать в Telegram</a>
+      </div>
+    </div>
+    <figure class="fd-lux-hero__window">
+      <div class="fd-lux-hero__dial">
+      <div class="fd-lux-hero__glass">
+        <video class="fd-lux-hero__vid" muted loop playsinline preload="metadata" poster="../../media/vid/hero-poster.webp" aria-hidden="true">
+          <source src="../../media/vid/hero.mp4" type="video/mp4">
+        </video>
+      </div>
+      <svg class="fd-lux-hero__track" viewBox="0 0 200 200" aria-hidden="true"></svg>
+      </div>
+      <figcaption>Механизм на&nbsp;верстаке мастерской: пинцет у&nbsp;балансового узла</figcaption>
+    </figure>
+  </div>
+</section>
+
+<nav data-part="fd-lux-dock" data-slot="dock" class="fd-lux-dock" aria-label="Связаться с мастерской">
+  <a href="tel:+79651716996">Позвонить</a>
+  <a href="https://t.me/VFswissboutique" rel="noopener">Telegram</a>
+  <a href="#booking" class="fd-lux-dock__book" data-book>Заявка</a>
+</nav>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+
+<script>
+/* ── fd-lux-hero ── */
+;(() => {
+VFKit.register('fd-lux-hero', root => {
+  // минутная дорожка безеля: 60 рисок, каждая пятая длиннее
+  const svg = root.querySelector('.fd-lux-hero__track');
+  const NS = 'http://www.w3.org/2000/svg';
+  const ring = document.createElementNS(NS, 'circle');
+  ring.setAttribute('cx', 100); ring.setAttribute('cy', 100); ring.setAttribute('r', 99.2);
+  svg.appendChild(ring);
+  for (let i = 0; i < 60; i++) {
+    const a = (i / 60) * Math.PI * 2, h = i % 5 === 0;
+    const r1 = h ? 92.5 : 95, r2 = 98;
+    const l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', (100 + r1 * Math.sin(a)).toFixed(2)); l.setAttribute('y1', (100 - r1 * Math.cos(a)).toFixed(2));
+    l.setAttribute('x2', (100 + r2 * Math.sin(a)).toFixed(2)); l.setAttribute('y2', (100 - r2 * Math.cos(a)).toFixed(2));
+    if (h) l.setAttribute('class', 'h');
+    l.style.setProperty('--i', i);
+    svg.appendChild(l);
+  }
+  const v = root.querySelector('video');
+  if (v && !matchMedia('(prefers-reduced-motion: reduce)').matches) { v.play().catch(() => {}); }
+  root.querySelectorAll('[data-book]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    document.dispatchEvent(new CustomEvent('vf:book', { cancelable: true, detail: {} }));
+  }));
+});
+
+})();
+
+/* ── fd-lux-dock ── */
+;(() => {
+VFKit.register('fd-lux-dock', root => {
+  root.querySelector('[data-book]').addEventListener('click', e => {
+    e.preventDefault();
+    document.dispatchEvent(new CustomEvent('vf:book', { cancelable: true, detail: {} }));
+  });
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>

@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="ru" data-recipe="tech">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Разбор механизма на слои · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300..700&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* title: Современно-технологично */
+/* fonts: Onest:wght@300..700; IBM Plex Mono:wght@400; IBM Plex Mono:wght@500 */
+/* Тема «живой прибор»: графит и один люминесцентный акцент. Глобальные правила сайта — только здесь. */
+:root{
+  --vf-bg:#05070a;
+  --vf-bg-2:#0a0e11;
+  --vf-surface:#10161a;
+  --vf-text:#eaf1f2;
+  --vf-text-2:#93a0a5;
+  --vf-muted:#5b676d;
+  --vf-line:rgba(214,236,240,.09);
+  --vf-accent:#6ff2d0;
+  --vf-accent-2:#b9fff0;
+  --vf-on-accent:#03140f;
+  --vf-danger:#ff8a7a;
+  --vf-font-display:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --vf-font-text:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --vf-font-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --vf-radius:18px;
+  --vf-radius-lg:26px;
+  --vf-ease:cubic-bezier(.2,.7,.1,1);
+  /* особые токены видения tech (компоненты читают их с запасным значением) */
+  --vf-surface-2:#080b0d;
+  --vf-line-2:rgba(214,236,240,.16);
+  --vf-tint:#d6ecf0;
+  --vf-danger-soft:#ff9d8f;
+  --vf-pad:clamp(20px,5.5vw,88px);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:90px}
+.vf-page{margin:0;background:var(--vf-bg);color:var(--vf-text);font-family:var(--vf-font-text);font-weight:400;font-size:17px;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.vf-page::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+img,video,canvas,svg{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit}
+.mono{font-family:var(--vf-font-mono);font-feature-settings:"zero" 1;letter-spacing:0}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:2px solid var(--vf-accent);outline-offset:3px;border-radius:8px}
+sup{color:var(--vf-accent);font-size:.7em;margin-left:1px}
+@media (max-width:820px){.vf-page{font-size:16px}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+
+/* title: Кнопки · технологично */
+/* Капсулы: люминесцентная основная со свечением и «стеклянная» второстепенная. */
+.vf-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:48px;padding:0 22px;border-radius:999px;border:0;text-decoration:none;font-family:var(--vf-font-text);font-weight:500;font-size:16px;line-height:1.2;cursor:pointer;white-space:nowrap;transition:transform .35s var(--vf-ease),box-shadow .35s var(--vf-ease),background .35s}
+.vf-btn--primary{background:var(--vf-accent);color:var(--vf-on-accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--vf-accent-2) 60%,transparent) inset,0 10px 40px -8px color-mix(in srgb,var(--vf-accent) 55%,transparent)}
+.vf-btn--primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.7) inset,0 16px 60px -6px color-mix(in srgb,var(--vf-accent) 75%,transparent)}
+.vf-btn--ghost{background:color-mix(in srgb,var(--vf-text) 6%,transparent);color:var(--vf-text);box-shadow:inset 0 0 0 1px var(--vf-line-2,var(--vf-line));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.vf-btn--ghost:hover{background:color-mix(in srgb,var(--vf-text) 10%,transparent);transform:translateY(-2px)}
+.vf-btn--sm{height:42px}
+.vf-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+@media (prefers-reduced-motion:reduce){.vf-btn{transition:none}}
+
+/* title: Поля · технологично */
+/* Крупные поля-«экраны» прибора: тонкая рамка, при фокусе — люминесцентный контур. */
+.vf-field{display:block;border:0;margin:0;padding:0;min-width:0}
+.vf-input{width:100%;height:68px;padding:0 22px;border-radius:var(--vf-radius);border:0;background:color-mix(in srgb,var(--vf-text) 4%,transparent);box-shadow:inset 0 0 0 1px var(--vf-line-2,var(--vf-line));color:var(--vf-text);font:400 24px/1 var(--vf-font-text);transition:box-shadow .3s,background .3s}
+.vf-input::placeholder{color:var(--vf-muted)}
+.vf-input:focus{outline:0;background:color-mix(in srgb,var(--vf-accent) 5%,transparent);box-shadow:inset 0 0 0 1.5px var(--vf-accent),0 0 40px -12px color-mix(in srgb,var(--vf-accent) 60%,transparent)}
+.vf-input[aria-invalid="true"]{box-shadow:inset 0 0 0 1.5px var(--vf-danger)}
+textarea.vf-input{height:auto;min-height:110px;padding:18px 22px;font-size:19px;line-height:1.4;resize:vertical}
+@media (max-width:820px){.vf-input,textarea.vf-input{height:60px;font-size:20px}}
+@media (prefers-reduced-motion:reduce){.vf-input{transition:none}}
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── tech-story-explode ── */
+/* tech-story-explode — VF kit, видение tech. Цвета/шрифты — общие токены --vf-*, особые tech-токены с запасным значением. */
+.tech-story-explode{--t-tint:var(--vf-tint,var(--vf-text));--t-line2:var(--vf-line-2,var(--vf-line));--t-pad:var(--vf-pad,clamp(20px,5.5vw,88px))}
+:where(.tech-story-explode),:where(.tech-story-explode) *{box-sizing:border-box}
+:where(.tech-story-explode) :where(h1,h2,h3,p){margin:0}
+:where(.tech-story-explode) :where(img,video,canvas,svg){display:block;max-width:100%}
+:where(.tech-story-explode) :where(a){color:inherit}
+:where(.tech-story-explode) :where(button){font:inherit;color:inherit}
+:where(.tech-story-explode) .mono{font-family:var(--vf-font-mono);font-feature-settings:"zero" 1;letter-spacing:0}
+:where(.tech-story-explode) .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:where(.tech-story-explode) sup{color:var(--vf-accent);font-size:.7em;margin-left:1px}
+.tech-story-explode .ruler{position:absolute;z-index:2;right:clamp(14px,2.2vw,34px);top:18%;bottom:24%;width:22px;pointer-events:none;
+  background:
+    repeating-linear-gradient(180deg,color-mix(in srgb,var(--t-tint) 50%,transparent) 0 1px,transparent 1px 40px) right top/14px 100% no-repeat,
+    repeating-linear-gradient(180deg,color-mix(in srgb,var(--t-tint) 22%,transparent) 0 1px,transparent 1px 8px) right top/7px 100% no-repeat}
+.tech-story-explode .ruler::before{content:"";position:absolute;right:0;top:0;bottom:0;width:1px;background:color-mix(in srgb,var(--t-tint) 18%,transparent)}
+.tech-story-explode .ruler i{position:absolute;right:-2px;top:calc(var(--k,.5)*100%);width:26px;height:2px;margin-top:-1px;background:var(--vf-accent);box-shadow:0 0 12px var(--vf-accent)}
+.tech-story-explode .ruler i::after{content:"";position:absolute;left:-7px;top:-3px;border:4px solid transparent;border-left:6px solid var(--vf-accent)}
+.tech-story-explode .ruler-tag{position:absolute;right:0;top:-24px;font-size:10px;color:var(--vf-muted);white-space:nowrap;letter-spacing:.06em}
+.tech-story-explode .ruler-xp{top:22%;bottom:22%}
+.tech-story-explode{position:relative;height:440vh;background:linear-gradient(180deg,var(--vf-bg),color-mix(in srgb,var(--vf-bg) 50%,var(--vf-bg-2)) 30%,color-mix(in srgb,var(--vf-bg) 50%,var(--vf-bg-2)) 70%,var(--vf-bg))}
+.tech-story-explode .xp-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.tech-story-explode .xp-pin canvas{position:absolute;inset:0;width:100%;height:100%}
+.tech-story-explode .xp-head{position:absolute;left:var(--t-pad);top:clamp(100px,15vh,150px);max-width:min(420px,32vw);z-index:2}
+.tech-story-explode .xp-head h2{font-weight:500;font-size:clamp(34px,3.6vw,56px);line-height:1;letter-spacing:-.04em;text-wrap:balance}
+.tech-story-explode .xp-hint{margin-top:16px;color:var(--vf-text-2)}
+.tech-story-explode .xp-tags{list-style:none;margin:0;padding:0}
+@media (scripting:enabled){.tech-story-explode .xp-tags li{position:absolute;left:0;top:0;opacity:0;transition:opacity .5s var(--vf-ease),filter .5s;will-change:transform;filter:blur(6px)}}
+@media (scripting:enabled){.tech-story-explode .xp-tags li.on{opacity:1;filter:none}}
+.tech-story-explode .xp-tags li{display:flex;flex-direction:column;gap:3px;padding:2px 0;max-width:250px;text-shadow:0 2px 14px #000,0 0 2px #000}
+.tech-story-explode .xp-tags li.left{text-align:right;align-items:flex-end}
+.tech-story-explode .xp-tags b{font-weight:500;font-size:19px;letter-spacing:-.015em}
+.tech-story-explode .xp-tags span{font-size:13.5px;color:var(--vf-text-2);line-height:1.35}
+.tech-story-explode .xp-tags li.act b{color:var(--vf-accent)}
+.tech-story-explode .xp-final{position:absolute;left:50%;bottom:clamp(30px,7vh,70px);transform:translate(-50%,20px);opacity:0;transition:.7s var(--vf-ease);font-size:clamp(20px,2vw,28px);letter-spacing:-.02em;text-align:center;width:max-content;max-width:90vw}
+.tech-story-explode .xp-final em{font-style:normal;color:var(--vf-accent)}
+.tech-story-explode .xp-final.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:820px){
+  .tech-story-explode .ruler-xp{display:none}
+  .tech-story-explode{height:420vh}
+  .tech-story-explode .xp-head{left:20px;right:20px;top:84px;max-width:none}
+  .tech-story-explode .xp-head h2{font-size:30px}
+  .tech-story-explode .xp-hint{margin-top:8px;font-size:14px}
+  .tech-story-explode .xp-tags li{max-width:150px}
+  .tech-story-explode .xp-tags b{font-size:15px}
+  .tech-story-explode .xp-tags span{display:none}
+  .tech-story-explode .xp-tags li.act span{display:block;font-size:12px}
+  .tech-story-explode .xp-final{bottom:96px;font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  .tech-story-explode{height:auto}
+  .tech-story-explode .xp-pin{position:relative;height:100svh;min-height:700px}
+  @media (scripting:enabled){.tech-story-explode .xp-tags li{opacity:1;filter:none}}
+  .tech-story-explode .xp-final{opacity:1;transform:translate(-50%,0)}
+}
+@media (scripting:none){.tech-story-explode{height:auto}}
+@media (scripting:none){.tech-story-explode .xp-pin{position:relative;height:auto;padding:140px var(--t-pad) 60px}}
+@media (scripting:none){.tech-story-explode .xp-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:180px}}
+@media (scripting:none){.tech-story-explode .xp-head{position:relative;left:0;top:0}}
+@media (scripting:none){.tech-story-explode .xp-final{position:relative;opacity:1;left:0;transform:none;margin-top:30px;bottom:0}}
+@media (prefers-reduced-motion:reduce){
+  .tech-story-explode,.tech-story-explode *,.tech-story-explode *::before,.tech-story-explode *::after{animation:none!important;transition:none!important}
+}
+
+
+/* ── tech-overlay-viewer ── */
+/* tech-overlay-viewer — VF kit, видение tech. Цвета/шрифты — общие токены --vf-*, особые tech-токены с запасным значением. */
+.tech-overlay-viewer{--t-tint:var(--vf-tint,var(--vf-text));--t-line2:var(--vf-line-2,var(--vf-line));--t-pad:var(--vf-pad,clamp(20px,5.5vw,88px))}
+:where(.tech-overlay-viewer),:where(.tech-overlay-viewer) *{box-sizing:border-box}
+:where(.tech-overlay-viewer) :where(h1,h2,h3,p){margin:0}
+:where(.tech-overlay-viewer) :where(img,video,canvas,svg){display:block;max-width:100%}
+:where(.tech-overlay-viewer) :where(a){color:inherit}
+:where(.tech-overlay-viewer) :where(button){font:inherit;color:inherit}
+:where(.tech-overlay-viewer) .mono{font-family:var(--vf-font-mono);font-feature-settings:"zero" 1;letter-spacing:0}
+:where(.tech-overlay-viewer) .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:where(.tech-overlay-viewer) sup{color:var(--vf-accent);font-size:.7em;margin-left:1px}
+.tech-overlay-viewer{border:0;padding:0;margin:0;width:100vw;height:100dvh;max-width:none;max-height:none;background:color-mix(in srgb,var(--vf-bg) 40%,#000);color:var(--vf-text)}
+.tech-overlay-viewer::backdrop{background:#000}
+.tech-overlay-viewer .viewer-scroll{position:absolute;inset:0;overflow:auto;display:grid;place-items:center;-webkit-overflow-scrolling:touch}
+.tech-overlay-viewer .viewer-scroll img{width:100%;height:auto;max-height:100%;object-fit:contain;cursor:zoom-in;transition:width .3s var(--vf-ease)}
+.tech-overlay-viewer.zoom .viewer-scroll{place-items:start}
+.tech-overlay-viewer.zoom .viewer-scroll img{width:260%;max-height:none;max-width:none;cursor:zoom-out}
+.tech-overlay-viewer .viewer-hint{position:absolute;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);font-size:12px;color:var(--vf-text-2);pointer-events:none}
+.tech-overlay-viewer .v-btn{position:absolute;width:52px;height:52px;border-radius:50%;border:0;background:color-mix(in srgb,var(--vf-surface) 75%,transparent);box-shadow:inset 0 0 0 1px var(--t-line2);font-size:20px;cursor:pointer;backdrop-filter:blur(10px)}
+.tech-overlay-viewer .v-close{top:calc(14px + env(safe-area-inset-top));right:14px}
+.tech-overlay-viewer .v-prev{left:14px;top:50%;margin-top:-26px}
+.tech-overlay-viewer .v-next{right:14px;top:50%;margin-top:-26px}
+.tech-overlay-viewer:not([open]){display:none}
+.tech-overlay-viewer .v-btn{color:var(--vf-text)}
+@media (prefers-reduced-motion:reduce){
+  .tech-overlay-viewer,.tech-overlay-viewer *,.tech-overlay-viewer *::before,.tech-overlay-viewer *::after{animation:none!important;transition:none!important}
+}
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Разбор механизма на слои</span><a href="../../v/tech/#tech-story-explode" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<section data-part="tech-story-explode" data-slot="story" class="tech-story-explode" id="razbor" aria-labelledby="tech-xp-h">
+  <div class="xp-pin">
+    <canvas class="xp-canvas" aria-hidden="true"></canvas>
+    <div class="ruler ruler-xp" aria-hidden="true"><span class="ruler-tag mono">разнос&nbsp;слоёв</span><i></i></div>
+    <div class="xp-head">
+      <h2 id="tech-xp-h">Мастер видит часы насквозь</h2>
+      <p class="xp-hint">Прокрутите&nbsp;— механизм разложится по&nbsp;слоям.</p>
+    </div>
+    <ol class="xp-tags">
+      <li data-layer="5"><b>Стекло</b><span>меняем, если поцарапано или разбито</span></li>
+      <li data-layer="4"><b>Мосты</b><span>держат оси колёс на камнях</span></li>
+      <li data-layer="3"><b>Баланс</b><span>сердце хода, проверяем на таймграфере</span></li>
+      <li data-layer="2"><b>Анкерный спуск</b><span>смотрим под микроскопом</span></li>
+      <li data-layer="1"><b>Колёсная передача</b><span>оригинальные комплектующие</span></li>
+      <li data-layer="0"><b>Платина</b><span>основа механизма</span></li>
+    </ol>
+    <p class="xp-final">Разобрать, понять, собрать. <em>Гарантия до&nbsp;двух&nbsp;лет.</em></p>
+  </div>
+</section>
+
+<dialog data-part="tech-overlay-viewer" data-slot="overlay" class="tech-overlay-viewer" aria-label="Просмотр снимка">
+  <div class="viewer-scroll"><img class="viewer-img" src="" alt=""></div>
+  <p class="viewer-hint mono">коснитесь, чтобы увеличить</p>
+  <button class="v-btn v-close" type="button" aria-label="Закрыть">✕</button>
+  <button class="v-btn v-prev" type="button" aria-label="Предыдущий снимок">←</button>
+  <button class="v-btn v-next" type="button" aria-label="Следующий снимок">→</button>
+</dialog>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+
+<script>
+/* ── tech-story-explode ── */
+;(() => {
+/* --- Общий процедурный механизм tech (canvas 2D, аксонометрия: каждый слой — плоскость на своей высоте z).
+   Этот блок одинаков в tech-hero и tech-story-explode; на странице создаётся один раз (window.VFTechMech). --- */
+const techMech = root => window.VFTechMech || (window.VFTechMech = (() => {
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const TAU = Math.PI * 2;
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const lerp = (a, b, k) => a + (b - a) * k;
+  const ease = k => (k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+  const smooth = (a, b, x) => { const k = clamp((x - a) / (b - a)); return k * k * (3 - 2 * k); };
+  const hash = n => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+  // цвета и шрифты темы → для canvas
+  const cs = getComputedStyle(root);
+  const probe = document.createElement('canvas').getContext('2d');
+  const rgb = (v, fb) => {
+    probe.fillStyle = fb; probe.fillStyle = (v || '').trim() || fb; const s = probe.fillStyle;
+    if (s[0] === '#') return [1, 3, 5].map(i => parseInt(s.slice(i, i + 2), 16)).join(',');
+    return (s.match(/[\d.]+/g) || [0, 0, 0]).slice(0, 3).join(',');
+  };
+  const LUME = rgb(cs.getPropertyValue('--vf-accent'), '#6ff2d0');
+  const TINT = rgb(cs.getPropertyValue('--vf-tint') || cs.getPropertyValue('--vf-text'), '#d6ecf0');
+  const FONT_TEXT = cs.getPropertyValue('--vf-font-text').trim() || 'sans-serif';
+  const FONT_MONO = cs.getPropertyValue('--vf-font-mono').trim() || 'monospace';
+  function msk() { const d = new Date(); return new Date(d.getTime() + (d.getTimezoneOffset() + 180) * 60000); }
+
+  const G = { barrel: [-48, 32, 32], center: [0, 0, 26], third: [30, -28, 18], fourth: [58, -2, 16], escape: [55, 32, 13], pallet: [38, 49], bal: [18, 66, 27] };
+  const F = 2.5; // частота баланса, Гц (визуально)
+  function mstate(t) {
+    const ph = t * F;
+    const beats = Math.floor(ph * 2);
+    const fr = ph * 2 - beats;
+    const k = 1 - Math.pow(1 - clamp(fr * 6), 3);
+    const cur = (beats % 2 ? -1 : 1) * 0.12;
+    const barrel = -0.12 * t;
+    const center = -barrel * 32 / 26;
+    const third = -center * 26 / 18;
+    const fourth = -third * 18 / 16;
+    return { t, bal: 3.3 * Math.sin(TAU * ph), esc: -(beats + k) * (TAU / 30), pal: lerp(-cur, cur, k), barrel, center, third, fourth, beat: beats, glow: Math.max(0, 1 - fr * 2.5) };
+  }
+
+  let LW = 1; // толщина 1 css-px в локальных единицах
+  const gradCache = new WeakMap();
+  function metal(g, r, kind) {
+    let m = gradCache.get(g); if (!m) { m = new Map(); gradCache.set(g, m); }
+    const key = kind + r; if (m.has(key)) return m.get(key);
+    const gr = g.createLinearGradient(-r, -r, r, r);
+    const S = kind === 'warm' ? ['#efe5cc', '#8e8167', '#dcd0b1', '#5d5442'] : ['#f1f6f7', '#7d898e', '#cfd8db', '#3b4448'];
+    S.forEach((c, i) => gr.addColorStop(i / (S.length - 1), c));
+    m.set(key, gr); return gr;
+  }
+  function ring(g, r, col, w) { g.strokeStyle = col; g.lineWidth = w; g.beginPath(); g.arc(0, 0, r, 0, TAU); g.stroke(); }
+  function screw(g, x, y, r, a) {
+    const sg = g.createRadialGradient(x - r * .4, y - r * .4, 0, x, y, r);
+    sg.addColorStop(0, '#9fc0dc'); sg.addColorStop(.55, '#3d5f80'); sg.addColorStop(1, '#16222e');
+    g.fillStyle = sg; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill();
+    g.strokeStyle = 'rgba(0,0,0,.75)'; g.lineWidth = r * .32; g.beginPath();
+    g.moveTo(x + Math.cos(a) * r * .8, y + Math.sin(a) * r * .8); g.lineTo(x - Math.cos(a) * r * .8, y - Math.sin(a) * r * .8); g.stroke();
+  }
+  function jewel(g, x, y, r, a = 1) {
+    const jg = g.createRadialGradient(x, y, 0, x, y, r * 3.4);
+    jg.addColorStop(0, `rgba(240,255,252,${a})`);
+    jg.addColorStop(.16, `rgba(${LUME},${.95 * a})`);
+    jg.addColorStop(.38, `rgba(${LUME},${.22 * a})`);
+    jg.addColorStop(1, `rgba(${LUME},0)`);
+    g.fillStyle = jg; g.beginPath(); g.arc(x, y, r * 3.4, 0, TAU); g.fill();
+  }
+
+  /* заранее отрисованные статичные слои */
+  const UNITS = 280;
+  const RES = Math.min(1700, Math.ceil(3.4 * DPR * UNITS));
+  function off(draw) {
+    const c = document.createElement('canvas'); c.width = c.height = RES;
+    const g = c.getContext('2d'); g.setTransform(RES / UNITS, 0, 0, RES / UNITS, RES / 2, RES / 2); draw(g); return c;
+  }
+  function drawPlate(g) {
+    const gr = g.createRadialGradient(-30, -40, 10, 0, 0, 104);
+    gr.addColorStop(0, '#222a2f'); gr.addColorStop(1, '#0b0f11');
+    g.fillStyle = gr; g.beginPath(); g.arc(0, 0, 100, 0, TAU); g.fill();
+    g.save(); g.beginPath(); g.arc(0, 0, 97, 0, TAU); g.clip();
+    for (let y = -100, row = 0; y <= 100; y += 8.5, row++) {
+      for (let x = -100 + (row % 2) * 5; x <= 100; x += 10) {
+        const pg = g.createRadialGradient(x - 1.6, y - 1.6, 0, x, y, 6.8);
+        pg.addColorStop(0, 'rgba(225,238,242,.13)'); pg.addColorStop(.6, 'rgba(225,238,242,.035)'); pg.addColorStop(1, 'rgba(225,238,242,0)');
+        g.fillStyle = pg; g.beginPath(); g.arc(x, y, 6.8, 0, TAU); g.fill();
+        g.strokeStyle = 'rgba(225,238,242,.06)'; g.lineWidth = .35; g.stroke();
+      }
+    }
+    g.restore();
+    for (const [x, y, r] of [G.barrel, G.bal]) {
+      g.fillStyle = 'rgba(0,0,0,.22)'; g.beginPath(); g.arc(x, y, r + 3, 0, TAU); g.fill();
+      g.strokeStyle = 'rgba(225,238,242,.12)'; g.lineWidth = .5; g.stroke();
+    }
+    ring(g, 100, 'rgba(225,238,242,.5)', .8); ring(g, 96.5, 'rgba(225,238,242,.16)', .4);
+    for (const k of ['barrel', 'center', 'third', 'fourth', 'escape', 'bal']) { const [x, y] = G[k]; g.fillStyle = '#040607'; g.beginPath(); g.arc(x, y, 2.2, 0, TAU); g.fill(); }
+    for (const a of [.35, 2.3, 3.9, 5.3]) screw(g, Math.cos(a) * 90, Math.sin(a) * 90, 3.4, a * 2);
+    g.textAlign = 'center';
+    g.fillStyle = 'rgba(225,238,242,.32)'; g.font = `600 7px ${FONT_TEXT}`; g.fillText('VF swiss', -24, -74);
+    g.fillStyle = 'rgba(225,238,242,.2)'; g.font = `3.6px ${FONT_MONO}`; g.fillText('MOSCOW · PETROVKA 23/10', -24, -67);
+  }
+  const BR = [
+    { pts: [[-48, 32], [-76, -26]], w: 30, caps: [[-48, 32, 37]] },
+    { pts: [[-26, -64], [0, 0], [30, -28], [58, -2]], w: 19, caps: [[0, 0, 13], [30, -28, 11], [58, -2, 10]] },
+    { pts: [[55, 32], [38, 49], [64, 58]], w: 11, caps: [[55, 32, 8]] },
+    { pts: [[18, 66], [-22, 88]], w: 19, caps: [[18, 66, 13]] },
+  ];
+  const JEWELS = [G.center, G.third, G.fourth, G.escape, G.pallet, G.bal];
+  const BSCREWS = [[-76, -26], [-26, -64], [-22, 88], [64, 58], [-30, 52]];
+  function bridgeShape(g, extra) {
+    g.lineCap = 'round'; g.lineJoin = 'round';
+    for (const b of BR) {
+      g.lineWidth = b.w + extra; g.beginPath();
+      b.pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.stroke();
+      for (const [x, y, r] of b.caps) { g.beginPath(); g.arc(x, y, r + extra / 2, 0, TAU); g.fill(); }
+    }
+  }
+  function plateClip(g) { g.globalCompositeOperation = 'destination-in'; g.fillStyle = '#000'; g.beginPath(); g.arc(0, 0, 99, 0, TAU); g.fill(); g.globalCompositeOperation = 'source-over'; }
+  function drawBridgeFill(g) {
+    g.fillStyle = g.strokeStyle = '#4d5c63'; bridgeShape(g, 0);
+    g.globalCompositeOperation = 'source-atop';
+    const lg = g.createLinearGradient(-100, -100, 100, 100); lg.addColorStop(0, '#5d6c73'); lg.addColorStop(.45, '#1b2327'); lg.addColorStop(.7, '#38444a'); lg.addColorStop(1, '#11171a');
+    g.fillStyle = lg; g.fillRect(-140, -140, 280, 280);
+    g.save(); g.rotate(-.55);
+    for (let x = -160; x < 160; x += 9) {
+      const sg = g.createLinearGradient(x, 0, x + 9, 0);
+      sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(255,255,255,.13)'); sg.addColorStop(1, 'rgba(0,0,0,.2)');
+      g.fillStyle = sg; g.fillRect(x, -160, 9, 320);
+    }
+    g.restore();
+    g.globalCompositeOperation = 'destination-out';
+    for (const [x, y] of JEWELS) { g.beginPath(); g.arc(x, y, 4, 0, TAU); g.fill(); }
+    g.globalCompositeOperation = 'source-over';
+    plateClip(g);
+  }
+  function drawBridgeEdge(g) {
+    g.fillStyle = g.strokeStyle = 'rgba(214,236,240,.75)'; bridgeShape(g, 1.2);
+    g.globalCompositeOperation = 'destination-out'; bridgeShape(g, 0); g.globalCompositeOperation = 'source-over';
+    plateClip(g);
+    for (const [x, y] of JEWELS) { g.strokeStyle = 'rgba(230,244,246,.8)'; g.lineWidth = .7; g.beginPath(); g.arc(x, y, 5.4, 0, TAU); g.stroke(); }
+    BSCREWS.forEach(([x, y], i) => screw(g, x, y, 3.3, i * 1.3));
+  }
+  function drawGlassRing(g) {
+    const cg = g.createRadialGradient(-40, -50, 10, 0, 0, 120);
+    cg.addColorStop(0, 'rgba(190,240,245,.12)'); cg.addColorStop(.7, 'rgba(190,240,245,.03)'); cg.addColorStop(1, 'rgba(190,240,245,.07)');
+    g.fillStyle = cg; g.beginPath(); g.arc(0, 0, 118, 0, TAU); g.arc(0, 0, 103, 0, TAU, true); g.fill('evenodd');
+    g.fillStyle = 'rgba(190,240,245,.022)'; g.beginPath(); g.arc(0, 0, 103, 0, TAU); g.fill();
+    ring(g, 118, 'rgba(225,240,242,.65)', .8); ring(g, 103, 'rgba(225,240,242,.25)', .4);
+    for (let i = 0; i < 60; i++) {
+      const a = i / 60 * TAU, big = i % 5 === 0;
+      g.strokeStyle = big ? 'rgba(235,245,246,.8)' : 'rgba(235,245,246,.35)'; g.lineWidth = big ? 1 : .45;
+      const r0 = big ? 105 : 108.5;
+      g.beginPath(); g.moveTo(Math.sin(a) * r0, -Math.cos(a) * r0); g.lineTo(Math.sin(a) * 115, -Math.cos(a) * 115); g.stroke();
+    }
+    for (let i = 0; i < 4; i++) { const a = i * TAU / 4; jewel(g, Math.sin(a) * 110.5, -Math.cos(a) * 110.5, 1.6, .9); }
+    const sg = g.createLinearGradient(-90, -90, 40, 40);
+    sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.4, 'rgba(255,255,255,.09)'); sg.addColorStop(.46, 'rgba(255,255,255,0)');
+    g.fillStyle = sg; g.beginPath(); g.arc(0, 0, 117, 0, TAU); g.fill();
+  }
+  let IMG = {};
+  function prerender() { IMG = { plate: off(drawPlate), bfill: off(drawBridgeFill), bedge: off(drawBridgeEdge), glass: off(drawGlassRing) }; }
+  prerender();
+  const ready = (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { prerender(); });
+  const blit = (g, c) => g.drawImage(c, -UNITS / 2, -UNITS / 2, UNITS, UNITS);
+
+  /* живые детали */
+  function gear(g, x, y, r, n, ang, o = {}) {
+    const spokes = o.spokes ?? 5, th = o.th ?? (r > 20 ? 2.6 : 2), rim = o.rim ?? 3, hub = o.hub ?? Math.max(2.4, r * .2);
+    g.save(); g.translate(x, y); g.rotate(ang);
+    g.beginPath();
+    const rr = r - th, w = TAU / n;
+    for (let i = 0; i < n; i++) {
+      const a = i * w;
+      const P = [[rr, a], [r, a + .22 * w], [r, a + .5 * w], [rr, a + .72 * w]];
+      P.forEach(([R, A], j) => (i === 0 && j === 0 ? g.moveTo(Math.cos(A) * R, Math.sin(A) * R) : g.lineTo(Math.cos(A) * R, Math.sin(A) * R)));
+    }
+    g.closePath();
+    if (spokes) {
+      const ri = rr - rim, sw = Math.max(1.1, r * .07);
+      for (let i = 0; i < spokes; i++) {
+        const a = i / spokes * TAU, b = (i + 1) / spokes * TAU;
+        g.moveTo(Math.cos(a + sw / ri) * ri, Math.sin(a + sw / ri) * ri);
+        g.arc(0, 0, ri, a + sw / ri, b - sw / ri);
+        g.arc(0, 0, hub, b - sw / hub, a + sw / hub, true); g.closePath();
+      }
+    }
+    g.fillStyle = metal(g, r, o.kind || 'warm'); g.fill('evenodd');
+    g.strokeStyle = 'rgba(255,250,235,.4)'; g.lineWidth = LW * .8; g.stroke();
+    if (o.cover) {
+      g.fillStyle = metal(g, rr - 2, 'warm'); g.beginPath(); g.arc(0, 0, rr - 1.5, 0, TAU); g.fill();
+      for (let k = 4; k < rr - 2; k += 2.2) ring(g, k, 'rgba(60,50,30,.18)', .35);
+    }
+    if (o.pinion) { g.fillStyle = '#2a3135'; g.beginPath(); g.arc(0, 0, o.pinion, 0, TAU); g.fill(); g.strokeStyle = 'rgba(230,240,242,.55)'; g.lineWidth = LW * .8; g.stroke(); }
+    g.fillStyle = '#0b0e10'; g.beginPath(); g.arc(0, 0, 1.5, 0, TAU); g.fill();
+    g.restore();
+  }
+  function escapeWheel(g, ang) {
+    const [x, y, r] = G.escape;
+    g.save(); g.translate(x, y); g.rotate(ang);
+    g.beginPath();
+    const n = 15, w = TAU / n, rr = r * .66;
+    for (let i = 0; i < n; i++) {
+      const a = i * w;
+      const P = [[rr, a], [r * .97, a + .3 * w], [r, a + .44 * w], [r * .88, a + .52 * w], [rr, a + .64 * w]];
+      P.forEach(([R, A], j) => (i === 0 && j === 0 ? g.moveTo(Math.cos(A) * R, Math.sin(A) * R) : g.lineTo(Math.cos(A) * R, Math.sin(A) * R)));
+    }
+    g.closePath();
+    const ri = rr - 1.6, hub = 2.4, sw = 1;
+    for (let i = 0; i < 4; i++) {
+      const a = i / 4 * TAU, b = (i + 1) / 4 * TAU;
+      g.moveTo(Math.cos(a + sw / ri) * ri, Math.sin(a + sw / ri) * ri);
+      g.arc(0, 0, ri, a + sw / ri, b - sw / ri); g.arc(0, 0, hub, b - sw / hub, a + sw / hub, true); g.closePath();
+    }
+    g.fillStyle = metal(g, r, 'cool'); g.fill('evenodd');
+    g.strokeStyle = 'rgba(240,250,252,.5)'; g.lineWidth = LW * .8; g.stroke();
+    g.restore();
+  }
+  function palletFork(g, ang) {
+    const [px, py] = G.pallet, [ex, ey] = G.escape, [bx, by] = G.bal;
+    const ae = Math.atan2(ey - py, ex - px), ab = Math.atan2(by - py, bx - px);
+    g.save(); g.translate(px, py); g.rotate(ang);
+    const L = 17, a1 = ae - .5, a2 = ae + .5, Lb = 20;
+    g.lineCap = 'round'; g.lineJoin = 'round';
+    g.strokeStyle = metal(g, 20, 'cool'); g.lineWidth = 2.8;
+    g.beginPath(); g.moveTo(Math.cos(a1) * L, Math.sin(a1) * L); g.lineTo(0, 0); g.lineTo(Math.cos(a2) * L, Math.sin(a2) * L);
+    g.moveTo(0, 0); g.lineTo(Math.cos(ab) * Lb, Math.sin(ab) * Lb); g.stroke();
+    g.lineWidth = 1.4; g.beginPath();
+    const hx = Math.cos(ab) * Lb, hy = Math.sin(ab) * Lb;
+    g.moveTo(hx + Math.cos(ab + 1.9) * 3, hy + Math.sin(ab + 1.9) * 3); g.lineTo(hx, hy); g.lineTo(hx + Math.cos(ab - 1.9) * 3, hy + Math.sin(ab - 1.9) * 3); g.stroke();
+    for (const a of [a1, a2]) jewel(g, Math.cos(a) * L, Math.sin(a) * L, 1.3, .9);
+    g.fillStyle = '#0b0e10'; g.beginPath(); g.arc(0, 0, 1.5, 0, TAU); g.fill();
+    g.restore();
+  }
+  function balanceWheel(g, ang, glow) {
+    const [x, y, r] = G.bal;
+    g.save(); g.translate(x, y);
+    g.beginPath();
+    const turns = 9, N = turns * 40;
+    for (let i = 0; i <= N; i++) {
+      const u = i / N, th = u * turns * TAU + ang * (1 - u) * .85, R = 3.4 + 13 * u;
+      const px = Math.cos(th) * R, py = Math.sin(th) * R;
+      i ? g.lineTo(px, py) : g.moveTo(px, py);
+    }
+    g.strokeStyle = 'rgba(205,228,234,.6)'; g.lineWidth = Math.max(.3, LW * .8); g.stroke();
+    g.rotate(ang);
+    g.beginPath(); g.arc(0, 0, r, 0, TAU); g.arc(0, 0, r - 3.2, 0, TAU, true);
+    g.fillStyle = metal(g, r, 'warm'); g.fill('evenodd');
+    g.fillRect(-r + 2, -1.3, 2 * r - 4, 2.6);
+    g.strokeStyle = 'rgba(255,250,235,.45)'; g.lineWidth = LW * .8; g.stroke();
+    for (let i = 0; i < 16; i++) {
+      const a = i / 16 * TAU;
+      g.fillStyle = '#cdbf9c'; g.beginPath(); g.arc(Math.cos(a) * (r + .8), Math.sin(a) * (r + .8), 1.05, 0, TAU); g.fill();
+    }
+    g.fillStyle = metal(g, 5, 'cool'); g.beginPath(); g.arc(0, 0, 4.2, 0, TAU); g.fill();
+    jewel(g, 0, 4.2, .9, .8);
+    if (glow > 0) {
+      g.strokeStyle = `rgba(${LUME},${.5 * glow})`; g.lineWidth = 2.4; g.beginPath(); g.arc(0, 0, r + 2.4, 0, TAU); g.stroke();
+    }
+    g.restore();
+  }
+  function ratchet(g, ang) {
+    const [x, y] = G.barrel;
+    g.save(); g.translate(x, y); g.rotate(ang);
+    g.beginPath();
+    const n = 44, R = 24, rr = 22;
+    for (let i = 0; i < n; i++) { const a = i / n * TAU, b = (i + .85) / n * TAU; i ? g.lineTo(Math.cos(a) * rr, Math.sin(a) * rr) : g.moveTo(Math.cos(a) * rr, Math.sin(a) * rr); g.lineTo(Math.cos(b) * R, Math.sin(b) * R); }
+    g.closePath(); g.fillStyle = metal(g, 24, 'cool'); g.fill();
+    g.strokeStyle = 'rgba(240,250,252,.45)'; g.lineWidth = LW * .8; g.stroke();
+    g.strokeStyle = 'rgba(20,30,34,.18)'; g.lineWidth = .3; g.beginPath();
+    for (let i = 0; i < 90; i++) { const a = i / 90 * TAU; g.moveTo(Math.cos(a) * 5, Math.sin(a) * 5); g.lineTo(Math.cos(a) * 21, Math.sin(a) * 21); }
+    g.stroke();
+    screw(g, 0, 0, 4.2, 0.6);
+    g.restore();
+  }
+  function hand(g, a, L, w) {
+    g.save(); g.rotate(a);
+    g.beginPath(); g.moveTo(-w, 7); g.lineTo(-w * .75, -L * .9); g.lineTo(0, -L); g.lineTo(w * .75, -L * .9); g.lineTo(w, 7); g.closePath();
+    g.fillStyle = 'rgba(8,12,14,.75)'; g.fill(); g.strokeStyle = 'rgba(238,246,247,.9)'; g.lineWidth = LW * 1.1; g.stroke();
+    g.fillStyle = `rgba(${LUME},.9)`; g.fillRect(-w * .32, -L * .84, w * .64, L * .56);
+    g.restore();
+  }
+  const LAYERS = [
+    (g) => blit(g, IMG.plate),
+    (g, s) => {
+      gear(g, G.barrel[0], G.barrel[1], 32, 76, s.barrel, { spokes: 0, cover: true });
+      gear(g, 0, 0, 26, 64, s.center, { pinion: 4.5 });
+      gear(g, 30, -28, 18, 48, s.third, { pinion: 3.6 });
+      gear(g, 58, -2, 16, 42, s.fourth, { pinion: 3.2, spokes: 4 });
+    },
+    (g, s) => { escapeWheel(g, s.esc); palletFork(g, s.pal); },
+    (g, s) => balanceWheel(g, s.bal, s.glow),
+    (g, s) => {
+      g.globalAlpha *= .88; blit(g, IMG.bfill); g.globalAlpha /= .88;
+      blit(g, IMG.bedge); ratchet(g, s.barrel * 1.0);
+      for (const [x, y] of JEWELS) jewel(g, x, y, 1.9, .95);
+    },
+    (g) => {
+      blit(g, IMG.glass);
+      const d = msk(); const sec = d.getSeconds() + d.getMilliseconds() / 1000, min = d.getMinutes() + sec / 60, hr = d.getHours() % 12 + min / 60;
+      hand(g, hr / 12 * TAU, 56, 3.4); hand(g, min / 60 * TAU, 86, 2.5);
+      g.save(); g.rotate(sec / 60 * TAU); g.strokeStyle = `rgba(${LUME},.95)`; g.lineWidth = Math.max(.5, LW * 1.2);
+      g.beginPath(); g.moveTo(0, 18); g.lineTo(0, -98); g.stroke(); g.fillStyle = `rgba(${LUME},1)`; g.beginPath(); g.arc(0, 0, 2.2, 0, TAU); g.fill(); g.restore();
+      g.fillStyle = '#0b0e10'; g.beginPath(); g.arc(0, 0, 1, 0, TAU); g.fill();
+    },
+  ];
+  function proj(V, z, lx, ly) {
+    const c = Math.cos(V.theta), s = Math.sin(V.theta);
+    const x1 = lx * c - ly * s, y1 = lx * s + ly * c;
+    return [V.cx + z * V.ox * V.s + x1 * V.s, V.cy - z * Math.sin(V.phi) * V.s + y1 * V.s * Math.cos(V.phi)];
+  }
+  function renderMech(C, V, st) {
+    const g = C.g;
+    g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, C.cv.width, C.cv.height);
+    LW = 1 / V.s;
+    const cp = Math.cos(V.phi), sp = Math.sin(V.phi);
+    const set = z => g.setTransform(DPR * V.s, 0, 0, DPR * V.s * cp, DPR * (V.cx + z * V.ox * V.s), DPR * (V.cy - z * sp * V.s));
+    set(V.z[0] - 8);
+    const sh = g.createRadialGradient(0, 10, 70, 0, 10, 150); sh.addColorStop(0, 'rgba(0,0,0,.75)'); sh.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = sh; g.beginPath(); g.arc(0, 10, 150, 0, TAU); g.fill();
+    if (V.halo) {
+      const hg = g.createRadialGradient(0, 0, 96, 0, 0, 160); hg.addColorStop(0, `rgba(${LUME},.16)`); hg.addColorStop(1, `rgba(${LUME},0)`);
+      g.fillStyle = hg; g.beginPath(); g.arc(0, 0, 160, 0, TAU); g.fill();
+    }
+    if (V.e > .02) {
+      const a = proj(V, V.z[0] - 20, 0, 0), b = proj(V, V.z[5] + 40, 0, 0);
+      g.setTransform(DPR, 0, 0, DPR, 0, 0); g.setLineDash([3, 5]); g.strokeStyle = `rgba(${LUME},${.45 * V.e})`; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); g.setLineDash([]);
+    }
+    for (let i = 0; i < 6; i++) {
+      set(V.z[i]); g.rotate(V.theta);
+      if (V.e > .05) {
+        const on = V.hi === i;
+        g.setLineDash(on ? [] : [3, 4]);
+        g.strokeStyle = `rgba(${LUME},${(on ? .75 : .2) * V.e})`; g.lineWidth = LW * (on ? 1.6 : 1);
+        g.beginPath(); g.arc(0, 0, 127, 0, TAU); g.stroke(); g.setLineDash([]);
+        if (on) { g.strokeStyle = `rgba(${LUME},${.12 * V.e})`; g.lineWidth = 7; g.beginPath(); g.arc(0, 0, 127, 0, TAU); g.stroke(); }
+      }
+      g.globalAlpha = V.hi >= 0 && V.hi !== i ? .62 : 1;
+      LAYERS[i](g, st, V);
+      g.globalAlpha = 1;
+    }
+  }
+  function mkCanvas(cv) {
+    const C = { cv, g: cv.getContext('2d'), w: 0, h: 0 };
+    C.fit = () => { const r = cv.getBoundingClientRect(); C.w = r.width; C.h = r.height; cv.width = Math.max(1, Math.round(r.width * DPR)); cv.height = Math.max(1, Math.round(r.height * DPR)); };
+    C.fit(); return C;
+  }
+  return { DPR, TAU, LUME, TINT, FONT_TEXT, FONT_MONO, clamp, lerp, ease, smooth, hash, msk, G, F, JEWELS, mstate, proj, renderMech, mkCanvas, ready };
+})());
+
+/* --- Сцена «Разбор»: закреплённый механизм раскладывается по оси z на 6 слоёв, выноски по одной --- */
+VFKit.register('tech-story-explode', root => {
+  const M = techMech(root);
+  const { DPR, TAU, LUME, clamp, lerp, ease, G, JEWELS, mstate, proj, renderMech, mkCanvas } = M;
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const COARSE = matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const XP = mkCanvas(root.querySelector('.xp-canvas'));
+  const tags = [...root.querySelectorAll('.xp-tags li')].map(el => ({ el, L: +el.dataset.layer, h: 0, w: 0 }));
+  const xpFinal = root.querySelector('.xp-final');
+  const xpRuler = root.querySelector('.ruler-xp');
+  const measureTags = () => tags.forEach(t => { t.h = t.el.offsetHeight; t.w = t.el.offsetWidth; });
+
+  const ptr = { x: 0, y: 0, tx: 0, ty: 0 };
+  const onPtr = e => { if (e.pointerType !== 'mouse') return; ptr.tx = e.clientX / innerWidth * 2 - 1; ptr.ty = e.clientY / innerHeight * 2 - 1; };
+
+  function candidates(L, V) {
+    const pts = [];
+    const rim = r => { for (let i = 0; i < 24; i++) { const a = i / 24 * TAU; pts.push([Math.cos(a) * r, Math.sin(a) * r]); } };
+    if (L === 0) rim(100);
+    if (L === 5) rim(118);
+    if (L === 1) pts.push([G.barrel[0], G.barrel[1]], [0, 0], [G.third[0], G.third[1]], [G.fourth[0], G.fourth[1]]);
+    if (L === 2) pts.push([G.escape[0], G.escape[1]], [G.pallet[0], G.pallet[1]]);
+    if (L === 3) { const c = Math.cos(-V.theta), s = Math.sin(-V.theta); pts.push([G.bal[0] + c * 27, G.bal[1] + s * 27], [G.bal[0] - c * 27, G.bal[1] - s * 27]); }
+    if (L === 4) JEWELS.forEach(([x, y]) => pts.push([x, y]));
+    return pts;
+  }
+  function xpView(p) {
+    const W = XP.w, H = XP.h, mob = W < 820;
+    const k1 = ease(clamp(p / .2)), e = ease(clamp((p - .08) / .42));
+    const phi = lerp(.48, mob ? 1.02 : 1.1, k1);
+    const theta = -.72 + p * .45 + ptr.x * .1;
+    const s = mob ? (W * .33) / 118 : Math.min(H * .24, W * .17) / 118;
+    const top = mob ? 196 : 104, bot = mob ? H - 150 : H - 120, Ah = bot - top;
+    const cp = Math.cos(phi), sp = Math.sin(phi);
+    const zmax = Math.max(60, (Ah / s - 2 * 122 * cp) / sp);
+    const step = lerp(6, zmax / 5, e);
+    const z = [0, 1, 2, 3, 4, 5].map(i => i * step);
+    const stackH = 2 * 122 * cp * s + 5 * step * sp * s;
+    const cy = top + (Ah - stackH) / 2 + 122 * cp * s + 5 * step * sp * s;
+    const cx = mob ? W * .6 : W * .56;
+    return { cx, cy, s, phi, theta, ox: 0, z, e, hi: -1, halo: false, mob };
+  }
+  function renderXp(p, st) {
+    const V = xpView(p);
+    const thr = i => .3 + i * .085;
+    let act = -1;
+    tags.forEach((t, i) => { if (p > thr(i)) act = i; });
+    const fin = p > .86;
+    V.hi = act >= 0 && !fin ? tags[act].L : -1;
+    renderMech(XP, V, st);
+    if (xpRuler) xpRuler.style.setProperty('--k', V.e.toFixed(3));
+    const g = XP.g; g.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const lastB = { L: V.mob ? 190 : 330, R: 90 };
+    tags.forEach((t, i) => {
+      const on = i <= act;
+      const side = V.mob ? 'L' : (i % 2 ? 'L' : 'R');
+      const z = V.z[t.L];
+      let best = null;
+      for (const [lx, ly] of candidates(t.L, V)) {
+        const q = proj(V, z, lx, ly);
+        if (!best || (side === 'L' ? q[0] < best[0] : q[0] > best[0])) best = q;
+      }
+      const [ax, ay] = best;
+      const ly = Math.max(ay, lastB[side] + t.h / 2 + 12);
+      lastB[side] = ly + t.h / 2;
+      const R = 122 * V.s;
+      const lx = V.mob ? 12 : side === 'R' ? Math.min(XP.w - t.w - 24, V.cx + R + 70) : Math.max(24, V.cx - R - 70 - t.w);
+      t.el.style.transform = `translate(${lx.toFixed(1)}px,${(ly - t.h / 2).toFixed(1)}px)`;
+      t.el.classList.toggle('left', side === 'L' && !V.mob);
+      t.el.classList.toggle('on', on);
+      t.el.classList.toggle('act', i === act && !fin);
+      if (on) {
+        const ex = side === 'L' ? lx + t.w + 10 : lx - 10, bx = side === 'L' ? ex + 26 : ex - 26;
+        g.strokeStyle = `rgba(${LUME},${i === act && !fin ? .9 : .38})`; g.lineWidth = 1;
+        g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, ly); g.lineTo(ex, ly); g.stroke();
+        const jg = g.createRadialGradient(ax, ay, 0, ax, ay, 10); jg.addColorStop(0, `rgba(${LUME},.9)`); jg.addColorStop(1, `rgba(${LUME},0)`);
+        g.fillStyle = jg; g.beginPath(); g.arc(ax, ay, 10, 0, TAU); g.fill();
+        g.fillStyle = '#eafff9'; g.beginPath(); g.arc(ax, ay, 2.4, 0, TAU); g.fill();
+      }
+    });
+    xpFinal?.classList.toggle('on', fin);
+  }
+  const progress = () => { const r = root.getBoundingClientRect(); return clamp(-r.top / Math.max(1, r.height - innerHeight)); };
+  const staticDraw = () => { renderXp(.84, mstate(1.13)); tags.forEach(x => x.el.classList.add('on')); };
+
+  let raf = 0;
+  function frame(now) {
+    const t = now / 1000;
+    if (COARSE) { ptr.tx = Math.sin(t * .35) * .55; ptr.ty = Math.sin(t * .27) * .35; }
+    ptr.x += (ptr.tx - ptr.x) * .06; ptr.y += (ptr.ty - ptr.y) * .06;
+    renderXp(progress(), mstate(t));
+    raf = requestAnimationFrame(frame);
+  }
+  const start = () => { if (raf || RM) return; addEventListener('pointermove', onPtr, { passive: true }); raf = requestAnimationFrame(frame); };
+  const stop = () => { if (!raf) return; cancelAnimationFrame(raf); raf = 0; removeEventListener('pointermove', onPtr); };
+  new IntersectionObserver(es => es.forEach(e => (e.isIntersecting ? start() : stop())), { rootMargin: '80px' }).observe(root);
+
+  measureTags();
+  let rz = 0;
+  new ResizeObserver(() => { clearTimeout(rz); rz = setTimeout(() => { XP.fit(); measureTags(); if (RM) staticDraw(); }, 120); }).observe(root.querySelector('.xp-pin'));
+  if (RM) { staticDraw(); M.ready.then(staticDraw); }
+});
+
+})();
+
+/* ── tech-overlay-viewer ── */
+;(() => {
+/* Полноэкранный просмотрщик снимков. Слушает vf:viewer { items:[{src,alt}], index }.
+   Касание — увеличить в точке, листание свайпом или стрелками. */
+VFKit.register('tech-overlay-viewer', root => {
+  const vImg = root.querySelector('.viewer-img'), vScroll = root.querySelector('.viewer-scroll');
+  let list = [], vi = 0;
+  function setViewer(i) {
+    if (!list.length) return;
+    vi = (i + list.length) % list.length;
+    vImg.src = list[vi].src; vImg.alt = list[vi].alt || ''; root.classList.remove('zoom');
+  }
+  document.addEventListener('vf:viewer', e => {
+    const d = e.detail || {};
+    if (!Array.isArray(d.items) || !d.items.length) return;
+    e.preventDefault();
+    list = d.items; setViewer(d.index || 0);
+    if (typeof root.showModal === 'function') { if (!root.open) root.showModal(); } else root.setAttribute('open', '');
+  });
+  vImg.addEventListener('click', e => {
+    if (root.classList.contains('zoom')) { root.classList.remove('zoom'); return; }
+    const r = vImg.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+    root.classList.add('zoom');
+    requestAnimationFrame(() => {
+      const W = vImg.offsetWidth, H = vImg.offsetHeight;
+      vScroll.scrollLeft = fx * W - vScroll.clientWidth / 2; vScroll.scrollTop = fy * H - vScroll.clientHeight / 2;
+    });
+  });
+  const close = () => { if (typeof root.close === 'function') root.close(); else root.removeAttribute('open'); };
+  root.querySelector('.v-close').addEventListener('click', close);
+  root.querySelector('.v-prev').addEventListener('click', () => setViewer(vi - 1));
+  root.querySelector('.v-next').addEventListener('click', () => setViewer(vi + 1));
+  root.addEventListener('keydown', e => { if (e.key === 'ArrowRight') setViewer(vi + 1); if (e.key === 'ArrowLeft') setViewer(vi - 1); });
+  let tx0 = null;
+  vScroll.addEventListener('touchstart', e => { tx0 = root.classList.contains('zoom') ? null : e.touches[0].clientX; }, { passive: true });
+  vScroll.addEventListener('touchend', e => {
+    if (tx0 === null) return; const dx = e.changedTouches[0].clientX - tx0;
+    if (Math.abs(dx) > 60) setViewer(vi + (dx < 0 ? 1 : -1)); tx0 = null;
+  });
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>

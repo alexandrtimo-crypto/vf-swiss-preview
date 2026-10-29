@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="ru" data-recipe="r3-easy" data-sound-pack="zen">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Шапка · полоса коврика · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@400..800&family=Sofia+Sans+Condensed:wght@600..900&display=swap">
+<style>
+/* title: Р3 · Бирка на верстаке */
+/* fonts: Sofia Sans:wght@400..800; Sofia Sans Condensed:wght@600..900 */
+/* Видение r3-easy: синий антистатический коврик верстака — поле страницы;
+   манильский картон бирок с красной типографской печатью и чёрными цифрами нумератора.
+   Общие токены --vf-*; материалы мира — --vf-tag-* (компоненты берут их с запасным значением). */
+:root {
+  --vf-bg: #2B5F9E;            /* коврик верстака */
+  --vf-bg-2: #224F86;          /* тот же коврик в тени */
+  --vf-surface: #E8C886;       /* манильский картон */
+  --vf-text: #F7F8FA;
+  --vf-text-2: #CFDBEE;        /* вторичный текст на коврике, из его же синего */
+  --vf-muted: rgba(247, 248, 250, .16);
+  --vf-line: rgba(247, 248, 250, .32);
+  --vf-accent: #B8301C;        /* красная печать бирки — действие */
+  --vf-accent-2: #E8C886;
+  --vf-on-accent: #FFFFFF;
+  --vf-danger: #9A2614;
+  --vf-font-display: "Sofia Sans Condensed", "Arial Narrow", sans-serif;
+  --vf-font-text: "Sofia Sans", "Segoe UI", Roboto, sans-serif;
+  --vf-font-mono: "Sofia Sans Condensed", "Arial Narrow", sans-serif; /* цифры нумератора — табличные */
+  --vf-radius: 6px;
+  --vf-radius-lg: 12px;
+  --vf-ease: cubic-bezier(.16, 1, .3, 1);
+
+  /* материалы мира */
+  --vf-tag-card: #E8C886;      /* манила */
+  --vf-tag-card-2: #DDB873;    /* манила, усиливающее кольцо и тень сгиба */
+  --vf-tag-ink: #1E1A14;       /* чёрная краска нумератора */
+  --vf-tag-ink-2: #5B4A2A;     /* вторичный текст на маниле */
+  --vf-tag-red: #B8301C;       /* красная печать: линии, крупные слова */
+  --vf-tag-red-text: #9A2614;  /* красная печать для мелкого текста */
+  --vf-tag-paper: #FAFAF7;     /* белая карточка K, поля фото */
+  --vf-tag-thread: #EFE9DC;    /* хлопковая нитка */
+  --vf-tag-shadow: 0 1px 1px rgba(10, 24, 48, .18), 0 10px 22px -8px rgba(10, 24, 48, .45), 0 28px 48px -24px rgba(10, 24, 48, .5);
+  --vf-gutter: clamp(16px, 4.2vw, 64px);
+  --vf-max: 1320px;
+
+  color-scheme: light;
+  accent-color: var(--vf-accent);
+  caret-color: var(--vf-tag-red);
+  scrollbar-color: var(--vf-tag-card) var(--vf-bg-2);
+}
+
+/* ---------- основа страницы ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 12px; }
+.vf-page {
+  margin: 0; background: var(--vf-bg); color: var(--vf-text);
+  font-family: var(--vf-font-text); font-size: 17px; line-height: 1.5; font-weight: 400;
+  font-feature-settings: "tnum" 0; overflow-x: hidden;
+  /* матовая фактура коврика */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:where(.vf-page a) { color: inherit; text-underline-offset: .2em; text-decoration-thickness: 1px; }
+:where(.vf-page a:hover) { text-decoration-thickness: 2px; }
+:where(.vf-page button) { font: inherit; color: inherit; cursor: pointer; }
+:where(.vf-page img, .vf-page video, .vf-page svg) { display: block; max-width: 100%; }
+:where(.vf-page h1, .vf-page h2, .vf-page h3) { margin: 0; font-family: var(--vf-font-display); font-weight: 800; line-height: 1; letter-spacing: -.01em; text-wrap: balance; }
+:where(.vf-page p) { margin: 0; text-wrap: pretty; }
+.vf-page ::selection { background: var(--vf-tag-card); color: var(--vf-tag-ink); }
+:where(.vf-page) :focus-visible { outline: 3px solid var(--vf-tag-card); outline-offset: 3px; border-radius: 4px; }
+.vf-page ::-webkit-scrollbar { width: 12px; height: 10px; }
+.vf-page ::-webkit-scrollbar-track { background: var(--vf-bg-2); }
+.vf-page ::-webkit-scrollbar-thumb { background: var(--vf-tag-card); border-radius: 6px; border: 3px solid var(--vf-bg-2); }
+.vf-page .vf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}
+
+/* title: Р3 · Кнопки · печать бирки */
+/* Кнопка — вырубка из картона с красной печатью: прямые углы со скруглением 6px,
+   мягкая бумажная тень, нажатие прижимает к коврику. Контекст может задать
+   --vf-btn-bg / --vf-btn-fg / --vf-btn-line (например, на манильской бирке). */
+.vf-btn {
+  --vf-btn-bg: var(--vf-tag-paper, #FAFAF7);
+  --vf-btn-fg: var(--vf-tag-ink, #1E1A14);
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 56px; padding: 0 24px; border-radius: var(--vf-radius, 6px); border: 0;
+  font-family: var(--vf-font-display); font-weight: 700; font-size: 20px; line-height: 1.1; letter-spacing: .005em;
+  text-decoration: none; cursor: pointer; text-align: center;
+  background: var(--vf-btn-bg); color: var(--vf-btn-fg);
+  box-shadow: 0 1px 0 rgba(10, 24, 48, .22), 0 6px 14px -8px rgba(10, 24, 48, .55);
+  transition: transform .18s var(--vf-ease), box-shadow .18s var(--vf-ease), background-color .18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.vf-btn:hover { box-shadow: 0 1px 0 rgba(10, 24, 48, .22), 0 10px 20px -8px rgba(10, 24, 48, .6); transform: translateY(-1px); }
+.vf-btn:active { transform: translateY(1px); box-shadow: 0 0 0 rgba(10, 24, 48, .2), 0 2px 4px -2px rgba(10, 24, 48, .5); }
+.vf-btn:focus-visible { outline: 3px solid var(--vf-btn-line, var(--vf-tag-ink, #1E1A14)); outline-offset: 3px; }
+.vf-btn:disabled, .vf-btn[aria-disabled="true"] { opacity: .55; cursor: default; transform: none; }
+.vf-btn > svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.vf-btn--primary { --vf-btn-bg: var(--vf-accent); --vf-btn-fg: var(--vf-on-accent); }
+.vf-btn--primary:hover { --vf-btn-bg: color-mix(in srgb, var(--vf-accent) 86%, #000); }
+
+.vf-btn--ghost {
+  --vf-btn-bg: transparent; --vf-btn-fg: currentColor;
+  box-shadow: inset 0 0 0 1.5px var(--vf-btn-line, currentColor);
+}
+.vf-btn--ghost:hover { --vf-btn-bg: color-mix(in srgb, currentColor 8%, transparent); box-shadow: inset 0 0 0 2px var(--vf-btn-line, currentColor); transform: none; }
+.vf-btn--ghost:active { box-shadow: inset 0 0 0 2px var(--vf-btn-line, currentColor); }
+
+.vf-btn--sm { min-height: 44px; padding: 0 16px; font-size: 17px; gap: 8px; }
+.vf-btn--sm > svg { width: 18px; height: 18px; }
+
+/* title: Р3 · Поля · графа бирки */
+/* Поле — напечатанная графа: подпись красной печатью, строка для записи чёрной линией.
+   Контекст задаёт --vf-field-fg (текст, линия), --vf-field-label (подпись), --vf-field-accent (фокус). */
+.vf-field { display: grid; gap: 4px; min-width: 0; }
+.vf-field > label, .vf-field__label {
+  font: 600 14px/1.25 var(--vf-font-text); letter-spacing: .01em;
+  color: var(--vf-field-label, var(--vf-tag-red-text, #9A2614));
+}
+.vf-input {
+  width: 100%; min-height: 52px; padding: 10px 2px 6px; margin: 0;
+  font: 600 22px/1.2 var(--vf-font-display); font-variant-numeric: tabular-nums; letter-spacing: .01em;
+  color: var(--vf-field-fg, var(--vf-tag-ink, #1E1A14));
+  background: transparent; border: 0; border-radius: 0; outline: none;
+  border-bottom: 2px solid color-mix(in srgb, var(--vf-field-fg, var(--vf-tag-ink, #1E1A14)) 70%, transparent);
+  transition: border-color .2s, box-shadow .2s, background-color .2s;
+  -webkit-appearance: none; appearance: none;
+}
+.vf-input::placeholder { color: color-mix(in srgb, var(--vf-field-fg, var(--vf-tag-ink, #1E1A14)) 42%, transparent); font-weight: 500; }
+.vf-input:hover { border-bottom-color: var(--vf-field-fg, var(--vf-tag-ink, #1E1A14)); }
+.vf-input:focus, .vf-input:focus-visible {
+  outline: none; border-bottom-color: var(--vf-field-accent, var(--vf-accent));
+  box-shadow: 0 2px 0 var(--vf-field-accent, var(--vf-accent));
+  background: color-mix(in srgb, var(--vf-field-accent, var(--vf-accent)) 6%, transparent);
+}
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); box-shadow: 0 2px 0 var(--vf-danger); }
+textarea.vf-input { resize: vertical; min-height: 80px; font-size: 19px; line-height: 1.35; }
+.vf-field__err { font: 600 14px/1.3 var(--vf-font-text); color: var(--vf-danger); }
+.vf-field__err:empty { display: none; }
+.vf-field__hint { font: 400 14px/1.35 var(--vf-font-text); color: var(--vf-field-hint, var(--vf-tag-ink-2, #5B4A2A)); }
+
+/* title: Иконки · Tabler (MIT, линия 2px) */
+/* MIT © Paweł Kuna (tabler-icons). Сборка: kit/icons/build-icons.mjs */
+.vf-i { display: inline-block; width: 1em; height: 1em; flex: none; vertical-align: -0.125em; background-color: currentColor; -webkit-mask: var(--vf-i) center / contain no-repeat; mask: var(--vf-i) center / contain no-repeat; }
+.vf-i--phone { --vf-i: url("../../kit/icons/tabler/phone.svg"); }
+.vf-i--telegram { --vf-i: url("../../kit/icons/tabler/telegram.svg"); }
+.vf-i--map-pin { --vf-i: url("../../kit/icons/tabler/map-pin.svg"); }
+.vf-i--route { --vf-i: url("../../kit/icons/tabler/route.svg"); }
+.vf-i--copy { --vf-i: url("../../kit/icons/tabler/copy.svg"); }
+.vf-i--clock { --vf-i: url("../../kit/icons/tabler/clock.svg"); }
+.vf-i--calendar { --vf-i: url("../../kit/icons/tabler/calendar.svg"); }
+.vf-i--shield-check { --vf-i: url("../../kit/icons/tabler/shield-check.svg"); }
+.vf-i--wrench { --vf-i: url("../../kit/icons/tabler/wrench.svg"); }
+.vf-i--search { --vf-i: url("../../kit/icons/tabler/search.svg"); }
+.vf-i--microscope { --vf-i: url("../../kit/icons/tabler/microscope.svg"); }
+.vf-i--droplet { --vf-i: url("../../kit/icons/tabler/droplet.svg"); }
+.vf-i--battery { --vf-i: url("../../kit/icons/tabler/battery.svg"); }
+.vf-i--watch { --vf-i: url("../../kit/icons/tabler/watch.svg"); }
+.vf-i--sparkles { --vf-i: url("../../kit/icons/tabler/sparkles.svg"); }
+.vf-i--camera { --vf-i: url("../../kit/icons/tabler/camera.svg"); }
+.vf-i--photo { --vf-i: url("../../kit/icons/tabler/photo.svg"); }
+.vf-i--upload { --vf-i: url("../../kit/icons/tabler/upload.svg"); }
+.vf-i--check { --vf-i: url("../../kit/icons/tabler/check.svg"); }
+.vf-i--close { --vf-i: url("../../kit/icons/tabler/close.svg"); }
+.vf-i--arrow-right { --vf-i: url("../../kit/icons/tabler/arrow-right.svg"); }
+.vf-i--arrow-left { --vf-i: url("../../kit/icons/tabler/arrow-left.svg"); }
+.vf-i--chevron-down { --vf-i: url("../../kit/icons/tabler/chevron-down.svg"); }
+.vf-i--menu { --vf-i: url("../../kit/icons/tabler/menu.svg"); }
+.vf-i--qr-code { --vf-i: url("../../kit/icons/tabler/qr-code.svg"); }
+.vf-i--file-text { --vf-i: url("../../kit/icons/tabler/file-text.svg"); }
+.vf-i--user { --vf-i: url("../../kit/icons/tabler/user.svg"); }
+.vf-i--message { --vf-i: url("../../kit/icons/tabler/message.svg"); }
+.vf-i--info { --vf-i: url("../../kit/icons/tabler/info.svg"); }
+.vf-i--alert { --vf-i: url("../../kit/icons/tabler/alert.svg"); }
+.vf-i--gauge { --vf-i: url("../../kit/icons/tabler/gauge.svg"); }
+.vf-i--award { --vf-i: url("../../kit/icons/tabler/award.svg"); }
+.vf-i--ruble { --vf-i: url("../../kit/icons/tabler/ruble.svg"); }
+.vf-i--settings { --vf-i: url("../../kit/icons/tabler/settings.svg"); }
+.vf-i--hand { --vf-i: url("../../kit/icons/tabler/hand.svg"); }
+.vf-i--volume { --vf-i: url("../../kit/icons/tabler/volume.svg"); }
+.vf-i--volume-off { --vf-i: url("../../kit/icons/tabler/volume-off.svg"); }
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── r3-easy-header ── */
+[data-part="r3-easy-header"] { position: relative; z-index: 5; color: var(--vf-text); }
+.r3hd__in {
+  max-width: var(--vf-max, 1320px); margin: 0 auto; padding: 14px var(--vf-gutter, 20px);
+  display: flex; align-items: center; gap: 20px;
+  border-bottom: 1px solid var(--vf-line);
+}
+.r3hd__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
+.r3hd__mark {
+  display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+  background: var(--vf-tag-card, #E8C886); color: var(--vf-tag-red, #B8301C);
+  font: 900 17px/1 var(--vf-font-display); letter-spacing: -.02em;
+}
+.r3hd__name { display: grid; font: 800 21px/1 var(--vf-font-display); white-space: nowrap; }
+.r3hd__name small { font: 500 13px/1.3 var(--vf-font-text); color: var(--vf-text-2); margin-top: 3px; }
+.r3hd__addr { margin: 0 0 0 auto; font-size: 15px; color: var(--vf-text-2); }
+.r3hd__act { display: flex; gap: 6px; }
+.r3hd__act a {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: var(--vf-radius, 6px);
+  font: 700 18px/1 var(--vf-font-display); font-variant-numeric: tabular-nums; text-decoration: none;
+  transition: background-color .18s;
+}
+.r3hd__act a:hover { background: var(--vf-muted); }
+.r3hd__act svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
+.r3hd__tel { background: var(--vf-tag-card, #E8C886); color: var(--vf-tag-ink, #1E1A14); }
+.r3hd__act .r3hd__tel:hover { background: var(--vf-tag-card-2, #DDB873); }
+
+@media (max-width: 1080px) { .r3hd__addr { display: none; } .r3hd__act { margin-left: auto; } }
+@media (max-width: 640px) {
+  .r3hd__in { padding-top: 10px; padding-bottom: 10px; gap: 10px; }
+  .r3hd__name { font-size: 19px; }
+  .r3hd__act a { padding: 0; width: 44px; justify-content: center; }
+  .r3hd__act a span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+}
+
+
+/* ── r3-easy-hero-tag ── */
+[data-part="r3-easy-hero-tag"] {
+  --r3h-thread: 54px;
+  --r3h-hole: 5px;
+  --r3h-pitch: 16px;
+  position: relative; color: var(--vf-text);
+}
+.r3h__in {
+  max-width: var(--vf-max, 1320px); margin: 0 auto;
+  padding: 0 var(--vf-gutter, 20px) clamp(56px, 8vw, 112px);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 468px);
+  column-gap: clamp(32px, 6vw, 112px); align-items: start;
+}
+
+/* ---------- текст ---------- */
+.r3h__copy { padding-top: clamp(36px, 6.5vh, 84px); min-width: 0; }
+.r3h__title {
+  font-size: clamp(44px, 5.7vw, 88px); line-height: .94; letter-spacing: -.015em; font-weight: 800;
+}
+.r3h__lede { margin-top: 24px; max-width: 36ch; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.5; color: var(--vf-text-2); }
+.r3h__facts { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 22px; font: 700 20px/1.2 var(--vf-font-display); }
+.r3h__facts span { display: inline-flex; align-items: center; gap: 9px; }
+.r3h__facts span::before {
+  content: ""; width: 9px; height: 9px; border-radius: 50%; flex: none;
+  background: var(--vf-bg-2); box-shadow: 0 0 0 3px var(--vf-tag-card, #E8C886);
+}
+
+.r3h__print {
+  margin: clamp(36px, 5vh, 56px) 0 0; width: min(560px, 100%); padding: 10px 10px 0;
+  background: var(--vf-tag-paper, #FAFAF7); color: var(--vf-tag-ink, #1E1A14);
+  border-radius: 2px; box-shadow: var(--vf-tag-shadow); transform: rotate(-1.2deg); transform-origin: 30% 0;
+}
+.r3h__print img { width: 100%; height: auto; aspect-ratio: 1200 / 898; object-fit: cover; }
+.r3h__print figcaption { padding: 10px 4px 12px; font-size: 14px; line-height: 1.35; color: var(--vf-tag-ink-2, #5B4A2A); }
+
+/* ---------- бирка на нитке ---------- */
+.r3h__hang {
+  position: relative; padding-top: var(--r3h-thread); min-width: 0;
+  transform-origin: 50% 0; animation: r3-easy-hero-tag-settle 1.9s var(--vf-ease) .15s both;
+}
+.r3h__thread {
+  position: absolute; top: 0; left: 50%; width: 40px; height: calc(var(--r3h-thread) + 31px);
+  transform: translateX(-50%); overflow: visible; z-index: 2; pointer-events: none;
+}
+.r3h__thread path { fill: none; stroke: var(--vf-tag-thread, #EFE9DC); stroke-width: 1.7; vector-effect: non-scaling-stroke; stroke-linecap: round; }
+
+.r3h__tag {
+  position: relative; margin: 0 auto; max-width: 468px; color: var(--vf-tag-ink, #1E1A14);
+  filter: drop-shadow(0 1px 1px rgba(10, 24, 48, .22)) drop-shadow(0 16px 20px rgba(10, 24, 48, .34));
+  --vf-field-fg: var(--vf-tag-ink, #1E1A14);
+  --vf-field-accent: var(--vf-tag-red, #B8301C);
+  --vf-field-label: var(--vf-tag-red-text, #9A2614);
+  --vf-btn-line: var(--vf-tag-ink, #1E1A14);
+}
+.r3h__body, .r3h__stub {
+  background-color: var(--vf-tag-card, #E8C886);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .08 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+}
+.r3h__body {
+  position: relative; display: grid; gap: 14px;
+  padding: 62px clamp(20px, 2.4vw, 30px) 28px;
+  clip-path: polygon(36px 0, calc(100% - 36px) 0, 100% 36px, 100% 100%, 0 100%, 0 36px);
+  -webkit-mask: radial-gradient(circle var(--r3h-hole) at 50% 100%, #0000 96%, #000) 0 100% / var(--r3h-pitch) 6px repeat-x, linear-gradient(#000 0 0) 0 0 / 100% calc(100% - 6px) no-repeat;
+          mask: radial-gradient(circle var(--r3h-hole) at 50% 100%, #0000 96%, #000) 0 100% / var(--r3h-pitch) 6px repeat-x, linear-gradient(#000 0 0) 0 0 / 100% calc(100% - 6px) no-repeat;
+}
+.r3h__eyelet {
+  position: absolute; top: 18px; left: 50%; width: 24px; height: 24px; margin-left: -12px; border-radius: 50%;
+  background: var(--vf-bg); box-shadow: 0 0 0 7px var(--vf-tag-card-2, #DDB873), inset 0 2px 3px rgba(0, 0, 0, .35);
+}
+.r3h__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 2px solid var(--vf-tag-red, #B8301C); }
+.r3h__head b { font: 800 26px/1 var(--vf-font-display); color: var(--vf-tag-red, #B8301C); letter-spacing: -.005em; }
+.r3h__head span { font: 700 18px/1 var(--vf-font-display); color: var(--vf-tag-red, #B8301C); }
+.r3h__head i { display: inline-block; width: 74px; height: 1px; margin-left: 4px; border-bottom: 1.5px solid currentColor; vertical-align: baseline; }
+
+.r3h__call { display: grid; gap: 2px; text-decoration: none; color: inherit; padding: 2px 0; border-radius: 4px; }
+.r3h__call-l { font: 600 14px/1.2 var(--vf-font-text); color: var(--vf-tag-red-text, #9A2614); }
+.r3h__call-n { font: 800 clamp(31px, 9.2vw, 46px)/1 var(--vf-font-display); font-variant-numeric: tabular-nums; letter-spacing: .005em; white-space: nowrap; }
+.r3h__call:hover .r3h__call-n { text-decoration: underline 2px var(--vf-tag-red, #B8301C); text-underline-offset: 6px; }
+.r3h__call:focus-visible { outline: 3px solid var(--vf-tag-ink, #1E1A14); outline-offset: 4px; }
+
+.r3h__or { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--vf-tag-red-text, #9A2614); }
+.r3h__or::before, .r3h__or::after { content: ""; height: 1px; flex: 1; background: currentColor; opacity: .55; }
+.r3h__or span { flex: none; max-width: 80%; text-align: center; }
+
+.r3h__phone .vf-input { font-size: 26px; }
+
+.r3h__via { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 20px; margin: 0; padding: 0; border: 0; }
+.r3h__via legend { float: left; padding: 0; margin-right: -6px; font: 600 14px/40px var(--vf-font-text); color: var(--vf-tag-red-text, #9A2614); }
+.r3h__via label, .r3h__consent { display: flex; align-items: center; gap: 10px; cursor: pointer; min-height: 40px; }
+.r3h__via label { font: 600 16px/1.2 var(--vf-font-text); }
+.r3h__via input, .r3h__consent input {
+  -webkit-appearance: none; appearance: none; flex: none; margin: 0; width: 22px; height: 22px;
+  border: 2px solid var(--vf-tag-ink, #1E1A14); border-radius: 3px; background: transparent no-repeat center / 16px;
+  cursor: pointer; transition: background-color .15s;
+}
+.r3h__via input:checked, .r3h__consent input:checked {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.5 8.6 6.3 12 13.5 3.6' fill='none' stroke='%23B8301C' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.r3h__via input:focus-visible, .r3h__consent input:focus-visible { outline: 3px solid var(--vf-tag-red, #B8301C); outline-offset: 2px; }
+.r3h__consent { align-items: flex-start; font-size: 14px; line-height: 1.35; color: var(--vf-tag-ink-2, #5B4A2A); }
+.r3h__consent input { margin-top: 1px; }
+.r3h__consent input[aria-invalid="true"] { border-color: var(--vf-danger); box-shadow: 0 0 0 2px color-mix(in srgb, var(--vf-danger) 35%, transparent); }
+.r3h__consent a { color: var(--vf-tag-ink, #1E1A14); }
+.r3h__consent-err { margin-top: -10px; }
+
+.r3h__more summary {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 36px; cursor: pointer; list-style: none;
+  font: 600 15px/1.2 var(--vf-font-text); color: var(--vf-tag-red-text, #9A2614);
+  text-decoration: underline 1px; text-underline-offset: 4px;
+}
+.r3h__more summary::-webkit-details-marker { display: none; }
+.r3h__more summary::before {
+  content: ""; width: 14px; height: 14px; flex: none;
+  background: linear-gradient(currentColor 0 0) center / 14px 2px no-repeat, linear-gradient(currentColor 0 0) center / 2px 14px no-repeat;
+  transition: transform .2s var(--vf-ease);
+}
+.r3h__more[open] summary::before { transform: rotate(45deg); }
+.r3h__more summary:focus-visible { outline: 3px solid var(--vf-tag-red, #B8301C); outline-offset: 2px; }
+.r3h__more-in { display: grid; gap: 12px; padding-top: 6px; }
+
+.r3h__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.r3h__send { width: 100%; min-height: 58px; font-size: 22px; margin-top: 2px; }
+
+/* корешок */
+.r3h__stub {
+  position: relative; padding: 22px clamp(20px, 2.4vw, 30px) 22px; border-radius: 0 0 6px 6px;
+  font-size: 14px; line-height: 1.4; color: var(--vf-tag-ink-2, #5B4A2A);
+  -webkit-mask: radial-gradient(circle var(--r3h-hole) at 50% 0, #0000 96%, #000) 0 0 / var(--r3h-pitch) 6px repeat-x, linear-gradient(#000 0 0) 0 6px / 100% calc(100% - 6px) no-repeat;
+          mask: radial-gradient(circle var(--r3h-hole) at 50% 0, #0000 96%, #000) 0 0 / var(--r3h-pitch) 6px repeat-x, linear-gradient(#000 0 0) 0 6px / 100% calc(100% - 6px) no-repeat;
+  transform-origin: 85% 0; outline: none;
+}
+.r3h__stub-h { font: 800 21px/1.1 var(--vf-font-display); color: var(--vf-tag-ink, #1E1A14); margin-bottom: 4px; }
+.r3h__stub-h small { font: 600 15px var(--vf-font-text); color: var(--vf-tag-red-text, #9A2614); }
+.r3h__stub-idle .r3h__stub-h small { display: block; margin-top: 3px; font-size: 13px; font-weight: 500; color: var(--vf-tag-ink-2, #5B4A2A); }
+.r3h__stub-msg { color: var(--vf-tag-ink, #1E1A14); font-size: 15px; }
+.r3h__again {
+  margin-top: 10px; padding: 0; min-height: 36px; background: none; border: 0;
+  font: 600 15px var(--vf-font-text); color: var(--vf-tag-red-text, #9A2614); text-decoration: underline 1px; text-underline-offset: 4px;
+}
+.r3h__again:focus-visible { outline: 3px solid var(--vf-tag-red, #B8301C); outline-offset: 2px; }
+.r3h__stub:focus-visible { outline: 3px solid var(--vf-tag-card, #E8C886); outline-offset: 4px; }
+
+/* отрыв корешка */
+.r3h__tag.is-torn .r3h__stub { animation: r3-easy-hero-tag-tear .9s var(--vf-ease) both; }
+.r3h__tag.is-torn .r3h__body { animation: r3-easy-hero-tag-tug .7s var(--vf-ease) both; transform-origin: 50% 0; }
+
+.r3h__tg-alt { margin-top: 30px; text-align: center; font-size: 15px; color: var(--vf-text-2); }
+.r3h__tg-alt a { color: var(--vf-text); font-weight: 600; }
+
+@keyframes r3-easy-hero-tag-settle {
+  0% { transform: rotate(2.6deg); }
+  30% { transform: rotate(-1.5deg); }
+  55% { transform: rotate(.7deg); }
+  78% { transform: rotate(-.25deg); }
+  100% { transform: rotate(0); }
+}
+@keyframes r3-easy-hero-tag-tear {
+  0% { transform: none; }
+  18% { transform: translate(0, 3px) rotate(-.6deg); }
+  100% { transform: translate(6px, 30px) rotate(2.4deg); }
+}
+@keyframes r3-easy-hero-tag-tug {
+  0% { transform: none; }
+  20% { transform: rotate(.6deg) translateY(2px); }
+  55% { transform: rotate(-.3deg); }
+  100% { transform: none; }
+}
+
+/* ---------- телефон и планшет ---------- */
+@media (max-width: 980px) {
+  .r3h__in { grid-template-columns: minmax(0, 1fr); }
+  .r3h__copy { display: contents; }
+  .r3h__title { order: 1; padding-top: 26px; font-size: clamp(40px, 10.6vw, 72px); }
+  .r3h__lede { order: 2; margin-top: 14px; font-size: 16px; line-height: 1.45; }
+  .r3h__hang { order: 3; margin-top: 8px; }
+  .r3h__facts { order: 4; margin-top: 64px; }
+  .r3h__print { order: 5; margin-top: 28px; }
+  [data-part="r3-easy-hero-tag"] { --r3h-thread: 26px; }
+  .r3h__tag { width: 100%; }
+}
+@media (max-width: 480px) {
+  .r3h__body { gap: 11px; padding-top: 54px; padding-bottom: 22px; clip-path: polygon(28px 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%, 0 28px); }
+  .r3h__eyelet { top: 15px; }
+  .r3h__head b { font-size: 23px; }
+  .r3h__via { gap: 0 14px; }
+  .r3h__via label { font-size: 15px; min-height: 40px; }
+  .r3h__more summary { min-height: 32px; }
+  .r3h__facts { font-size: 18px; }
+}
+
+
+/* ── lib-sound-toggle ── */
+.lib-sound-toggle { position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 60; }
+.lib-sound-toggle__btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+  font: 500 13px/1 var(--vf-font-text); color: var(--vf-text); background: var(--vf-surface, var(--vf-bg-2)); border: 1px solid var(--vf-line);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .18); }
+.lib-sound-toggle__btn:hover { border-color: var(--vf-accent); }
+.lib-sound-toggle__btn:focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+.lib-sound-toggle__on, .lib-sound-toggle__btn[data-state="on"] .lib-sound-toggle__off { display: none; }
+.lib-sound-toggle__btn[data-state="on"] .lib-sound-toggle__on { display: inline-block; color: var(--vf-accent); }
+/* Телефон: не плавает поверх текста — тихая строка в конце страницы (над нижней панелью связи) */
+@media (max-width: 720px) { .lib-sound-toggle { position: static; display: flex; justify-content: center; padding: 16px 16px calc(96px + env(safe-area-inset-bottom)); } .lib-sound-toggle__btn { box-shadow: none; } }
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Шапка · полоса коврика</span><a href="../../v/r3-easy/#r3-easy-header" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<header data-part="r3-easy-header" data-slot="header" class="r3hd">
+  <div class="r3hd__in">
+    <a class="r3hd__brand" href="#" aria-label="VF swiss — в начало страницы">
+      <span class="r3hd__mark" aria-hidden="true">VF</span>
+      <span class="r3hd__name">VF swiss<small>Ремонт швейцарских часов</small></span>
+    </a>
+    <p class="r3hd__addr">Москва, Петровка, 23/10&nbsp;стр.&nbsp;5</p>
+    <nav class="r3hd__act" aria-label="Связь с мастерской">
+      <a class="r3hd__tel" href="tel:+79651716996">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.4a11.5 11.5 0 0 0 6.4 6.4l1.4-2 4.1 1.4v2.6a2 2 0 0 1-2.2 2A16.6 16.6 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z"/></svg>
+        <span>8 (965) 171-69-96</span>
+      </a>
+      <a class="r3hd__tg" href="https://t.me/VFswissboutique" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4 3 11.2l6.3 2.2L18 7.5l-6.6 7.1 7 5.4L21 4Z"/><path d="m9.3 13.4.6 6.1 2.4-3.3"/></svg>
+        <span>Telegram</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<section data-part="r3-easy-hero-tag" data-slot="hero" class="r3h" aria-labelledby="r3h-title">
+  <div class="r3h__in">
+    <div class="r3h__copy">
+      <h1 id="r3h-title" class="r3h__title">Часы в&nbsp;ремонт&nbsp;—<br>под&nbsp;номером</h1>
+      <p class="r3h__lede">Мастерская швейцарских часов на&nbsp;Петровке. У&nbsp;каждого клиента — карточка с&nbsp;номером и&nbsp;QR личного кабинета.</p>
+      <p class="r3h__facts"><span>Диагностика бесплатно</span><span>Гарантия до&nbsp;двух лет</span><span>Оригинальные комплектующие</span></p>
+      <figure class="r3h__print">
+        <img src="../../media/img/ex_19.webp" width="1200" height="898" alt="Механизм часов, разобранный на детали и разложенный на листе: платина, колёса, мост, циферблат, корпус и безель." decoding="async">
+        <figcaption>Разбираем до&nbsp;последнего винта. Кадр с&nbsp;верстака мастерской.</figcaption>
+      </figure>
+    </div>
+
+    <div class="r3h__hang">
+      <svg class="r3h__thread" viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M17 0 C 17 40, 19 70, 20 100"/><path d="M23 0 C 23 40, 21 70, 20 100"/>
+      </svg>
+      <form class="r3h__tag" novalidate aria-labelledby="r3h-tag-title">
+        <div class="r3h__body">
+          <span class="r3h__eyelet" aria-hidden="true"></span>
+          <p class="r3h__head" id="r3h-tag-title"><b>Бирка ремонта</b><span aria-hidden="true">№ <i></i></span></p>
+
+          <a class="r3h__call" href="tel:+79651716996">
+            <span class="r3h__call-l">Позвонить мастеру</span>
+            <span class="r3h__call-n">8&nbsp;(965)&nbsp;171-69-96</span>
+          </a>
+
+          <p class="r3h__or"><span>или оставьте свой — перезвоним сами</span></p>
+
+          <div class="vf-field r3h__phone">
+            <label for="r3h-phone">Ваш телефон</label>
+            <input class="vf-input" id="r3h-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" aria-describedby="r3h-phone-err" required>
+            <p class="vf-field__err" id="r3h-phone-err" aria-live="polite"></p>
+          </div>
+
+          <fieldset class="r3h__via">
+            <legend>Связаться:</legend>
+            <label><input type="radio" name="contact" value="call" checked><span>звонком</span></label>
+            <label><input type="radio" name="contact" value="telegram"><span>в&nbsp;Telegram</span></label>
+          </fieldset>
+
+          <details class="r3h__more">
+            <summary>Добавить марку и что случилось</summary>
+            <div class="r3h__more-in">
+              <div class="vf-field"><label for="r3h-brand">Марка часов</label><input class="vf-input" id="r3h-brand" name="brand" type="text" autocomplete="off" placeholder="Например, Omega"></div>
+              <div class="vf-field"><label for="r3h-desc">Что с часами</label><textarea class="vf-input" id="r3h-desc" name="description" rows="2" placeholder="Остановились, отстают, нужна полировка…"></textarea></div>
+            </div>
+          </details>
+
+          <div class="r3h__hp" aria-hidden="true"><label>Сайт<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+
+          <label class="r3h__consent">
+            <input type="checkbox" name="consent" aria-describedby="r3h-consent-err">
+            <span>Согласен на&nbsp;обработку персональных данных по&nbsp;<a href="#" data-stub>политике</a></span>
+          </label>
+          <p class="vf-field__err r3h__consent-err" id="r3h-consent-err" aria-live="polite"></p>
+
+          <button class="vf-btn vf-btn--primary r3h__send" type="submit">Жду звонка</button>
+        </div>
+
+        <div class="r3h__stub" tabindex="-1">
+          <div class="r3h__stub-idle">
+            <p class="r3h__stub-h">Корешок <small>VF swiss · Петровка, 23/10 стр. 5</small></p>
+            <p>Остаётся у&nbsp;вас. При приёмке часов получите карточку клиента с&nbsp;номером и&nbsp;QR.</p>
+          </div>
+          <div class="r3h__stub-done" role="status" aria-live="polite" hidden>
+            <p class="r3h__stub-h">Заявка принята <small>(прототип)</small></p>
+            <p class="r3h__stub-msg"></p>
+            <button class="r3h__again" type="button">Исправить номер</button>
+          </div>
+        </div>
+      </form>
+      <p class="r3h__tg-alt">Удобнее сразу написать? <a href="https://t.me/VFswissboutique" target="_blank" rel="noopener">Telegram @VFswissboutique</a></p>
+    </div>
+  </div>
+</section>
+
+<div data-part="lib-sound-toggle" data-slot="overlay" class="lib-sound-toggle">
+  <button type="button" class="lib-sound-toggle__btn" data-sound-toggle aria-pressed="false" aria-label="Звук интерфейса">
+    <i class="vf-i vf-i--volume-off lib-sound-toggle__off" aria-hidden="true"></i>
+    <i class="vf-i vf-i--volume lib-sound-toggle__on" aria-hidden="true"></i>
+    <span class="lib-sound-toggle__label">Звук</span>
+  </button>
+</div>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+<script>
+// Общая логика заявки для всех вариантов VF swiss v2: маска телефона и проверка
+window.VFLead = (() => {
+  function formatPhone(value) {
+    let d = value.replace(/\D/g, '');
+    if (d.startsWith('8') || d.startsWith('7')) d = d.slice(1);
+    d = d.slice(0, 10);
+    if (!d) return '';
+    let r = '+7 (' + d.slice(0, 3);
+    if (d.length > 3) r += ') ' + d.slice(3, 6);
+    if (d.length > 6) r += '-' + d.slice(6, 8);
+    if (d.length > 8) r += '-' + d.slice(8, 10);
+    return r;
+  }
+
+  // Проверка заявки перед отправкой.
+  // data: { name, phone, contact: 'call'|'telegram', brand, description, photos: File[] }
+  // Вернуть { ok: true } или { ok: false, field: 'имя поля', message: 'текст для клиента' }.
+  function validateLead(data) {
+    // TODO(human): правила проверки заявки
+    return { ok: true };
+  }
+
+  // Подключает маску к полю телефона
+  function bindPhone(input) {
+    input.addEventListener('input', () => { input.value = formatPhone(input.value); });
+  }
+
+  return { formatPhone, validateLead, bindPhone };
+})();
+
+</script>
+<script>
+// VF kit · звуковой слой. По умолчанию ВЫКЛЮЧЕН: включает посетитель (переключатель [data-sound-toggle]),
+// выбор запоминается. Звук только в ответ на действие: [data-sound="click|tick|wind|stamp|tear|paper|success|error"].
+// Файлы — kit/sounds/<имя>.{ogg,mp3} (CC0, источники — kit/sounds/SOURCES.md); если файла нет — короткий синтез Web Audio.
+(() => {
+  if (window.VFSound) return;
+  const KEY = 'vf-sound';
+  const PACK = () => document.documentElement.dataset.soundPack || 'mechanical';
+  let ctx = null, on = false;
+  const buffers = new Map();
+  try { on = localStorage.getItem(KEY) === 'on'; } catch {}
+
+  const ac = () => (ctx ||= new (window.AudioContext || window.webkitAudioContext)());
+
+  async function load(name) {
+    if (buffers.has(name)) return buffers.get(name);
+    const p = (async () => {
+      for (const ext of ['ogg', 'mp3']) {
+        try {
+          const r = await fetch(`../../kit/sounds/${PACK()}/${name}.${ext}`);
+          if (r.ok) return await ac().decodeAudioData(await r.arrayBuffer());
+        } catch {}
+      }
+      return null;
+    })();
+    buffers.set(name, p);
+    return p;
+  }
+
+  // Синтез на случай отсутствия файла: короткий механический щелчок/тик
+  function synth(name, gain) {
+    const a = ac(), t = a.currentTime;
+    const freq = { tick: 3200, click: 1800, wind: 900, stamp: 140, tear: 600, paper: 500, success: 880, error: 220 }[name] || 1500;
+    const len = name === 'stamp' ? 0.12 : name === 'success' ? 0.18 : 0.035;
+    const osc = a.createOscillator(), g = a.createGain();
+    osc.type = name === 'stamp' || name === 'error' ? 'triangle' : 'square';
+    osc.frequency.setValueAtTime(freq, t);
+    if (name === 'success') osc.frequency.exponentialRampToValueAtTime(freq * 1.5, t + len);
+    g.gain.setValueAtTime(gain * 0.25, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+    osc.connect(g).connect(a.destination);
+    osc.start(t); osc.stop(t + len + 0.02);
+  }
+
+  async function play(name, { volume = 0.35, rate = 1 } = {}) {
+    if (!on || !name) return;
+    const a = ac(); if (a.state === 'suspended') await a.resume().catch(() => {});
+    const buf = await load(name);
+    if (!buf) return synth(name, volume);
+    const src = a.createBufferSource(), g = a.createGain();
+    src.buffer = buf; src.playbackRate.value = rate * (0.97 + Math.random() * 0.06); // живой разброс
+    g.gain.value = volume;
+    src.connect(g).connect(a.destination); src.start();
+  }
+
+  function set(state, silent = false) {
+    on = state;
+    try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch {}
+    document.querySelectorAll('[data-sound-toggle]').forEach(b => { b.setAttribute('aria-pressed', on); b.dataset.state = on ? 'on' : 'off'; });
+    if (on && !silent) play('click');
+  }
+
+  // Делегирование: звук по атрибуту на любом элементе, без правки компонентов
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-sound-toggle]');
+    if (t) { set(!on); return; }
+    const s = e.target.closest('[data-sound]');
+    if (s) play(s.dataset.sound);
+  });
+  // События компонентов: vf:sound { detail: { name } } — например, отрыв талона или штамп после анимации
+  document.addEventListener('vf:sound', e => play(e.detail?.name, e.detail));
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => set(on, true)); else set(on, true);
+
+  window.VFSound = { play, set, get enabled() { return on; } };
+})();
+
+</script>
+<script>
+/* ── r3-easy-hero-tag ── */
+;(() => {
+// Бирка-заявка: маска телефона, проверка, отрыв корешка. Ничего не отправляется (прототип).
+VFKit.register('r3-easy-hero-tag', root => {
+  const form = root.querySelector('.r3h__tag');
+  const phone = form.querySelector('[name="phone"]');
+  const phoneErr = form.querySelector('#r3h-phone-err');
+  const consent = form.querySelector('[name="consent"]');
+  const consentErr = form.querySelector('#r3h-consent-err');
+  const send = form.querySelector('.r3h__send');
+  const more = form.querySelector('.r3h__more');
+  const desc = form.querySelector('[name="description"]');
+  const stub = form.querySelector('.r3h__stub');
+  const idle = stub.querySelector('.r3h__stub-idle');
+  const done = stub.querySelector('.r3h__stub-done');
+  const msg = stub.querySelector('.r3h__stub-msg');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (window.VFLead) VFLead.bindPhone(phone);
+
+  const via = () => form.querySelector('[name="contact"]:checked')?.value || 'call';
+  const syncSend = () => { send.textContent = via() === 'telegram' ? 'Жду сообщения' : 'Жду звонка'; };
+  form.querySelectorAll('[name="contact"]').forEach(r => r.addEventListener('change', syncSend));
+  syncSend();
+
+  const setErr = (input, box, text) => {
+    box.textContent = text || '';
+    if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+  };
+  phone.addEventListener('input', () => { if (phone.getAttribute('aria-invalid')) setErr(phone, phoneErr, ''); });
+  consent.addEventListener('change', () => { if (consent.checked) setErr(consent, consentErr, ''); });
+
+  form.querySelectorAll('[data-stub]').forEach(a => a.addEventListener('click', e => e.preventDefault()));
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const digits = phone.value.replace(/\D/g, '');
+    let bad = null;
+    if (!digits.length) { setErr(phone, phoneErr, 'Впишите номер — по нему мастер перезвонит или напишет.'); bad = bad || phone; }
+    else if (digits.length < 11) { setErr(phone, phoneErr, `Не хватает цифр: в номере ${digits.length - 1} из 10 после +7.`); bad = bad || phone; }
+    else setErr(phone, phoneErr, '');
+    if (!consent.checked) { setErr(consent, consentErr, 'Отметьте согласие — без него мы не можем связаться с вами.'); bad = bad || consent; }
+    else setErr(consent, consentErr, '');
+
+    const data = {
+      name: '', phone: phone.value, contact: via(),
+      brand: form.querySelector('[name="brand"]').value.trim(),
+      description: desc.value.trim(), photos: [],
+    };
+    if (!bad && window.VFLead) {
+      const r = VFLead.validateLead(data);
+      if (r && r.ok === false) {
+        if (r.field === 'phone') { setErr(phone, phoneErr, r.message); bad = phone; }
+        else { setErr(consent, consentErr, r.message); bad = consent; }
+      }
+    }
+    if (bad) { bad.focus(); return; }
+
+    // honeypot заполнен — молча показываем то же подтверждение, ничего не делаем
+    const how = data.contact === 'telegram'
+      ? `Мастер напишет в Telegram на номер ${data.phone}.`
+      : `Мастер перезвонит на ${data.phone}.`;
+    msg.textContent = `${how} Ничего не отправлено — это прототип сайта.`;
+    idle.hidden = true; done.hidden = false;
+    form.classList.remove('is-torn'); void form.offsetWidth;
+    form.classList.add('is-torn');
+    stub.focus({ preventScroll: true });
+    if (!reduce.matches) stub.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
+
+  stub.querySelector('.r3h__again').addEventListener('click', () => {
+    form.classList.remove('is-torn');
+    done.hidden = true; idle.hidden = false;
+    phone.focus(); phone.select();
+  });
+
+  // «Записаться» из других частей страницы: бирка в центр, курсор в телефон
+  const onBook = e => {
+    e.preventDefault();
+    const s = e.detail && e.detail.symptom;
+    if (s) { more.open = true; desc.value = s; }
+    form.scrollIntoView({ block: 'center', behavior: reduce.matches ? 'auto' : 'smooth' });
+    setTimeout(() => phone.focus({ preventScroll: true }), reduce.matches ? 0 : 450);
+  };
+  document.addEventListener('vf:book', onBook);
+
+  // Сигнал для панели связи: бирка ушла за верх экрана
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(([en]) => {
+      const over = !en.isIntersecting && en.boundingClientRect.top < 0;
+      document.dispatchEvent(new CustomEvent('vf:hero', { detail: { over } }));
+    });
+    io.observe(send);
+  }
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>

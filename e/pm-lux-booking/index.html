@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ru" data-recipe="pm-lux">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Заявка на белом листе · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400..600%3B1,400..500&family=Montserrat:wght@400..600&display=swap">
+<style>
+/* title: PM · Швейцарская глава (дорого-богато) */
+/* fonts: Cormorant:ital,wght@0,400..600%3B1,400..500; Montserrat:wght@400..600 */
+/* UI UX Pro Max → Luxury/Premium Brand: стиль Minimalism & Swiss Style (дисперсия 2), палитра «Premium black + gold accent»,
+   пара «Luxury Serif» (Cormorant + Montserrat), паттерн Scroll-Triggered Storytelling. Плотность 2 → просторная шкала 24–96. */
+:root {
+  --vf-bg: #FAFAF9;
+  --vf-bg-2: #F5F5F4;
+  --vf-surface: #FFFFFF;
+  --vf-text: #0C0A09;
+  --vf-text-2: #44403C;
+  --vf-muted: #475569;
+  --vf-line: #D6D3D1;
+  --vf-accent: #A16207;
+  --vf-accent-2: #1C1917;
+  --vf-on-accent: #FFFFFF;
+  --vf-danger: #B91C1C;
+  --vf-font-display: 'Cormorant', 'Times New Roman', serif;
+  --vf-font-text: 'Montserrat', system-ui, sans-serif;
+  --vf-font-mono: 'Montserrat', system-ui, sans-serif;
+  --vf-radius: 0px;
+  --vf-radius-lg: 0px;
+  --vf-ease: cubic-bezier(.25, .46, .45, .94); /* power1.out — пресет Scroll Reveal · Subtle */
+  --vf-dur: 500ms;           /* «Premium reveals (400-600ms)» из ui-reasoning */
+  --vf-dur-exit: 320ms;      /* exit-faster-than-enter ≈ 65 % */
+  /* Плотность 2 (Spacious) — шкала из DIAL_TIERS */
+  --pm-s-xs: 4px; --pm-s-sm: 8px; --pm-s-md: 24px; --pm-s-lg: 32px; --pm-s-xl: 48px; --pm-s-2xl: 64px; --pm-s-3xl: 96px;
+  --pm-wrap: 1240px;
+  --pm-gutter: clamp(16px, 4vw, 48px);
+  --vf-metal: #A16207;
+  color-scheme: light;
+}
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body.vf-page {
+  margin: 0; background: var(--vf-bg); color: var(--vf-text);
+  font: 400 16px/1.65 var(--vf-font-text);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  font-feature-settings: "tnum" 1;
+}
+body.vf-page :focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+body.vf-page img, body.vf-page video { max-width: 100%; display: block; }
+body.vf-page a { color: inherit; }
+body.vf-page [data-slot] { scroll-margin-top: 80px; }
+.pm-skip { position: absolute; left: -9999px; top: 8px; z-index: 1000; background: var(--vf-text); color: var(--vf-bg); padding: 10px 16px; }
+.pm-skip:focus { left: 8px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  body.vf-page *, body.vf-page *::before, body.vf-page *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* title: PM · кнопки швейцарской главы — прямые углы, волосяная рамка, золото только на главном действии */
+.vf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 0 28px; border: 1px solid var(--vf-text); border-radius: var(--vf-radius);
+  background: transparent; color: var(--vf-text); cursor: pointer; text-decoration: none;
+  font: 600 13px/1 var(--vf-font-text); letter-spacing: .14em; text-transform: uppercase;
+  transition: background-color var(--vf-dur-exit, 300ms) var(--vf-ease), color var(--vf-dur-exit, 300ms) var(--vf-ease), border-color var(--vf-dur-exit, 300ms) var(--vf-ease);
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.vf-btn:hover { background: var(--vf-text); color: var(--vf-bg); }
+.vf-btn:active { opacity: .85; }
+.vf-btn--primary { background: var(--vf-accent-2); border-color: var(--vf-accent-2); color: var(--vf-on-accent); }
+.vf-btn--primary:hover { background: var(--vf-accent); border-color: var(--vf-accent); color: var(--vf-on-accent); }
+.vf-btn--ghost { border-color: var(--vf-line); }
+.vf-btn--ghost:hover { border-color: var(--vf-text); }
+.vf-btn--sm { min-height: 44px; padding: 0 18px; font-size: 12px; }
+.vf-btn[disabled], .vf-btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
+.vf-btn svg { width: 18px; height: 18px; flex: none; }
+body.vf-page a.vf-btn { color: var(--vf-text); }
+body.vf-page a.vf-btn:hover { color: var(--vf-bg); }
+body.vf-page a.vf-btn--primary, body.vf-page a.vf-btn--primary:hover { color: var(--vf-on-accent); }
+
+/* title: PM · поля швейцарской главы — подпись над полем, линия снизу, ошибка под полем */
+.vf-field { display: grid; gap: 8px; }
+.vf-field > label, .vf-field > .vf-field__label { font: 600 12px/1.3 var(--vf-font-text); letter-spacing: .12em; text-transform: uppercase; color: var(--vf-text-2); }
+.vf-field__req { color: var(--vf-accent); }
+.vf-input {
+  width: 100%; box-sizing: border-box; min-height: 52px; padding: 12px 0;
+  border: 0; border-bottom: 1px solid var(--vf-line); border-radius: 0; background: transparent;
+  color: var(--vf-text); font: 400 17px/1.4 var(--vf-font-text);
+  transition: border-color 250ms var(--vf-ease);
+}
+textarea.vf-input { min-height: 112px; resize: vertical; }
+.vf-input::placeholder { color: #78716C; }
+.vf-input:hover { border-bottom-color: var(--vf-text-2); }
+.vf-input:focus { outline: none; border-bottom: 2px solid var(--vf-accent); }
+.vf-input:focus-visible { outline: none; }
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); }
+.vf-field__hint { font-size: 13px; color: var(--vf-muted); }
+.vf-field__error { font-size: 14px; color: var(--vf-danger); min-height: 0; }
+.vf-field__error:empty { display: none; }
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── pm-lux-booking ── */
+.pm-lux-booking { padding: var(--pm-s-3xl, 96px) 0; background: var(--vf-surface); border-top: 1px solid var(--vf-text); }
+.pm-lux-booking .pm-lux-booking__wrap { max-width: var(--pm-wrap, 1240px); margin: 0 auto; padding: 0 var(--pm-gutter, 24px); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: start; }
+.pm-lux-booking .pm-lux-booking__intro { grid-column: 1 / span 5; position: sticky; top: 104px; }
+.pm-lux-booking .pm-lux-booking__label { margin: 0 0 20px; font: 600 12px/1.4 var(--vf-font-text); letter-spacing: .2em; text-transform: uppercase; color: var(--vf-text-2); }
+.pm-lux-booking .pm-lux-booking__label::before { content: ""; display: inline-block; width: 40px; height: 1px; background: var(--vf-accent); vertical-align: middle; margin-right: 14px; }
+.pm-lux-booking .pm-lux-booking__title { margin: 0; font: 400 clamp(38px, 4.6vw, 68px)/1.03 var(--vf-font-display); letter-spacing: -.01em; text-wrap: balance; }
+.pm-lux-booking .pm-lux-booking__title em { color: var(--vf-accent); }
+.pm-lux-booking .pm-lux-booking__text { margin: var(--pm-s-md, 24px) 0 0; max-width: 26em; color: var(--vf-text-2); }
+.pm-lux-booking .pm-lux-booking__alt { margin: var(--pm-s-lg, 32px) 0 0; display: grid; gap: 4px; justify-items: start; }
+.pm-lux-booking .pm-lux-booking__alt a { display: inline-flex; align-items: center; min-height: 44px; font: 400 26px/1 var(--vf-font-display); text-decoration: none; border-bottom: 1px solid var(--vf-line); }
+.pm-lux-booking .pm-lux-booking__alt a:hover { color: var(--vf-accent); border-color: var(--vf-accent); }
+.pm-lux-booking .pm-lux-booking__form { grid-column: 7 / -1; display: grid; gap: 28px; }
+.pm-lux-booking .pm-lux-booking__how { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 32px; }
+.pm-lux-booking .pm-lux-booking__how legend { padding: 0; margin-bottom: 8px; font: 600 12px/1.3 var(--vf-font-text); letter-spacing: .12em; text-transform: uppercase; color: var(--vf-text-2); }
+.pm-lux-booking .pm-lux-booking__how label, .pm-lux-booking .pm-lux-booking__consent label { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; }
+.pm-lux-booking input[type="radio"], .pm-lux-booking input[type="checkbox"] { width: 20px; height: 20px; margin: 0; flex: none; accent-color: var(--vf-accent-2); }
+.pm-lux-booking .pm-lux-booking__consent label { align-items: flex-start; font-size: 14px; line-height: 1.5; color: var(--vf-text-2); padding: 10px 0; }
+.pm-lux-booking .pm-lux-booking__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.pm-lux-booking .pm-lux-booking__send { justify-self: start; min-width: 260px; }
+.pm-lux-booking .pm-lux-booking__done { grid-column: 7 / -1; padding: 40px 0 0; border-top: 1px solid var(--vf-text); outline: none; }
+.pm-lux-booking .pm-lux-booking__done h3 { margin: 0; font: 400 clamp(30px, 3.4vw, 46px)/1.1 var(--vf-font-display); }
+.pm-lux-booking .pm-lux-booking__done p { color: var(--vf-text-2); max-width: 30em; }
+@media (max-width: 900px) {
+  .pm-lux-booking { padding: var(--pm-s-2xl, 64px) 0; }
+  .pm-lux-booking .pm-lux-booking__wrap { display: block; }
+  .pm-lux-booking .pm-lux-booking__intro { position: static; margin-bottom: 40px; }
+  .pm-lux-booking .pm-lux-booking__send { width: 100%; justify-self: stretch; }
+}
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Заявка на белом листе</span><a href="../../v/pm-lux/#pm-lux-booking" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<section data-part="pm-lux-booking" data-slot="booking" class="pm-lux-booking" id="pm-booking" aria-labelledby="pm-lux-booking-title">
+  <div class="pm-lux-booking__wrap">
+    <div class="pm-lux-booking__intro">
+      <p class="pm-lux-booking__label">Заявка</p>
+      <h2 class="pm-lux-booking__title" id="pm-lux-booking-title">Начнём с&nbsp;<em>бесплатной</em> диагностики.</h2>
+      <p class="pm-lux-booking__text">Оставьте имя и&nbsp;телефон — Владислав свяжется с&nbsp;вами выбранным способом.</p>
+      <p class="pm-lux-booking__alt"><a href="tel:+79651716996">8 (965) 171-69-96</a><a href="https://t.me/VFswissboutique" rel="noopener" target="_blank">@VFswissboutique</a></p>
+    </div>
+    <form class="pm-lux-booking__form" action="#pm-booking" method="post" novalidate>
+      <div class="vf-field"><label for="pm-b-name">Имя <span class="vf-field__req" aria-hidden="true">*</span></label><input class="vf-input" id="pm-b-name" name="name" autocomplete="name" required><p class="vf-field__error" data-err="name"></p></div>
+      <div class="vf-field"><label for="pm-b-phone">Телефон <span class="vf-field__req" aria-hidden="true">*</span></label><input class="vf-input" id="pm-b-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required><p class="vf-field__error" data-err="phone"></p></div>
+      <fieldset class="pm-lux-booking__how">
+        <legend>Как связаться</legend>
+        <label><input type="radio" name="contact" value="call" checked><span>Позвонить</span></label>
+        <label><input type="radio" name="contact" value="telegram"><span>Написать в&nbsp;Telegram</span></label>
+      </fieldset>
+      <div class="vf-field"><label for="pm-b-brand">Марка часов, если знаете</label><input class="vf-input" id="pm-b-brand" name="brand" placeholder="Например, Patek Philippe"></div>
+      <div class="vf-field"><label for="pm-b-desc">Что с&nbsp;часами</label><textarea class="vf-input" id="pm-b-desc" name="description" rows="3" placeholder="Остановились, отстают, нужна полировка…"></textarea></div>
+      <label class="pm-lux-booking__hp" aria-hidden="true">Сайт <input name="website" tabindex="-1" autocomplete="off"></label>
+      <div class="pm-lux-booking__consent"><label><input type="checkbox" name="consent" required><span>Согласен на&nbsp;обработку персональных данных для ответа на&nbsp;заявку</span></label><p class="vf-field__error" data-err="consent"></p></div>
+      <button class="vf-btn vf-btn--primary pm-lux-booking__send" type="submit">Отправить заявку</button>
+    </form>
+    <div class="pm-lux-booking__done" data-done hidden tabindex="-1" role="status">
+      <p class="pm-lux-booking__label">Заявка</p>
+      <h3>Заявка принята (прототип)</h3>
+      <p>Это демонстрация: заявка никуда не&nbsp;отправлена. На&nbsp;настоящем сайте Владислав свяжется с&nbsp;вами выбранным способом.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+<script>
+// Общая логика заявки для всех вариантов VF swiss v2: маска телефона и проверка
+window.VFLead = (() => {
+  function formatPhone(value) {
+    let d = value.replace(/\D/g, '');
+    if (d.startsWith('8') || d.startsWith('7')) d = d.slice(1);
+    d = d.slice(0, 10);
+    if (!d) return '';
+    let r = '+7 (' + d.slice(0, 3);
+    if (d.length > 3) r += ') ' + d.slice(3, 6);
+    if (d.length > 6) r += '-' + d.slice(6, 8);
+    if (d.length > 8) r += '-' + d.slice(8, 10);
+    return r;
+  }
+
+  // Проверка заявки перед отправкой.
+  // data: { name, phone, contact: 'call'|'telegram', brand, description, photos: File[] }
+  // Вернуть { ok: true } или { ok: false, field: 'имя поля', message: 'текст для клиента' }.
+  function validateLead(data) {
+    // TODO(human): правила проверки заявки
+    return { ok: true };
+  }
+
+  // Подключает маску к полю телефона
+  function bindPhone(input) {
+    input.addEventListener('input', () => { input.value = formatPhone(input.value); });
+  }
+
+  return { formatPhone, validateLead, bindPhone };
+})();
+
+</script>
+<script>
+/* ── pm-lux-booking ── */
+;(() => {
+VFKit.register('pm-lux-booking', root => {
+  const form = root.querySelector('form');
+  const done = root.querySelector('[data-done]');
+  if (!form) return;
+  form.noValidate = true;
+  const f = n => form.elements[n];
+  if (window.VFLead && f('phone')) VFLead.bindPhone(f('phone'));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Открыть заявку из любого места страницы: vf:book { symptom }
+  document.addEventListener('vf:book', e => {
+    e.preventDefault();
+    const s = e.detail && e.detail.symptom;
+    if (s && f('description') && !f('description').value.trim()) f('description').value = s + '. ';
+    if (s && f('topic')) f('topic').value = s;
+    root.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    setTimeout(() => f('name') && f('name').focus({ preventScroll: true }), reduce ? 0 : 500);
+  });
+
+  const setErr = (name, msg) => {
+    const el = f(name); const box = root.querySelector(`[data-err="${name}"]`);
+    if (el && el.setAttribute) { msg ? el.setAttribute('aria-invalid', 'true') : el.removeAttribute('aria-invalid'); }
+    if (box) { box.textContent = msg || ''; box.hidden = false; }
+  };
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    ['name', 'phone', 'consent'].forEach(n => setErr(n, ''));
+    if (f('website') && f('website').value) { form.hidden = true; done.hidden = false; return; } // honeypot
+    const data = {
+      name: f('name').value.trim(),
+      phone: f('phone').value.trim(),
+      contact: (form.querySelector('[name="contact"]:checked') || {}).value || 'call',
+      brand: f('brand') ? f('brand').value.trim() : '',
+      description: f('description') ? f('description').value.trim() : '',
+      photos: [],
+    };
+    let res = { ok: true };
+    if (!data.name) res = { ok: false, field: 'name', message: 'Напишите, как к вам обращаться.' };
+    else if (data.phone.replace(/\D/g, '').length < 11) res = { ok: false, field: 'phone', message: 'Номер неполный: нужно 10 цифр после +7.' };
+    else if (!f('consent').checked) res = { ok: false, field: 'consent', message: 'Отметьте согласие на обработку данных — без него заявку не принять.' };
+    if (res.ok && window.VFLead) res = VFLead.validateLead(data) || { ok: true };
+    if (!res.ok) { setErr(res.field, res.message); const el = f(res.field); el && el.focus && el.focus(); return; }
+    form.hidden = true; done.hidden = false; done.focus();
+  });
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>

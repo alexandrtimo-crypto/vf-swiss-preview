@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ru" data-recipe="tech">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Заявка-прибор: шаги и кольцо прогресса · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300..700&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* title: Современно-технологично */
+/* fonts: Onest:wght@300..700; IBM Plex Mono:wght@400; IBM Plex Mono:wght@500 */
+/* Тема «живой прибор»: графит и один люминесцентный акцент. Глобальные правила сайта — только здесь. */
+:root{
+  --vf-bg:#05070a;
+  --vf-bg-2:#0a0e11;
+  --vf-surface:#10161a;
+  --vf-text:#eaf1f2;
+  --vf-text-2:#93a0a5;
+  --vf-muted:#5b676d;
+  --vf-line:rgba(214,236,240,.09);
+  --vf-accent:#6ff2d0;
+  --vf-accent-2:#b9fff0;
+  --vf-on-accent:#03140f;
+  --vf-danger:#ff8a7a;
+  --vf-font-display:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --vf-font-text:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --vf-font-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --vf-radius:18px;
+  --vf-radius-lg:26px;
+  --vf-ease:cubic-bezier(.2,.7,.1,1);
+  /* особые токены видения tech (компоненты читают их с запасным значением) */
+  --vf-surface-2:#080b0d;
+  --vf-line-2:rgba(214,236,240,.16);
+  --vf-tint:#d6ecf0;
+  --vf-danger-soft:#ff9d8f;
+  --vf-pad:clamp(20px,5.5vw,88px);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:90px}
+.vf-page{margin:0;background:var(--vf-bg);color:var(--vf-text);font-family:var(--vf-font-text);font-weight:400;font-size:17px;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.vf-page::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+img,video,canvas,svg{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit}
+.mono{font-family:var(--vf-font-mono);font-feature-settings:"zero" 1;letter-spacing:0}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:2px solid var(--vf-accent);outline-offset:3px;border-radius:8px}
+sup{color:var(--vf-accent);font-size:.7em;margin-left:1px}
+@media (max-width:820px){.vf-page{font-size:16px}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+
+/* title: Кнопки · технологично */
+/* Капсулы: люминесцентная основная со свечением и «стеклянная» второстепенная. */
+.vf-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:48px;padding:0 22px;border-radius:999px;border:0;text-decoration:none;font-family:var(--vf-font-text);font-weight:500;font-size:16px;line-height:1.2;cursor:pointer;white-space:nowrap;transition:transform .35s var(--vf-ease),box-shadow .35s var(--vf-ease),background .35s}
+.vf-btn--primary{background:var(--vf-accent);color:var(--vf-on-accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--vf-accent-2) 60%,transparent) inset,0 10px 40px -8px color-mix(in srgb,var(--vf-accent) 55%,transparent)}
+.vf-btn--primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.7) inset,0 16px 60px -6px color-mix(in srgb,var(--vf-accent) 75%,transparent)}
+.vf-btn--ghost{background:color-mix(in srgb,var(--vf-text) 6%,transparent);color:var(--vf-text);box-shadow:inset 0 0 0 1px var(--vf-line-2,var(--vf-line));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.vf-btn--ghost:hover{background:color-mix(in srgb,var(--vf-text) 10%,transparent);transform:translateY(-2px)}
+.vf-btn--sm{height:42px}
+.vf-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+@media (prefers-reduced-motion:reduce){.vf-btn{transition:none}}
+
+/* title: Поля · технологично */
+/* Крупные поля-«экраны» прибора: тонкая рамка, при фокусе — люминесцентный контур. */
+.vf-field{display:block;border:0;margin:0;padding:0;min-width:0}
+.vf-input{width:100%;height:68px;padding:0 22px;border-radius:var(--vf-radius);border:0;background:color-mix(in srgb,var(--vf-text) 4%,transparent);box-shadow:inset 0 0 0 1px var(--vf-line-2,var(--vf-line));color:var(--vf-text);font:400 24px/1 var(--vf-font-text);transition:box-shadow .3s,background .3s}
+.vf-input::placeholder{color:var(--vf-muted)}
+.vf-input:focus{outline:0;background:color-mix(in srgb,var(--vf-accent) 5%,transparent);box-shadow:inset 0 0 0 1.5px var(--vf-accent),0 0 40px -12px color-mix(in srgb,var(--vf-accent) 60%,transparent)}
+.vf-input[aria-invalid="true"]{box-shadow:inset 0 0 0 1.5px var(--vf-danger)}
+textarea.vf-input{height:auto;min-height:110px;padding:18px 22px;font-size:19px;line-height:1.4;resize:vertical}
+@media (max-width:820px){.vf-input,textarea.vf-input{height:60px;font-size:20px}}
+@media (prefers-reduced-motion:reduce){.vf-input{transition:none}}
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── tech-booking-form ── */
+/* tech-booking-form — VF kit, видение tech. Цвета/шрифты — общие токены --vf-*, особые tech-токены с запасным значением. */
+.tech-booking-form{--t-tint:var(--vf-tint,var(--vf-text));--t-line2:var(--vf-line-2,var(--vf-line));--t-pad:var(--vf-pad,clamp(20px,5.5vw,88px))}
+:where(.tech-booking-form),:where(.tech-booking-form) *{box-sizing:border-box}
+:where(.tech-booking-form) :where(h1,h2,h3,p){margin:0}
+:where(.tech-booking-form) :where(img,video,canvas,svg){display:block;max-width:100%}
+:where(.tech-booking-form) :where(a){color:inherit}
+:where(.tech-booking-form) :where(button){font:inherit;color:inherit}
+:where(.tech-booking-form) .mono{font-family:var(--vf-font-mono);font-feature-settings:"zero" 1;letter-spacing:0}
+:where(.tech-booking-form) .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:where(.tech-booking-form) sup{color:var(--vf-accent);font-size:.7em;margin-left:1px}
+.tech-booking-form{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;padding:clamp(100px,14vh,150px) var(--t-pad) 60px;max-width:1360px;margin:0 auto;align-items:stretch}
+.tech-booking-form .ord-dev{position:relative;display:grid;grid-template-columns:240px 1fr;gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(28px,4vw,56px);border-radius:34px;
+  background:radial-gradient(100% 120% at 0% 0%,color-mix(in srgb,var(--vf-accent) 8%,transparent),transparent 50%),linear-gradient(160deg,color-mix(in srgb,var(--vf-surface) 90%,var(--vf-bg)),color-mix(in srgb,var(--vf-bg) 70%,var(--vf-surface-2,var(--vf-bg-2))));box-shadow:inset 0 0 0 1px var(--vf-line),inset 0 1px 0 rgba(255,255,255,.07),0 50px 120px -40px rgba(0,0,0,.9)}
+.tech-booking-form .btn-xl{height:60px;padding:0 30px;font-size:17px}
+.tech-booking-form .ring{position:relative;width:240px;aspect-ratio:1;align-self:center}
+.tech-booking-form .ring svg{width:100%;height:100%}
+.tech-booking-form .ring-bg{fill:rgba(255,255,255,.015);stroke:color-mix(in srgb,var(--t-tint) 10%,transparent);stroke-width:8}
+.tech-booking-form .ring-fg{fill:none;stroke:var(--vf-accent);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .8s var(--vf-ease);filter:drop-shadow(0 0 10px color-mix(in srgb,var(--vf-accent) 70%,transparent))}
+.tech-booking-form .ring-ticks line{stroke:color-mix(in srgb,var(--t-tint) 25%,transparent);stroke-width:1.2}
+.tech-booking-form .ring-num{position:absolute;inset:0;display:grid;place-items:center;font-size:34px;letter-spacing:-.02em}
+.tech-booking-form .form{position:relative;min-height:380px;display:flex;flex-direction:column}
+.tech-booking-form .form-h{font-weight:500;font-size:clamp(30px,3vw,46px);letter-spacing:-.04em;line-height:1}
+.tech-booking-form .form-note{margin-top:10px;color:var(--vf-text-2)}
+.tech-booking-form .steps{margin-top:30px;flex:1}
+.tech-booking-form .step{border:0;margin:0;padding:0;min-width:0}
+@media (scripting:enabled){.tech-booking-form .step{display:none}}
+@media (scripting:enabled){.tech-booking-form .step.on{display:block;animation:tech-ord-stepIn .55s var(--vf-ease)}}
+@keyframes tech-ord-stepIn{from{opacity:0;transform:translateX(26px);filter:blur(4px)}}
+@media (scripting:none){.tech-booking-form .step{margin-bottom:22px}}
+.tech-booking-form .q{display:block;font-size:clamp(22px,2vw,28px);letter-spacing:-.025em;margin-bottom:16px;padding:0}
+.tech-booking-form .vf-input.mono{font-family:var(--vf-font-mono);font-size:22px}
+.tech-booking-form .sw{position:relative;display:grid;grid-template-columns:1fr 1fr;max-width:420px;height:68px;padding:5px;border-radius:999px;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px var(--t-line2)}
+.tech-booking-form .sw input{position:absolute;opacity:0;pointer-events:none}
+.tech-booking-form .sw label{position:relative;z-index:1;display:grid;place-items:center;font-size:19px;cursor:pointer;color:var(--vf-text-2);border-radius:999px;transition:color .3s}
+.tech-booking-form .sw input:checked + label{color:var(--vf-on-accent);font-weight:500}
+.tech-booking-form .sw input:focus-visible + label{outline:2px solid var(--vf-accent-2);outline-offset:-4px}
+.tech-booking-form .sw-thumb{position:absolute;top:5px;bottom:5px;left:5px;width:calc(50% - 5px);border-radius:999px;background:var(--vf-accent);box-shadow:0 0 30px color-mix(in srgb,var(--vf-accent) 50%,transparent);transition:transform .5s var(--vf-ease)}
+.tech-booking-form .sw:has(input[value="telegram"]:checked) .sw-thumb{transform:translateX(100%)}
+.tech-booking-form .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tech-booking-form .chips button{height:38px;padding:0 14px;border-radius:999px;border:0;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--t-line2);font-size:14px;cursor:pointer;color:var(--vf-text-2);transition:.25s}
+.tech-booking-form .chips button:hover,.tech-booking-form .chips button.on{color:var(--vf-text);box-shadow:inset 0 0 0 1px var(--vf-accent)}
+.tech-booking-form .drop{display:flex;align-items:center;justify-content:center;margin-top:12px;height:58px;border-radius:16px;border:1.5px dashed color-mix(in srgb,var(--t-tint) 20%,transparent);color:var(--vf-text-2);cursor:pointer;font-size:15px;transition:.3s}
+.tech-booking-form .drop:hover{border-color:var(--vf-accent);color:var(--vf-text)}
+.tech-booking-form .drop input{position:absolute;opacity:0;width:1px;height:1px}
+.tech-booking-form .summary{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.tech-booking-form .summary span{padding:7px 12px;border-radius:999px;background:color-mix(in srgb,var(--vf-accent) 8%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--vf-accent) 25%,transparent);font-size:14px}
+.tech-booking-form .consent{display:flex;gap:14px;align-items:flex-start;cursor:pointer;font-size:15px;color:var(--vf-text-2);margin-bottom:22px;max-width:30em}
+.tech-booking-form .consent input{position:absolute;opacity:0;width:1px;height:1px}
+.tech-booking-form .consent .box{flex:0 0 26px;height:26px;border-radius:8px;box-shadow:inset 0 0 0 1.5px var(--t-line2);display:grid;place-items:center;transition:.25s;margin-top:-2px}
+.tech-booking-form .consent input:checked + .box{background:var(--vf-accent);box-shadow:0 0 18px color-mix(in srgb,var(--vf-accent) 50%,transparent)}
+.tech-booking-form .consent input:checked + .box::after{content:"";width:10px;height:5px;border:2px solid var(--vf-on-accent);border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+.tech-booking-form .consent input:focus-visible + .box{outline:2px solid var(--vf-accent);outline-offset:3px}
+.tech-booking-form .consent a{color:var(--vf-text)}
+.tech-booking-form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.tech-booking-form .form-err{min-height:24px;margin-top:12px;color:var(--vf-danger-soft,var(--vf-danger));font-size:15px}
+.tech-booking-form .nav-steps{display:flex;gap:10px;margin-top:8px}
+@media (scripting:none){.tech-booking-form .nav-steps,.tech-booking-form .ring{display:none}}
+@media (scripting:none){.tech-booking-form .ord-dev{grid-template-columns:1fr}}
+.tech-booking-form .nav-steps [hidden]{display:none}
+.tech-booking-form .done{display:none;position:absolute;inset:0;flex-direction:column;justify-content:center;gap:12px;background:linear-gradient(160deg,color-mix(in srgb,var(--vf-surface) 90%,var(--vf-bg)),color-mix(in srgb,var(--vf-bg) 70%,var(--vf-surface-2,var(--vf-bg-2))))}
+.tech-booking-form .done-h{font-size:clamp(30px,3vw,44px);letter-spacing:-.04em;line-height:1.05;color:var(--vf-accent)}
+.tech-booking-form .done-h span{color:var(--vf-text-2);font-size:.55em;letter-spacing:0}
+.tech-booking-form .done p:not(.done-h){color:var(--vf-text-2)}
+.tech-booking-form .done .vf-btn{align-self:flex-start;margin-top:10px}
+.tech-booking-form .form.sent .done{display:flex}
+@media (max-width:820px){
+  .tech-booking-form{grid-template-columns:1fr;padding:80px 12px 30px}
+  .tech-booking-form .ord-dev{grid-template-columns:1fr;padding:24px 20px;border-radius:28px;gap:18px}
+  .tech-booking-form .btn-xl{height:60px;padding:0 30px;font-size:17px}
+.tech-booking-form .ring{width:110px;position:absolute;right:16px;top:16px}
+  .tech-booking-form .ring-num{font-size:20px}
+  .tech-booking-form .form-h{font-size:30px;max-width:7.5em}
+  .tech-booking-form .form{min-height:430px}
+    .tech-booking-form .vf-input.mono{font-size:19px}
+  .tech-booking-form .sw{height:60px}
+}
+/* Место для соседней панели (например, tech-contacts-reach с data-beside="booking"): она встаёт справа через anchor positioning */
+.tech-booking-form .ord-side{display:none}
+@supports (anchor-name:--a){
+  @media (min-width:821px){
+    .tech-booking-form:has(+ [data-beside="booking"]){grid-template-columns:minmax(0,1.75fr) minmax(0,1fr)}
+    .tech-booking-form:has(+ [data-beside="booking"]) .ord-side{display:block;anchor-name:--vf-booking-side}
+  }
+}
+@media (max-width:820px){
+  .tech-booking-form:has(+ [data-beside="booking"]){padding-bottom:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  .tech-booking-form,.tech-booking-form *,.tech-booking-form *::before,.tech-booking-form *::after{animation:none!important;transition:none!important}
+}
+
+
+/* ── tech-overlay-viewer ── */
+/* tech-overlay-viewer — VF kit, видение tech. Цвета/шрифты — общие токены --vf-*, особые tech-токены с запасным значением. */
+.tech-overlay-viewer{--t-tint:var(--vf-tint,var(--vf-text));--t-line2:var(--vf-line-2,var(--vf-line));--t-pad:var(--vf-pad,clamp(20px,5.5vw,88px))}
+:where(.tech-overlay-viewer),:where(.tech-overlay-viewer) *{box-sizing:border-box}
+:where(.tech-overlay-viewer) :where(h1,h2,h3,p){margin:0}
+:where(.tech-overlay-viewer) :where(img,video,canvas,svg){display:block;max-width:100%}
+:where(.tech-overlay-viewer) :where(a){color:inherit}
+:where(.tech-overlay-viewer) :where(button){font:inherit;color:inherit}
+:where(.tech-overlay-viewer) .mono{font-family:var(--vf-font-mono);font-feature-settings:"zero" 1;letter-spacing:0}
+:where(.tech-overlay-viewer) .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:where(.tech-overlay-viewer) sup{color:var(--vf-accent);font-size:.7em;margin-left:1px}
+.tech-overlay-viewer{border:0;padding:0;margin:0;width:100vw;height:100dvh;max-width:none;max-height:none;background:color-mix(in srgb,var(--vf-bg) 40%,#000);color:var(--vf-text)}
+.tech-overlay-viewer::backdrop{background:#000}
+.tech-overlay-viewer .viewer-scroll{position:absolute;inset:0;overflow:auto;display:grid;place-items:center;-webkit-overflow-scrolling:touch}
+.tech-overlay-viewer .viewer-scroll img{width:100%;height:auto;max-height:100%;object-fit:contain;cursor:zoom-in;transition:width .3s var(--vf-ease)}
+.tech-overlay-viewer.zoom .viewer-scroll{place-items:start}
+.tech-overlay-viewer.zoom .viewer-scroll img{width:260%;max-height:none;max-width:none;cursor:zoom-out}
+.tech-overlay-viewer .viewer-hint{position:absolute;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);font-size:12px;color:var(--vf-text-2);pointer-events:none}
+.tech-overlay-viewer .v-btn{position:absolute;width:52px;height:52px;border-radius:50%;border:0;background:color-mix(in srgb,var(--vf-surface) 75%,transparent);box-shadow:inset 0 0 0 1px var(--t-line2);font-size:20px;cursor:pointer;backdrop-filter:blur(10px)}
+.tech-overlay-viewer .v-close{top:calc(14px + env(safe-area-inset-top));right:14px}
+.tech-overlay-viewer .v-prev{left:14px;top:50%;margin-top:-26px}
+.tech-overlay-viewer .v-next{right:14px;top:50%;margin-top:-26px}
+.tech-overlay-viewer:not([open]){display:none}
+.tech-overlay-viewer .v-btn{color:var(--vf-text)}
+@media (prefers-reduced-motion:reduce){
+  .tech-overlay-viewer,.tech-overlay-viewer *,.tech-overlay-viewer *::before,.tech-overlay-viewer *::after{animation:none!important;transition:none!important}
+}
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Заявка-прибор: шаги и кольцо прогресса</span><a href="../../v/tech/#tech-booking-form" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<section data-part="tech-booking-form" data-slot="booking" class="tech-booking-form" id="zayavka" aria-labelledby="tech-ord-h">
+  <div class="ord-dev">
+    <div class="ring" aria-hidden="true">
+      <svg viewBox="-110 -110 220 220">
+        <circle class="ring-bg" r="96"/>
+        <circle class="ring-fg" r="96" transform="rotate(-90)"/>
+        <g class="ring-ticks"></g>
+      </svg>
+      <span class="ring-num mono">1/6</span>
+    </div>
+
+    <form class="form" method="post" action="#" novalidate>
+      <h2 id="tech-ord-h" class="form-h">Заявка в&nbsp;мастерскую</h2>
+      <p class="form-note">Ответим звонком или в&nbsp;Telegram&nbsp;— как удобнее.</p>
+      <div class="steps">
+        <fieldset class="step vf-field" data-step="0">
+          <label class="q" for="tech-f-name">Как вас зовут?</label>
+          <input class="vf-input" id="tech-f-name" name="name" type="text" autocomplete="name" placeholder="Имя">
+        </fieldset>
+        <fieldset class="step vf-field" data-step="1">
+          <label class="q" for="tech-f-phone">Номер телефона</label>
+          <input class="vf-input mono" id="tech-f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__">
+        </fieldset>
+        <fieldset class="step vf-field" data-step="2">
+          <legend class="q">Как удобнее связаться?</legend>
+          <div class="sw">
+            <input type="radio" id="tech-c-call" name="contact" value="call" checked><label for="tech-c-call">Звонок</label>
+            <input type="radio" id="tech-c-tg" name="contact" value="telegram"><label for="tech-c-tg">Telegram</label>
+            <span class="sw-thumb" aria-hidden="true"></span>
+          </div>
+        </fieldset>
+        <fieldset class="step vf-field" data-step="3">
+          <label class="q" for="tech-f-brand">Какие часы?</label>
+          <input class="vf-input" id="tech-f-brand" name="brand" type="text" placeholder="Марка, если знаете" list="tech-brands">
+          <datalist id="tech-brands"><option>Rolex</option><option>Patek Philippe</option><option>Audemars Piguet</option><option>Vacheron Constantin</option><option>Breguet</option><option>Cartier</option><option>Breitling</option><option>Franck Muller</option><option>Blancpain</option></datalist>
+          <div class="chips" aria-label="Быстрый выбор марки">
+            <button type="button">Rolex</button><button type="button">Patek Philippe</button><button type="button">Audemars Piguet</button><button type="button">Cartier</button><button type="button">Breguet</button><button type="button">Breitling</button>
+          </div>
+        </fieldset>
+        <fieldset class="step vf-field" data-step="4">
+          <label class="q" for="tech-f-desc">Что случилось?</label>
+          <textarea class="vf-input" id="tech-f-desc" name="description" rows="3" placeholder="Например: отстают, нужна полировка, замена стекла"></textarea>
+          <label class="drop" for="tech-f-photos"><input id="tech-f-photos" name="photos" type="file" accept="image/*" multiple><span class="drop-txt">+ Фото часов&nbsp;— по желанию</span></label>
+        </fieldset>
+        <fieldset class="step vf-field" data-step="5">
+          <legend class="q">Проверим и&nbsp;отправим</legend>
+          <div class="summary" aria-live="polite"></div>
+          <label class="consent"><input type="checkbox" id="tech-f-consent" name="consent"><span class="box" aria-hidden="true"></span><span>Согласен на&nbsp;обработку персональных данных <a href="#policy" class="stub-link">политика<sup>•</sup></a></span></label>
+          <div class="hp" aria-hidden="true"><label for="tech-f-web">Сайт</label><input id="tech-f-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+          <button class="vf-btn vf-btn--primary btn-xl submit" type="submit" disabled>Отправить заявку</button>
+          <noscript><p class="form-err">Отправка работает с&nbsp;включённым JavaScript. Позвоните: 8&nbsp;(965)&nbsp;171-69-96.</p></noscript>
+        </fieldset>
+      </div>
+      <p class="form-err" role="alert"></p>
+      <div class="nav-steps">
+        <button class="vf-btn vf-btn--ghost prev" type="button">Назад</button>
+        <button class="vf-btn vf-btn--primary next" type="button">Далее <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="done" tabindex="-1">
+        <p class="done-h">Заявка принята <span>(прототип)</span></p>
+        <p>Это демонстрация: данные никуда не отправлены.</p>
+        <button class="vf-btn vf-btn--ghost again" type="button">Заполнить снова</button>
+      </div>
+    </form>
+  </div>
+  <div class="ord-side" aria-hidden="true"></div>
+</section>
+
+<dialog data-part="tech-overlay-viewer" data-slot="overlay" class="tech-overlay-viewer" aria-label="Просмотр снимка">
+  <div class="viewer-scroll"><img class="viewer-img" src="" alt=""></div>
+  <p class="viewer-hint mono">коснитесь, чтобы увеличить</p>
+  <button class="v-btn v-close" type="button" aria-label="Закрыть">✕</button>
+  <button class="v-btn v-prev" type="button" aria-label="Предыдущий снимок">←</button>
+  <button class="v-btn v-next" type="button" aria-label="Следующий снимок">→</button>
+</dialog>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+<script>
+// Общая логика заявки для всех вариантов VF swiss v2: маска телефона и проверка
+window.VFLead = (() => {
+  function formatPhone(value) {
+    let d = value.replace(/\D/g, '');
+    if (d.startsWith('8') || d.startsWith('7')) d = d.slice(1);
+    d = d.slice(0, 10);
+    if (!d) return '';
+    let r = '+7 (' + d.slice(0, 3);
+    if (d.length > 3) r += ') ' + d.slice(3, 6);
+    if (d.length > 6) r += '-' + d.slice(6, 8);
+    if (d.length > 8) r += '-' + d.slice(8, 10);
+    return r;
+  }
+
+  // Проверка заявки перед отправкой.
+  // data: { name, phone, contact: 'call'|'telegram', brand, description, photos: File[] }
+  // Вернуть { ok: true } или { ok: false, field: 'имя поля', message: 'текст для клиента' }.
+  function validateLead(data) {
+    // TODO(human): правила проверки заявки
+    return { ok: true };
+  }
+
+  // Подключает маску к полю телефона
+  function bindPhone(input) {
+    input.addEventListener('input', () => { input.value = formatPhone(input.value); });
+  }
+
+  return { formatPhone, validateLead, bindPhone };
+})();
+
+</script>
+<script>
+/* ── tech-booking-form ── */
+;(() => {
+/* Заявка-прибор: одно поле на шаг, кольцо прогресса 1/6…6/6, VFLead.validateLead, honeypot, без реальной отправки.
+   Ловит vf:book { symptom?, brand? }: прокручивает к себе и подставляет данные. */
+VFKit.register('tech-booking-form', root => {
+  const TAU = Math.PI * 2, NS = 'http://www.w3.org/2000/svg';
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const $ = s => root.querySelector(s), $$ = s => [...root.querySelectorAll(s)];
+  const form = $('.form'), steps = $$('.step'), prevB = $('.prev'), nextB = $('.next'), submitB = $('.submit');
+  const err = $('.form > .form-err'), ringFg = $('.ring-fg'), ringNum = $('.ring-num'), done = $('.done');
+  const RC = TAU * 96;
+  ringFg.style.strokeDasharray = RC;
+  (() => { const g = $('.ring-ticks'); for (let i = 0; i < 60; i++) { const a = i / 60 * TAU, l = document.createElementNS(NS, 'line'), r0 = i % 10 ? 104 : 102; l.setAttribute('x1', Math.sin(a) * r0); l.setAttribute('y1', -Math.cos(a) * r0); l.setAttribute('x2', Math.sin(a) * 108); l.setAttribute('y2', -Math.cos(a) * 108); g.appendChild(l); } })();
+  const phoneInp = form.elements.phone, photosInp = form.elements.photos, brandInp = form.elements.brand, descInp = form.elements.description;
+  const consent = form.elements.consent, dropTxt = $('.drop-txt'), DROP0 = '+ Фото часов — по желанию';
+  if (window.VFLead) VFLead.bindPhone(phoneInp);
+  submitB.disabled = false;
+  let cur = 0;
+  const FIELD_STEP = { name: 0, phone: 1, contact: 2, brand: 3, description: 4, photos: 4, consent: 5 };
+  function collect() {
+    const fd = new FormData(form);
+    return {
+      name: (fd.get('name') || '').trim(), phone: (fd.get('phone') || '').trim(), contact: fd.get('contact') === 'telegram' ? 'telegram' : 'call',
+      brand: (fd.get('brand') || '').trim(), description: (fd.get('description') || '').trim(), photos: Array.from(photosInp.files || []),
+    };
+  }
+  function setRing(frac, label) { ringFg.style.strokeDashoffset = (RC * (1 - frac)).toFixed(1); ringNum.textContent = label; }
+  function show(i, focus) {
+    cur = clamp(i, 0, steps.length - 1);
+    steps.forEach((s, k) => s.classList.toggle('on', k === cur));
+    prevB.hidden = cur === 0; nextB.hidden = cur === steps.length - 1;
+    setRing((cur + 1) / steps.length, `${cur + 1}/${steps.length}`);
+    err.textContent = '';
+    if (cur === steps.length - 1) buildSummary();
+    if (focus) { const f = steps[cur].querySelector('input:not([type=hidden]):not([tabindex="-1"]),textarea'); if (f) f.focus({ preventScroll: true }); }
+  }
+  function buildSummary() {
+    const d = collect(), sm = $('.summary'); sm.innerHTML = '';
+    const items = [d.name, d.phone, d.contact === 'telegram' ? 'Telegram' : 'Звонок', d.brand, d.photos.length ? `фото: ${d.photos.length}` : ''].filter(Boolean);
+    items.forEach(t => { const s = document.createElement('span'); s.textContent = t; sm.appendChild(s); });
+  }
+  function fail(r) {
+    const st = FIELD_STEP[r.field] ?? cur;
+    show(st, false);
+    err.textContent = r.message || 'Проверьте поле';
+    const el = form.elements[r.field];
+    const node = el && (el.length && !el.tagName ? el[0] : el);
+    if (node && node.setAttribute) { node.setAttribute('aria-invalid', 'true'); node.focus({ preventScroll: true }); }
+  }
+  function check(upTo) {
+    if (!window.VFLead) return true;
+    const r = VFLead.validateLead(collect());
+    if (r && r.ok === false && (FIELD_STEP[r.field] ?? 0) <= upTo) { fail(r); return false; }
+    return true;
+  }
+  nextB.addEventListener('click', () => { if (check(cur)) show(cur + 1, true); });
+  prevB.addEventListener('click', () => show(cur - 1, true));
+  form.addEventListener('input', e => { if (e.target.getAttribute) e.target.removeAttribute('aria-invalid'); err.textContent = ''; });
+  form.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox' && cur < steps.length - 1) { e.preventDefault(); nextB.click(); }
+  });
+  $$('.chips button').forEach(b => b.addEventListener('click', () => {
+    brandInp.value = b.textContent; $$('.chips button').forEach(x => x.classList.toggle('on', x === b));
+  }));
+  photosInp.addEventListener('change', e => { const n = e.target.files.length; dropTxt.textContent = n ? `Выбрано фото: ${n}` : DROP0; });
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const ok = () => { form.classList.add('sent'); setRing(1, '✓'); done.focus(); };
+    if (form.elements.website.value) { ok(); return; }
+    if (!check(99)) return;
+    if (!consent.checked) { show(5, false); err.textContent = 'Нужно согласие на обработку персональных данных.'; consent.focus(); return; }
+    ok();
+  });
+  $('.again').addEventListener('click', () => { form.reset(); form.classList.remove('sent'); $$('.chips button').forEach(x => x.classList.remove('on')); dropTxt.textContent = DROP0; show(0, true); });
+  show(0, false);
+
+  // связь с другими элементами: «Записаться/Заявка» где угодно на странице
+  document.addEventListener('vf:book', e => {
+    if (e.defaultPrevented) return;
+    e.preventDefault();
+    const d = e.detail || {};
+    if (d.brand) brandInp.value = d.brand;
+    if (d.symptom) descInp.value = d.symptom;
+    root.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
+});
+
+})();
+
+/* ── tech-overlay-viewer ── */
+;(() => {
+/* Полноэкранный просмотрщик снимков. Слушает vf:viewer { items:[{src,alt}], index }.
+   Касание — увеличить в точке, листание свайпом или стрелками. */
+VFKit.register('tech-overlay-viewer', root => {
+  const vImg = root.querySelector('.viewer-img'), vScroll = root.querySelector('.viewer-scroll');
+  let list = [], vi = 0;
+  function setViewer(i) {
+    if (!list.length) return;
+    vi = (i + list.length) % list.length;
+    vImg.src = list[vi].src; vImg.alt = list[vi].alt || ''; root.classList.remove('zoom');
+  }
+  document.addEventListener('vf:viewer', e => {
+    const d = e.detail || {};
+    if (!Array.isArray(d.items) || !d.items.length) return;
+    e.preventDefault();
+    list = d.items; setViewer(d.index || 0);
+    if (typeof root.showModal === 'function') { if (!root.open) root.showModal(); } else root.setAttribute('open', '');
+  });
+  vImg.addEventListener('click', e => {
+    if (root.classList.contains('zoom')) { root.classList.remove('zoom'); return; }
+    const r = vImg.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+    root.classList.add('zoom');
+    requestAnimationFrame(() => {
+      const W = vImg.offsetWidth, H = vImg.offsetHeight;
+      vScroll.scrollLeft = fx * W - vScroll.clientWidth / 2; vScroll.scrollTop = fy * H - vScroll.clientHeight / 2;
+    });
+  });
+  const close = () => { if (typeof root.close === 'function') root.close(); else root.removeAttribute('open'); };
+  root.querySelector('.v-close').addEventListener('click', close);
+  root.querySelector('.v-prev').addEventListener('click', () => setViewer(vi - 1));
+  root.querySelector('.v-next').addEventListener('click', () => setViewer(vi + 1));
+  root.addEventListener('keydown', e => { if (e.key === 'ArrowRight') setViewer(vi + 1); if (e.key === 'ArrowLeft') setViewer(vi - 1); });
+  let tx0 = null;
+  vScroll.addEventListener('touchstart', e => { tx0 = root.classList.contains('zoom') ? null : e.touches[0].clientX; }, { passive: true });
+  vScroll.addEventListener('touchend', e => {
+    if (tx0 === null) return; const dx = e.changedTouches[0].clientX - tx0;
+    if (Math.abs(dx) > 60) setViewer(vi + (dx < 0 ? 1 : -1)); tx0 = null;
+  });
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>

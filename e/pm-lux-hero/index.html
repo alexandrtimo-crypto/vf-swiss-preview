@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ru" data-recipe="pm-lux">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Первый экран: «До последнего винта» · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400..600%3B1,400..500&family=Montserrat:wght@400..600&display=swap">
+<style>
+/* title: PM · Швейцарская глава (дорого-богато) */
+/* fonts: Cormorant:ital,wght@0,400..600%3B1,400..500; Montserrat:wght@400..600 */
+/* UI UX Pro Max → Luxury/Premium Brand: стиль Minimalism & Swiss Style (дисперсия 2), палитра «Premium black + gold accent»,
+   пара «Luxury Serif» (Cormorant + Montserrat), паттерн Scroll-Triggered Storytelling. Плотность 2 → просторная шкала 24–96. */
+:root {
+  --vf-bg: #FAFAF9;
+  --vf-bg-2: #F5F5F4;
+  --vf-surface: #FFFFFF;
+  --vf-text: #0C0A09;
+  --vf-text-2: #44403C;
+  --vf-muted: #475569;
+  --vf-line: #D6D3D1;
+  --vf-accent: #A16207;
+  --vf-accent-2: #1C1917;
+  --vf-on-accent: #FFFFFF;
+  --vf-danger: #B91C1C;
+  --vf-font-display: 'Cormorant', 'Times New Roman', serif;
+  --vf-font-text: 'Montserrat', system-ui, sans-serif;
+  --vf-font-mono: 'Montserrat', system-ui, sans-serif;
+  --vf-radius: 0px;
+  --vf-radius-lg: 0px;
+  --vf-ease: cubic-bezier(.25, .46, .45, .94); /* power1.out — пресет Scroll Reveal · Subtle */
+  --vf-dur: 500ms;           /* «Premium reveals (400-600ms)» из ui-reasoning */
+  --vf-dur-exit: 320ms;      /* exit-faster-than-enter ≈ 65 % */
+  /* Плотность 2 (Spacious) — шкала из DIAL_TIERS */
+  --pm-s-xs: 4px; --pm-s-sm: 8px; --pm-s-md: 24px; --pm-s-lg: 32px; --pm-s-xl: 48px; --pm-s-2xl: 64px; --pm-s-3xl: 96px;
+  --pm-wrap: 1240px;
+  --pm-gutter: clamp(16px, 4vw, 48px);
+  --vf-metal: #A16207;
+  color-scheme: light;
+}
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body.vf-page {
+  margin: 0; background: var(--vf-bg); color: var(--vf-text);
+  font: 400 16px/1.65 var(--vf-font-text);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  font-feature-settings: "tnum" 1;
+}
+body.vf-page :focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+body.vf-page img, body.vf-page video { max-width: 100%; display: block; }
+body.vf-page a { color: inherit; }
+body.vf-page [data-slot] { scroll-margin-top: 80px; }
+.pm-skip { position: absolute; left: -9999px; top: 8px; z-index: 1000; background: var(--vf-text); color: var(--vf-bg); padding: 10px 16px; }
+.pm-skip:focus { left: 8px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  body.vf-page *, body.vf-page *::before, body.vf-page *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* title: PM · кнопки швейцарской главы — прямые углы, волосяная рамка, золото только на главном действии */
+.vf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 0 28px; border: 1px solid var(--vf-text); border-radius: var(--vf-radius);
+  background: transparent; color: var(--vf-text); cursor: pointer; text-decoration: none;
+  font: 600 13px/1 var(--vf-font-text); letter-spacing: .14em; text-transform: uppercase;
+  transition: background-color var(--vf-dur-exit, 300ms) var(--vf-ease), color var(--vf-dur-exit, 300ms) var(--vf-ease), border-color var(--vf-dur-exit, 300ms) var(--vf-ease);
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.vf-btn:hover { background: var(--vf-text); color: var(--vf-bg); }
+.vf-btn:active { opacity: .85; }
+.vf-btn--primary { background: var(--vf-accent-2); border-color: var(--vf-accent-2); color: var(--vf-on-accent); }
+.vf-btn--primary:hover { background: var(--vf-accent); border-color: var(--vf-accent); color: var(--vf-on-accent); }
+.vf-btn--ghost { border-color: var(--vf-line); }
+.vf-btn--ghost:hover { border-color: var(--vf-text); }
+.vf-btn--sm { min-height: 44px; padding: 0 18px; font-size: 12px; }
+.vf-btn[disabled], .vf-btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
+.vf-btn svg { width: 18px; height: 18px; flex: none; }
+body.vf-page a.vf-btn { color: var(--vf-text); }
+body.vf-page a.vf-btn:hover { color: var(--vf-bg); }
+body.vf-page a.vf-btn--primary, body.vf-page a.vf-btn--primary:hover { color: var(--vf-on-accent); }
+
+/* title: PM · поля швейцарской главы — подпись над полем, линия снизу, ошибка под полем */
+.vf-field { display: grid; gap: 8px; }
+.vf-field > label, .vf-field > .vf-field__label { font: 600 12px/1.3 var(--vf-font-text); letter-spacing: .12em; text-transform: uppercase; color: var(--vf-text-2); }
+.vf-field__req { color: var(--vf-accent); }
+.vf-input {
+  width: 100%; box-sizing: border-box; min-height: 52px; padding: 12px 0;
+  border: 0; border-bottom: 1px solid var(--vf-line); border-radius: 0; background: transparent;
+  color: var(--vf-text); font: 400 17px/1.4 var(--vf-font-text);
+  transition: border-color 250ms var(--vf-ease);
+}
+textarea.vf-input { min-height: 112px; resize: vertical; }
+.vf-input::placeholder { color: #78716C; }
+.vf-input:hover { border-bottom-color: var(--vf-text-2); }
+.vf-input:focus { outline: none; border-bottom: 2px solid var(--vf-accent); }
+.vf-input:focus-visible { outline: none; }
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); }
+.vf-field__hint { font-size: 13px; color: var(--vf-muted); }
+.vf-field__error { font-size: 14px; color: var(--vf-danger); min-height: 0; }
+.vf-field__error:empty { display: none; }
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── pm-lux-hero ── */
+.pm-lux-hero { max-width: var(--pm-wrap, 1240px); margin: 0 auto; padding: var(--pm-s-2xl, 64px) var(--pm-gutter, 24px) 0; outline: none; }
+.pm-lux-hero .pm-lux-hero__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: end; }
+.pm-lux-hero .pm-lux-hero__copy { grid-column: 1 / span 6; padding-bottom: 8px; }
+.pm-lux-hero .pm-lux-hero__kicker { margin: 0 0 var(--pm-s-lg, 32px); font: 600 12px/1.4 var(--vf-font-text); letter-spacing: .2em; text-transform: uppercase; color: var(--vf-text-2); }
+.pm-lux-hero .pm-lux-hero__kicker::before { content: ""; display: inline-block; width: 40px; height: 1px; background: var(--vf-accent); vertical-align: middle; margin-right: 14px; }
+.pm-lux-hero .pm-lux-hero__title { margin: 0; font: 400 clamp(56px, 6.8vw, 104px)/.9 var(--vf-font-display); letter-spacing: -.02em; color: var(--vf-text); text-wrap: balance; }
+.pm-lux-hero .pm-lux-hero__title em { font-style: italic; color: var(--vf-accent); }
+.pm-lux-hero .pm-lux-hero__lede { max-width: 33em; margin: var(--pm-s-lg, 32px) 0 0; font-size: 17px; line-height: 1.7; color: var(--vf-text-2); }
+.pm-lux-hero .pm-lux-hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: var(--pm-s-xl, 48px); }
+.pm-lux-hero .pm-lux-hero__fig { grid-column: 7 / span 6; margin: 0; }
+.pm-lux-hero .pm-lux-hero__fig img { width: 100%; height: auto; aspect-ratio: 1200 / 898; object-fit: cover; background: var(--vf-bg-2); }
+.pm-lux-hero .pm-lux-hero__fig figcaption { display: grid; grid-template-columns: auto 1fr; gap: 16px; margin-top: 14px; font-size: 13px; line-height: 1.5; color: var(--vf-muted); }
+.pm-lux-hero .pm-lux-hero__fig figcaption span { font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 11px; color: var(--vf-text-2); padding-top: 2px; }
+.pm-lux-hero .pm-lux-hero__facts { display: grid; grid-template-columns: repeat(3, 1fr); margin: var(--pm-s-2xl, 64px) 0 0; border-top: 1px solid var(--vf-text); }
+.pm-lux-hero .pm-lux-hero__facts > div { padding: 22px 24px 26px 0; border-right: 1px solid var(--vf-line); }
+.pm-lux-hero .pm-lux-hero__facts > div + div { padding-left: 24px; }
+.pm-lux-hero .pm-lux-hero__facts > div:last-child { border-right: 0; }
+.pm-lux-hero .pm-lux-hero__facts dt { font: 600 11px/1.3 var(--vf-font-text); letter-spacing: .2em; text-transform: uppercase; color: var(--vf-muted); }
+.pm-lux-hero .pm-lux-hero__facts dd { margin: 8px 0 0; font: 400 clamp(26px, 2.6vw, 36px)/1.1 var(--vf-font-display); }
+/* Появление — один ключевой элемент (excessive-motion), 500 мс, y 12px */
+@media (prefers-reduced-motion: no-preference) {
+  .pm-lux-hero .pm-lux-hero__title, .pm-lux-hero .pm-lux-hero__fig img { animation: pm-lux-hero-in 600ms var(--vf-ease) both; }
+  .pm-lux-hero .pm-lux-hero__fig img { animation-delay: 120ms; }
+}
+@keyframes pm-lux-hero-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (max-width: 900px) {
+  .pm-lux-hero { padding-top: var(--pm-s-xl, 48px); }
+  .pm-lux-hero .pm-lux-hero__copy, .pm-lux-hero .pm-lux-hero__fig { grid-column: 1 / -1; }
+  .pm-lux-hero .pm-lux-hero__fig { margin-top: var(--pm-s-xl, 48px); order: 0; }
+  .pm-lux-hero .pm-lux-hero__facts { grid-template-columns: 1fr; margin-top: var(--pm-s-xl, 48px); }
+  .pm-lux-hero .pm-lux-hero__facts > div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 16px 0; border-right: 0; border-bottom: 1px solid var(--vf-line); }
+  .pm-lux-hero .pm-lux-hero__facts > div + div { padding-left: 0; }
+  .pm-lux-hero .pm-lux-hero__facts dd { margin: 0; font-size: 26px; }
+}
+@media (max-width: 480px) {
+  .pm-lux-hero .pm-lux-hero__title { font-size: 58px; }
+  .pm-lux-hero .pm-lux-hero__kicker { margin-bottom: 24px; letter-spacing: .14em; }
+  .pm-lux-hero .pm-lux-hero__cta .vf-btn { flex: 1 1 100%; }
+  .pm-lux-hero .pm-lux-hero__fig figcaption { grid-template-columns: 1fr; gap: 4px; }
+}
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Первый экран: «До последнего винта»</span><a href="../../v/pm-lux/#pm-lux-hero" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<section data-part="pm-lux-hero" data-slot="hero" class="pm-lux-hero" id="pm-main" tabindex="-1" aria-labelledby="pm-lux-hero-title">
+  <div class="pm-lux-hero__grid">
+    <div class="pm-lux-hero__copy">
+      <p class="pm-lux-hero__kicker">Часовая мастерская · Петровка, 23/10 стр. 5</p>
+      <h1 class="pm-lux-hero__title" id="pm-lux-hero-title">До&nbsp;последнего <em>винта.</em></h1>
+      <p class="pm-lux-hero__lede">Ремонт и&nbsp;обслуживание швейцарских часов. Мастер Владислав полностью разбирает механизм, проверяет ход на&nbsp;таймграфере и&nbsp;ставит оригинальные комплектующие.</p>
+      <div class="pm-lux-hero__cta">
+        <a class="vf-btn vf-btn--primary" href="#pm-booking" data-book>Оставить заявку</a>
+        <a class="vf-btn vf-btn--ghost" href="https://t.me/VFswissboutique" rel="noopener" target="_blank">Написать в Telegram</a>
+      </div>
+    </div>
+    <figure class="pm-lux-hero__fig">
+      <img src="../../media/img/ex_19.webp" width="1200" height="898" alt="Механизм часов, разобранный на детали и разложенный на белом листе с эмблемами VF swiss" fetchpriority="high">
+      <figcaption><span>Фото из мастерской</span>Механизм после полной разборки — каждая деталь на&nbsp;своём месте.</figcaption>
+    </figure>
+  </div>
+  <dl class="pm-lux-hero__facts">
+    <div><dt>Диагностика</dt><dd>бесплатно</dd></div>
+    <div><dt>Гарантия</dt><dd>до&nbsp;двух лет</dd></div>
+    <div><dt>Комплектующие</dt><dd>оригинальные</dd></div>
+  </dl>
+</section>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+
+<script>
+/* ── pm-lux-hero ── */
+;(() => {
+VFKit.register('pm-lux-hero', root => {
+  root.querySelectorAll('[data-book]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    document.dispatchEvent(new CustomEvent('vf:book', { detail: {}, cancelable: true }));
+  }));
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>

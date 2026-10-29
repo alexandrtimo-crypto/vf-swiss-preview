@@ -116,7 +116,7 @@ document.getElementById('elements').innerHTML = D.slots.map(g => `
       <span class="el__img" style="${e.thumb ? `background-image:url('${e.thumb}')` : ''}" role="img" aria-label="${esc(e.title)}"></span>
       <div class="el__body"><div class="el__t">${esc(e.title)}</div><div class="el__in">из варианта: ${e.in.map(x => esc(x.title)).join(', ')}</div>
         <div class="el__act"><button type="button" class="love" aria-pressed="${!!S.e[e.id]}"><i class="vf-i vf-i--check" aria-hidden="true"></i>Хочу это</button>
-          <a href="../v/${e.in[0].id}/" target="_blank" rel="noopener">вживую</a></div>
+          <a href="../e/${e.id}/" target="_blank" rel="noopener">вживую</a></div>
         <details ${S.ec[e.id] ? 'open' : ''}><summary>Комментарий</summary><textarea data-ec="${e.id}" placeholder="Что поменять?">${esc(S.ec[e.id] || '')}</textarea></details>
       </div></article>`).join('')}</div>`).join('');
 

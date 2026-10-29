@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ru" data-recipe="pm-lux">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Глава II: путь часов (липкая сцена) · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400..600%3B1,400..500&family=Montserrat:wght@400..600&display=swap">
+<style>
+/* title: PM · Швейцарская глава (дорого-богато) */
+/* fonts: Cormorant:ital,wght@0,400..600%3B1,400..500; Montserrat:wght@400..600 */
+/* UI UX Pro Max → Luxury/Premium Brand: стиль Minimalism & Swiss Style (дисперсия 2), палитра «Premium black + gold accent»,
+   пара «Luxury Serif» (Cormorant + Montserrat), паттерн Scroll-Triggered Storytelling. Плотность 2 → просторная шкала 24–96. */
+:root {
+  --vf-bg: #FAFAF9;
+  --vf-bg-2: #F5F5F4;
+  --vf-surface: #FFFFFF;
+  --vf-text: #0C0A09;
+  --vf-text-2: #44403C;
+  --vf-muted: #475569;
+  --vf-line: #D6D3D1;
+  --vf-accent: #A16207;
+  --vf-accent-2: #1C1917;
+  --vf-on-accent: #FFFFFF;
+  --vf-danger: #B91C1C;
+  --vf-font-display: 'Cormorant', 'Times New Roman', serif;
+  --vf-font-text: 'Montserrat', system-ui, sans-serif;
+  --vf-font-mono: 'Montserrat', system-ui, sans-serif;
+  --vf-radius: 0px;
+  --vf-radius-lg: 0px;
+  --vf-ease: cubic-bezier(.25, .46, .45, .94); /* power1.out — пресет Scroll Reveal · Subtle */
+  --vf-dur: 500ms;           /* «Premium reveals (400-600ms)» из ui-reasoning */
+  --vf-dur-exit: 320ms;      /* exit-faster-than-enter ≈ 65 % */
+  /* Плотность 2 (Spacious) — шкала из DIAL_TIERS */
+  --pm-s-xs: 4px; --pm-s-sm: 8px; --pm-s-md: 24px; --pm-s-lg: 32px; --pm-s-xl: 48px; --pm-s-2xl: 64px; --pm-s-3xl: 96px;
+  --pm-wrap: 1240px;
+  --pm-gutter: clamp(16px, 4vw, 48px);
+  --vf-metal: #A16207;
+  color-scheme: light;
+}
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body.vf-page {
+  margin: 0; background: var(--vf-bg); color: var(--vf-text);
+  font: 400 16px/1.65 var(--vf-font-text);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  font-feature-settings: "tnum" 1;
+}
+body.vf-page :focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+body.vf-page img, body.vf-page video { max-width: 100%; display: block; }
+body.vf-page a { color: inherit; }
+body.vf-page [data-slot] { scroll-margin-top: 80px; }
+.pm-skip { position: absolute; left: -9999px; top: 8px; z-index: 1000; background: var(--vf-text); color: var(--vf-bg); padding: 10px 16px; }
+.pm-skip:focus { left: 8px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  body.vf-page *, body.vf-page *::before, body.vf-page *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* title: PM · кнопки швейцарской главы — прямые углы, волосяная рамка, золото только на главном действии */
+.vf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 0 28px; border: 1px solid var(--vf-text); border-radius: var(--vf-radius);
+  background: transparent; color: var(--vf-text); cursor: pointer; text-decoration: none;
+  font: 600 13px/1 var(--vf-font-text); letter-spacing: .14em; text-transform: uppercase;
+  transition: background-color var(--vf-dur-exit, 300ms) var(--vf-ease), color var(--vf-dur-exit, 300ms) var(--vf-ease), border-color var(--vf-dur-exit, 300ms) var(--vf-ease);
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.vf-btn:hover { background: var(--vf-text); color: var(--vf-bg); }
+.vf-btn:active { opacity: .85; }
+.vf-btn--primary { background: var(--vf-accent-2); border-color: var(--vf-accent-2); color: var(--vf-on-accent); }
+.vf-btn--primary:hover { background: var(--vf-accent); border-color: var(--vf-accent); color: var(--vf-on-accent); }
+.vf-btn--ghost { border-color: var(--vf-line); }
+.vf-btn--ghost:hover { border-color: var(--vf-text); }
+.vf-btn--sm { min-height: 44px; padding: 0 18px; font-size: 12px; }
+.vf-btn[disabled], .vf-btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
+.vf-btn svg { width: 18px; height: 18px; flex: none; }
+body.vf-page a.vf-btn { color: var(--vf-text); }
+body.vf-page a.vf-btn:hover { color: var(--vf-bg); }
+body.vf-page a.vf-btn--primary, body.vf-page a.vf-btn--primary:hover { color: var(--vf-on-accent); }
+
+/* title: PM · поля швейцарской главы — подпись над полем, линия снизу, ошибка под полем */
+.vf-field { display: grid; gap: 8px; }
+.vf-field > label, .vf-field > .vf-field__label { font: 600 12px/1.3 var(--vf-font-text); letter-spacing: .12em; text-transform: uppercase; color: var(--vf-text-2); }
+.vf-field__req { color: var(--vf-accent); }
+.vf-input {
+  width: 100%; box-sizing: border-box; min-height: 52px; padding: 12px 0;
+  border: 0; border-bottom: 1px solid var(--vf-line); border-radius: 0; background: transparent;
+  color: var(--vf-text); font: 400 17px/1.4 var(--vf-font-text);
+  transition: border-color 250ms var(--vf-ease);
+}
+textarea.vf-input { min-height: 112px; resize: vertical; }
+.vf-input::placeholder { color: #78716C; }
+.vf-input:hover { border-bottom-color: var(--vf-text-2); }
+.vf-input:focus { outline: none; border-bottom: 2px solid var(--vf-accent); }
+.vf-input:focus-visible { outline: none; }
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); }
+.vf-field__hint { font-size: 13px; color: var(--vf-muted); }
+.vf-field__error { font-size: 14px; color: var(--vf-danger); min-height: 0; }
+.vf-field__error:empty { display: none; }
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── pm-lux-process ── */
+.pm-lux-process { padding: var(--pm-s-3xl, 96px) 0; background: var(--vf-bg-2); }
+.pm-lux-process .pm-lux-process__wrap { max-width: var(--pm-wrap, 1240px); margin: 0 auto; padding: 0 var(--pm-gutter, 24px); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+.pm-lux-process .pm-lux-process__head { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; border-top: 1px solid var(--vf-line); padding-top: var(--pm-s-xl, 48px); margin-bottom: var(--pm-s-2xl, 64px); }
+.pm-lux-process .pm-lux-process__num { grid-column: 1 / span 3; grid-row: 1 / span 2; margin: 0; font: italic 400 clamp(80px, 9vw, 140px)/.8 var(--vf-font-display); color: var(--vf-accent); }
+.pm-lux-process .pm-lux-process__label { grid-column: 4 / -1; margin: 0; font: 600 12px/1.4 var(--vf-font-text); letter-spacing: .2em; text-transform: uppercase; color: var(--vf-text-2); }
+.pm-lux-process .pm-lux-process__title { grid-column: 4 / -1; margin: 20px 0 0; max-width: 14em; font: 400 clamp(36px, 4.4vw, 64px)/1.05 var(--vf-font-display); letter-spacing: -.01em; text-wrap: balance; }
+.pm-lux-process .pm-lux-process__stage { grid-column: 1 / span 5; position: sticky; top: 96px; align-self: start; }
+.pm-lux-process .pm-lux-process__frame { position: relative; aspect-ratio: 4 / 5; background: var(--vf-bg); overflow: hidden; }
+.pm-lux-process .pm-lux-process__frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity var(--vf-dur, 500ms) var(--vf-ease); }
+.pm-lux-process .pm-lux-process__frame img.is-on { opacity: 1; }
+.pm-lux-process .pm-lux-process__count { margin: 14px 0 0; font: 600 12px/1 var(--vf-font-text); letter-spacing: .2em; color: var(--vf-muted); }
+.pm-lux-process .pm-lux-process__steps { grid-column: 7 / -1; list-style: none; margin: 0; padding: 0; }
+.pm-lux-process .pm-lux-process__steps li { padding: 40px 0 72px; border-top: 1px solid var(--vf-line); opacity: .45; transition: opacity var(--vf-dur, 500ms) var(--vf-ease); }
+.pm-lux-process .pm-lux-process__steps li:first-child { border-top-color: var(--vf-text); }
+.pm-lux-process .pm-lux-process__steps li.is-on, .pm-lux-process.is-static .pm-lux-process__steps li { opacity: 1; }
+.pm-lux-process .pm-lux-process__n { margin: 0; font: italic 400 28px/1 var(--vf-font-display); color: var(--vf-accent); }
+.pm-lux-process .pm-lux-process__steps h3 { margin: 14px 0 0; font: 400 clamp(28px, 2.8vw, 40px)/1.1 var(--vf-font-display); text-wrap: balance; }
+.pm-lux-process .pm-lux-process__steps li > p:not(.pm-lux-process__n) { margin: 16px 0 0; max-width: 32em; color: var(--vf-text-2); }
+.pm-lux-process .pm-lux-process__inline { display: none; }
+.pm-lux-process .pm-lux-process__more { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 24px; font: 600 13px/1 var(--vf-font-text); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid var(--vf-accent); }
+.pm-lux-process .pm-lux-process__more:hover { color: var(--vf-accent); }
+@media (max-width: 900px) {
+  .pm-lux-process { padding: var(--pm-s-2xl, 64px) 0; }
+  .pm-lux-process .pm-lux-process__head { display: block; margin-bottom: 32px; }
+  .pm-lux-process .pm-lux-process__num { font-size: 72px; }
+  .pm-lux-process .pm-lux-process__label { margin-top: 16px; }
+  .pm-lux-process .pm-lux-process__title { margin-top: 12px; }
+  .pm-lux-process .pm-lux-process__stage { display: none; }
+  .pm-lux-process .pm-lux-process__steps { grid-column: 1 / -1; }
+  .pm-lux-process .pm-lux-process__steps li { opacity: 1; padding: 32px 0 40px; }
+  .pm-lux-process .pm-lux-process__inline { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; margin-bottom: 20px; background: var(--vf-bg); }
+}
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Глава II: путь часов (липкая сцена)</span><a href="../../v/pm-lux/#pm-lux-process" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<section data-part="pm-lux-process" data-slot="process" class="pm-lux-process" id="pm-ch-2" aria-labelledby="pm-lux-process-title">
+  <div class="pm-lux-process__wrap">
+    <header class="pm-lux-process__head">
+      <p class="pm-lux-process__num" aria-hidden="true">II</p>
+      <p class="pm-lux-process__label">Глава вторая · Путь часов</p>
+      <h2 class="pm-lux-process__title" id="pm-lux-process-title">Пять остановок между приёмом и&nbsp;возвратом.</h2>
+    </header>
+    <div class="pm-lux-process__stage" aria-hidden="true">
+      <div class="pm-lux-process__frame">
+        <img data-step="0" class="is-on" src="../../media/vid/hero-poster.webp" width="960" height="780" alt="" loading="lazy">
+        <img data-step="1" src="../../media/img/ex_5.webp" width="600" height="800" alt="" loading="lazy">
+        <img data-step="2" src="../../media/img/ex_32.webp" width="1200" height="900" alt="" loading="lazy">
+        <img data-step="3" src="../../media/img/ex_33.webp" width="1200" height="900" alt="" loading="lazy">
+        <img data-step="4" src="../../media/img/ex_22.webp" width="900" height="1200" alt="" loading="lazy">
+      </div>
+      <p class="pm-lux-process__count"><span data-count>01</span> / 05</p>
+    </div>
+    <ol class="pm-lux-process__steps">
+      <li data-step="0">
+        <img class="pm-lux-process__inline" src="../../media/vid/hero-poster.webp" width="960" height="780" loading="lazy" alt="Мастер пинцетом снимает деталь с механизма">
+        <p class="pm-lux-process__n">01</p>
+        <h3>Приём и бесплатная диагностика</h3>
+        <p>Вы приносите часы на Петровку. Мастер осматривает их при вас и&nbsp;объясняет, что происходит с&nbsp;механизмом. Диагностика — бесплатно.</p>
+      </li>
+      <li data-step="1">
+        <img class="pm-lux-process__inline" src="../../media/img/ex_5.webp" width="600" height="800" loading="lazy" alt="Детали механизма разложены по ячейкам лотка">
+        <p class="pm-lux-process__n">02</p>
+        <h3>Разборка до последнего винта</h3>
+        <p>Механизм разбирается полностью. Детали раскладываются по ячейкам — ничего не&nbsp;смешивается и&nbsp;не&nbsp;теряется.</p>
+      </li>
+      <li data-step="2">
+        <img class="pm-lux-process__inline" src="../../media/img/ex_32.webp" width="1200" height="900" loading="lazy" alt="Колесо механизма крупным планом под микроскопом">
+        <p class="pm-lux-process__n">03</p>
+        <h3>Микроскоп и оригинальные комплектующие</h3>
+        <p>Каждый узел осматривается под микроскопом. Изношенное заменяется только оригинальными комплектующими.</p>
+      </li>
+      <li data-step="3">
+        <img class="pm-lux-process__inline" src="../../media/img/ex_33.webp" width="1200" height="900" loading="lazy" alt="Часы на держателе таймграфера, на экране прибора — показания хода">
+        <p class="pm-lux-process__n">04</p>
+        <h3>Проверка хода на таймграфере</h3>
+        <p>После сборки ход проверяется на&nbsp;таймграфере — приборе, который показывает точность и&nbsp;состояние механизма.</p>
+      </li>
+      <li data-step="4">
+        <img class="pm-lux-process__inline" src="../../media/img/ex_22.webp" width="900" height="1200" loading="lazy" alt="Часы с открытой задней крышкой на подставке мастерской">
+        <p class="pm-lux-process__n">05</p>
+        <h3>Герметичность и гарантия</h3>
+        <p>Корпус проверяется на тестере герметичности. Часы возвращаются к&nbsp;вам с&nbsp;гарантией до&nbsp;двух лет.</p>
+        <a class="pm-lux-process__more" href="#pm-booking" data-book>Начать с диагностики <span aria-hidden="true">→</span></a>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+
+<script>
+/* ── pm-lux-process ── */
+;(() => {
+VFKit.register('pm-lux-process', root => {
+  root.querySelectorAll('[data-book]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    document.dispatchEvent(new CustomEvent('vf:book', { detail: { symptom: 'Диагностика' }, cancelable: true }));
+  }));
+  const steps = [...root.querySelectorAll('.pm-lux-process__steps li')];
+  const imgs = [...root.querySelectorAll('.pm-lux-process__frame img')];
+  const count = root.querySelector('[data-count]');
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) { root.classList.add('is-static'); }
+  if (!('IntersectionObserver' in window)) return;
+  const set = i => {
+    steps.forEach((s, k) => s.classList.toggle('is-on', k === i));
+    imgs.forEach((m, k) => m.classList.toggle('is-on', k === i));
+    if (count) count.textContent = String(i + 1).padStart(2, '0');
+  };
+  set(0);
+  const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) set(steps.indexOf(en.target)); }), { rootMargin: '-40% 0px -45% 0px' });
+  steps.forEach(s => io.observe(s));
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>

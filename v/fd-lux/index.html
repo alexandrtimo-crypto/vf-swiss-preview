@@ -623,5 +623,6 @@ VFKit.register('fd-lux-dock', root => {
 })();
 </script>
 <script>VFKit.boot();</script>
+<script>(()=>{const p=decodeURIComponent(location.hash.slice(1));const el=p&&document.querySelector('[data-part="'+CSS.escape(p)+'"]');if(!el)return;setTimeout(()=>{el.scrollIntoView({block:'start'});el.style.outline='3px solid #e6c27a';el.style.outlineOffset='-3px';setTimeout(()=>{el.style.outline=''},2600)},400)})()</script>
 </body>
 </html>

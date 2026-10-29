@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ru" data-recipe="lux">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>Гарантия · сцена с сертификатом · элемент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..500&family=Playfair+Display:wght@400..500&family=Playfair+Display:ital,wght@1,400..500&display=swap">
+<style>
+/* title: Дорого-богато */
+/* fonts: Manrope:wght@200..500; Playfair Display:wght@400..500; Playfair Display:ital,wght@1,400..500 */
+/* Тема «Дорого-богато»: тёплый чёрный, слоновая кость, шампань-платина. Антиква Playfair Display + гротеск Manrope. */
+
+:root {
+  /* общие токены VF kit */
+  --vf-bg: #0c0a08;
+  --vf-bg-2: #15110d;
+  --vf-surface: #211a14;
+  --vf-text: #f0e9dd;
+  --vf-text-2: #cdc2b0;
+  --vf-muted: #8d8273;
+  --vf-line: rgba(191, 174, 146, .28);
+  --vf-accent: #bfae92;
+  --vf-accent-2: #efe2c8;
+  --vf-on-accent: #0c0a08;
+  --vf-danger: #9a2f22;
+  --vf-font-display: 'Playfair Display', 'Didot', 'Bodoni 72', 'Times New Roman', serif;
+  --vf-font-text: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --vf-font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --vf-radius: 2px;
+  --vf-radius-lg: 4px;
+  --vf-ease: cubic-bezier(.65, 0, .15, 1);
+
+  /* особые токены видения lux (компоненты держат их с запасным значением) */
+  --vf-paper: #f4eee3;
+  --vf-paper-ink: #2a221a;
+  --vf-paper-mute: #7a6d5c;
+  --vf-bronze: #8a6a3e;
+  --vf-gut: clamp(16px, 4vw, 56px);
+}
+
+/* ── глобальное: только здесь ── */
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--vf-bg); color: var(--vf-text); -webkit-text-size-adjust: 100%; }
+.vf-page {
+  margin: 0; background: var(--vf-bg); color: var(--vf-text); font-family: var(--vf-font-text);
+  font-weight: 300; font-size: 16px; line-height: 1.6; overflow-x: clip; -webkit-font-smoothing: antialiased;
+}
+:where(.vf-page) img, :where(.vf-page) video { display: block; max-width: 100%; }
+:where(.vf-page) a { color: inherit; }
+:where(.vf-page) em { font-style: italic; }
+:where(.vf-page) button { font: inherit; color: inherit; }
+:where(.vf-page) :focus-visible { outline: 1px solid var(--vf-accent); outline-offset: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* title: Кнопки · дорого */
+/* Прямоугольные кнопки с разрядкой капителью и «подчёркнутая» кнопка-ссылка.
+   Контекст может подсказать цвета переменными: --vf-btn-fg, --vf-btn-bg, --vf-btn-on, --vf-btn-bg-hover, --vf-btn-line. */
+
+.vf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .6em;
+  min-height: 48px; margin: 0; padding: 0 28px; border: 1px solid transparent; border-radius: 0;
+  background: none; color: var(--vf-btn-fg, inherit); -webkit-appearance: none; appearance: none;
+  font: 400 12px/1 var(--vf-font-text); letter-spacing: .34em; text-transform: uppercase; text-decoration: none;
+  cursor: pointer; transition: background .5s, color .5s, border-color .5s, letter-spacing .8s var(--vf-ease);
+}
+.vf-btn--primary {
+  min-height: 60px; letter-spacing: .38em;
+  background: var(--vf-btn-bg, var(--vf-accent-2)); color: var(--vf-btn-on, var(--vf-on-accent));
+}
+.vf-btn--primary:hover { background: var(--vf-btn-bg-hover, var(--vf-text)); letter-spacing: .44em; }
+
+/* призрачная: текст капителью над тонкой линией */
+.vf-btn--ghost {
+  min-height: 0; padding: 16px 0 10px; border: 0;
+  border-bottom: 1px solid var(--vf-btn-line, var(--vf-accent));
+}
+.vf-btn--ghost:hover { color: var(--vf-btn-fg-hover, var(--vf-btn-fg, inherit)); }
+
+.vf-btn--sm { font-size: 11px; letter-spacing: .3em; font-weight: 300; }
+.vf-btn--sm:not(.vf-btn--ghost) { min-height: 44px; padding: 0 18px; }
+.vf-btn--ghost.vf-btn--sm { padding: 12px 0 6px; line-height: 1.6; }
+
+/* title: Поля · дорого */
+/* Поле-строка внутри фразы: курсивная антиква над тонкой линией.
+   Контекст может задать цвета: --vf-field-fg (текст и линия), --vf-field-accent (фокус). */
+
+.vf-field { position: relative; }
+.vf-input {
+  font: italic 400 1em/1.4 var(--vf-font-display); color: var(--vf-field-fg, var(--vf-text));
+  background: transparent; border: 0; border-radius: 0; outline: none; padding: 2px 6px 4px;
+  border-bottom: 1px solid color-mix(in srgb, var(--vf-field-fg, var(--vf-text)) 45%, transparent);
+  transition: border-color .4s;
+}
+.vf-input::placeholder { color: color-mix(in srgb, var(--vf-field-fg, var(--vf-text)) 34%, transparent); }
+.vf-input:focus { border-bottom-color: var(--vf-field-accent, var(--vf-accent)); box-shadow: 0 1px 0 var(--vf-field-accent, var(--vf-accent)); }
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); }
+textarea.vf-input { resize: vertical; }
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── lux-warranty ── */
+/* Гарантия «дорого»: «Гарантия до двух лет» огромной антиквой и сертификат как предмет */
+.lux-warranty { --gut: var(--vf-gut, clamp(16px, 4vw, 56px)); position: relative; min-height: 100vh; padding: 14vh var(--gut); display: grid; align-items: center; overflow: hidden; color: var(--vf-text);
+  background: radial-gradient(ellipse 55% 55% at 66% 52%, color-mix(in srgb, var(--vf-bg), var(--vf-accent) 22%) 0%, color-mix(in srgb, var(--vf-bg), var(--vf-accent) 7%) 50%, var(--vf-bg) 100%); }
+.lux-warranty *, .lux-warranty *::before, .lux-warranty *::after { box-sizing: border-box; }
+.lux-warranty::before { content: ''; position: absolute; inset: 0; background: url(../../media/img/bg.webp) center / cover; opacity: .18; mix-blend-mode: soft-light; }
+.lux-warranty .warranty__big { position: absolute; left: var(--gut); top: 13vh; z-index: 0; margin: 0; font: 400 clamp(64px, 8.6vw, 170px)/.9 var(--vf-font-display); letter-spacing: -.03em; color: #e9dfcd; }
+.lux-warranty .warranty__big span { display: block; }
+.lux-warranty .warranty__big em { display: block; color: var(--vf-accent); padding-left: .5em; }
+.lux-warranty .cert-stage { justify-self: end; width: min(720px, 50vw); margin-top: 24vh; margin-right: 1vw; }
+.lux-warranty .warranty__note { position: absolute; right: var(--gut); bottom: 6vh; margin: 0; font-size: 12px; color: var(--vf-muted); letter-spacing: .04em; }
+
+.lux-warranty .cert-stage { position: relative; z-index: 1; perspective: 1400px; }
+.lux-warranty.is-motion .cert-stage { animation: lux-warranty-sway 9s ease-in-out infinite alternate; }
+@keyframes lux-warranty-sway { from { transform: rotate(-.6deg) translateY(-6px); } to { transform: rotate(.6deg) translateY(6px); } }
+.lux-warranty .cert { position: relative; aspect-ratio: 1.414; container-type: inline-size; color: var(--vf-paper-ink, #2a221a);
+  background: radial-gradient(ellipse at 28% 18%, #fdfaf3, #f0e7d6 60%, #e6dac4);
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) rotateZ(-3deg); transform-style: preserve-3d; transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  box-shadow: 0 70px 90px -30px rgba(0,0,0,.85), 0 20px 40px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.6); }
+.lux-warranty .cert::before { content: ''; position: absolute; inset: 0; opacity: .5; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .47 0 0 0 0 .36 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"); }
+.lux-warranty .cert__guilloche { position: absolute; inset: 3cqw; padding: 1.7cqw;
+  background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--vf-bronze, #8a6a3e) 32%, transparent) 0 1px, transparent 1px 5px), repeating-linear-gradient(-45deg, color-mix(in srgb, var(--vf-bronze, #8a6a3e) 32%, transparent) 0 1px, transparent 1px 5px);
+  -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.lux-warranty .cert__guilloche::after { content: ''; position: absolute; left: 50%; top: 50%; width: 46cqw; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; opacity: .5;
+  background: repeating-conic-gradient(color-mix(in srgb, var(--vf-bronze, #8a6a3e) 12%, transparent) 0 1deg, transparent 1deg 4deg); }
+.lux-warranty .cert__in { position: absolute; inset: 7.5cqw 8.5cqw 6.5cqw; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.lux-warranty .cert__mono { margin: 0; font: 400 8cqw/1 var(--vf-font-display); color: #ebe1cf; letter-spacing: -.03em;
+  text-shadow: -1px -1px 0 rgba(255,255,255,.95), 1px 1px 1px rgba(90,68,40,.45), 2px 2px 4px rgba(90,68,40,.12); }
+.lux-warranty .cert__mono i { display: block; font: 400 1.2cqw/1 var(--vf-font-text); letter-spacing: .9em; padding-left: .9em; text-transform: uppercase; color: var(--vf-bronze, #8a6a3e); text-shadow: none; margin-top: 1cqw; }
+.lux-warranty .cert__title { margin: 2cqw 0 2.4cqw; font: 400 4.4cqw/1.1 var(--vf-font-display); letter-spacing: .01em; }
+.lux-warranty .cert__text { margin: 0; max-width: 68cqw; font: 400 2.1cqw/1.6 var(--vf-font-text); color: #4c4135; }
+.lux-warranty .cert__term { margin: 1.8cqw 0 0; font: 400 3cqw/1.3 var(--vf-font-display); }
+.lux-warranty .cert__term em { color: var(--vf-bronze, #8a6a3e); }
+.lux-warranty .cert__foot { margin-top: auto; width: 100%; display: flex; align-items: flex-end; justify-content: space-between; }
+.lux-warranty .cert__qr { width: 11cqw; fill: #2b231b; }
+.lux-warranty .cert__sign { font: italic 400 3.4cqw/1 var(--vf-font-display); color: #3b3127; padding: 0 5cqw 1cqw; border-bottom: 1px solid rgba(43,35,27,.35); transform: rotate(-3deg); }
+.lux-warranty .cert__seal { width: 15cqw; fill: none; stroke: #ad8d58; stroke-width: 1; filter: drop-shadow(1px 1px 0 rgba(255,255,255,.8)) drop-shadow(-1px -1px 0 rgba(120,90,50,.25)); }
+.lux-warranty .cert__seal text { fill: #a58552; stroke: none; font: 500 8.6px var(--vf-font-text); letter-spacing: 1.6px; }
+.lux-warranty .cert__seal .cert__seal-vf { font: 400 26px var(--vf-font-display); letter-spacing: -1px; }
+.lux-warranty .cert__stamp { position: absolute; right: 9cqw; top: 8.5cqw; transform: rotate(11deg); padding: .7cqw 2cqw; border: 2px solid rgba(146,44,32,.55); color: rgba(146,44,32,.7);
+  font: 500 1.9cqw/1 var(--vf-font-text); letter-spacing: .42em; text-transform: uppercase; mix-blend-mode: multiply; }
+.lux-warranty .cert__shine { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light;
+  background: radial-gradient(circle at var(--mx, 30%) var(--my, 20%), rgba(255,255,255,.75), transparent 48%); }
+
+@media (max-width: 899px) {
+  .lux-warranty { padding: 120px 16px 90px; display: block; }
+  .lux-warranty .warranty__big { position: relative; left: auto; top: auto; font-size: clamp(64px, 19vw, 96px); }
+  .lux-warranty .warranty__big em { padding-left: .5em; }
+  .lux-warranty .cert-stage { width: 100%; margin: 28px 0 0; }
+  .lux-warranty .warranty__note { position: static; margin-top: 30px; }
+  .lux-warranty .cert { aspect-ratio: .7; touch-action: pan-y; }
+  .lux-warranty .cert__in { inset: 11cqw 9cqw 9cqw; }
+  .lux-warranty .cert__guilloche { inset: 4cqw; padding: 2.6cqw; }
+  .lux-warranty .cert__mono { font-size: 15cqw; }
+  .lux-warranty .cert__mono i { font-size: 2.4cqw; }
+  .lux-warranty .cert__title { font-size: 7.6cqw; margin: 4cqw 0 4cqw; }
+  .lux-warranty .cert__text { font-size: 3.9cqw; max-width: none; }
+  .lux-warranty .cert__term { font-size: 5.6cqw; margin-top: 4cqw; }
+  .lux-warranty .cert__qr { width: 19cqw; }
+  .lux-warranty .cert__sign { font-size: 5cqw; padding: 0 2cqw 1.5cqw; }
+  .lux-warranty .cert__seal { width: 24cqw; }
+  .lux-warranty .cert__stamp { font-size: 3.2cqw; top: auto; bottom: 34cqw; right: 6cqw; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lux-warranty *, .lux-warranty *::before, .lux-warranty *::after { animation: none !important; transition-duration: .01ms !important; }
+}
+
+
+/* ── lux-overlay-grain ── */
+/* Плёночное зерно поверх всей страницы */
+.lux-overlay-grain {
+  position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: .06; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+</style>
+</head>
+<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#f2ede4;font:500 13px/1.3 system-ui,sans-serif">
+<a href="../../#stend" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Стенд</a><span style="flex:1;text-align:center">Гарантия · сцена с сертификатом</span><a href="../../v/lux/#lux-warranty" style="color:#e6c27a;text-decoration:none;white-space:nowrap">В составе стенда</a></div>
+<section data-part="lux-warranty" data-slot="warranty" class="lux-warranty" id="warranty" aria-labelledby="lux-warrantyTitle">
+  <h2 class="warranty__big" id="lux-warrantyTitle"><span>Гарантия</span><em>до двух лет</em></h2>
+  <div class="cert-stage">
+    <article class="cert" aria-label="Гарантийный сертификат, образец">
+      <div class="cert__guilloche" aria-hidden="true"></div>
+      <div class="cert__in">
+        <p class="cert__mono" aria-hidden="true">VF<i>swiss</i></p>
+        <h3 class="cert__title">Гарантийный сертификат</h3>
+        <p class="cert__text">Работы по&nbsp;часам выполнены мастерской VF&nbsp;swiss на&nbsp;Петровке с&nbsp;применением оригинальных комплектующих.</p>
+        <p class="cert__term">Гарантия на&nbsp;выполненные работы — <em>до двух лет.</em></p>
+        <div class="cert__foot">
+          <svg class="cert__qr" viewBox="-1 -1 27 27" role="img" aria-label="QR-код, образец"><path d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM8 0h1v1h-1zM9 0h1v1h-1zM10 0h1v1h-1zM11 0h1v1h-1zM12 0h1v1h-1zM14 0h1v1h-1zM15 0h1v1h-1zM18 0h1v1h-1zM19 0h1v1h-1zM20 0h1v1h-1zM21 0h1v1h-1zM22 0h1v1h-1zM23 0h1v1h-1zM24 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM9 1h1v1h-1zM10 1h1v1h-1zM12 1h1v1h-1zM13 1h1v1h-1zM15 1h1v1h-1zM16 1h1v1h-1zM18 1h1v1h-1zM24 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM11 2h1v1h-1zM15 2h1v1h-1zM18 2h1v1h-1zM20 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM24 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM9 3h1v1h-1zM10 3h1v1h-1zM11 3h1v1h-1zM13 3h1v1h-1zM14 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM21 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM15 4h1v1h-1zM18 4h1v1h-1zM20 4h1v1h-1zM21 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM9 5h1v1h-1zM12 5h1v1h-1zM13 5h1v1h-1zM14 5h1v1h-1zM15 5h1v1h-1zM16 5h1v1h-1zM18 5h1v1h-1zM24 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM12 6h1v1h-1zM13 6h1v1h-1zM14 6h1v1h-1zM18 6h1v1h-1zM19 6h1v1h-1zM20 6h1v1h-1zM21 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM10 7h1v1h-1zM14 7h1v1h-1zM15 7h1v1h-1zM16 7h1v1h-1zM0 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM8 8h1v1h-1zM11 8h1v1h-1zM12 8h1v1h-1zM15 8h1v1h-1zM16 8h1v1h-1zM17 8h1v1h-1zM20 8h1v1h-1zM24 8h1v1h-1zM1 9h1v1h-1zM2 9h1v1h-1zM7 9h1v1h-1zM10 9h1v1h-1zM11 9h1v1h-1zM12 9h1v1h-1zM13 9h1v1h-1zM15 9h1v1h-1zM16 9h1v1h-1zM17 9h1v1h-1zM19 9h1v1h-1zM20 9h1v1h-1zM23 9h1v1h-1zM3 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM8 10h1v1h-1zM9 10h1v1h-1zM12 10h1v1h-1zM16 10h1v1h-1zM18 10h1v1h-1zM19 10h1v1h-1zM0 11h1v1h-1zM5 11h1v1h-1zM7 11h1v1h-1zM12 11h1v1h-1zM16 11h1v1h-1zM17 11h1v1h-1zM18 11h1v1h-1zM19 11h1v1h-1zM20 11h1v1h-1zM21 11h1v1h-1zM0 12h1v1h-1zM3 12h1v1h-1zM6 12h1v1h-1zM8 12h1v1h-1zM12 12h1v1h-1zM13 12h1v1h-1zM15 12h1v1h-1zM16 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM21 12h1v1h-1zM22 12h1v1h-1zM23 12h1v1h-1zM1 13h1v1h-1zM5 13h1v1h-1zM6 13h1v1h-1zM7 13h1v1h-1zM9 13h1v1h-1zM10 13h1v1h-1zM11 13h1v1h-1zM14 13h1v1h-1zM15 13h1v1h-1zM19 13h1v1h-1zM20 13h1v1h-1zM22 13h1v1h-1zM23 13h1v1h-1zM2 14h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM7 14h1v1h-1zM10 14h1v1h-1zM11 14h1v1h-1zM13 14h1v1h-1zM14 14h1v1h-1zM15 14h1v1h-1zM16 14h1v1h-1zM17 14h1v1h-1zM18 14h1v1h-1zM19 14h1v1h-1zM21 14h1v1h-1zM23 14h1v1h-1zM24 14h1v1h-1zM0 15h1v1h-1zM1 15h1v1h-1zM2 15h1v1h-1zM5 15h1v1h-1zM6 15h1v1h-1zM8 15h1v1h-1zM10 15h1v1h-1zM13 15h1v1h-1zM17 15h1v1h-1zM21 15h1v1h-1zM22 15h1v1h-1zM23 15h1v1h-1zM24 15h1v1h-1zM0 16h1v1h-1zM2 16h1v1h-1zM3 16h1v1h-1zM4 16h1v1h-1zM8 16h1v1h-1zM9 16h1v1h-1zM10 16h1v1h-1zM11 16h1v1h-1zM12 16h1v1h-1zM13 16h1v1h-1zM14 16h1v1h-1zM18 16h1v1h-1zM20 16h1v1h-1zM21 16h1v1h-1zM22 16h1v1h-1zM23 16h1v1h-1zM24 16h1v1h-1zM8 17h1v1h-1zM9 17h1v1h-1zM10 17h1v1h-1zM17 17h1v1h-1zM18 17h1v1h-1zM20 17h1v1h-1zM23 17h1v1h-1zM0 18h1v1h-1zM1 18h1v1h-1zM2 18h1v1h-1zM3 18h1v1h-1zM4 18h1v1h-1zM5 18h1v1h-1zM6 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM16 18h1v1h-1zM17 18h1v1h-1zM18 18h1v1h-1zM0 19h1v1h-1zM6 19h1v1h-1zM8 19h1v1h-1zM9 19h1v1h-1zM10 19h1v1h-1zM12 19h1v1h-1zM16 19h1v1h-1zM17 19h1v1h-1zM22 19h1v1h-1zM23 19h1v1h-1zM24 19h1v1h-1zM0 20h1v1h-1zM2 20h1v1h-1zM3 20h1v1h-1zM4 20h1v1h-1zM6 20h1v1h-1zM9 20h1v1h-1zM11 20h1v1h-1zM12 20h1v1h-1zM13 20h1v1h-1zM15 20h1v1h-1zM18 20h1v1h-1zM19 20h1v1h-1zM22 20h1v1h-1zM23 20h1v1h-1zM24 20h1v1h-1zM0 21h1v1h-1zM2 21h1v1h-1zM3 21h1v1h-1zM4 21h1v1h-1zM6 21h1v1h-1zM11 21h1v1h-1zM14 21h1v1h-1zM15 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM21 21h1v1h-1zM23 21h1v1h-1zM0 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM4 22h1v1h-1zM6 22h1v1h-1zM10 22h1v1h-1zM11 22h1v1h-1zM12 22h1v1h-1zM13 22h1v1h-1zM14 22h1v1h-1zM16 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM21 22h1v1h-1zM22 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM14 23h1v1h-1zM15 23h1v1h-1zM16 23h1v1h-1zM17 23h1v1h-1zM20 23h1v1h-1zM22 23h1v1h-1zM24 23h1v1h-1zM0 24h1v1h-1zM1 24h1v1h-1zM2 24h1v1h-1zM3 24h1v1h-1zM4 24h1v1h-1zM5 24h1v1h-1zM6 24h1v1h-1zM8 24h1v1h-1zM9 24h1v1h-1zM10 24h1v1h-1zM11 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM14 24h1v1h-1zM15 24h1v1h-1zM19 24h1v1h-1zM20 24h1v1h-1zM22 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1z"/></svg>
+          <span class="cert__sign" aria-hidden="true">VF swiss</span>
+          <svg class="cert__seal" viewBox="0 0 120 120" aria-hidden="true">
+            <defs><path id="lux-warranty-seal" d="M60 60 m-44 0 a44 44 0 1 1 88 0 a44 44 0 1 1 -88 0"/></defs>
+            <circle cx="60" cy="60" r="56"/><circle cx="60" cy="60" r="34"/>
+            <text><textPath href="#lux-warranty-seal">VF SWISS · ЮВЕЛИРНАЯ ТОЧНОСТЬ · МОСКВА ·</textPath></text>
+            <text x="60" y="68" text-anchor="middle" class="cert__seal-vf">VF</text>
+          </svg>
+        </div>
+      </div>
+      <span class="cert__stamp" aria-hidden="true">образец</span>
+      <span class="cert__shine" aria-hidden="true"></span>
+    </article>
+  </div>
+  <p class="warranty__note">Сертификат и QR-код — образец оформления •</p>
+</section>
+
+<div data-part="lux-overlay-grain" data-slot="overlay" class="lux-overlay-grain" aria-hidden="true"></div>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+
+<script>
+/* ── lux-warranty ── */
+;(() => {
+// Сертификат-предмет: наклон в 3D за курсором, пальцем или гироскопом; блик следует за наклоном.
+VFKit.register('lux-warranty', root => {
+  const motion = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  root.classList.add('is-js');
+  if (motion) root.classList.add('is-motion');
+  if (!motion) return;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const cert = root.querySelector('.cert');
+  function tilt(nx, ny) {
+    cert.style.setProperty('--ry', (nx * 18).toFixed(2) + 'deg');
+    cert.style.setProperty('--rx', (-ny * 14).toFixed(2) + 'deg');
+    cert.style.setProperty('--mx', (50 + nx * 90).toFixed(1) + '%');
+    cert.style.setProperty('--my', (50 + ny * 90).toFixed(1) + '%');
+  }
+  root.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse' && !e.target.closest('.cert')) return;
+    const r = cert.getBoundingClientRect();
+    tilt(clamp((e.clientX - r.left - r.width / 2) / r.width, -.8, .8), clamp((e.clientY - r.top - r.height / 2) / r.height, -.8, .8));
+  });
+  root.addEventListener('pointerleave', () => tilt(0, 0));
+  cert.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') setTimeout(() => tilt(0, 0), 900); });
+  let inView = false;
+  if ('IntersectionObserver' in window) new IntersectionObserver(([en]) => { inView = en.isIntersecting; }).observe(root);
+  addEventListener('deviceorientation', e => {
+    if (!inView || e.gamma == null || e.beta == null) return;
+    tilt(clamp(e.gamma / 35, -.7, .7), clamp((e.beta - 50) / 35, -.7, .7));
+  });
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+<div style="height:70vh;display:grid;place-items:center;color:#8a8478;font:14px system-ui,sans-serif;background:#171512"><div>Конец элемента · <a href="../../#stend" style="color:#e6c27a">к стенду</a></div></div>
+</body>
+</html>
