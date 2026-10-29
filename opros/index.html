@@ -70,22 +70,22 @@
 <body>
 <div class="wrap">
   <header class="top"><b>VF swiss</b><a href="../">← все варианты</a></header>
-  <h1>Что вам понравилось?</h1>
-  <p class="lead">Минут пять. Отметьте варианты, отдельные элементы и фишки, которые нравятся, и напишите пару слов там, где есть мысли. Всё сохраняется само — можно прерваться и вернуться. В конце одна кнопка отправит отзыв.</p>
+  <h1>Влад, что зацепило?</h1>
+  <p class="lead">Минут пять. Отметь варианты, отдельные элементы и фишки, которые нравятся, и напиши пару слов, где есть мысли. Варианты — черновики, мне важно понять направление. Всё сохраняется само — можно прерваться и вернуться. В конце одна кнопка — и ответ придёт мне в Telegram.</p>
   <nav class="steps" aria-label="Шаги опроса"><a href="#s1"><b>1</b>Варианты</a><a href="#s2"><b>2</b>Элементы</a><a href="#s3"><b>3</b>Фишки</a><a href="#s4"><b>4</b>Отправить</a></nav>
 
-  <section class="q" id="s1"><h2>Варианты целиком</h2><p class="hint">Какое общее впечатление? Можно открыть вариант и вернуться.</p><div id="variants"></div></section>
-  <section class="q" id="s2"><h2>Отдельные элементы</h2><p class="hint">Листайте ряды вбок. Сердце — «хочу это на сайте», даже если вариант целиком не нравится. Сайт можно собрать из элементов разных вариантов.</p><div id="elements"></div></section>
+  <section class="q" id="s1"><h2>Варианты целиком</h2><p class="hint">Общее впечатление? Можно открыть вариант и вернуться.</p><div id="variants"></div></section>
+  <section class="q" id="s2"><h2>Отдельные элементы</h2><p class="hint">Листай ряды вбок. «Хочу это» — значит, хочешь такой кусок на сайте, даже если вариант целиком не нравится: сайт можно собрать из элементов разных вариантов.</p><div id="elements"></div></section>
   <section class="q" id="s3"><h2>Фишки</h2><p class="hint">Что из этого точно нужно?</p><div class="chips" id="features"></div>
     <h3>Чего не хватает или что точно не нужно?</h3><textarea id="c-features" placeholder="Например: убрать звуки, добавить цены, больше фото до/после…"></textarea></section>
   <section class="q" id="s4"><h2>Отправить отзыв</h2>
-    <h3>Общий комментарий</h3><textarea id="c-general" placeholder="Что главное в новом сайте для вас и ваших клиентов?"></textarea>
-    <h3>Как вас подписать</h3><input type="text" id="c-name" placeholder="Владислав">
-    <h3>Ваш отзыв</h3><pre class="sum" id="summary"></pre>
+    <h3>Общий комментарий</h3><textarea id="c-general" placeholder="Что для тебя и твоих клиентов главное в новом сайте?"></textarea>
+    <h3>Подпись</h3><input type="text" id="c-name" placeholder="Владислав">
+    <h3>Твой ответ</h3><pre class="sum" id="summary"></pre>
     <div class="finish"><a class="btn btn--tg" id="tg" href="#"><i class="vf-i vf-i--telegram" aria-hidden="true"></i>Отправить в Telegram</a>
       <button class="btn btn--sec" id="copy" type="button"><i class="vf-i vf-i--copy" aria-hidden="true"></i>Скопировать текст</button>
       <button class="btn btn--sec" id="dl" type="button"><i class="vf-i vf-i--file-text" aria-hidden="true"></i>Скачать файлом</button></div>
-    <p class="hint" style="margin-top:12px">Telegram откроет выбор чата — отправьте разработчику. Если текст длинный и Telegram его обрежет, используйте «Скопировать текст».</p>
+    <p class="hint" style="margin-top:12px">Telegram откроет выбор чата — выбери наш диалог. Если текст длинный и обрежется — «Скопировать текст» и вставь в чат.</p>
   </section>
 </div>
 <div class="bar"><span id="count">Пока ничего не отмечено</span><a class="btn btn--sec" href="#s4">К отправке</a></div>
@@ -137,7 +137,7 @@ function summary() {
   const L = [];
   const vt = id => D.variants.find(v => v.id === id)?.title || id;
   const et = id => { for (const g of D.slots) { const e = g.items.find(x => x.id === id); if (e) return g.title + ': ' + e.title + ' (' + e.in.map(x => x.title).join(', ') + ')'; } return id; };
-  L.push('Отзыв о вариантах сайта VF swiss' + (S.name ? ' — ' + S.name : ''));
+  L.push('Ответ по вариантам сайта VF swiss' + (S.name ? ' — ' + S.name : ''));
   const rated = D.variants.filter(v => S.v[v.id] || S.vc[v.id]);
   if (rated.length) { L.push('', 'ВАРИАНТЫ'); for (const v of rated) L.push('• ' + v.title + ': ' + (RATES.find(r => r[0] === S.v[v.id])?.[1] || 'без оценки') + (S.vc[v.id] ? ' — ' + S.vc[v.id].trim() : '')); }
   const els = Object.keys(S.e).filter(k => S.e[k]); const ecs = Object.keys(S.ec).filter(k => S.ec[k] && S.ec[k].trim());
