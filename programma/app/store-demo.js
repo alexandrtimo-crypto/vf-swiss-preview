@@ -1,7 +1,7 @@
 // Демо-хранилище для показа без сервера (GitHub Pages): тот же интерфейс, что у store.js, данные — в localStorage браузера.
 // Приложение мастера и кабинет клиента лежат на одном адресе и видят одну базу: изменения в заказе сразу видны в кабинете.
 window.Store = (() => {
-  const KEY = 'vf-demo-v2';
+  const KEY = 'vf-demo-v3';
   const TOTAL = 500;
   const DAY = 864e5;
   const ago = d => new Date(Date.now() - d * DAY).toISOString();
@@ -36,13 +36,16 @@ window.Store = (() => {
         { brand: 'Cartier', model: 'Tank Française', ref: 'WSTA0005', serial: '', movement: 'кварцевый', material: 'Сталь', kit: 'Часы, документы', condition: 'Мелкие волосяные царапины на стекле' },
         { inspect: { corpus: [OK], glass: ['царапины'], bezel: [OK], dial: [OK], strap: ['ремешок с трещинами'], clasp: [OK], crown: [OK], work: ['часы не работают', 'часы не обслуживали больше 5 лет'] }, photos: [photo('d')], issue: 'Остановились, замена батарейки не помогла', estimate: 'после диагностики', due: ahead(5) }),
     ];
-    return { seq: 3, settings: {}, orders, bound: { [code(1)]: andrey, [code(3)]: maria } };
+    // демо-кабинеты K-0001 и K-0003 уже активированы с паролем demo1234, остальные карточки «новые»
+    const cabs = { [code(1)]: { name: 'Андрей', hash: '00e1eb9eb814fe7c742d483a985cf958a980dc358cdd75c8f36612fce7cfafef', activated: ago(24) }, [code(3)]: { name: 'Мария', hash: '00e1eb9eb814fe7c742d483a985cf958a980dc358cdd75c8f36612fce7cfafef', activated: ago(1) } };
+    return { seq: 3, settings: {}, orders, bound: { [code(1)]: andrey, [code(3)]: maria }, cabs, sess: {} };
   }
 
   let db;
   try { db = JSON.parse(localStorage.getItem(KEY)) || seed(); } catch { db = seed(); }
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch { /* приватный режим: работаем в памяти */ } };
   const clone = v => JSON.parse(JSON.stringify(v));
+  db.cabs ??= {}; db.sess ??= {};
   save();
 
   const DEFAULT_SETTINGS = Docs.DEFAULTS;
@@ -86,11 +89,12 @@ window.Store = (() => {
     if (isNaN(n)) { const c = q.toUpperCase().replace(/\s/g, ''); n = /^\d+$/.test(c) ? +c : /^K-\d+$/.test(c) ? +c.slice(2) : NaN; }
     return n >= 1 && n <= TOTAL ? n : null;
   }
+  const cabState = c => (db.cabs[c]?.hash ? 'active' : db.cabs[c]?.pin ? 'reset' : 'new');
   async function lookupCabinet(q) {
     const n = find(q);
     if (!n) throw Object.assign(new Error('Такой карточки нет'), { status: 404 });
     const c = code(n);
-    return { code: c, token: tokenOf(n), bound: !!db.bound[c], client: clone(db.bound[c] || null) };
+    return { code: c, token: tokenOf(n), bound: !!db.bound[c], state: cabState(c), display_name: db.cabs[c]?.name || null, client: clone(db.bound[c] || null) };
   }
   async function bindCabinet(c, client) {
     if (!db.bound[c]) { db.bound[c] = clone(client || {}); save(); }
@@ -99,20 +103,60 @@ window.Store = (() => {
   async function listCabinets() {
     return Array.from({ length: TOTAL }, (_, i) => {
       const c = code(i + 1);
-      return { code: c, token: tokenOf(i + 1), client: clone(db.bound[c] || null), bound_at: db.bound[c] ? 1 : null, orders: db.orders.filter(o => o.cabinet?.code === c).length };
+      return { code: c, token: tokenOf(i + 1), client: clone(db.bound[c] || null), bound_at: db.bound[c] ? 1 : null, state: cabState(c), display_name: db.cabs[c]?.name || null,
+        activated_at: db.cabs[c]?.activated || null, last_seen: db.cabs[c]?.seen || null, orders: db.orders.filter(o => o.cabinet?.code === c).length };
     });
   }
 
-  // То, что видит клиент по QR (как cabinet_public на сервере): без истории и служебного
+  // Доступ клиента, как на сервере: без пароля видны только номер карточки и контакты мастерской
+  const sha = async v => { try { return [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('vf-demo:' + v)))].map(x => x.toString(16).padStart(2, '0')).join(''); } catch { return 'plain:' + v; } };
+  const fails = {};
+  const must = (c, token) => { const n = find(token); if (!n) throw new Error('Кабинет не найден'); return code(n); };
   async function cabinetByToken(token) {
     const n = find(token);
     if (!n) return null;
-    const c = code(n);
-    const s = await getSettings();
-    return {
-      code: c, active: !!db.bound[c], client: clone(db.bound[c] || null), settings: s,
-      orders: db.bound[c] ? clone(db.orders.filter(o => o.cabinet?.code === c)).sort((a, b) => b.created.localeCompare(a.created)).map(({ history, ...o }) => o) : [],
-    };
+    const c = code(n), st = cabState(c), s = await getSettings();
+    if (st === 'active' && db.sess[c]) {
+      db.cabs[c].seen = new Date().toISOString(); save();
+      return {
+        code: c, state: 'active', authed: true, name: db.cabs[c].name, active: !!db.bound[c], client: clone(db.bound[c] || null), settings: s,
+        orders: db.bound[c] ? clone(db.orders.filter(o => o.cabinet?.code === c)).sort((a, b) => b.created.localeCompare(a.created)).map(({ history, ...o }) => o) : [],
+      };
+    }
+    return { code: c, state: st, authed: false, demoHint: c === 'K-0001' || c === 'K-0003' ? 'Демо: пароль demo1234' : '', settings: Object.fromEntries(['company', 'address', 'phone', 'telegram'].map(k => [k, s[k]]).filter(([, v]) => v)) };
+  }
+  async function cabinetActivate(token, b) {
+    const c = must(null, token), st = cabState(c);
+    if (st === 'active') throw new Error('Кабинет уже активирован. Войдите по паролю.');
+    if (st === 'reset' && String(b.pin || '').trim() !== db.cabs[c].pin) throw new Error('Неверный код от мастера');
+    const name = String(b.name || '').trim(), pw = String(b.password || '');
+    if (!name || name.length > 60) throw new Error('Напишите, как к вам обращаться (до 60 знаков)');
+    if (pw.length < 6) throw new Error('Пароль должен быть не короче 6 знаков');
+    db.cabs[c] = { name, hash: await sha(pw), activated: new Date().toISOString(), seen: new Date().toISOString() };
+    db.sess[c] = true; save();
+    return { ok: true };
+  }
+  async function cabinetLogin(token, pw) {
+    const c = must(null, token);
+    if (cabState(c) !== 'active') throw new Error('Кабинет ещё не активирован');
+    if ((fails[c] || 0) >= 5) throw new Error('Слишком много попыток. Обновите страницу позже.');
+    if ((await sha(String(pw))) !== db.cabs[c].hash) { fails[c] = (fails[c] || 0) + 1; throw new Error('Неверный пароль'); }
+    delete fails[c]; db.sess[c] = true; save();
+    return { ok: true };
+  }
+  async function cabinetLogout(token) { delete db.sess[must(null, token)]; save(); return { ok: true }; }
+  async function cabinetPassword(token, b) {
+    const c = must(null, token);
+    if (!db.sess[c]) throw new Error('Нужен вход');
+    if ((await sha(String(b.old || ''))) !== db.cabs[c].hash) throw new Error('Старый пароль неверный');
+    if (String(b.password || '').length < 6) throw new Error('Пароль должен быть не короче 6 знаков');
+    db.cabs[c].hash = await sha(b.password); save();
+    return { ok: true };
+  }
+  async function resetCabinet(c) {
+    const pin = String(Math.floor(Math.random() * 1e6)).padStart(6, '0');
+    db.cabs[c] = { pin }; delete db.sess[c]; save();
+    return { ok: true, pin };
   }
 
   async function exportAll() {
@@ -127,5 +171,5 @@ window.Store = (() => {
 
   window.VF_DEMO.reset = () => { try { localStorage.removeItem(KEY); } catch { /* нет доступа */ } location.reload(); };
 
-  return { me, login, getSettings, saveSettings, listOrders, getOrder, saveOrder, deleteOrder, newOrder, lookupCabinet, bindCabinet, listCabinets, cabinetByToken, exportAll, importAll, DEFAULT_SETTINGS };
+  return { me, login, getSettings, saveSettings, listOrders, getOrder, saveOrder, deleteOrder, newOrder, lookupCabinet, bindCabinet, listCabinets, cabinetByToken, cabinetActivate, cabinetLogin, cabinetLogout, cabinetPassword, resetCabinet, exportAll, importAll, DEFAULT_SETTINGS };
 })();

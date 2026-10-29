@@ -70,30 +70,106 @@
     } finally { el.remove(); }
   }
 
+  // Доступ к данным: на сервере — запросы к /api/k/<токен>, в демо — та же логика в localStorage (store-demo.js)
+  const post = (action, body) => fetch(`/api/k/${encodeURIComponent(token)}/${action}`, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) })
+    .then(async r => { const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.error || `Ошибка ${r.status}`); return d; });
+  const api = window.Store?.cabinetByToken
+    ? { get: () => Store.cabinetByToken(token), activate: b => Store.cabinetActivate(token, b), login: pw => Store.cabinetLogin(token, pw), logout: () => Store.cabinetLogout(token), password: b => Store.cabinetPassword(token, b) }
+    : { get: () => fetch('/api/k/' + encodeURIComponent(token), { credentials: 'same-origin' }).then(r => (r.ok ? r.json() : null)).catch(() => null),
+        activate: b => post('activate', b), login: pw => post('login', { password: pw }), logout: () => post('logout'), password: b => post('password', b) };
+
+  const eye = `<button type="button" class="eye" aria-label="Показать пароль">Показать</button>`;
+  const bindEye = root => root.querySelectorAll('.eye').forEach(b => b.addEventListener('click', () => {
+    const inp = b.parentElement.querySelector('input'); const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password'; b.textContent = show ? 'Скрыть' : 'Показать';
+  }));
+
+  // Первый вход (или после сброса мастером): как к вам обращаться и новый пароль
+  function activation(data, s) {
+    const reset = data.state === 'reset';
+    view.innerHTML = `<section class="card auth"><img src="${Docs.ASSETS}logo-color.png" alt="VF swiss">
+      <h1 class="hello">${reset ? 'Новый пароль' : 'Добро пожаловать'}</h1>
+      <p class="hint">Карточка ${esc(data.code)}. ${reset ? 'Мастер сбросил доступ: введите код, который он вам назвал, и придумайте новый пароль.' : 'Придумайте пароль: он защитит ваши данные, если карточка потеряется. Мастер ваш пароль не видит.'}</p>
+      <form id="act" class="auth__form" autocomplete="on">
+        <label class="f"><span>Как к вам обращаться</span><input name="name" autocomplete="given-name" maxlength="60" required placeholder="Например, Иван"></label>
+        ${reset ? '<label class="f"><span>Код от мастера</span><input name="pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" required placeholder="6 цифр"></label>' : ''}
+        <label class="f f--eye"><span>Новый пароль <small>не короче 6 знаков</small></span><input name="password" type="password" minlength="6" maxlength="100" autocomplete="new-password" required>${eye}</label>
+        <p class="auth__err" id="err" role="alert"></p>
+        <button class="btn btn--gold btn--wide" id="go">Активировать кабинет</button>
+      </form></section>`;
+    bindEye(view);
+    view.querySelector('#act').onsubmit = async e => {
+      e.preventDefault();
+      const f = e.target, go = f.querySelector('#go'), err = f.querySelector('#err');
+      go.disabled = true; err.textContent = '';
+      try { await api.activate({ name: f.name.value.trim(), password: f.password.value, pin: f.pin ? f.pin.value.trim() : undefined }); toast('Кабинет активирован'); await load(); }
+      catch (x) { err.textContent = x.message; go.disabled = false; }
+    };
+  }
+
+  // Повторный вход: только пароль. Без него данные клиента не отдаются
+  function loginForm(data, s) {
+    const tel = (s.phone || '').replace(/[^\d+]/g, '');
+    view.innerHTML = `<section class="card auth"><img src="${Docs.ASSETS}logo-color.png" alt="VF swiss">
+      <h1 class="hello">Личный кабинет</h1>
+      <p class="hint">Карточка ${esc(data.code)}. Введите пароль, который вы задали при первом входе.</p>${data.demoHint ? `<p class="hint"><b>${esc(data.demoHint)}</b></p>` : ''}
+      <form id="login" class="auth__form">
+        <label class="f f--eye"><span>Пароль</span><input name="password" type="password" autocomplete="current-password" required>${eye}</label>
+        <p class="auth__err" id="err" role="alert"></p>
+        <button class="btn btn--gold btn--wide" id="go">Войти</button>
+      </form>
+      <p class="hint" style="margin-top:14px">Забыли пароль? ${tel ? `Позвоните в мастерскую: <a href="tel:${esc(tel)}">${esc(s.phone)}</a>.` : 'Свяжитесь с мастерской.'} Мастер сбросит доступ после проверки, что карточка ваша.</p></section>`;
+    bindEye(view);
+    view.querySelector('#login').onsubmit = async e => {
+      e.preventDefault();
+      const f = e.target, go = f.querySelector('#go'), err = f.querySelector('#err');
+      go.disabled = true; err.textContent = '';
+      try { await api.login(f.password.value); await load(); }
+      catch (x) { err.textContent = x.message; go.disabled = false; f.password.select(); }
+    };
+  }
+
+  function account() {
+    return `<section class="card acc"><h3>Доступ</h3>
+      <details><summary>Сменить пароль</summary>
+        <form id="chg" class="auth__form">
+          <label class="f f--eye"><span>Старый пароль</span><input name="old" type="password" autocomplete="current-password" required>${eye}</label>
+          <label class="f f--eye"><span>Новый пароль <small>не короче 6 знаков</small></span><input name="password" type="password" minlength="6" autocomplete="new-password" required>${eye}</label>
+          <p class="auth__err" id="cerr" role="alert"></p>
+          <button class="btn btn--wide">Сохранить пароль</button>
+        </form></details>
+      <button class="btn btn--wide" id="out" type="button" style="margin-top:10px">Выйти</button></section>`;
+  }
+
   async function load() {
     if (!token) { view.innerHTML = '<div class="empty">Ссылка неполная. Отсканируйте QR на карточке ещё раз.</div>'; return; }
-    // В демо кабинет читает ту же базу браузера, что и приложение мастера (store-demo.js)
-    const data = window.Store?.cabinetByToken ? await Store.cabinetByToken(token)
-      : await fetch('/api/k/' + encodeURIComponent(token)).then(r => (r.ok ? r.json() : null)).catch(() => null);
+    const data = await api.get();
     if (!data) { view.innerHTML = '<div class="empty">Кабинет не найден. Проверьте QR или позвоните в мастерскую.</div>'; return; }
     const s = { ...Docs.DEFAULTS, ...data.settings };
     document.getElementById('code').textContent = data.code;
     contacts(s);
+    if (!data.authed) { return data.state === 'active' ? loginForm(data, s) : activation(data, s); }
 
+    const name = data.name || (data.client?.name || '').split(' ')[0];
     if (!data.active) {
-      view.innerHTML = `<section class="card inactive"><img src="${Docs.ASSETS}logo-color.png" alt="VF swiss">
-        <h2>Карточка ${esc(data.code)}</h2>
-        <p class="hint">Кабинет ещё не активирован. Покажите эту карточку мастеру, когда будете сдавать часы, — здесь появятся статус ремонта, документы и гарантия.</p>
-        <p class="hint">${esc(s.address)}</p></section>`;
-      return;
+      view.innerHTML = `<h1 class="hello">${name ? `Здравствуйте, ${esc(name)}` : 'Ваш кабинет'}</h1>
+        <section class="card inactive"><p class="hint">Карточка ${esc(data.code)} активирована. Покажите её мастеру, когда будете сдавать часы, — здесь появятся статус ремонта, документы и гарантия.</p>
+        <p class="hint">${esc(s.address)}</p></section>${account()}`;
+    } else {
+      view.innerHTML = `<h1 class="hello">${name ? `Здравствуйте, ${esc(name)}` : 'Ваш кабинет'}</h1>
+        <p class="hint">${data.client?.phone ? `Телефон ${esc(maskPhone(data.client.phone))} · ` : ''}карточка ${esc(data.code)}</p>
+        ${data.orders.length ? data.orders.map((o, i) => orderCard(o, s, i)).join('') : '<div class="empty">Заказов пока нет. Они появятся здесь, как только мастер примет часы.</div>'}${account()}`;
     }
+    bindEye(view);
+    view.querySelector('#out').onclick = async () => { await api.logout().catch(() => {}); await load(); };
+    view.querySelector('#chg').onsubmit = async e => {
+      e.preventDefault();
+      const f = e.target, err = f.querySelector('#cerr'); err.textContent = '';
+      try { await api.password({ old: f.old.value, password: f.password.value }); f.reset(); f.closest('details').open = false; toast('Пароль изменён'); }
+      catch (x) { err.textContent = x.message; }
+    };
 
-    const name = (data.client?.name || '').split(' ')[0];
-    view.innerHTML = `<h1 class="hello">${name ? `Здравствуйте, ${esc(name)}` : 'Ваш кабинет'}</h1>
-      <p class="hint">${data.client?.phone ? `Телефон ${esc(maskPhone(data.client.phone))} · ` : ''}карточка ${esc(data.code)}</p>
-      ${data.orders.length ? data.orders.map((o, i) => orderCard(o, s, i)).join('') : '<div class="empty">Заказов пока нет. Они появятся здесь, как только мастер примет часы.</div>'}`;
-
-    view.addEventListener('click', async e => {
+    view.onclick = async e => {
       const b = e.target.closest('[data-doc]'); if (!b) return;
       const o = data.orders[+b.dataset.i]; const label = b.textContent;
       b.disabled = true; b.textContent = 'Готовлю…';
@@ -109,9 +185,8 @@
         return;
       } catch (err) { toast('Не получилось: ' + err.message); }
       b.disabled = false; b.textContent = label;
-    });
+    };
   }
-
 
   load();
 })();

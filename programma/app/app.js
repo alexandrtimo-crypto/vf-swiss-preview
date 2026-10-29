@@ -176,6 +176,10 @@
         <a class="btn btn--gold" href="#/doc/${order.id}/act">Акт работ</a>
       </nav>`;
     bindOrder();
+    if (order.cabinet) Store.lookupCabinet(order.cabinet.code).then(c => {
+      const el = document.getElementById('cabstate'); if (!el) return;
+      el.textContent = c.state === 'active' ? `Клиент вошёл в кабинет${c.display_name ? ` («${c.display_name}»)` : ''}` : c.state === 'reset' ? 'Доступ сброшен: клиент ждёт нового пароля' : 'Клиент ещё не активировал кабинет (задаёт имя и пароль по QR)';
+    }).catch(() => {});
   }
 
   const cabinetUrl = token => Docs.cabUrl((settings.publicUrl || location.origin).replace(/\/$/, ''), token);
@@ -184,7 +188,7 @@
     const c = order.cabinet;
     if (c) return `<h3>Кабинет клиента</h3>
       <div class="cab__row"><span class="cab__code">${esc(c.code)}</span>
-        <span class="cab__text">Клиент видит статус ремонта, акт приёма, акт работ и гарантию по QR на своей карточке.</span>
+        <span class="cab__text">Клиент видит статус ремонта, акт приёма, акт работ и гарантию по QR на своей карточке.<br><b id="cabstate" class="cab__state"></b></span>
         <a class="btn" href="${esc(cabinetUrl(c.token))}" target="_blank" rel="noopener">Открыть кабинет</a></div>`;
     return `<h3>Кабинет клиента</h3>
       <p class="hint">Выдайте клиенту карточку с QR и отсканируйте её — заказ появится в его кабинете. Постоянный клиент — отсканируйте его карточку, данные подставятся сами.</p>
@@ -545,12 +549,22 @@
     const list = view.querySelector('#cabs');
     const draw = q => {
       q = (q || '').toLowerCase().trim();
-      list.innerHTML = cabs.filter(c => !q || c.code.toLowerCase().includes(q) || (c.client?.name || '').toLowerCase().includes(q)).map(c => c.bound_at
-        ? `<a class="cab-tile is-bound" href="${esc(cabinetUrl(c.token))}" target="_blank" rel="noopener"><b>${c.code}</b><span>${esc(c.client?.name || 'без имени')}</span><small>${c.orders} зак.</small></a>`
+      const STATE_TXT = { active: 'клиент вошёл в кабинет', reset: 'доступ сброшен, ждёт нового пароля', new: 'клиент ещё не активировал' };
+      list.innerHTML = cabs.filter(c => !q || c.code.toLowerCase().includes(q) || (c.client?.name || '').toLowerCase().includes(q) || (c.display_name || '').toLowerCase().includes(q)).map(c => c.bound_at || c.state !== 'new'
+        ? `<div class="cab-tile is-bound" data-state="${c.state}"><a href="${esc(cabinetUrl(c.token))}" target="_blank" rel="noopener"><b>${c.code}</b><span>${esc(c.client?.name || c.display_name || 'без имени')}</span>${c.display_name ? `<small>обращаться: ${esc(c.display_name)}</small>` : ''}<small>${c.orders} зак. · ${STATE_TXT[c.state]}</small></a>${c.state === 'new' ? '' : `<button class="cab-reset" type="button" data-reset="${c.code}">Сбросить доступ</button>`}</div>`
         : `<div class="cab-tile"><b>${c.code}</b><span>свободна</span></div>`).join('');
     };
     draw();
     view.querySelector('#q').oninput = e => draw(e.target.value);
+    list.addEventListener('click', async e => {
+      const b = e.target.closest('[data-reset]'); if (!b) return;
+      if (!confirm(`Сбросить доступ к кабинету ${b.dataset.reset}? Клиент потеряет вход и сможет задать новый пароль только по коду, который вы ему назовёте. Делайте это, когда убедились, что карточка его.`)) return;
+      try {
+        const { pin } = await Store.resetCabinet(b.dataset.reset);
+        alert(`Код для клиента: ${pin}\n\nНазовите его клиенту. Он отсканирует QR, введёт этот код и придумает новый пароль. Код показывается один раз.`);
+        renderCabinets();
+      } catch (err) { toast(err.message || String(err), 3500); }
+    });
     view.querySelector('#printCards').onclick = e => { e.preventDefault(); location.hash = `#/cards/${view.querySelector('#from').value}/${view.querySelector('#to').value}`; };
   }
 

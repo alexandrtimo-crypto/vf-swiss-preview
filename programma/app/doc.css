@@ -198,3 +198,26 @@
 .is-intake .d-cb { font-size: 7.4pt; margin-right: 2.6mm; }
 .is-intake .d-photos img { height: 16mm; }
 .is-intake .d-insp b { font-size: 7.4pt; width: 33mm; }
+
+/* Ч/б печать: на лазерном принтере тонкие светло-серые линии и бледные подписи пропадают, поэтому всё темнее и плотнее */
+.sheet.is-bw { --rule: #8a8a8a; --muted: #333; }
+.is-bw h3 { color: #000; font-weight: 700; }
+.is-bw .d-title h1 { -webkit-text-stroke: .22pt #000; }
+.is-bw .d-title p, .is-bw .d-f span, .is-bw .d-works th, .is-bw .d-total span, .is-bw .d-words, .is-bw .d-sg span { color: #222; }
+.is-bw .d-f { border-bottom: .28mm solid #8a8a8a; }
+.is-bw .d-insp { border-bottom: .25mm solid #8a8a8a; }
+.is-bw .d-works th { border-bottom: .4mm solid #000; font-weight: 700; }
+.is-bw .d-works td { border-bottom: .22mm solid #8a8a8a; }
+.is-bw .d-mp em { border: .3mm dashed #333; color: #333; }
+.is-bw .d-warranty { border: .35mm solid #000; background: #fff; }
+.is-bw .d-warranty p, .is-bw .d-note p, .is-bw .d-confirm, .is-bw .d-cab p { color: #111; }
+.is-bw .d-cab { border: .3mm dashed #000; }
+.is-bw .d-foot { color: #000; }
+.is-bw .d-copy { border-color: #000; color: #000; }
+.is-bw .d-dash, .is-bw .d-empty { color: #444; }
+.is-bw .d-blank { border-bottom-color: #333; }
+.is-bw .d-cb i { border-width: .35mm; }
+.is-bw .d-photos img { border-color: #777; }
+
+/* Ч/б: фото часов в серых тонах бесполезны и съедают тонер, в ч/б версии их нет (остаются в цветной, в кабинете клиента и в мессенджере) */
+.is-bw .d-photos-sec { display: none; }

@@ -199,3 +199,10 @@ h2 { font: 400 26px/1.2 Forum, serif; letter-spacing: .03em; margin: 8px 0 14px;
 .insp h4 { margin: 0 0 8px; font-size: 14px; font-weight: 600; color: var(--gold-2); }
 #inspect > h3 small { display: block; margin-top: 2px; font-weight: 400; }
 .bar__clock { font: 500 13px/1 var(--mono, ui-monospace, monospace); color: var(--muted); letter-spacing: .04em; margin-left: auto; margin-right: 10px; white-space: nowrap; }
+
+.cab-tile.is-bound { padding: 0; gap: 0; }
+.cab-tile.is-bound > a { display: grid; gap: 2px; padding: 10px; color: inherit; text-decoration: none; }
+.cab-tile .cab-reset { margin: 0 10px 10px; min-height: 36px; border-radius: 9px; border: 1px solid var(--line); background: transparent; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
+.cab-tile[data-state="reset"] { border-color: #c9863d; }
+.cab__state { color: var(--gold-2); font-weight: 500; }
+.cabs .cab-tile.is-bound { grid-column: 1 / -1; }

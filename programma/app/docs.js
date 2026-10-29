@@ -204,7 +204,7 @@ window.Docs = (() => {
         ${o.watch.condition ? `<p class="d-text d-text--s"><b>Примечание:</b> ${nl(o.watch.condition)}</p>` : ''}
         ${o.issue ? `<p class="d-text d-text--s"><b>Со слов клиента:</b> ${nl(o.issue)}</p>` : ''}
       </section>
-      ${o.photos?.length ? `<section class="d-sec"><div class="d-photos">${o.photos.slice(0, 4).map(src => `<img src="${src}" alt="">`).join('')}</div></section>` : ''}
+      ${o.photos?.length ? `<section class="d-sec d-photos-sec"><div class="d-photos">${o.photos.slice(0, 4).map(src => `<img src="${src}" alt="">`).join('')}</div></section>` : ''}
       <section class="d-note"><h3>Дополнительная информация</h3><p>${nl(cl(settings.diagText || DEFAULTS.diagText))}</p><p>${nl(cl(settings.photoText || DEFAULTS.photoText))}</p></section>
       ${cabinetBlock(o, settings)}
       ${signs(o, settings, 'Дата приёма часов', when(created))}

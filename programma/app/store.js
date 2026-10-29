@@ -58,6 +58,7 @@ window.Store = (() => {
   const lookupCabinet = q => api('POST', 'cabinets/lookup', { q });
   const bindCabinet = (code, client) => api('POST', 'cabinets/bind', { code, client });
   const listCabinets = () => api('GET', 'cabinets');
+  const resetCabinet = code => api('POST', 'cabinets/reset', { code });
 
   async function exportAll() {
     return { app: 'vf-docs', version: 2, exported: new Date().toISOString(), settings: await getSettings(), orders: await listOrders() };
@@ -70,5 +71,5 @@ window.Store = (() => {
     return data.orders.length;
   }
 
-  return { me, login, getSettings, saveSettings, listOrders, getOrder, saveOrder, deleteOrder, newOrder, lookupCabinet, bindCabinet, listCabinets, exportAll, importAll, DEFAULT_SETTINGS };
+  return { me, login, getSettings, saveSettings, listOrders, getOrder, saveOrder, deleteOrder, newOrder, lookupCabinet, bindCabinet, listCabinets, resetCabinet, exportAll, importAll, DEFAULT_SETTINGS };
 })();

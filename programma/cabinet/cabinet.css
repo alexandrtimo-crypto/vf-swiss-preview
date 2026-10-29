@@ -26,3 +26,14 @@
 .docs-row .btn { flex: 1 1 140px; }
 .inactive { text-align: center; padding: 28px 18px; }
 .inactive img { width: 160px; height: auto; margin: 0 auto 10px; display: block; }
+
+/* Вход и активация */
+.auth { text-align: center; }
+.auth img { width: 96px; height: auto; margin: 4px auto 8px; display: block; }
+.auth__form { display: grid; gap: 12px; text-align: left; margin-top: 14px; }
+.auth__err { margin: 0; min-height: 1.2em; color: #e8806f; font-size: 14px; }
+.f--eye { position: relative; }
+.f--eye .eye { position: absolute; right: 8px; bottom: 8px; height: 32px; padding: 0 10px; border-radius: 9px; border: 1px solid var(--line); background: transparent; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
+.f--eye input { padding-right: 96px; }
+.acc summary { cursor: pointer; padding: 8px 0; color: var(--gold-2); }
+.acc h3 { margin-bottom: 4px; }
