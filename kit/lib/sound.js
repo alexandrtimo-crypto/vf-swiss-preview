@@ -41,7 +41,7 @@
     osc.start(t); osc.stop(t + len + 0.02);
   }
 
-  async function play(name, { volume = 0.35, rate = 1 } = {}) {
+  async function play(name, { volume = 0.6, rate = 1 } = {}) {
     if (!on || !name) return;
     const a = ac(); if (a.state === 'suspended') await a.resume().catch(() => {});
     const buf = await load(name);
@@ -52,11 +52,28 @@
     src.connect(g).connect(a.destination); src.start();
   }
 
+  // iPhone глушит веб-звук беззвучным переключателем, пока страница не «играет медиа»: переводим сессию в playback
+  // и один раз проигрываем тишину (после жеста пользователя)
+  let unlocked = false;
+  function unlock() {
+    if (unlocked) return; unlocked = true;
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
+    try {
+      const n = 4410, b = new DataView(new ArrayBuffer(44 + n * 2));
+      const w = (o, t) => [...t].forEach((c, i) => b.setUint8(o + i, c.charCodeAt(0)));
+      w(0, 'RIFF'); b.setUint32(4, 36 + n * 2, true); w(8, 'WAVEfmt '); b.setUint32(16, 16, true); b.setUint16(20, 1, true); b.setUint16(22, 1, true);
+      b.setUint32(24, 44100, true); b.setUint32(28, 88200, true); b.setUint16(32, 2, true); b.setUint16(34, 16, true); w(36, 'data'); b.setUint32(40, n * 2, true);
+      const a = new Audio(URL.createObjectURL(new Blob([b], { type: 'audio/wav' })));
+      a.play().catch(() => {});
+    } catch {}
+  }
+
   function set(state, silent = false) {
     on = state;
     try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch {}
     document.querySelectorAll('[data-sound-toggle]').forEach(b => { b.setAttribute('aria-pressed', on); b.dataset.state = on ? 'on' : 'off'; });
-    if (on && !silent) play('click');
+    if (on) unlock();
+    if (on && !silent) play('success', { volume: 0.7 });   // слышимое подтверждение: звук включён
   }
 
   // Делегирование: звук по атрибуту на любом элементе, без правки компонентов
