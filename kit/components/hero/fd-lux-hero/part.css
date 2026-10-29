@@ -1,0 +1,35 @@
+[data-part="fd-lux-hero"] { --fd-win: min(560px, 42vw); padding: 56px 40px 96px; }
+[data-part="fd-lux-hero"] .fd-lux-hero__in { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) var(--fd-win); gap: 64px; align-items: center; }
+[data-part="fd-lux-hero"] .fd-lux-hero__title { margin: 0 0 28px; font: 400 var(--fd-s9, 72px)/1.04 var(--vf-font-display); letter-spacing: -.012em; color: var(--vf-accent); max-width: 11ch; text-wrap: balance; }
+[data-part="fd-lux-hero"] .fd-lux-hero__lead { margin: 0 0 40px; max-width: 34em; font-size: var(--fd-s4, 21px); line-height: 1.6; color: var(--vf-text-2); }
+[data-part="fd-lux-hero"] .fd-lux-hero__acts { display: flex; flex-wrap: wrap; gap: 14px; }
+[data-part="fd-lux-hero"] .fd-lux-hero__window { position: relative; margin: 0; width: var(--fd-win); }
+[data-part="fd-lux-hero"] .fd-lux-hero__dial { position: relative; aspect-ratio: 1; }
+[data-part="fd-lux-hero"] .fd-lux-hero__glass { position: absolute; top: 0; left: 0; width: 84%; margin: 8%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--vf-accent-2); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vf-metal, #A8823A) 70%, transparent), 0 30px 60px -30px rgba(18, 28, 62, .55); }
+[data-part="fd-lux-hero"] .fd-lux-hero__glass::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(120% 80% at 30% 15%, rgba(255,255,255,.22), transparent 45%); pointer-events: none; }
+[data-part="fd-lux-hero"] .fd-lux-hero__vid { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.12); }
+[data-part="fd-lux-hero"] .fd-lux-hero__track { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--vf-metal, #A8823A); }
+[data-part="fd-lux-hero"] .fd-lux-hero__track line { stroke: currentColor; stroke-width: .5; }
+[data-part="fd-lux-hero"] .fd-lux-hero__track line.h { stroke-width: 1.1; }
+[data-part="fd-lux-hero"] .fd-lux-hero__track circle { fill: none; stroke: currentColor; stroke-width: .4; }
+[data-part="fd-lux-hero"] figcaption { margin: 10px auto 0; max-width: 30em; text-align: center; font-style: italic; font-size: var(--fd-s2, 16px); color: var(--vf-muted); }
+/* единственный оркестрованный момент: минутная дорожка «набирается» при загрузке */
+@keyframes fd-lux-hero-tick { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fd-lux-hero-glass { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+[data-part="fd-lux-hero"] .fd-lux-hero__track line { animation: fd-lux-hero-tick .5s var(--vf-ease) both; animation-delay: calc(var(--i) * 18ms + .2s); }
+[data-part="fd-lux-hero"] .fd-lux-hero__glass { animation: fd-lux-hero-glass 1.2s var(--vf-ease) both .1s; }
+@media (prefers-reduced-motion: reduce) {
+  [data-part="fd-lux-hero"] .fd-lux-hero__track line, [data-part="fd-lux-hero"] .fd-lux-hero__glass { animation: none; }
+}
+@media (max-width: 980px) {
+  [data-part="fd-lux-hero"] { --fd-win: min(400px, 78vw); padding: 16px 24px 72px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__in { grid-template-columns: 1fr; gap: 8px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__window { order: -1; margin: 0 auto; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__title { font-size: clamp(40px, 10.4vw, 60px); max-width: 12ch; margin-top: 16px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__lead { font-size: var(--fd-s3, 18px); margin-bottom: 28px; }
+}
+@media (max-width: 600px) {
+  [data-part="fd-lux-hero"] { padding: 8px 20px 64px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__acts .vf-btn { flex: 1 1 100%; }
+  [data-part="fd-lux-hero"] figcaption { font-size: 14px; }
+}

@@ -1,0 +1,13 @@
+/* title: Поля · легко */
+/* .vf-field — обёртка label: подпись (span) + поле; .vf-input — поле ввода или textarea. */
+.vf-field { display: grid; gap: 6px; }
+.vf-field > span { font-weight: 900; font-size: 15px; }
+.vf-field > span i { font-style: normal; font-weight: 700; color: var(--vf-text-2); font-size: 13.5px; }
+.vf-input {
+  box-sizing: border-box; width: 100%; resize: vertical;
+  font: inherit; font-weight: 700; font-size: 17px; color: var(--vf-text);
+  border: 2.5px solid var(--vf-line); border-radius: 18px; padding: 13px 16px; background: var(--vf-bg);
+}
+.vf-input:focus { outline: none; border-color: var(--vf-accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--vf-accent) 18%, transparent); }
+.vf-input:disabled { opacity: .5; }
+.vf-input[aria-invalid=true] { border-color: var(--vf-accent); background: color-mix(in srgb, var(--vf-accent) 9%, var(--vf-surface)); }

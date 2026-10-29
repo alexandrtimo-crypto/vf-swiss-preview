@@ -1,0 +1,9 @@
+{
+  "id": "easy-hero",
+  "slot": "hero",
+  "title": "Первый экран «Что с часами?» · легко",
+  "vision": "easy",
+  "description": "Аватар мастера с репликой, огромный вопрос «Что с часами?» и 8 живых плиток-наклеек с иллюстрациями. Плитка открывает чат: событие vf:chat { symptom }.",
+  "fonts": ["Nunito:wght@500..900"],
+  "needs": ["{{shared}}/../kit/elements/icons/easy.js"]
+}

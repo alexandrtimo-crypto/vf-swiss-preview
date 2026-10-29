@@ -1,0 +1,41 @@
+/* Бренды «дорого»: две бегущие строки навстречу, антиква «гравируется» бликом света */
+.lux-brands { --gut: var(--vf-gut, clamp(16px, 4vw, 56px)); position: relative; padding: 20vh 0 16vh; overflow: hidden; color: var(--vf-text); background: linear-gradient(var(--vf-bg), color-mix(in srgb, var(--vf-bg), var(--vf-accent) 1%) 60%, var(--vf-bg)); }
+.lux-brands *, .lux-brands *::before, .lux-brands *::after { box-sizing: border-box; }
+.lux-brands .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: -1px; }
+.lux-brands .houses__title { text-align: center; margin: 0 0 7vh; font: italic 400 clamp(18px, 1.6vw, 26px)/1.4 var(--vf-font-display); color: var(--vf-text-2); }
+.lux-brands .houses__row { display: flex; width: max-content; }
+.lux-brands .houses__run { display: flex; align-items: center; flex-shrink: 0; }
+.lux-brands .houses__run span { padding: 0 .28em; white-space: nowrap; font: 400 clamp(68px, 11vw, 200px)/1.12 var(--vf-font-display); letter-spacing: -.02em; }
+.lux-brands .houses__run i { font-style: normal; color: var(--vf-accent); opacity: .55; font-size: clamp(14px, 1.3vw, 22px); }
+.lux-brands .houses__row--a span {
+  color: transparent; -webkit-background-clip: text; background-clip: text; background-size: 300% 100%;
+  background-image: linear-gradient(100deg, #4d4236 0%, #4d4236 44%, #fff4dc 50%, #4d4236 56%, #4d4236 100%); background-position: 100% 0;
+}
+.lux-brands .houses__row--b { margin-top: 1vh; }
+.lux-brands .houses__row--b span { font: 200 clamp(40px, 5.6vw, 104px)/1.3 var(--vf-font-text); letter-spacing: .12em; text-transform: uppercase; color: color-mix(in srgb, var(--vf-accent) 50%, transparent); transition: color 1.2s var(--vf-ease); }
+.lux-brands .houses__row--b span:hover { color: color-mix(in srgb, var(--vf-accent-2) 90%, transparent); }
+.lux-brands .houses__row--b .houses__etc { font: italic 400 clamp(40px, 5vw, 90px)/1.3 var(--vf-font-display); letter-spacing: 0; text-transform: none; color: var(--vf-accent-2); }
+.lux-brands.is-motion .houses__row--a { animation: lux-brands-run 120s linear infinite; }
+.lux-brands.is-motion .houses__row--b { animation: lux-brands-run 140s linear infinite reverse; }
+.lux-brands.is-motion .houses__row--a span { animation: lux-brands-engrave 7s var(--vf-ease) infinite; }
+.lux-brands.is-motion .houses__row--a span:nth-child(3) { animation-delay: 1.4s; } .lux-brands.is-motion .houses__row--a span:nth-child(5) { animation-delay: 2.8s; }
+.lux-brands.is-motion .houses__row--a span:nth-child(7) { animation-delay: 4.2s; } .lux-brands.is-motion .houses__row--a span:nth-child(9) { animation-delay: 5.6s; }
+.lux-brands:hover .houses__row, .lux-brands.is-paused .houses__row, .lux-brands.is-paused .houses__row span { animation-play-state: paused; }
+@keyframes lux-brands-run { to { transform: translateX(-50%); } }
+@keyframes lux-brands-engrave { 0% { background-position: 100% 0; } 55%, 100% { background-position: 0 0; } }
+.lux-brands:not(.is-motion) .houses__row { width: auto; flex-wrap: wrap; justify-content: center; padding: 0 var(--gut); }
+.lux-brands:not(.is-motion) .houses__run + .houses__run { display: none; }
+.lux-brands:not(.is-motion) .houses__run { flex-wrap: wrap; justify-content: center; }
+.lux-brands:not(.is-motion) .houses__run span { font-size: clamp(40px, 6vw, 96px); }
+.lux-brands:not(.is-motion) .houses__row--a span { color: var(--vf-text-2); background: none; }
+.lux-brands .houses__pause { display: flex; width: fit-content; margin: 6vh auto 0; --vf-btn-fg: var(--vf-muted); --vf-btn-line: color-mix(in srgb, var(--vf-accent) 40%, transparent); }
+.lux-brands:not(.is-motion) .houses__pause { display: none; }
+
+@media (max-width: 899px) {
+  .lux-brands { padding: 16vh 0 12vh; }
+  .lux-brands .houses__run span { font-size: 20vw; }
+  .lux-brands .houses__row--b span { font-size: 10vw; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lux-brands *, .lux-brands *::before, .lux-brands *::after { animation: none !important; transition-duration: .01ms !important; }
+}

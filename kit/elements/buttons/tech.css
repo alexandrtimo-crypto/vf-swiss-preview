@@ -1,0 +1,10 @@
+/* title: Кнопки · технологично */
+/* Капсулы: люминесцентная основная со свечением и «стеклянная» второстепенная. */
+.vf-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:48px;padding:0 22px;border-radius:999px;border:0;text-decoration:none;font-family:var(--vf-font-text);font-weight:500;font-size:16px;line-height:1.2;cursor:pointer;white-space:nowrap;transition:transform .35s var(--vf-ease),box-shadow .35s var(--vf-ease),background .35s}
+.vf-btn--primary{background:var(--vf-accent);color:var(--vf-on-accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--vf-accent-2) 60%,transparent) inset,0 10px 40px -8px color-mix(in srgb,var(--vf-accent) 55%,transparent)}
+.vf-btn--primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.7) inset,0 16px 60px -6px color-mix(in srgb,var(--vf-accent) 75%,transparent)}
+.vf-btn--ghost{background:color-mix(in srgb,var(--vf-text) 6%,transparent);color:var(--vf-text);box-shadow:inset 0 0 0 1px var(--vf-line-2,var(--vf-line));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.vf-btn--ghost:hover{background:color-mix(in srgb,var(--vf-text) 10%,transparent);transform:translateY(-2px)}
+.vf-btn--sm{height:42px}
+.vf-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+@media (prefers-reduced-motion:reduce){.vf-btn{transition:none}}

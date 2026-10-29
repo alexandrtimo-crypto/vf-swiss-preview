@@ -1,0 +1,20 @@
+/* title: Кнопки · печать и гравированная рамка */
+/* Основная — бордовая печать с внутренним тиснёным кольцом; второстепенная — двойная рамка гравюры. */
+.vf-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border:0;border-radius:var(--vf-radius);text-decoration:none;font-family:var(--vf-font-display);font-weight:700;font-size:15px;line-height:1.1;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background-color .25s var(--vf-ease),color .25s,box-shadow .25s var(--vf-ease),transform .25s var(--vf-ease)}
+.vf-btn .vf-i{font-size:18px}
+.vf-btn--primary{background:var(--vf-seal,#7b1e34);color:var(--vf-on-accent);
+  box-shadow:inset 0 0 0 3px var(--vf-seal,#7b1e34),inset 0 0 0 4px rgba(244,238,230,.6),inset 0 1px 0 4px rgba(255,255,255,.08),0 1px 0 #4d1121,0 10px 18px -10px rgba(123,30,52,.75)}
+.vf-btn--primary:hover{background:var(--vf-seal-hover,#621628);box-shadow:inset 0 0 0 3px var(--vf-seal-hover,#621628),inset 0 0 0 4px rgba(244,238,230,.85),0 1px 0 #3d0d1a,0 12px 20px -10px rgba(123,30,52,.8)}
+.vf-btn--primary:active{transform:translateY(1px);box-shadow:inset 0 0 0 3px #521223,inset 0 0 0 4px rgba(244,238,230,.7),0 0 0 #3d0d1a,0 3px 8px -6px rgba(123,30,52,.8)}
+.vf-btn--ghost{background:transparent;color:currentColor;box-shadow:inset 0 0 0 1px currentColor}
+.vf-btn--ghost::before{content:"";position:absolute;inset:3px;border:1px solid currentColor;opacity:.55;border-radius:1px;pointer-events:none;transition:opacity .25s,inset .25s var(--vf-ease)}
+.vf-btn--ghost:hover{background:color-mix(in srgb,currentColor 8%,transparent)}
+.vf-btn--ghost:hover::before{opacity:1;inset:4px}
+.vf-btn--ghost:active{transform:translateY(1px)}
+.vf-btn--sm{min-height:42px;padding:0 18px;font-size:13px;letter-spacing:.11em}
+.vf-btn--sm .vf-i{font-size:16px}
+.vf-btn:focus-visible{outline:2px solid var(--vf-accent);outline-offset:3px}
+.vf-btn:disabled,.vf-btn[aria-disabled="true"]{opacity:.5;cursor:not-allowed;transform:none}
+.vf-btn[aria-busy="true"]{cursor:progress;opacity:.8}
+@media (max-width:480px){.vf-btn:not(.vf-btn--sm){white-space:normal;text-align:center;line-height:1.25;padding-block:12px;letter-spacing:.09em}}
+@media (prefers-reduced-motion:reduce){.vf-btn{transition:none}.vf-btn:active{transform:none}}

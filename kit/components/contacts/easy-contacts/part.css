@@ -1,0 +1,36 @@
+/* easy-contacts: «Как нас найти» — нарисованная схема с прыгающим пином, адрес, маршрут и копирование */
+.easy-contacts { padding: 40px 10px 30px; box-sizing: border-box; }
+.easy-contacts *, .easy-contacts *::before, .easy-contacts *::after { box-sizing: border-box; }
+.easy-contacts :where(h2, p) { margin: 0; }
+.easy-contacts :where(h2) { line-height: 1.05; font-weight: 900; letter-spacing: -.02em; font-family: var(--vf-font-display); }
+.easy-contacts svg { display: block; max-width: 100%; }
+
+.easy-contacts .mapcard { max-width: 1100px; margin: 0 auto; background: var(--vf-surface); border: 3px solid var(--vf-line); border-radius: 40px; overflow: hidden; box-shadow: 0 8px 0 var(--vf-line); }
+.easy-contacts .map { width: 100%; height: auto; aspect-ratio: 640/400; border-bottom: 3px solid var(--vf-line); }
+.easy-contacts .map__street { font: 900 22px var(--vf-font-display, Nunito), sans-serif; fill: #B9A58D; letter-spacing: .02em; }
+.easy-contacts .map__lbl { font: 900 20px var(--vf-font-display, Nunito), sans-serif; fill: var(--vf-easy-ink, #2A211C); }
+.easy-contacts .pin__t { font: 900 20px var(--vf-font-display, Nunito), sans-serif; fill: #fff; }
+.easy-contacts .pin .pin__body { animation: easy-contacts-pin 2.4s var(--vf-ease) infinite; transform-origin: 0 56px; transform-box: view-box; }
+@keyframes easy-contacts-pin { 0%, 70%, 100% { transform: translateY(0); } 80% { transform: translateY(-14px) scaleY(1.04); } 90% { transform: translateY(0) scaleY(.94); } }
+.easy-contacts .pin__pulse { transform-origin: 0 56px; transform-box: view-box; animation: easy-contacts-pulse 2.4s ease-out infinite; }
+@keyframes easy-contacts-pulse { from { transform: scale(.4); opacity: 1; } to { transform: scale(2.4); opacity: 0; } }
+.easy-contacts .mapcard__body { padding: 24px 20px 28px; }
+.easy-contacts .mapcard__body h2 { font-size: clamp(36px, 9vw, 60px); letter-spacing: -.04em; }
+.easy-contacts .addr { font-size: 22px; font-weight: 900; margin: 10px 0 20px; line-height: 1.2; }
+.easy-contacts .mapcard__btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.easy-contacts .mapcard__btns .vf-btn { flex: 1 1 200px; }
+.easy-contacts .hours { margin-top: 18px; font-size: 15px; color: var(--vf-text-2); }
+.easy-contacts .stub { color: var(--vf-accent); font-weight: 900; margin-left: 3px; }
+
+.easy-contacts__toast { position: fixed; left: 50%; bottom: calc(var(--vf-easy-dock-h, 76px) + 30px); z-index: 200; transform: translate(-50%, 30px) scale(.8); opacity: 0; background: var(--vf-text); color: var(--vf-surface); font-weight: 900; padding: 12px 20px; border-radius: 999px; transition: transform .45s var(--vf-ease), opacity .25s; pointer-events: none; white-space: nowrap; }
+.easy-contacts__toast.on { opacity: 1; transform: translate(-50%, 0) scale(1); }
+
+@media (min-width: 760px) {
+  .easy-contacts { padding: 60px 24px 30px; }
+  .easy-contacts .mapcard { display: grid; grid-template-columns: 1.35fr 1fr; align-items: stretch; }
+  .easy-contacts .map { border-bottom: 0; border-right: 3px solid var(--vf-line); height: 100%; object-fit: cover; }
+  .easy-contacts .mapcard__body { padding: 40px 34px; display: flex; flex-direction: column; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .easy-contacts *, .easy-contacts *::before, .easy-contacts *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}

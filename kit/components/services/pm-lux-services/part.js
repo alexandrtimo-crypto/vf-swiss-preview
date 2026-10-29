@@ -1,0 +1,1 @@
+VFKit.register('pm-lux-services', root => { root.querySelectorAll('[data-book]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); document.dispatchEvent(new CustomEvent('vf:book', { detail: { symptom: a.dataset.symptom || '' }, cancelable: true })); })); });

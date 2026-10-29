@@ -1,0 +1,31 @@
+/* Табло статусов: SplitFlapText (React Bits) → DOM-плитки с WAAPI. Цвета только --vf-* */
+.lpb { --gut: var(--vf-gut, var(--vf-gutter, clamp(16px, 4vw, 56px))); --tw: clamp(25px, 5.4vw, 64px); --th: calc(var(--tw) * 1.42);
+  background: var(--vf-bg-2, var(--vf-bg)); color: var(--vf-text); padding: clamp(48px, 7vw, 104px) var(--gut); }
+.lpb *, .lpb *::before, .lpb *::after { box-sizing: border-box; }
+.lpb__in { max-width: 1180px; margin: 0 auto; display: grid; gap: clamp(18px, 2.4vw, 30px); justify-items: start; }
+.lpb__head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.lpb__title { margin: 0; font: 400 clamp(28px, 4vw, 52px)/1.05 var(--vf-font-display); }
+.lpb__demo { font: 500 13px/1 var(--vf-font-text); padding: 5px 9px 6px; border: 1px solid var(--vf-line); border-radius: var(--vf-radius, 2px); color: var(--vf-text-2, var(--vf-text)); }
+.lpb__board { display: flex; gap: clamp(2px, .45vw, 6px); min-height: var(--th); max-width: 100%; }
+.lpb__now { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: 0; }
+.lpb__steps { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.lpb__chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--vf-line); border-radius: var(--vf-radius, 2px); background: transparent; color: var(--vf-text-2, var(--vf-text));
+  font: 400 15px/1 var(--vf-font-text); cursor: pointer; transition: background .3s, color .3s, border-color .3s; }
+.lpb__chip:hover { border-color: var(--vf-accent); color: var(--vf-text); }
+.lpb__chip[aria-current="true"] { background: var(--vf-accent); border-color: var(--vf-accent); color: var(--vf-on-accent); }
+.lpb__chip:focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 2px; }
+.lpb__note { margin: 0; max-width: 40em; font: 400 clamp(16px, 1.3vw, 18px)/1.55 var(--vf-font-text); color: var(--vf-text-2, var(--vf-text)); }
+
+/* плитка: верхняя и нижняя половины, две створки перекидываются */
+.lpb .sf { position: relative; width: var(--tw); height: var(--th); perspective: calc(var(--th) * 5); font: 600 calc(var(--th) * .72)/var(--th) var(--vf-font-text); text-transform: uppercase; color: var(--vf-text); }
+.lpb .sf__h { position: absolute; left: 0; right: 0; height: 50%; overflow: hidden; background: var(--vf-surface); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.lpb .sf__h i { position: absolute; left: 0; right: 0; height: var(--th); text-align: center; font-style: normal; }
+.lpb .sf__a, .lpb .sf__fa { top: 0; border-radius: var(--vf-radius, 2px) var(--vf-radius, 2px) 0 0; transform-origin: 50% 100%; }
+.lpb .sf__b, .lpb .sf__fb { bottom: 0; border-radius: 0 0 var(--vf-radius, 2px) var(--vf-radius, 2px); transform-origin: 50% 0; }
+.lpb .sf__a i, .lpb .sf__fa i { top: 0; }
+.lpb .sf__b i, .lpb .sf__fb i { bottom: 0; }
+.lpb .sf__fa, .lpb .sf__fb { display: none; }
+.lpb .sf__a { border-bottom: 1px solid var(--vf-bg); }
+.lpb .sf__b { border-top: 1px solid var(--vf-bg); }
+.lpb .sf::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; margin-top: -.5px; background: var(--vf-bg); z-index: 3; }
+.lpb .sf__fb { transform: rotateX(90deg); }

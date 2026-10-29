@@ -1,0 +1,23 @@
+/* Этапы ремонта листами: ScrollStack (React Bits) на sticky. Цвета только --vf-* */
+.lps { --gut: var(--vf-gut, var(--vf-gutter, clamp(16px, 4vw, 56px))); --top: clamp(72px, 11vh, 120px); --step: 18px;
+  background: var(--vf-bg); color: var(--vf-text); padding: clamp(48px, 7vw, 104px) var(--gut) clamp(64px, 9vw, 120px); }
+.lps *, .lps *::before, .lps *::after { box-sizing: border-box; }
+.lps__title { margin: 0 0 clamp(20px, 3vw, 40px); font: 400 clamp(28px, 4vw, 52px)/1.05 var(--vf-font-display); }
+.lps__stack { list-style: none; margin: 0 auto; padding: 0; max-width: 1180px; }
+.lps__sheet { position: sticky; top: calc(var(--top) + var(--i) * var(--step)); margin: 0 0 clamp(36px, 14vh, 140px); transform-origin: 50% 0; will-change: transform; }
+.lps__sheet:last-child { margin-bottom: 0; }
+.lps__card { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); min-height: clamp(300px, 44vh, 420px);
+  background: var(--vf-surface); color: var(--vf-text); border: 1px solid var(--vf-line); border-radius: var(--vf-radius-lg, 4px); overflow: hidden; }
+.lps__text { padding: clamp(24px, 4vw, 56px); display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+.lps__h { margin: 0; font: 400 clamp(26px, 3.2vw, 44px)/1.08 var(--vf-font-display); letter-spacing: 0; text-wrap: balance; }
+.lps__p { margin: 0; max-width: 34em; font: 400 clamp(16px, 1.3vw, 18px)/1.55 var(--vf-font-text); color: var(--vf-text-2, var(--vf-text)); }
+.lps__pic { position: relative; min-height: 100%; background: var(--vf-bg-2, var(--vf-bg)); }
+.lps__pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.lps__shade { position: absolute; inset: 0; background: var(--vf-bg); opacity: var(--dim, 0); pointer-events: none; }
+@media (max-width: 720px) {
+  .lps { --top: 68px; --step: 12px; }
+  .lps__card { grid-template-columns: 1fr; grid-template-rows: 150px auto; min-height: 0; }
+  .lps__pic { order: -1; min-height: 150px; }
+  .lps__text { padding: 20px 18px 24px; gap: 10px; }
+  .lps__sheet { margin-bottom: 40px; }
+}

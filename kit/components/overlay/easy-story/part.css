@@ -1,0 +1,31 @@
+/* easy-story: просмотр историй мастерской на весь экран, как в Instagram */
+.easy-story { position: fixed; inset: 0; z-index: 130; background: rgba(20,15,12,.92); display: grid; place-items: center; }
+.easy-story[hidden] { display: none; }
+.easy-story *, .easy-story *::before, .easy-story *::after { box-sizing: border-box; }
+.easy-story :where(p) { margin: 0; }
+.easy-story :where(button) { font: inherit; color: inherit; cursor: pointer; }
+.easy-story :where(img, video, svg) { display: block; max-width: 100%; }
+.easy-story .story__frame { position: relative; width: 100%; height: 100%; max-width: 460px; max-height: 100dvh; background: #111; overflow: hidden; animation: easy-story-in .45s var(--vf-ease) both; }
+@keyframes easy-story-in { from { transform: scale(.6); opacity: 0; border-radius: 50%; } to { transform: none; opacity: 1; } }
+.easy-story .story__bars { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; gap: 5px; z-index: 3; }
+.easy-story .story__bars span { flex: 1; height: 4px; border-radius: 4px; background: rgba(255,255,255,.35); overflow: hidden; }
+.easy-story .story__bars span i { display: block; height: 100%; width: 0; background: #fff; border-radius: 4px; }
+.easy-story .story__bars span.done i { width: 100%; }
+.easy-story .story__head { position: absolute; top: 22px; left: 12px; right: 10px; z-index: 4; display: flex; align-items: center; gap: 10px; color: #fff; }
+.easy-story .story__head b { flex: 1; font-weight: 900; font-size: 16px; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
+.easy-story .story__ava { width: 36px; height: 36px; border-radius: 50%; background: var(--vf-accent); border: 2px solid #fff; display: grid; place-items: center; font-weight: 900; font-size: 13px; color: var(--vf-on-accent); }
+.easy-story .iconbtn { width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0; background: rgba(255,255,255,.18); display: grid; place-items: center; flex: none; }
+.easy-story .iconbtn svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; }
+.easy-story .story__media { position: absolute; inset: 0; }
+.easy-story .story__media img, .easy-story .story__media video { width: 100%; height: 100%; object-fit: cover; animation: easy-story-kb 6s ease-out both; }
+@keyframes easy-story-kb { from { transform: scale(1.08); } to { transform: scale(1); } }
+.easy-story .story__cap { position: absolute; left: 14px; right: 14px; bottom: calc(26px + env(safe-area-inset-bottom)); z-index: 3; background: var(--vf-surface); color: var(--vf-text); border: 3px solid var(--vf-line); border-radius: 22px 22px 22px 6px; padding: 12px 16px; font-weight: 900; font-size: 17px; line-height: 1.25; box-shadow: 0 4px 0 var(--vf-line); animation: easy-story-pop .5s .15s var(--vf-ease) both; }
+@keyframes easy-story-pop { from { opacity: 0; transform: scale(.6) translateY(10px); } to { opacity: 1; transform: none; } }
+.easy-story .story__tap { position: absolute; top: 70px; bottom: 110px; z-index: 2; border: 0; padding: 0; background: transparent; width: 38%; }
+.easy-story .story__tap--l { left: 0; } .easy-story .story__tap--r { right: 0; width: 62%; }
+@media (min-width: 760px) {
+  .easy-story .story__frame { height: min(820px, 94vh); border-radius: 30px; border: 3px solid var(--vf-line); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .easy-story *, .easy-story *::before, .easy-story *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}

@@ -1,0 +1,48 @@
+/* title: PM · Швейцарская глава (дорого-богато) */
+/* fonts: Cormorant:ital,wght@0,400..600%3B1,400..500; Montserrat:wght@400..600 */
+/* UI UX Pro Max → Luxury/Premium Brand: стиль Minimalism & Swiss Style (дисперсия 2), палитра «Premium black + gold accent»,
+   пара «Luxury Serif» (Cormorant + Montserrat), паттерн Scroll-Triggered Storytelling. Плотность 2 → просторная шкала 24–96. */
+:root {
+  --vf-bg: #FAFAF9;
+  --vf-bg-2: #F5F5F4;
+  --vf-surface: #FFFFFF;
+  --vf-text: #0C0A09;
+  --vf-text-2: #44403C;
+  --vf-muted: #475569;
+  --vf-line: #D6D3D1;
+  --vf-accent: #A16207;
+  --vf-accent-2: #1C1917;
+  --vf-on-accent: #FFFFFF;
+  --vf-danger: #B91C1C;
+  --vf-font-display: 'Cormorant', 'Times New Roman', serif;
+  --vf-font-text: 'Montserrat', system-ui, sans-serif;
+  --vf-font-mono: 'Montserrat', system-ui, sans-serif;
+  --vf-radius: 0px;
+  --vf-radius-lg: 0px;
+  --vf-ease: cubic-bezier(.25, .46, .45, .94); /* power1.out — пресет Scroll Reveal · Subtle */
+  --vf-dur: 500ms;           /* «Premium reveals (400-600ms)» из ui-reasoning */
+  --vf-dur-exit: 320ms;      /* exit-faster-than-enter ≈ 65 % */
+  /* Плотность 2 (Spacious) — шкала из DIAL_TIERS */
+  --pm-s-xs: 4px; --pm-s-sm: 8px; --pm-s-md: 24px; --pm-s-lg: 32px; --pm-s-xl: 48px; --pm-s-2xl: 64px; --pm-s-3xl: 96px;
+  --pm-wrap: 1240px;
+  --pm-gutter: clamp(16px, 4vw, 48px);
+  --vf-metal: #A16207;
+  color-scheme: light;
+}
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body.vf-page {
+  margin: 0; background: var(--vf-bg); color: var(--vf-text);
+  font: 400 16px/1.65 var(--vf-font-text);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  font-feature-settings: "tnum" 1;
+}
+body.vf-page :focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+body.vf-page img, body.vf-page video { max-width: 100%; display: block; }
+body.vf-page a { color: inherit; }
+body.vf-page [data-slot] { scroll-margin-top: 80px; }
+.pm-skip { position: absolute; left: -9999px; top: 8px; z-index: 1000; background: var(--vf-text); color: var(--vf-bg); padding: 10px 16px; }
+.pm-skip:focus { left: 8px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  body.vf-page *, body.vf-page *::before, body.vf-page *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

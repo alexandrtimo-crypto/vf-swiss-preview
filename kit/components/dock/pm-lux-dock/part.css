@@ -1,0 +1,7 @@
+.pm-lux-dock { display: none; }
+@media (max-width: 900px) {
+  .pm-lux-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--vf-surface); border-top: 1px solid var(--vf-text); padding-bottom: env(safe-area-inset-bottom, 0); }
+  .pm-lux-dock a { display: flex; align-items: center; justify-content: center; min-height: 56px; font: 600 12px/1 var(--vf-font-text); letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--vf-text); border-right: 1px solid var(--vf-line); }
+  .pm-lux-dock a:last-child { border-right: 0; }
+  .pm-lux-dock .pm-lux-dock__book { background: var(--vf-accent-2); color: var(--vf-on-accent); }
+}

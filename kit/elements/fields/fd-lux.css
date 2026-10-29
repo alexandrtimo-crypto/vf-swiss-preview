@@ -1,0 +1,9 @@
+/* title: fd-lux — поля: строка на эмали */
+.vf-field { display: grid; gap: 6px; }
+.vf-field > span, .vf-field > label { font: italic 400 16px/1.3 var(--vf-font-text); color: inherit; opacity: .85; }
+.vf-input { width: 100%; box-sizing: border-box; min-height: 52px; padding: 12px 2px; border: 0; border-bottom: 1px solid currentColor; border-radius: 0; background: transparent; color: inherit; font: 400 20px/1.3 var(--vf-font-text); }
+textarea.vf-input { min-height: 96px; resize: vertical; }
+.vf-input::placeholder { color: inherit; opacity: .5; }
+.vf-input:focus { outline: none; border-bottom-width: 2px; border-bottom-color: var(--vf-metal-on-dark, #CDAA63); }
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); }
+.vf-field__err { font: 400 15px/1.4 var(--vf-font-text); color: inherit; }

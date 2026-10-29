@@ -1,0 +1,44 @@
+<section data-part="r3-tech-booking" data-slot="booking" class="r3bk" id="r3-booking" aria-labelledby="r3bk-h">
+  <div class="r3bk__side">
+    <h2 class="r3bk__h" id="r3bk-h">Карта-наряд на&nbsp;ваши часы</h2>
+    <p class="r3bk__p">Опишите, что с часами, — мастер свяжется и пригласит на бесплатную диагностику. Если удобнее голосом или в переписке:</p>
+    <ul class="r3bk__direct">
+      <li><a href="tel:+79651716996">8 (965) 171-69-96</a></li>
+      <li><a href="tel:+79162459223">8 (916) 245-92-23</a></li>
+      <li><a href="https://t.me/VFswissboutique">Telegram @VFswissboutique</a></li>
+    </ul>
+    <p class="r3bk__addr">Мастерская: Москва, Петровка, 23/10 стр. 5</p>
+  </div>
+  <form class="r3bk__card" novalidate aria-labelledby="r3bk-h">
+    <div class="r3bk__in">
+      <div class="r3bk__row">
+        <label class="vf-field"><span>Имя</span><input class="vf-input" type="text" name="name" autocomplete="name" placeholder="Как к вам обращаться"></label>
+        <label class="vf-field"><span>Телефон</span><input class="vf-input" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required></label>
+      </div>
+      <fieldset class="vf-field r3bk__via"><legend>Как связаться</legend>
+        <div class="r3bk__seg">
+          <label><input type="radio" name="contact" value="call" checked><span>Звонок</span></label>
+          <label><input type="radio" name="contact" value="telegram"><span>Telegram</span></label>
+        </div>
+      </fieldset>
+      <label class="vf-field"><span>Марка часов</span><input class="vf-input" type="text" name="brand" list="r3bk-brands" autocomplete="off" placeholder="Например, Breitling"></label>
+      <datalist id="r3bk-brands"><option value="Rolex"><option value="Patek Philippe"><option value="Audemars Piguet"><option value="Vacheron Constantin"><option value="Breguet"><option value="Cartier"><option value="Breitling"><option value="Franck Muller"><option value="Blancpain"></datalist>
+      <fieldset class="vf-field r3bk__q"><legend>Что с часами</legend>
+        <div class="r3bk__chips">
+          <button type="button" aria-pressed="false">Остановились</button><button type="button" aria-pressed="false">Спешат или отстают</button><button type="button" aria-pressed="false">Нужна батарейка</button><button type="button" aria-pressed="false">Стекло</button><button type="button" aria-pressed="false">Ремешок или браслет</button><button type="button" aria-pressed="false">Полировка</button><button type="button" aria-pressed="false">Плановое обслуживание</button>
+        </div>
+        <textarea class="vf-input" name="description" rows="3" placeholder="Своими словами: что случилось и когда" aria-label="Описание"></textarea>
+      </fieldset>
+      <label class="vf-field r3bk__file"><span>Фото часов — по желанию</span><span class="r3bk__fbox"><input type="file" name="photos" accept="image/*" multiple><span class="r3bk__fbtn" aria-hidden="true">Выбрать фото</span><span class="r3bk__fname" aria-hidden="true">Файл не выбран</span></span></label>
+      <label class="r3bk__consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных (<a href="#r3-policy">политика</a>)</span></label>
+      <label class="r3bk__hp" aria-hidden="true">Сайт <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      <p class="r3bk__err" role="alert" hidden></p>
+      <button class="vf-btn vf-btn--primary r3bk__go" type="submit">Отправить заявку</button>
+    </div>
+    <div class="r3bk__done" hidden tabindex="-1">
+      <p class="r3bk__done-h">Заявка принята</p>
+      <p class="r3bk__done-p">Это прототип: заявка никуда не отправлена. На рабочем сайте мастер свяжется <span class="r3bk__done-via">по телефону</span>.</p>
+      <button class="vf-btn vf-btn--ghost vf-btn--sm r3bk__again" type="button">Заполнить заново</button>
+    </div>
+  </form>
+</section>

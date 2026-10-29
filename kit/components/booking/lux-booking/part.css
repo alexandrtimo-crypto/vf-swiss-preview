@@ -1,0 +1,65 @@
+/* Запись «дорого»: тёмное фото во весь экран и карточка-приглашение, заполняемая как фраза */
+.lux-booking { position: relative; min-height: 100vh; display: grid; place-items: center; padding: 16vh 16px; overflow: hidden; color: var(--vf-text); }
+.lux-booking *, .lux-booking *::before, .lux-booking *::after { box-sizing: border-box; }
+:where(.lux-booking) img { display: block; max-width: 100%; }
+:where(.lux-booking) a { color: inherit; }
+.lux-booking .visit__bg { position: absolute; inset: 0; }
+.lux-booking .visit__bg img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.08); filter: saturate(.3) sepia(.35) brightness(.34) contrast(1.1) blur(1.5px); }
+.lux-booking .visit__bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 50%, transparent, color-mix(in srgb, var(--vf-bg) 85%, transparent)); }
+.lux-booking .invite { position: relative; width: min(760px, 100%); padding: clamp(36px, 6vw, 80px) clamp(24px, 6vw, 84px); background: radial-gradient(ellipse at 30% 10%, #fbf7ef, var(--vf-paper, #f4eee3) 50%, #ebe1cf);
+  color: var(--vf-paper-ink, #2a221a); box-shadow: 0 80px 140px -40px rgba(0,0,0,.9), 0 20px 50px rgba(0,0,0,.35); transform: rotate(-.5deg);
+  --vf-field-fg: var(--vf-paper-ink, #2a221a); --vf-field-accent: var(--vf-bronze, #8a6a3e);
+  --vf-btn-bg: var(--vf-paper-ink, #2a221a); --vf-btn-on: var(--vf-paper, #f4eee3); --vf-btn-bg-hover: #47392a; }
+.lux-booking .invite::before { content: ''; position: absolute; inset: 14px; border: 1px solid color-mix(in srgb, var(--vf-bronze, #8a6a3e) 38%, transparent); pointer-events: none; }
+.lux-booking .invite::after { content: ''; position: absolute; inset: 19px; border: 1px solid color-mix(in srgb, var(--vf-bronze, #8a6a3e) 16%, transparent); pointer-events: none; }
+.lux-booking .invite__kicker { margin: 0 0 20px; text-align: center; font: 400 11px/1 var(--vf-font-text); letter-spacing: .48em; text-transform: uppercase; color: var(--vf-bronze, #8a6a3e); }
+.lux-booking .invite__title { margin: 0 0 44px; text-align: center; font: 400 clamp(34px, 4vw, 58px)/1.04 var(--vf-font-display); letter-spacing: -.015em; }
+.lux-booking .invite__title em { color: var(--vf-bronze, #8a6a3e); }
+.lux-booking .invite__sentence { position: relative; z-index: 1; margin: 0 0 28px; font: 400 clamp(22px, 2.2vw, 30px)/2.1 var(--vf-font-display); }
+.lux-booking .invite__sentence--sm { font-size: clamp(19px, 1.8vw, 24px); margin-bottom: 8px; }
+.lux-booking .field input { width: 8.6em; }
+.lux-booking .field--tel input { width: 10.6em; }
+.lux-booking .field--area { display: block; }
+.lux-booking .field--area textarea { width: 100%; font-size: clamp(18px, 1.6vw, 22px); min-height: 3.2em; padding-left: 0; }
+.lux-booking .invite__how { border: 0; padding: 0; margin: 0 0 26px; display: flex; flex-wrap: wrap; gap: 12px; }
+.lux-booking .invite__how legend { padding: 0; margin-bottom: 14px; font: italic 400 18px/1.3 var(--vf-font-display); color: var(--vf-paper-mute, #7a6d5c); }
+.lux-booking .pill { position: relative; }
+.lux-booking .pill input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+.lux-booking .pill span { display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--vf-paper-ink, #2a221a) 32%, transparent); font-size: 14px; letter-spacing: .05em; cursor: pointer; transition: background .4s, color .4s, border-color .4s; }
+.lux-booking .pill input:checked + span { background: var(--vf-paper-ink, #2a221a); color: var(--vf-paper, #f4eee3); border-color: var(--vf-paper-ink, #2a221a); }
+.lux-booking .pill input:focus-visible + span { outline: 1px solid var(--vf-bronze, #8a6a3e); outline-offset: 3px; }
+.lux-booking .invite__more { margin: 6px 0 0; }
+.lux-booking .invite__more summary { cursor: pointer; list-style: none; display: inline-flex; align-items: baseline; gap: 8px; min-height: 44px; padding-top: 10px; font: italic 400 21px/1.3 var(--vf-font-display); }
+.lux-booking .invite__more summary::-webkit-details-marker { display: none; }
+.lux-booking .invite__more summary::before { content: '+'; font: 300 22px/1 var(--vf-font-text); color: var(--vf-bronze, #8a6a3e); transition: transform .5s var(--vf-ease); }
+.lux-booking .invite__more[open] summary::before { transform: rotate(45deg); }
+.lux-booking .invite__more summary span { font: 400 13px/1 var(--vf-font-text); color: var(--vf-paper-mute, #7a6d5c); }
+.lux-booking .invite__more[open] > :not(summary) { animation: lux-booking-unfold .8s var(--vf-ease) both; }
+@keyframes lux-booking-unfold { from { opacity: 0; transform: translateY(-8px); } }
+.lux-booking .invite__file { position: relative; display: inline-flex; align-items: center; min-height: 44px; margin-top: 14px; cursor: pointer; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; border-bottom: 1px solid var(--vf-bronze, #8a6a3e); }
+.lux-booking .invite__file input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+.lux-booking .invite__file:focus-within { outline: 1px solid var(--vf-bronze, #8a6a3e); outline-offset: 4px; }
+.lux-booking .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.lux-booking .invite__consent { display: flex; gap: 14px; align-items: flex-start; margin: 30px 0 6px; font-size: 13px; line-height: 1.55; color: #5b4f41; cursor: pointer; }
+.lux-booking .invite__consent input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--vf-paper-ink, #2a221a); }
+.lux-booking .invite__err { min-height: 1.6em; margin: 6px 0 10px; font-size: 14px; color: var(--vf-danger); }
+.lux-booking .invite__send { display: flex; width: 100%; }
+.lux-booking:not(.is-js) .invite__send { display: none; }
+.lux-booking .invite__noscript { font-size: 15px; color: var(--vf-paper-ink, #2a221a); }
+.lux-booking .invite__done { text-align: center; padding: 30px 0; outline: none; }
+.lux-booking .invite__done-text { max-width: 36ch; margin: 0 auto; color: #5b4f41; }
+
+@media (max-width: 899px) {
+  .lux-booking { padding: 90px 12px 110px; }
+  .lux-booking .invite { transform: none; }
+  .lux-booking .invite::before { inset: 8px; } .lux-booking .invite::after { inset: 12px; }
+  .lux-booking .invite__title { font-size: 36px; margin-bottom: 32px; }
+  .lux-booking .invite__sentence { font-size: 22px; line-height: 2.05; }
+  .lux-booking .field input { width: 100%; max-width: 12em; }
+  .lux-booking .pill span { padding: 0 18px; }
+  .lux-booking .invite__more summary { flex-wrap: wrap; }
+  .lux-booking .invite__more summary span { flex-basis: 100%; padding-left: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lux-booking *, .lux-booking *::before, .lux-booking *::after { animation: none !important; transition-duration: .01ms !important; }
+}

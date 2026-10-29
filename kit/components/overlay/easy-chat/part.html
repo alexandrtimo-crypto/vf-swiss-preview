@@ -1,0 +1,20 @@
+<div data-part="easy-chat" data-slot="overlay" class="easy-chat" hidden>
+  <div class="chat__backdrop" data-close></div>
+  <section class="chat__panel" role="dialog" aria-modal="true" aria-labelledby="easy-chat-title">
+    <header class="chat__head">
+      <span class="chat__ava" aria-hidden="true"></span>
+      <span class="chat__who"><b id="easy-chat-title">VF swiss</b><small>помощник мастерской</small></span>
+      <button class="vf-btn vf-btn--sm is-xs chat__toform" type="button">Заполнить формой</button>
+      <button class="iconbtn" type="button" data-close aria-label="Закрыть чат"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </header>
+    <div class="chat__log" aria-live="polite"></div>
+    <div class="chat__actions"></div>
+    <form class="chat__composer" autocomplete="on" novalidate>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="sr" for="easy-chat-say">Сообщение</label>
+      <input class="vf-input chat__say" id="easy-chat-say" name="say" type="text" placeholder="Напишите вопрос…" enterkeyhint="send">
+      <button class="send" type="submit" aria-label="Отправить"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+    </form>
+    <input type="file" class="chat__photo" accept="image/*" multiple hidden>
+  </section>
+</div>

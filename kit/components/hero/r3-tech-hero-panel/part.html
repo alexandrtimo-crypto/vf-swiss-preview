@@ -1,0 +1,39 @@
+<section data-part="r3-tech-hero-panel" data-slot="hero" class="r3hp" id="top" aria-labelledby="r3hp-h">
+  <div class="r3hp__pin">
+    <div class="r3hp__win">
+    <div class="r3hp__port">
+      <video class="r3hp__vid" muted loop playsinline preload="metadata" poster="{{media}}/vid/hero-poster.webp" aria-label="Видео с верстака: пинцет над механизмом часов">
+        <source src="{{media}}/vid/hero.mp4" type="video/mp4">
+      </video>
+      <p class="r3hp__cap">Видео с верстака мастерской на Петровке</p>
+    </div>
+    <div class="r3hp__frame" aria-hidden="true"><i class="r3hp__screw t" style="--u:.05;--i:0"></i><i class="r3hp__screw t" style="--u:.23;--i:1"></i><i class="r3hp__screw t" style="--u:.41;--i:2"></i><i class="r3hp__screw t" style="--u:.59;--i:3"></i><i class="r3hp__screw t" style="--u:.77;--i:4"></i><i class="r3hp__screw t" style="--u:.95;--i:5"></i><i class="r3hp__screw r" style="--u:.3;--i:6"></i><i class="r3hp__screw r" style="--u:.7;--i:7"></i><i class="r3hp__screw b" style="--u:.95;--i:8"></i><i class="r3hp__screw b" style="--u:.77;--i:9"></i><i class="r3hp__screw b" style="--u:.59;--i:10"></i><i class="r3hp__screw b" style="--u:.41;--i:11"></i><i class="r3hp__screw b" style="--u:.23;--i:12"></i><i class="r3hp__screw b" style="--u:.05;--i:13"></i><i class="r3hp__screw l" style="--u:.7;--i:14"></i><i class="r3hp__screw l" style="--u:.3;--i:15"></i></div>
+    </div>
+    <div class="r3hp__copy">
+      <h1 class="r3hp__h" id="r3hp-h"><span class="r3hp__pre">Ремонт и обслуживание швейцарских часов</span> <span class="r3hp__big">до последнего винта</span></h1>
+      <p class="r3hp__lead">Мастер разбирает механизм полностью, ставит оригинальные комплектующие и проверяет ход на таймграфере. Диагностика бесплатно, гарантия до двух лет.</p>
+      <p class="r3hp__reach"><a href="tel:+79651716996">8 (965) 171-69-96</a><a href="tel:+79162459223">8 (916) 245-92-23</a><a href="https://t.me/VFswissboutique">Telegram @VFswissboutique</a><span class="r3hp__addr">Петровка, 23/10 стр. 5</span></p>
+    </div>
+    <form class="r3hp__card" novalidate aria-labelledby="r3hp-card-h">
+      <div class="r3hp__card-in">
+        <h2 class="r3hp__card-h" id="r3hp-card-h">Заявка на&nbsp;диагностику</h2>
+        <p class="r3hp__card-sub">Бесплатно. Перезвоним или напишем в&nbsp;Telegram.</p>
+        <label class="vf-field"><span>Телефон</span><input class="vf-input" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required aria-describedby="r3hp-err"></label>
+        <label class="vf-field"><span>Марка часов</span><input class="vf-input" type="text" name="brand" autocomplete="off" placeholder="Например, Rolex или Cartier"></label>
+        <fieldset class="r3hp__via"><legend class="visually-hidden">Как связаться</legend>
+          <label><input type="radio" name="contact" value="call" checked><span>Звонок</span></label>
+          <label><input type="radio" name="contact" value="telegram"><span>Telegram</span></label>
+        </fieldset>
+        <label class="r3hp__consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных (<a href="#r3-policy">политика</a>)</span></label>
+        <label class="r3hp__hp" aria-hidden="true">Сайт <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        <p class="r3hp__err" id="r3hp-err" role="alert" hidden></p>
+        <button class="vf-btn vf-btn--primary r3hp__go" type="submit">Записаться на диагностику</button>
+      </div>
+      <div class="r3hp__done" hidden tabindex="-1">
+        <p class="r3hp__done-h">Заявка принята</p>
+        <p>Это прототип — заявка никуда не отправлена. На рабочем сайте мастер свяжется удобным вам способом.</p>
+        <button class="vf-btn vf-btn--ghost vf-btn--sm r3hp__again" type="button">Новая заявка</button>
+      </div>
+    </form>
+  </div>
+</section>

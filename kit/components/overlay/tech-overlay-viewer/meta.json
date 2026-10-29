@@ -1,0 +1,1 @@
+{ "id": "tech-overlay-viewer", "slot": "overlay", "title": "Просмотрщик снимков (полный экран)", "vision": "tech", "description": "Модальный <dialog>: снимок на весь экран, касание — увеличение ×2.6 в точке, свайп и стрелки ←/→. Открывается событием vf:viewer { items, index } от любого блока работ.", "fonts": [], "needs": [] }

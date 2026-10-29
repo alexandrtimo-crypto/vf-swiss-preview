@@ -1,0 +1,75 @@
+<section data-part="r3-easy-hero-tag" data-slot="hero" class="r3h" aria-labelledby="r3h-title">
+  <div class="r3h__in">
+    <div class="r3h__copy">
+      <h1 id="r3h-title" class="r3h__title">Часы в&nbsp;ремонт&nbsp;—<br>под&nbsp;номером</h1>
+      <p class="r3h__lede">Мастерская швейцарских часов на&nbsp;Петровке. У&nbsp;каждого клиента — карточка с&nbsp;номером и&nbsp;QR личного кабинета.</p>
+      <p class="r3h__facts"><span>Диагностика бесплатно</span><span>Гарантия до&nbsp;двух лет</span><span>Оригинальные комплектующие</span></p>
+      <figure class="r3h__print">
+        <img src="{{media}}/img/ex_19.webp" width="1200" height="898" alt="Механизм часов, разобранный на детали и разложенный на листе: платина, колёса, мост, циферблат, корпус и безель." decoding="async">
+        <figcaption>Разбираем до&nbsp;последнего винта. Кадр с&nbsp;верстака мастерской.</figcaption>
+      </figure>
+    </div>
+
+    <div class="r3h__hang">
+      <svg class="r3h__thread" viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M17 0 C 17 40, 19 70, 20 100"/><path d="M23 0 C 23 40, 21 70, 20 100"/>
+      </svg>
+      <form class="r3h__tag" novalidate aria-labelledby="r3h-tag-title">
+        <div class="r3h__body">
+          <span class="r3h__eyelet" aria-hidden="true"></span>
+          <p class="r3h__head" id="r3h-tag-title"><b>Бирка ремонта</b><span aria-hidden="true">№ <i></i></span></p>
+
+          <a class="r3h__call" href="tel:+79651716996">
+            <span class="r3h__call-l">Позвонить мастеру</span>
+            <span class="r3h__call-n">8&nbsp;(965)&nbsp;171-69-96</span>
+          </a>
+
+          <p class="r3h__or"><span>или оставьте свой — перезвоним сами</span></p>
+
+          <div class="vf-field r3h__phone">
+            <label for="r3h-phone">Ваш телефон</label>
+            <input class="vf-input" id="r3h-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" aria-describedby="r3h-phone-err" required>
+            <p class="vf-field__err" id="r3h-phone-err" aria-live="polite"></p>
+          </div>
+
+          <fieldset class="r3h__via">
+            <legend>Связаться:</legend>
+            <label><input type="radio" name="contact" value="call" checked><span>звонком</span></label>
+            <label><input type="radio" name="contact" value="telegram"><span>в&nbsp;Telegram</span></label>
+          </fieldset>
+
+          <details class="r3h__more">
+            <summary>Добавить марку и что случилось</summary>
+            <div class="r3h__more-in">
+              <div class="vf-field"><label for="r3h-brand">Марка часов</label><input class="vf-input" id="r3h-brand" name="brand" type="text" autocomplete="off" placeholder="Например, Omega"></div>
+              <div class="vf-field"><label for="r3h-desc">Что с часами</label><textarea class="vf-input" id="r3h-desc" name="description" rows="2" placeholder="Остановились, отстают, нужна полировка…"></textarea></div>
+            </div>
+          </details>
+
+          <div class="r3h__hp" aria-hidden="true"><label>Сайт<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+
+          <label class="r3h__consent">
+            <input type="checkbox" name="consent" aria-describedby="r3h-consent-err">
+            <span>Согласен на&nbsp;обработку персональных данных по&nbsp;<a href="#" data-stub>политике</a></span>
+          </label>
+          <p class="vf-field__err r3h__consent-err" id="r3h-consent-err" aria-live="polite"></p>
+
+          <button class="vf-btn vf-btn--primary r3h__send" type="submit">Жду звонка</button>
+        </div>
+
+        <div class="r3h__stub" tabindex="-1">
+          <div class="r3h__stub-idle">
+            <p class="r3h__stub-h">Корешок <small>VF swiss · Петровка, 23/10 стр. 5</small></p>
+            <p>Остаётся у&nbsp;вас. При приёмке часов получите карточку клиента с&nbsp;номером и&nbsp;QR.</p>
+          </div>
+          <div class="r3h__stub-done" role="status" aria-live="polite" hidden>
+            <p class="r3h__stub-h">Заявка принята <small>(прототип)</small></p>
+            <p class="r3h__stub-msg"></p>
+            <button class="r3h__again" type="button">Исправить номер</button>
+          </div>
+        </div>
+      </form>
+      <p class="r3h__tg-alt">Удобнее сразу написать? <a href="https://t.me/VFswissboutique" target="_blank" rel="noopener">Telegram @VFswissboutique</a></p>
+    </div>
+  </div>
+</section>

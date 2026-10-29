@@ -1,0 +1,9 @@
+{
+  "id": "easy-header",
+  "slot": "header",
+  "title": "Шапка · легко",
+  "vision": "easy",
+  "description": "Логотип-наклейка VF с наклоном и телефон в «таблетке» с объёмной тенью.",
+  "fonts": ["Nunito:wght@500..900"],
+  "needs": []
+}

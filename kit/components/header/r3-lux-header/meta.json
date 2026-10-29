@@ -1,0 +1,1 @@
+{ "id": "r3-lux-header", "slot": "header", "title": "Шапка · полоса ценной бумаги", "vision": "r3-lux", "description": "Тонкая липкая полоса на защитной бумаге: гильоше-эмблема и «VF SWISS», якоря, телефон, бордовая кнопка-печать «Записаться». Нижний край — гильоше-линейка.", "fonts": [], "needs": ["kit/lib/motion.js", "kit/lib/r3lux-engrave.js"] }

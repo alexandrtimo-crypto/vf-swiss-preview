@@ -1,0 +1,26 @@
+/* Плавающая связь «дорого» (телефон): круглая кнопка раскрывается в «Позвонить» / «Telegram». Работает без JS */
+.lux-dock { display: none; position: fixed; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 60; transition: opacity .5s, transform .5s var(--vf-ease); color: var(--vf-bg); }
+.lux-dock *, .lux-dock *::before, .lux-dock *::after { box-sizing: border-box; }
+.lux-dock.is-hidden { opacity: 0; transform: translateY(24px); pointer-events: none; }
+.lux-dock summary { list-style: none; position: relative; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  background: var(--vf-paper, #f4eee3); color: var(--vf-bg); box-shadow: 0 14px 34px rgba(0,0,0,.55), 0 0 0 1px color-mix(in srgb, var(--vf-accent) 50%, transparent); }
+.lux-dock summary::-webkit-details-marker { display: none; }
+.lux-dock summary::after { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--vf-accent-2) 40%, transparent); }
+.lux-dock.is-motion summary::after { animation: lux-dock-halo 3.6s var(--vf-ease) infinite; }
+@keyframes lux-dock-halo { 0% { transform: scale(.9); opacity: .9; } 70%, 100% { transform: scale(1.35); opacity: 0; } }
+.lux-dock .reach__ico { width: 22px; height: 22px; fill: var(--vf-bg); }
+.lux-dock .reach__x { display: none; font: 300 30px/1 var(--vf-font-text); }
+.lux-dock[open] .reach__ico { display: none; }
+.lux-dock[open] .reach__x { display: block; }
+.lux-dock .reach__menu { position: absolute; right: 0; bottom: 74px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.lux-dock .reach__menu a { display: inline-flex; align-items: center; min-height: 50px; padding: 0 24px; border-radius: 999px; text-decoration: none; white-space: nowrap;
+  background: var(--vf-paper, #f4eee3); color: var(--vf-bg); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; box-shadow: 0 12px 30px rgba(0,0,0,.5); }
+.lux-dock[open] .reach__menu a { animation: lux-dock-rise .6s var(--vf-ease) both; }
+.lux-dock[open] .reach__menu a + a { animation-delay: .08s; }
+@keyframes lux-dock-rise { from { opacity: 0; transform: translateY(26px); filter: blur(8px); letter-spacing: .02em; } }
+@media (max-width: 899px) {
+  .lux-dock { display: block; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lux-dock, .lux-dock *, .lux-dock *::before, .lux-dock *::after { animation: none !important; transition-duration: .01ms !important; }
+}

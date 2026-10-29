@@ -1,0 +1,2 @@
+{ "name": "r3-lux", "title": "VF swiss — ремонт и обслуживание швейцарских часов", "tokens": "r3-lux", "buttons": "r3-lux", "fields": "r3-lux", "icons": "lucide", "sounds": "zen",
+  "parts": ["r3-lux-header", "r3-lux-medallion", "r3-lux-vignettes", "r3-lux-denominations", "r3-lux-serials", "r3-lux-enamel", "r3-lux-brands", "r3-lux-form", "r3-lux-contacts", "r3-lux-footer", "r3-lux-dock", "lib-sound-toggle"] }

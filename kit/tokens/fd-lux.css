@@ -1,0 +1,30 @@
+/* title: fd-lux — эмаль и воронёная сталь */
+/* fonts: Old Standard TT:ital,wght@0,400%3B0,700%3B1,400 */
+:root {
+  --vf-bg: #EDEFF1;          /* эмаль циферблата */
+  --vf-bg-2: #E3E6EA;
+  --vf-surface: #F6F7F8;
+  --vf-text: #1C2340;        /* чернила */
+  --vf-text-2: #3A4260;
+  --vf-muted: #59607A;
+  --vf-line: #C9CDD6;
+  --vf-accent: #22388A;      /* воронёная сталь */
+  --vf-accent-2: #121C3E;    /* ночь — тёмные полосы */
+  --vf-on-accent: #F3F4F6;
+  --vf-danger: #A3261D;
+  --vf-metal: #A8823A;       /* золото механизма: только линии и декор */
+  --vf-metal-on-dark: #CDAA63;
+  --vf-font-display: 'Old Standard TT', 'Times New Roman', serif;
+  --vf-font-text: 'Old Standard TT', 'Times New Roman', serif;
+  --vf-font-mono: 'Old Standard TT', serif;
+  --vf-radius: 3px;
+  --vf-radius-lg: 6px;
+  --vf-ease: cubic-bezier(.2, .7, .2, 1);
+  /* шкала Брингхерста: 14 16 18 21 24 36 48 60 72 */
+  --fd-s1: 14px; --fd-s2: 16px; --fd-s3: 18px; --fd-s4: 21px; --fd-s5: 24px;
+  --fd-s6: 36px; --fd-s7: 48px; --fd-s8: 60px; --fd-s9: 72px;
+}
+html { background: var(--vf-bg); -webkit-text-size-adjust: 100%; scroll-padding-top: 84px; }
+body.vf-page { margin: 0; background: var(--vf-bg); color: var(--vf-text); font: 400 18px/1.65 var(--vf-font-text); font-kerning: normal; text-rendering: optimizeLegibility; }
+body.vf-page :focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

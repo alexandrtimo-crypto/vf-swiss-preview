@@ -1,0 +1,10 @@
+.lib-sound-toggle { position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 60; }
+.lib-sound-toggle__btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+  font: 500 13px/1 var(--vf-font-text); color: var(--vf-text); background: var(--vf-surface, var(--vf-bg-2)); border: 1px solid var(--vf-line);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .18); }
+.lib-sound-toggle__btn:hover { border-color: var(--vf-accent); }
+.lib-sound-toggle__btn:focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+.lib-sound-toggle__on, .lib-sound-toggle__btn[data-state="on"] .lib-sound-toggle__off { display: none; }
+.lib-sound-toggle__btn[data-state="on"] .lib-sound-toggle__on { display: inline-block; color: var(--vf-accent); }
+/* Телефон: не плавает поверх текста — тихая строка в конце страницы (над нижней панелью связи) */
+@media (max-width: 720px) { .lib-sound-toggle { position: static; display: flex; justify-content: center; padding: 16px 16px calc(96px + env(safe-area-inset-bottom)); } .lib-sound-toggle__btn { box-shadow: none; } }

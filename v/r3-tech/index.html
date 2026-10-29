@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="ru" data-recipe="r3-tech">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>VF swiss — ремонт и обслуживание швейцарских часов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Extra+Condensed:wght@600..900&family=Sofia+Sans:wght@400..700&display=swap">
+<style>
+/* title: Ангар · техобслуживание часов */
+/* fonts: Sofia Sans Extra Condensed:wght@600..900; Sofia Sans:wght@400..700 */
+/* Мир «авиационное ТО»: алюминиевая обшивка, швы из заклёпок, цинк-хроматный грунт, красная бирка действия. Глобальные правила сайта — только здесь. */
+:root{
+  --vf-bg:#dce0e3;          /* алюминий обшивки */
+  --vf-bg-2:#cdd4d6;        /* соседний лист, тень ангара */
+  --vf-surface:#edf1f2;     /* светлая накладка, рамка лючка */
+  --vf-text:#1b2125;        /* графит маркировки */
+  --vf-text-2:#3c4448;
+  --vf-muted:#50585c;
+  --vf-line:rgba(27,33,37,.2);
+  --vf-accent:#c8241f;      /* красная бирка: только действие */
+  --vf-accent-2:#cbd252;    /* цинк-хроматный грунт */
+  --vf-on-accent:#ffffff;
+  --vf-danger:#9e1418;
+  --vf-font-display:"Sofia Sans Extra Condensed","Arial Narrow",system-ui,sans-serif;
+  --vf-font-text:"Sofia Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --vf-font-mono:ui-monospace,Menlo,Consolas,monospace;
+  --vf-radius:4px;
+  --vf-radius-lg:14px;
+  --vf-ease:cubic-bezier(.16,1,.3,1);
+  /* особые токены мира r3-tech (компоненты читают их с запасным значением) */
+  --vf-primer:#cbd252;
+  --vf-primer-2:#bcc345;
+  --vf-primer-ink:#2b2d0e;
+  --vf-graph:#1a1f22;       /* тёмный ангар */
+  --vf-graph-2:#262c30;
+  --vf-on-graph:#e4e9eb;
+  --vf-on-graph-2:#a7afb3;
+  --vf-accent-hover:#a91c18;
+  --vf-pad:clamp(16px,3.2vw,48px);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:76px;scrollbar-color:#8a9397 var(--vf-bg-2);scrollbar-width:thin}
+html::-webkit-scrollbar{width:10px;height:10px}
+html::-webkit-scrollbar-track{background:var(--vf-bg-2)}
+html::-webkit-scrollbar-thumb{background:#8a9397;border:2px solid var(--vf-bg-2);border-radius:2px}
+.vf-page{margin:0;background-color:var(--vf-bg);color:var(--vf-text);font-family:var(--vf-font-text);font-weight:400;font-size:17px;line-height:1.5;overflow-x:clip;-webkit-font-smoothing:antialiased;caret-color:var(--vf-accent);font-variant-numeric:lining-nums tabular-nums;
+  /* шлифовка листа: еле заметная продольная риска */
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px)}
+.vf-page ::selection{background:var(--vf-primer);color:var(--vf-text)}
+img,video,canvas,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.2em}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--vf-text);outline-offset:3px;border-radius:2px}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:820px){.vf-page{font-size:16px}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+/* title: Кнопки · бирка и трафарет */
+/* Основная — красная бирка с люверсом; второстепенная — трафаретная рамка по металлу. */
+.vf-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border:0;border-radius:var(--vf-radius);text-decoration:none;font-family:var(--vf-font-display);font-weight:800;font-size:21px;line-height:1;letter-spacing:.045em;text-transform:uppercase;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:transform .2s var(--vf-ease),background-color .2s,box-shadow .2s,color .2s}
+.vf-btn svg{width:18px;height:18px;flex:none}
+.vf-btn--primary{padding-left:42px;background:var(--vf-accent);color:var(--vf-on-accent);
+  -webkit-mask:radial-gradient(circle 4.5px at 19px 50%,transparent 97%,#000 100%);mask:radial-gradient(circle 4.5px at 19px 50%,transparent 97%,#000 100%);
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.18)}
+.vf-btn--primary::before{content:"";position:absolute;left:12px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;box-shadow:inset 0 0 0 2.5px #e9eef0,inset 0 0 0 3.5px rgba(0,0,0,.25)}
+.vf-btn--primary:hover{background:var(--vf-accent-hover,#a91c18);transform:translateX(2px)}
+.vf-btn--primary:active{transform:translateX(2px) translateY(1px);box-shadow:inset 0 2px 0 rgba(0,0,0,.2)}
+.vf-btn--ghost{background:transparent;color:currentColor;box-shadow:inset 0 0 0 1.5px currentColor}
+.vf-btn--ghost:hover{background:color-mix(in srgb,currentColor 9%,transparent)}
+.vf-btn--ghost:active{transform:translateY(1px)}
+.vf-btn--sm{min-height:42px;padding:0 16px;font-size:18px}
+.vf-btn--primary.vf-btn--sm{padding-left:36px;-webkit-mask:radial-gradient(circle 4px at 16px 50%,transparent 97%,#000 100%);mask:radial-gradient(circle 4px at 16px 50%,transparent 97%,#000 100%)}
+.vf-btn--primary.vf-btn--sm::before{left:10px;width:12px;height:12px;margin-top:-6px}
+.vf-btn:focus-visible{outline:2px solid var(--vf-text);outline-offset:3px}
+.vf-btn:disabled,.vf-btn[aria-disabled="true"]{opacity:.5;cursor:not-allowed;transform:none}
+.vf-btn[aria-busy="true"]{cursor:progress;opacity:.8}
+@media (prefers-reduced-motion:reduce){.vf-btn{transition:none}.vf-btn:hover,.vf-btn:active{transform:none}}
+
+/* title: Поля · карта-наряд */
+/* Подпись — трафаретом над полем, поле — светлая накладка с тонкой кромкой. */
+.vf-field{display:grid;gap:6px;border:0;margin:0;padding:0;min-width:0}
+.vf-field > span,.vf-field > legend{font-family:var(--vf-font-display);font-weight:700;font-size:15px;line-height:1.1;letter-spacing:.08em;text-transform:uppercase;color:currentColor;padding:0}
+.vf-input{width:100%;min-height:50px;padding:12px 14px;border:0;border-radius:var(--vf-radius);background:var(--vf-surface);color:var(--vf-text);box-shadow:inset 0 0 0 1px rgba(27,33,37,.28),inset 0 2px 3px rgba(27,33,37,.08);font:400 18px/1.3 var(--vf-font-text);transition:box-shadow .2s,background-color .2s;caret-color:var(--vf-accent)}
+.vf-input::placeholder{color:#6a7276;opacity:1}
+.vf-input:hover{box-shadow:inset 0 0 0 1px rgba(27,33,37,.5),inset 0 2px 3px rgba(27,33,37,.08)}
+.vf-input:focus{outline:0;background:#fff;box-shadow:inset 0 0 0 2px var(--vf-text)}
+.vf-input[aria-invalid="true"]{box-shadow:inset 0 0 0 2px var(--vf-danger);background:#fff6f5}
+.vf-input:disabled{opacity:.55}
+textarea.vf-input{min-height:104px;resize:vertical;line-height:1.45}
+input[type="file"].vf-input{padding:11px 12px;font-size:16px}
+input[type="file"].vf-input::file-selector-button{margin-right:12px;padding:6px 12px;border:0;border-radius:3px;background:var(--vf-text);color:var(--vf-surface);font:700 15px/1.1 var(--vf-font-display);letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+@media (max-width:820px){.vf-input{font-size:17px}}
+@media (prefers-reduced-motion:reduce){.vf-input{transition:none}}
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── r3-tech-header ── */
+[data-part="r3-tech-header"]{--hh:64px;position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:clamp(16px,2.4vw,40px);height:var(--hh);padding:0 var(--vf-pad,28px);background:var(--vf-bg);color:var(--vf-text);
+  box-shadow:0 1px 0 rgba(27,33,37,.22),0 6px 14px -12px rgba(27,33,37,.5)}
+/* шов: ряд потайных заклёпок вдоль нижней кромки */
+[data-part="r3-tech-header"]::after{content:"";position:absolute;left:0;right:0;bottom:5px;height:4px;pointer-events:none;
+  background:radial-gradient(circle at 2px 2px,rgba(27,33,37,.38) 0 1.1px,rgba(255,255,255,.7) 1.4px,transparent 2px) 0 0/14px 4px repeat-x;opacity:.75}
+[data-part="r3-tech-header"] .r3h__brand{display:flex;align-items:baseline;gap:6px;text-decoration:none;font-family:var(--vf-font-display);text-transform:uppercase;line-height:1}
+[data-part="r3-tech-header"] .r3h__vf{font-weight:900;font-size:30px;letter-spacing:-.01em}
+[data-part="r3-tech-header"] .r3h__sw{font-weight:700;font-size:19px;letter-spacing:.14em}
+[data-part="r3-tech-header"] .r3h__nav{display:flex;gap:clamp(14px,1.8vw,28px);margin-left:auto}
+[data-part="r3-tech-header"] .r3h__nav a{position:relative;font-family:var(--vf-font-display);font-weight:700;font-size:17px;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;padding:6px 0}
+[data-part="r3-tech-header"] .r3h__nav a::after{content:"";position:absolute;left:0;right:0;bottom:1px;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .25s var(--vf-ease)}
+[data-part="r3-tech-header"] .r3h__nav a:hover::after,[data-part="r3-tech-header"] .r3h__nav a:focus-visible::after{transform:scaleX(1)}
+[data-part="r3-tech-header"] .r3h__reach{display:flex;align-items:center;gap:clamp(10px,1.4vw,20px)}
+[data-part="r3-tech-header"] .r3h__tel,[data-part="r3-tech-header"] .r3h__tg{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:600;font-size:16px;white-space:nowrap;min-height:42px}
+[data-part="r3-tech-header"] .r3h__tel:hover span,[data-part="r3-tech-header"] .r3h__tg:hover span{text-decoration:underline}
+[data-part="r3-tech-header"] svg{width:19px;height:19px;flex:none}
+@media (max-width:1180px){[data-part="r3-tech-header"] .r3h__nav{display:none}[data-part="r3-tech-header"] .r3h__reach{margin-left:auto}}
+@media (max-width:899px){
+  [data-part="r3-tech-header"]{--hh:56px}
+  [data-part="r3-tech-header"] .r3h__vf{font-size:26px}
+  [data-part="r3-tech-header"] .r3h__tel span,[data-part="r3-tech-header"] .r3h__tg span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  [data-part="r3-tech-header"] .r3h__tel,[data-part="r3-tech-header"] .r3h__tg{width:44px;justify-content:center;border-radius:4px;box-shadow:inset 0 0 0 1.5px currentColor}
+  [data-part="r3-tech-header"] .r3h__reach{gap:8px}
+}
+@media (prefers-reduced-motion:reduce){[data-part="r3-tech-header"] .r3h__nav a::after{transition:none}}
+
+
+/* ── r3-tech-hero-panel ── */
+[data-part="r3-tech-hero-panel"]{
+  --hh:64px; --p:0;
+  --t0:20px; --l0:28px; --r0:28px; --b0:42%; --R0:14px; --cardw:clamp(320px,26vw,384px);
+  /* p: 0→1 прокрутка через сцену. Винты: .00–.29, рамка: .26–.38, раскрытие: .36–.96 */
+  --f:clamp(0, calc((var(--p) - .26) / .12), 1);
+  --e:clamp(0, calc((var(--p) - .36) / .6), 1);
+  --ct:calc(var(--t0) * (1 - var(--e))); --cb:calc(var(--b0) * (1 - var(--e)));
+  --cl:calc(var(--l0) * (1 - var(--e))); --cr:calc(var(--r0) * (1 - var(--e)));
+  --cR:calc(var(--R0) * (1 - var(--e)));
+  position:relative;overflow-x:clip;color:var(--vf-text);background:var(--vf-bg)}
+[data-part="r3-tech-hero-panel"] .r3hp__pin{position:relative;height:calc(100svh - var(--hh));min-height:640px;overflow:hidden}
+[data-part="r3-tech-hero-panel"].is-pinned{height:calc(100svh - var(--hh) + 110vh)}
+[data-part="r3-tech-hero-panel"].is-pinned .r3hp__pin{position:sticky;top:var(--hh)}
+
+/* лючок */
+[data-part="r3-tech-hero-panel"] .r3hp__win{position:absolute;inset:0;pointer-events:none}
+[data-part="r3-tech-hero-panel"] .r3hp__port{position:absolute;inset:0;background:var(--vf-graph,#1a1f22);clip-path:inset(var(--ct) var(--cr) var(--cb) var(--cl) round var(--cR));overflow:hidden;pointer-events:auto}
+[data-part="r3-tech-hero-panel"] .r3hp__vid{width:100%;height:100%;object-fit:cover;object-position:50% 46%;transform:scale(calc(1.03 - var(--e) * .03))}
+[data-part="r3-tech-hero-panel"] .r3hp__cap{position:absolute;left:var(--vf-pad,28px);bottom:28px;padding:8px 12px;border-radius:3px;background:rgba(26,31,34,.78);color:var(--vf-on-graph,#e4e9eb);font:700 16px/1.1 var(--vf-font-display);letter-spacing:.08em;text-transform:uppercase;opacity:clamp(0, calc((var(--e) - .75) * 4), 1)}
+/* прижимная рамка лючка: 11 мм накладка, по ней винты */
+[data-part="r3-tech-hero-panel"] .r3hp__frame{position:absolute;top:calc(var(--ct) - 11px);left:calc(var(--cl) - 11px);right:calc(var(--cr) - 11px);bottom:calc(var(--cb) - 11px);
+  border:11px solid #f3f6f7;border-radius:calc(var(--cR) + 11px);
+  box-shadow:0 0 0 1px rgba(27,33,37,.24),inset 0 0 0 1px rgba(27,33,37,.42),0 calc(4px + var(--f) * 18px) calc(10px + var(--f) * 30px) calc(-6px - var(--f) * 4px) rgba(20,26,29,.45);
+  transform:translateY(calc(var(--f) * -12px)) scale(calc(1 + var(--f) * .012));opacity:calc(1 - var(--f));will-change:transform}
+[data-part="r3-tech-hero-panel"] .r3hp__screw{--d:calc(var(--i) * .011);--s:clamp(0, calc((var(--p) - var(--d)) / .12), 1);--a:calc(var(--i) * 47deg);
+  position:absolute;width:15px;height:15px;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#fdfefe 0 14%,#c9d0d3 52%,#8a9397 100%);
+  box-shadow:0 0 0 1px rgba(20,26,29,.42),0 calc(var(--s) * 6px) calc(1px + var(--s) * 6px) rgba(20,26,29,.35),inset 0 -1px 1px rgba(0,0,0,.2);
+  transform:rotate(calc(var(--a) - var(--s) * 900deg)) scale(calc(1 + var(--s) * .45));
+  opacity:calc(1 - clamp(0, calc((var(--s) - .72) * 3.6), 1))}
+[data-part="r3-tech-hero-panel"] .r3hp__screw::before,[data-part="r3-tech-hero-panel"] .r3hp__screw::after{content:"";position:absolute;left:50%;top:50%;width:9px;height:2px;margin:-1px 0 0 -4.5px;border-radius:1px;background:#353d41}
+[data-part="r3-tech-hero-panel"] .r3hp__screw::after{transform:rotate(90deg)}
+[data-part="r3-tech-hero-panel"] .r3hp__screw.t{top:-13px;left:calc(var(--u) * 100% - 7.5px)}
+[data-part="r3-tech-hero-panel"] .r3hp__screw.b{bottom:-13px;left:calc(var(--u) * 100% - 7.5px)}
+[data-part="r3-tech-hero-panel"] .r3hp__screw.l{left:-13px;top:calc(var(--u) * 100% - 7.5px)}
+[data-part="r3-tech-hero-panel"] .r3hp__screw.r{right:-13px;top:calc(var(--u) * 100% - 7.5px)}
+
+/* маркировка на обшивке */
+[data-part="r3-tech-hero-panel"] .r3hp__copy{position:absolute;left:var(--l0);bottom:28px;width:calc(100% - var(--l0) - var(--r0) - var(--cardw) - 48px);display:grid;grid-template-columns:minmax(0,1fr);gap:14px;
+  transform:translateY(calc(var(--e) * 24vh));opacity:calc(1 - var(--e) * 3)}
+[data-part="r3-tech-hero-panel"] .r3hp__h{display:grid;gap:4px;font-family:var(--vf-font-display);color:var(--vf-text)}
+[data-part="r3-tech-hero-panel"] .r3hp__pre{font-weight:700;font-size:clamp(22px,2.25vw,34px);line-height:1.05;letter-spacing:.005em}
+[data-part="r3-tech-hero-panel"] .r3hp__big{font-weight:900;font-size:clamp(60px,8.3vw,140px);line-height:.84;letter-spacing:-.012em;text-transform:uppercase;margin-left:-.04em}
+[data-part="r3-tech-hero-panel"] .r3hp__lead{max-width:56ch;font-size:18px;line-height:1.45;color:var(--vf-text-2);text-wrap:pretty}
+[data-part="r3-tech-hero-panel"] .r3hp__reach{display:flex;flex-wrap:wrap;gap:6px 26px}
+[data-part="r3-tech-hero-panel"] .r3hp__reach a{font:800 21px/1.1 var(--vf-font-display);letter-spacing:.03em;text-decoration:none;border-bottom:1.5px solid rgba(27,33,37,.35);padding:4px 0}
+[data-part="r3-tech-hero-panel"] .r3hp__reach a:hover{border-bottom-color:currentColor}
+[data-part="r3-tech-hero-panel"] .r3hp__addr{font:700 21px/1.1 var(--vf-font-display);letter-spacing:.03em;padding:4px 0;color:var(--vf-text-2)}
+
+/* карта-наряд: пластина на грунте, привёрнута по углам */
+[data-part="r3-tech-hero-panel"] .r3hp__card{position:absolute;right:var(--r0);bottom:28px;width:var(--cardw);padding:22px 22px 24px;border-radius:6px;color:var(--vf-text);
+  background:
+    radial-gradient(circle at 11px 11px,rgba(43,45,14,.6) 0 2px,rgba(255,255,255,.5) 2.6px,transparent 3.2px),
+    radial-gradient(circle at calc(100% - 11px) 11px,rgba(43,45,14,.6) 0 2px,rgba(255,255,255,.5) 2.6px,transparent 3.2px),
+    radial-gradient(circle at 11px calc(100% - 11px),rgba(43,45,14,.6) 0 2px,rgba(255,255,255,.5) 2.6px,transparent 3.2px),
+    radial-gradient(circle at calc(100% - 11px) calc(100% - 11px),rgba(43,45,14,.6) 0 2px,rgba(255,255,255,.5) 2.6px,transparent 3.2px),
+    var(--vf-primer,#cbd252);
+  box-shadow:0 0 0 1px rgba(43,45,14,.25),0 22px 40px -22px rgba(20,26,29,.6),0 4px 10px -6px rgba(20,26,29,.3);
+  transform:translateY(calc(var(--e) * 24vh));opacity:calc(1 - var(--e) * 3)}
+[data-part="r3-tech-hero-panel"] .r3hp__card-in{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+[data-part="r3-tech-hero-panel"] .r3hp__card-h{font:900 32px/.92 var(--vf-font-display);text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
+[data-part="r3-tech-hero-panel"] .r3hp__card-sub{margin-top:-4px;font-size:15px;line-height:1.35;color:var(--vf-primer-ink,#2b2d0e)}
+[data-part="r3-tech-hero-panel"] .r3hp__via{display:grid;grid-template-columns:1fr 1fr;border:0;margin:0;padding:0;border-radius:4px;box-shadow:inset 0 0 0 1.5px var(--vf-text)}
+[data-part="r3-tech-hero-panel"] .r3hp__via label{position:relative;display:flex;align-items:center;justify-content:center;min-height:44px;cursor:pointer;font:800 18px/1 var(--vf-font-display);letter-spacing:.06em;text-transform:uppercase;border-radius:4px;transition:background-color .15s,color .15s}
+[data-part="r3-tech-hero-panel"] .r3hp__via input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+[data-part="r3-tech-hero-panel"] .r3hp__via label:has(input:checked){background:var(--vf-text);color:var(--vf-primer,#cbd252)}
+[data-part="r3-tech-hero-panel"] .r3hp__via label:has(input:focus-visible){outline:2px solid var(--vf-text);outline-offset:2px}
+[data-part="r3-tech-hero-panel"] .r3hp__via label:hover:not(:has(input:checked)){background:rgba(27,33,37,.1)}
+[data-part="r3-tech-hero-panel"] .r3hp__consent{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start;font-size:14px;line-height:1.35;color:var(--vf-primer-ink,#2b2d0e);cursor:pointer}
+[data-part="r3-tech-hero-panel"] .r3hp__consent input{width:18px;height:18px;margin:1px 0 0;accent-color:var(--vf-text)}
+[data-part="r3-tech-hero-panel"] .r3hp__consent.is-bad span{color:var(--vf-danger);font-weight:600}
+[data-part="r3-tech-hero-panel"] .r3hp__hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+[data-part="r3-tech-hero-panel"] .r3hp__err{padding:8px 10px;border-radius:3px;background:rgba(255,255,255,.72);color:var(--vf-danger);font-size:15px;font-weight:600;line-height:1.3}
+[data-part="r3-tech-hero-panel"] .r3hp__go{width:100%}
+[data-part="r3-tech-hero-panel"] .r3hp__done{display:grid;gap:12px;outline:0}
+[data-part="r3-tech-hero-panel"] .r3hp__done[hidden],[data-part="r3-tech-hero-panel"] .r3hp__card-in[hidden],[data-part="r3-tech-hero-panel"] .r3hp__err[hidden]{display:none}
+[data-part="r3-tech-hero-panel"] .r3hp__done-h{font:900 34px/.95 var(--vf-font-display);text-transform:uppercase}
+[data-part="r3-tech-hero-panel"] .r3hp__done-h::after{content:"прототип";display:inline-block;margin-left:10px;padding:4px 7px 3px;border-radius:3px;vertical-align:.35em;background:var(--vf-text);color:var(--vf-primer,#cbd252);font-size:13px;letter-spacing:.12em}
+[data-part="r3-tech-hero-panel"] .r3hp__done .vf-btn{justify-self:start}
+
+@media (max-height:760px) and (min-width:900px){
+  [data-part="r3-tech-hero-panel"]{--b0:44%}
+  [data-part="r3-tech-hero-panel"] .r3hp__card{padding:18px 20px 20px}
+  [data-part="r3-tech-hero-panel"] .r3hp__card-in{gap:10px}
+  [data-part="r3-tech-hero-panel"] .r3hp__card-sub{display:none}
+  [data-part="r3-tech-hero-panel"] .r3hp__lead{font-size:17px}
+}
+@media (max-width:899px){
+  [data-part="r3-tech-hero-panel"]{--hh:56px;--t0:0px;--b0:0px;--l0:14px;--r0:14px;--R0:12px}
+  [data-part="r3-tech-hero-panel"] .r3hp__pin{height:auto;min-height:0;overflow:visible;padding:16px 0 8px}
+  [data-part="r3-tech-hero-panel"] .r3hp__win{position:relative;inset:auto;height:min(52svh,460px);min-height:290px}
+  [data-part="r3-tech-hero-panel"] .r3hp__copy,[data-part="r3-tech-hero-panel"] .r3hp__card{position:static;width:auto;transform:none;opacity:1}
+    [data-part="r3-tech-hero-panel"] .r3hp__copy{padding:26px 16px 0}
+  [data-part="r3-tech-hero-panel"] .r3hp__big{font-size:clamp(52px,16vw,96px);line-height:.86}
+  [data-part="r3-tech-hero-panel"] .r3hp__pre{font-size:22px}
+  [data-part="r3-tech-hero-panel"] .r3hp__lead{font-size:17px}
+  [data-part="r3-tech-hero-panel"] .r3hp__reach a{font-size:20px}
+  [data-part="r3-tech-hero-panel"] .r3hp__card{margin:26px 14px 0}
+  [data-part="r3-tech-hero-panel"] .r3hp__cap{left:12px;bottom:12px;font-size:14px}
+}
+@media (prefers-reduced-motion:reduce){[data-part="r3-tech-hero-panel"] .r3hp__via label{transition:none}}
+
+
+/* ── r3-tech-teardown ── */
+[data-part="r3-tech-teardown"]{position:relative;padding:clamp(64px,9vw,128px) 0 clamp(56px,7vw,96px);color:var(--vf-text);background:var(--vf-bg)}
+[data-part="r3-tech-teardown"]::before{content:"";position:absolute;left:0;right:0;top:0;height:9px;background:radial-gradient(circle at 2px 4px,rgba(27,33,37,.38) 0 1.1px,rgba(255,255,255,.7) 1.4px,transparent 2px) 0 0/14px 9px repeat-x;box-shadow:inset 0 1px 0 rgba(27,33,37,.18)}
+[data-part="r3-tech-teardown"] .r3td__head{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px clamp(24px,5vw,80px);align-items:end;padding:0 var(--vf-pad,28px);margin-bottom:clamp(28px,4vw,52px)}
+[data-part="r3-tech-teardown"] .r3td__h{font:900 clamp(44px,6vw,96px)/.88 var(--vf-font-display);text-transform:uppercase;letter-spacing:-.01em;text-wrap:balance}
+[data-part="r3-tech-teardown"] .r3td__p{max-width:52ch;font-size:18px;line-height:1.5;color:var(--vf-text-2);text-wrap:pretty}
+[data-part="r3-tech-teardown"] .r3td__fig{margin:0}
+[data-part="r3-tech-teardown"] .r3td__plate{position:relative;aspect-ratio:12/7;overflow:hidden;background:#eef0ef;box-shadow:0 1px 0 rgba(27,33,37,.2),0 -1px 0 rgba(27,33,37,.2)}
+[data-part="r3-tech-teardown"] .r3td__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;transition:filter .35s var(--vf-ease)}
+[data-part="r3-tech-teardown"] .r3td__lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+[data-part="r3-tech-teardown"] .r3td__lines line{stroke:var(--vf-text);stroke-width:1.2;vector-effect:non-scaling-stroke;opacity:.7;transition:opacity .2s,stroke .2s}
+[data-part="r3-tech-teardown"] .r3td__lines circle{fill:var(--vf-text);opacity:.8}
+[data-part="r3-tech-teardown"] .r3td__b{position:absolute;left:var(--x);top:var(--y);width:34px;height:34px;margin:-17px 0 0 -17px;border:0;border-radius:50%;padding:0;cursor:pointer;
+  background:var(--vf-surface,#edf1f2);color:var(--vf-text);box-shadow:inset 0 0 0 1.5px var(--vf-text),0 3px 8px -3px rgba(20,26,29,.45);font:800 19px/1 var(--vf-font-display);transition:background-color .2s,color .2s,transform .2s var(--vf-ease)}
+[data-part="r3-tech-teardown"] .r3td__b:hover,[data-part="r3-tech-teardown"] .r3td__b.is-on{background:var(--vf-text);color:var(--vf-primer,#cbd252);transform:scale(1.12)}
+[data-part="r3-tech-teardown"] .r3td__plate.has-on .r3td__lines line:not(.is-on){opacity:.18}
+[data-part="r3-tech-teardown"] .r3td__plate.has-on .r3td__lines line.is-on{stroke-width:2}
+[data-part="r3-tech-teardown"] .r3td__cap{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px 32px;padding:18px var(--vf-pad,28px) 0}
+[data-part="r3-tech-teardown"] .r3td__legend{display:flex;flex-wrap:wrap;gap:8px 22px;margin:0;padding:0;list-style:none;max-width:1100px}
+[data-part="r3-tech-teardown"] .r3td__legend li{font:700 19px/1.2 var(--vf-font-display);letter-spacing:.03em;text-transform:uppercase;color:var(--vf-text-2);transition:color .2s}
+[data-part="r3-tech-teardown"] .r3td__legend b{display:inline-grid;place-items:center;width:24px;height:24px;margin-right:6px;border-radius:50%;box-shadow:inset 0 0 0 1.5px currentColor;font-weight:800;font-size:15px;vertical-align:1px}
+[data-part="r3-tech-teardown"] .r3td__legend li.is-on{color:var(--vf-text)}
+[data-part="r3-tech-teardown"] .r3td__legend li.is-on b{background:var(--vf-text);color:var(--vf-primer,#cbd252);box-shadow:none}
+[data-part="r3-tech-teardown"] .r3td__src{font-size:14px;color:var(--vf-muted)}
+@media (max-width:899px){
+  [data-part="r3-tech-teardown"] .r3td__head{grid-template-columns:1fr}
+  [data-part="r3-tech-teardown"] .r3td__h{font-size:clamp(40px,11.5vw,64px)}
+  [data-part="r3-tech-teardown"] .r3td__p{font-size:17px}
+  [data-part="r3-tech-teardown"] .r3td__plate{aspect-ratio:12/7}
+  [data-part="r3-tech-teardown"] .r3td__b{width:26px;height:26px;margin:-13px 0 0 -13px;font-size:15px}
+  [data-part="r3-tech-teardown"] .r3td__b::after{content:"";position:absolute;inset:-9px}
+  [data-part="r3-tech-teardown"] .r3td__legend li{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){[data-part="r3-tech-teardown"] .r3td__b{transition:none}}
+
+
+/* ── r3-tech-process ── */
+[data-part="r3-tech-process"]{--hh:64px;--x:0px;position:relative;color:var(--vf-text);background:var(--vf-bg-2,#cdd4d6);
+  box-shadow:inset 0 1px 0 rgba(27,33,37,.22),inset 0 -1px 0 rgba(27,33,37,.22)}
+[data-part="r3-tech-process"] .r3pr__pin{overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#7d878b transparent}
+[data-part="r3-tech-process"] .r3pr__track{display:flex;align-items:stretch;width:max-content;padding:clamp(56px,7vw,96px) var(--vf-pad,28px)}
+[data-part="r3-tech-process"].is-pinned .r3pr__pin{position:sticky;top:var(--hh);height:calc(100svh - var(--hh));overflow:hidden;display:flex;align-items:center}
+[data-part="r3-tech-process"].is-pinned .r3pr__track{transform:translate3d(calc(var(--x) * -1),0,0);will-change:transform}
+[data-part="r3-tech-process"] .r3pr__intro{flex:none;width:clamp(280px,30vw,460px);padding-right:clamp(24px,4vw,64px);display:flex;flex-direction:column;justify-content:flex-end;gap:18px;scroll-snap-align:start}
+[data-part="r3-tech-process"] .r3pr__h{font:900 clamp(56px,7.4vw,128px)/.84 var(--vf-font-display);text-transform:uppercase;letter-spacing:-.01em;text-wrap:balance}
+[data-part="r3-tech-process"] .r3pr__p{font-size:18px;line-height:1.45;color:var(--vf-text-2);max-width:34ch}
+[data-part="r3-tech-process"] .r3pr__hint-m{display:none}
+[data-part="r3-tech-process"] .r3pr__list{display:flex;margin:0;padding:0;list-style:none}
+/* лист обшивки на каждый этап; шов — ряд заклёпок */
+[data-part="r3-tech-process"] .r3pr__step{position:relative;flex:none;width:clamp(320px,40vw,640px);padding:0 clamp(22px,2.6vw,40px);display:grid;grid-template-rows:auto 1fr;gap:22px;scroll-snap-align:start}
+[data-part="r3-tech-process"] .r3pr__step::before{content:"";position:absolute;top:-28px;bottom:-28px;left:0;width:8px;
+  background:radial-gradient(circle at 4px 3px,rgba(27,33,37,.42) 0 1.1px,rgba(255,255,255,.7) 1.4px,transparent 2px) 0 0/8px 14px repeat-y;border-left:1px solid rgba(27,33,37,.2)}
+[data-part="r3-tech-process"] .r3pr__ph{position:relative;aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:var(--vf-graph,#1a1f22);
+  box-shadow:0 0 0 9px var(--vf-surface,#edf1f2),0 0 0 10px rgba(27,33,37,.28),0 10px 22px 2px rgba(20,26,29,.25)}
+[data-part="r3-tech-process"] .r3pr__ph img{width:100%;height:100%;object-fit:cover}
+[data-part="r3-tech-process"] .r3pr__sc{position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#fdfefe 0 14%,#c9d0d3 52%,#8a9397 100%);box-shadow:0 0 0 1px rgba(20,26,29,.42)}
+[data-part="r3-tech-process"] .r3pr__sc::after{content:"";position:absolute;left:2px;right:2px;top:4.2px;height:1.6px;background:#353d41;transform:rotate(var(--r,30deg))}
+[data-part="r3-tech-process"] .r3pr__ph{--o:-14.5px}
+[data-part="r3-tech-process"] .r3pr__sc:nth-of-type(1){top:6px;left:6px;--r:20deg}
+[data-part="r3-tech-process"] .r3pr__sc:nth-of-type(2){top:6px;right:6px;--r:75deg}
+[data-part="r3-tech-process"] .r3pr__sc:nth-of-type(3){bottom:6px;left:6px;--r:-35deg}
+[data-part="r3-tech-process"] .r3pr__sc:nth-of-type(4){bottom:6px;right:6px;--r:110deg}
+[data-part="r3-tech-process"] .r3pr__tx{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;align-content:start}
+[data-part="r3-tech-process"] .r3pr__n{grid-row:span 2;font:900 clamp(64px,6vw,104px)/.8 var(--vf-font-display);color:transparent;-webkit-text-stroke:1.5px var(--vf-text)}
+[data-part="r3-tech-process"] .r3pr__h3{font:900 clamp(28px,2.4vw,40px)/.95 var(--vf-font-display);text-transform:uppercase;text-wrap:balance}
+[data-part="r3-tech-process"] .r3pr__tx p{font-size:17px;line-height:1.45;color:var(--vf-text-2);max-width:40ch}
+[data-part="r3-tech-process"] .r3pr__end{position:relative;flex:none;width:clamp(280px,28vw,420px);padding-left:clamp(28px,3vw,48px);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:18px;scroll-snap-align:start}
+[data-part="r3-tech-process"] .r3pr__end::before{content:"";position:absolute;top:-28px;bottom:-28px;left:0;width:8px;background:radial-gradient(circle at 4px 3px,rgba(27,33,37,.42) 0 1.1px,rgba(255,255,255,.7) 1.4px,transparent 2px) 0 0/8px 14px repeat-y;border-left:1px solid rgba(27,33,37,.2)}
+[data-part="r3-tech-process"] .r3pr__end-h{font:900 clamp(34px,3.2vw,52px)/.92 var(--vf-font-display);text-transform:uppercase;text-wrap:balance}
+[data-part="r3-tech-process"] .r3pr__tel{font-weight:600;text-decoration:underline;text-decoration-color:rgba(27,33,37,.4)}
+@media (max-width:899px){
+  [data-part="r3-tech-process"] .r3pr__track{padding:56px 16px 48px;scroll-padding-left:16px}
+  [data-part="r3-tech-process"] .r3pr__pin{scroll-padding-left:16px}
+  [data-part="r3-tech-process"] .r3pr__intro{width:78vw;padding-right:24px}
+  [data-part="r3-tech-process"] .r3pr__h{font-size:clamp(48px,14vw,72px)}
+  [data-part="r3-tech-process"] .r3pr__hint-d{display:none}[data-part="r3-tech-process"] .r3pr__hint-m{display:inline}
+  [data-part="r3-tech-process"] .r3pr__step{width:82vw;padding:0 18px 0 22px}
+  [data-part="r3-tech-process"] .r3pr__end{width:80vw}
+}
+
+
+/* ── r3-tech-services ── */
+[data-part="r3-tech-services"]{position:relative;padding:clamp(64px,8vw,120px) var(--vf-pad,28px) clamp(64px,8vw,112px);background:var(--vf-primer,#cbd252);color:var(--vf-text);
+  --ink2:var(--vf-primer-ink,#2b2d0e)}
+[data-part="r3-tech-services"]::before,[data-part="r3-tech-services"]::after{content:"";position:absolute;left:0;right:0;height:9px;background:radial-gradient(circle at 2px 4px,rgba(43,45,14,.5) 0 1.1px,rgba(255,255,255,.5) 1.4px,transparent 2px) 0 0/14px 9px repeat-x}
+[data-part="r3-tech-services"]::before{top:6px}[data-part="r3-tech-services"]::after{bottom:6px}
+[data-part="r3-tech-services"] .r3sv__h{font:900 clamp(48px,6.4vw,104px)/.86 var(--vf-font-display);text-transform:uppercase;letter-spacing:-.01em;margin-bottom:clamp(28px,4vw,56px)}
+[data-part="r3-tech-services"] .r3sv__grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);align-items:start}
+/* Услуги — маркировка на обшивке: трафаретные слова потоком, между ними заклёпки; без строк с линиями */
+[data-part="r3-tech-services"] .r3sv__list{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:10px 8px;align-items:center}
+[data-part="r3-tech-services"] .r3sv__list li{display:contents}
+[data-part="r3-tech-services"] .r3sv__item{position:relative;display:block;width:100%;display:inline-flex;align-items:center;gap:12px;width:auto;padding:8px 14px 7px 12px;border:0;border-radius:6px;background:none;text-align:left;cursor:pointer;
+  font:800 clamp(30px,3.6vw,58px)/.95 var(--vf-font-display);text-transform:uppercase;letter-spacing:.005em;color:var(--ink2);transition:color .2s,padding-left .3s var(--vf-ease)}
+[data-part="r3-tech-services"] .r3sv__item::before{content:"";position:static;flex:none;width:12px;height:12px;margin:0;border-radius:50%;opacity:.85;
+  background:radial-gradient(circle at 38% 32%,#fdfefe 0 14%,#c9d0d3 52%,#8a9397 100%);box-shadow:0 0 0 1px rgba(20,26,29,.5);transition:opacity .2s}
+[data-part="r3-tech-services"] .r3sv__item:hover{color:var(--vf-text)}
+[data-part="r3-tech-services"] .r3sv__item[aria-expanded="true"]{color:var(--vf-primer,#c9d14f);background:var(--vf-text);box-shadow:0 2px 0 rgba(0,0,0,.25),0 6px 14px rgba(20,26,29,.18)}
+[data-part="r3-tech-services"] .r3sv__item:focus-visible{outline:2px solid var(--vf-text);outline-offset:3px}
+[data-part="r3-tech-services"] .r3sv__item[aria-expanded="true"]::before{opacity:1}
+[data-part="r3-tech-services"] .r3sv__item:focus-visible{outline:2px solid var(--vf-text);outline-offset:2px}
+[data-part="r3-tech-services"] .r3sv__panes{position:sticky;top:96px}
+[data-part="r3-tech-services"] .r3sv__pane{display:grid;gap:14px;padding-bottom:28px}
+[data-part="r3-tech-services"].is-js .r3sv__pane:not(.is-on){display:none}
+[data-part="r3-tech-services"] .r3sv__ph{aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:var(--vf-graph,#1a1f22);box-shadow:0 0 0 9px var(--vf-surface,#edf1f2),0 0 0 10px rgba(43,45,14,.3),0 14px 26px -6px rgba(43,45,14,.45);margin:10px 10px 12px}
+[data-part="r3-tech-services"] .r3sv__ph img{width:100%;height:100%;object-fit:cover}
+[data-part="r3-tech-services"].is-js .r3sv__pane.is-on .r3sv__ph img{animation:r3sv-open .5s var(--vf-ease)}
+[data-part="r3-tech-services"] .r3sv__h3{font:900 clamp(30px,2.6vw,42px)/.95 var(--vf-font-display);text-transform:uppercase}
+[data-part="r3-tech-services"] .r3sv__d{font-size:18px;line-height:1.45;color:var(--ink2);max-width:44ch}
+[data-part="r3-tech-services"] .r3sv__book{justify-self:start;margin-top:6px}
+@keyframes r3sv-open{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0)}}
+@media (max-width:899px){
+  [data-part="r3-tech-services"] .r3sv__grid{grid-template-columns:1fr}
+  [data-part="r3-tech-services"] .r3sv__panes{position:static}
+  [data-part="r3-tech-services"] .r3sv__item{font-size:clamp(28px,8.4vw,40px)}
+  [data-part="r3-tech-services"].is-js .r3sv__list .r3sv__pane{padding:16px 0 26px}
+}
+@media (prefers-reduced-motion:reduce){[data-part="r3-tech-services"] .r3sv__pane .r3sv__ph img{animation:none!important}}
+
+
+/* ── r3-tech-brands ── */
+[data-part="r3-tech-brands"]{position:relative;padding:clamp(56px,7vw,104px) var(--vf-pad,28px);background:var(--vf-bg);color:var(--vf-text);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3.2fr);gap:20px clamp(24px,4vw,64px);align-items:start}
+[data-part="r3-tech-brands"] .r3br__h{font:800 clamp(26px,2.4vw,36px)/1.02 var(--vf-font-display);letter-spacing:.005em;color:var(--vf-text);padding-top:.35em;text-wrap:balance}
+[data-part="r3-tech-brands"] .r3br__list{display:flex;flex-wrap:wrap;align-items:center;gap:6px 0;margin:0;padding:0;list-style:none}
+[data-part="r3-tech-brands"] .r3br__list li{display:flex;align-items:center;font:800 clamp(36px,4.6vw,76px)/1 var(--vf-font-display);text-transform:uppercase;letter-spacing:.01em;white-space:nowrap}
+[data-part="r3-tech-brands"] .r3br__list li:not(:last-child)::after{content:"";display:inline-block;width:.2em;height:.2em;margin:0 .32em;border-radius:50%;flex:none;
+  background:radial-gradient(circle at 38% 32%,#fdfefe 0 14%,#c9d0d3 52%,#8a9397 100%);box-shadow:0 0 0 1px rgba(20,26,29,.45),inset 0 0 0 .06em transparent}
+[data-part="r3-tech-brands"] .r3br__more{grid-column:2;font-size:18px;color:var(--vf-text-2)}
+@media (max-width:899px){
+  [data-part="r3-tech-brands"]{grid-template-columns:1fr}
+  [data-part="r3-tech-brands"] .r3br__more{grid-column:1}
+  [data-part="r3-tech-brands"] .r3br__list li{font-size:clamp(30px,9vw,44px);white-space:normal}
+}
+
+
+/* ── r3-tech-works ── */
+[data-part="r3-tech-works"]{position:relative;padding:clamp(64px,8vw,120px) 0 clamp(56px,7vw,104px);background:var(--vf-graph,#1a1f22);color:var(--vf-on-graph,#e4e9eb)}
+[data-part="r3-tech-works"] ::selection{background:var(--vf-primer,#cbd252);color:#1b2125}
+[data-part="r3-tech-works"] .r3wk__head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px clamp(24px,5vw,80px);align-items:end;padding:0 var(--vf-pad,28px);margin-bottom:clamp(28px,4vw,52px)}
+[data-part="r3-tech-works"] .r3wk__h{font:900 clamp(56px,8vw,140px)/.84 var(--vf-font-display);text-transform:uppercase;letter-spacing:-.01em;color:var(--vf-primer,#cbd252)}
+[data-part="r3-tech-works"] .r3wk__p{max-width:50ch;font-size:18px;line-height:1.5;color:var(--vf-on-graph-2,#a7afb3)}
+[data-part="r3-tech-works"] .r3wk__hero{margin:0 0 clamp(10px,1vw,14px)}
+[data-part="r3-tech-works"] .r3wk__hero img{width:100%;height:min(82vh,860px);min-height:320px;object-fit:cover;object-position:50% 45%}
+[data-part="r3-tech-works"] .r3wk__hero figcaption{padding:10px var(--vf-pad,28px) 0;font-size:14px;color:var(--vf-on-graph-2,#a7afb3)}
+[data-part="r3-tech-works"] .r3wk__grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:clamp(150px,17vw,300px);gap:clamp(8px,1vw,14px);margin:clamp(28px,4vw,56px) 0 0;padding:0 var(--vf-pad,28px);list-style:none}
+[data-part="r3-tech-works"] .r3wk__c--a{grid-column:1/6;grid-row:1/3}
+[data-part="r3-tech-works"] .r3wk__c--b{grid-column:6/9;grid-row:1/3}
+[data-part="r3-tech-works"] .r3wk__c--c{grid-column:9/13;grid-row:1/2}
+[data-part="r3-tech-works"] .r3wk__c--d{grid-column:9/13;grid-row:2/3}
+[data-part="r3-tech-works"] .r3wk__c--e{grid-column:1/4;grid-row:3/5}
+[data-part="r3-tech-works"] .r3wk__c--f{grid-column:4/8;grid-row:3/5}
+[data-part="r3-tech-works"] .r3wk__c--g{grid-column:8/13;grid-row:3/5}
+[data-part="r3-tech-works"] .r3wk__open{position:relative;display:block;width:100%;height:100%;padding:0;border:0;border-radius:8px;overflow:hidden;background:var(--vf-graph-2,#262c30);cursor:zoom-in}
+[data-part="r3-tech-works"] .r3wk__open img,[data-part="r3-tech-works"] .r3wk__open video{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--vf-ease)}
+[data-part="r3-tech-works"] .r3wk__open:hover img,[data-part="r3-tech-works"] .r3wk__open:hover video{transform:scale(1.035)}
+[data-part="r3-tech-works"] .r3wk__open:focus-visible{outline:2px solid var(--vf-primer,#cbd252);outline-offset:3px}
+[data-part="r3-tech-works"] .r3wk__cap{position:absolute;left:10px;bottom:10px;padding:6px 9px 5px;border-radius:3px;background:rgba(26,31,34,.82);font:700 14px/1 var(--vf-font-display);letter-spacing:.1em;text-transform:uppercase;color:var(--vf-on-graph,#e4e9eb)}
+@media (max-width:899px){
+  [data-part="r3-tech-works"] .r3wk__head{grid-template-columns:1fr}
+  [data-part="r3-tech-works"] .r3wk__h{font-size:clamp(52px,16vw,84px)}
+  [data-part="r3-tech-works"] .r3wk__p{font-size:17px}
+  [data-part="r3-tech-works"] .r3wk__hero img{height:58svh}
+  [data-part="r3-tech-works"] .r3wk__grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:44vw;padding:0 12px}
+  [data-part="r3-tech-works"] .r3wk__c--a{grid-column:1/5;grid-row:span 2}
+  [data-part="r3-tech-works"] .r3wk__c--b{grid-column:5/7;grid-row:span 2}
+  [data-part="r3-tech-works"] .r3wk__c--c{grid-column:1/4;grid-row:auto}
+  [data-part="r3-tech-works"] .r3wk__c--d{grid-column:4/7;grid-row:auto}
+  [data-part="r3-tech-works"] .r3wk__c--e{grid-column:1/3;grid-row:span 2}
+  [data-part="r3-tech-works"] .r3wk__c--f{grid-column:3/7;grid-row:span 2}
+  [data-part="r3-tech-works"] .r3wk__c--g{grid-column:1/7;grid-row:auto}
+  [data-part="r3-tech-works"] .r3wk__cap{font-size:12px;left:6px;bottom:6px}
+}
+@media (prefers-reduced-motion:reduce){[data-part="r3-tech-works"] .r3wk__open img,[data-part="r3-tech-works"] .r3wk__open video{transition:none}}
+
+
+/* ── r3-tech-release ── */
+[data-part="r3-tech-release"]{position:relative;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:32px clamp(28px,5vw,88px);align-items:end;padding:clamp(64px,8vw,120px) var(--vf-pad,28px);background:var(--vf-primer,#cbd252);color:var(--vf-text);overflow:hidden}
+[data-part="r3-tech-release"]::before{content:"";position:absolute;left:0;right:0;top:6px;height:9px;background:radial-gradient(circle at 2px 4px,rgba(43,45,14,.5) 0 1.1px,rgba(255,255,255,.5) 1.4px,transparent 2px) 0 0/14px 9px repeat-x}
+[data-part="r3-tech-release"] .r3rl__h{display:grid;font-family:var(--vf-font-display);text-transform:uppercase}
+[data-part="r3-tech-release"] .r3rl__pre{font-weight:800;font-size:clamp(34px,4vw,64px);line-height:.95;letter-spacing:.02em}
+[data-part="r3-tech-release"] .r3rl__big{font-weight:900;font-size:clamp(110px,17vw,300px);line-height:.8;letter-spacing:-.02em;margin-left:-.05em;white-space:nowrap}
+[data-part="r3-tech-release"] .r3rl__facts{display:grid;gap:22px;padding-bottom:.6em}
+[data-part="r3-tech-release"] .r3rl__facts p{position:relative;padding:0 0 0 30px;font-size:18px;line-height:1.45;color:var(--vf-primer-ink,#2b2d0e);text-wrap:pretty}
+/* Подпункт отмечен головкой заклёпки, а не разделительной линией */
+[data-part="r3-tech-release"] .r3rl__facts p::before{content:"";position:absolute;left:0;top:5px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#fdfefe 0 14%,#c9d0d3 52%,#8a9397 100%);box-shadow:0 0 0 1px rgba(20,26,29,.5),0 1px 1px rgba(0,0,0,.3)}
+[data-part="r3-tech-release"] .r3rl__facts b{display:block;margin-bottom:4px;font:800 26px/1 var(--vf-font-display);text-transform:uppercase;letter-spacing:.02em;color:var(--vf-text)}
+@media (max-width:899px){
+  [data-part="r3-tech-release"]{grid-template-columns:1fr}
+  [data-part="r3-tech-release"] .r3rl__big{font-size:clamp(96px,30vw,170px)}
+  [data-part="r3-tech-release"] .r3rl__facts p{font-size:17px}
+}
+
+
+/* ── r3-tech-booking ── */
+[data-part="r3-tech-booking"]{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px clamp(28px,5vw,96px);align-items:start;padding:clamp(64px,8vw,120px) var(--vf-pad,28px);background:var(--vf-bg);color:var(--vf-text)}
+[data-part="r3-tech-booking"] .r3bk__side{position:sticky;top:100px;display:grid;gap:20px}
+[data-part="r3-tech-booking"] .r3bk__h{font:900 clamp(48px,6vw,100px)/.86 var(--vf-font-display);text-transform:uppercase;letter-spacing:-.01em;text-wrap:balance}
+[data-part="r3-tech-booking"] .r3bk__p{max-width:44ch;font-size:18px;line-height:1.45;color:var(--vf-text-2)}
+[data-part="r3-tech-booking"] .r3bk__direct{display:grid;gap:4px;margin:0;padding:0;list-style:none}
+[data-part="r3-tech-booking"] .r3bk__direct a{font:800 clamp(28px,2.6vw,40px)/1.1 var(--vf-font-display);letter-spacing:.02em;text-decoration:none;border-bottom:2px solid rgba(27,33,37,.3)}
+[data-part="r3-tech-booking"] .r3bk__direct a:hover{border-bottom-color:currentColor}
+[data-part="r3-tech-booking"] .r3bk__addr{font-size:16px;color:var(--vf-muted)}
+[data-part="r3-tech-booking"] .r3bk__card{position:relative;padding:clamp(22px,2.6vw,36px);padding-top:calc(clamp(22px,2.6vw,36px) + 14px);border-radius:8px;background:var(--vf-primer,#cbd252);
+  box-shadow:0 0 0 1px rgba(43,45,14,.28),0 24px 44px -26px rgba(20,26,29,.55)}
+[data-part="r3-tech-booking"] .r3bk__card::before{content:"";position:absolute;left:14px;right:14px;top:10px;height:8px;background:radial-gradient(circle at 4px 4px,rgba(43,45,14,.55) 0 1.6px,rgba(255,255,255,.5) 2px,transparent 2.6px) 0 0/22px 8px repeat-x}
+[data-part="r3-tech-booking"] .r3bk__in{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+[data-part="r3-tech-booking"] .r3bk__row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+[data-part="r3-tech-booking"] .r3bk__seg{display:grid;grid-template-columns:1fr 1fr;border-radius:4px;box-shadow:inset 0 0 0 1.5px var(--vf-text)}
+[data-part="r3-tech-booking"] .r3bk__seg label{position:relative;display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:4px;cursor:pointer;font:800 19px/1 var(--vf-font-display);letter-spacing:.06em;text-transform:uppercase;transition:background-color .15s,color .15s}
+[data-part="r3-tech-booking"] .r3bk__seg input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+[data-part="r3-tech-booking"] .r3bk__seg label:has(input:checked){background:var(--vf-text);color:var(--vf-primer,#cbd252)}
+[data-part="r3-tech-booking"] .r3bk__seg label:has(input:focus-visible){outline:2px solid var(--vf-text);outline-offset:2px}
+[data-part="r3-tech-booking"] .r3bk__seg label:hover:not(:has(input:checked)){background:rgba(27,33,37,.1)}
+[data-part="r3-tech-booking"] .r3bk__chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
+[data-part="r3-tech-booking"] .r3bk__chips button{min-height:40px;padding:0 13px;border:0;border-radius:3px;background:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(43,45,14,.4);cursor:pointer;font:600 16px/1 var(--vf-font-text);color:var(--vf-text);transition:background-color .15s}
+[data-part="r3-tech-booking"] .r3bk__chips button:hover{background:rgba(255,255,255,.85)}
+[data-part="r3-tech-booking"] .r3bk__chips button[aria-pressed="true"]{background:var(--vf-text);color:var(--vf-primer,#cbd252);box-shadow:none}
+[data-part="r3-tech-booking"] .r3bk__fbox{position:relative;display:flex;align-items:center;gap:12px;min-height:50px;padding:6px 8px;border-radius:var(--vf-radius);background:var(--vf-surface,#edf1f2);box-shadow:inset 0 0 0 1px rgba(27,33,37,.28)}
+[data-part="r3-tech-booking"] .r3bk__fbox input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+[data-part="r3-tech-booking"] .r3bk__fbox:has(input:focus-visible){outline:2px solid var(--vf-text);outline-offset:2px}
+[data-part="r3-tech-booking"] .r3bk__fbox:hover{box-shadow:inset 0 0 0 1px rgba(27,33,37,.5)}
+[data-part="r3-tech-booking"] .r3bk__fbtn{flex:none;padding:9px 12px 8px;border-radius:3px;background:var(--vf-text);color:var(--vf-surface,#edf1f2);font:700 16px/1 var(--vf-font-display);letter-spacing:.06em;text-transform:uppercase}
+[data-part="r3-tech-booking"] .r3bk__fname{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px;color:var(--vf-text-2)}
+[data-part="r3-tech-booking"] .r3bk__consent{display:grid;grid-template-columns:20px 1fr;gap:10px;font-size:15px;line-height:1.4;color:var(--vf-primer-ink,#2b2d0e);cursor:pointer}
+[data-part="r3-tech-booking"] .r3bk__consent input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--vf-text)}
+[data-part="r3-tech-booking"] .r3bk__consent.is-bad span{color:var(--vf-danger);font-weight:600}
+[data-part="r3-tech-booking"] .r3bk__hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+[data-part="r3-tech-booking"] .r3bk__err{padding:10px 12px;border-radius:3px;background:rgba(255,255,255,.75);color:var(--vf-danger);font-weight:600;font-size:16px}
+[data-part="r3-tech-booking"] .r3bk__err[hidden],[data-part="r3-tech-booking"] .r3bk__in[hidden],[data-part="r3-tech-booking"] .r3bk__done[hidden]{display:none}
+[data-part="r3-tech-booking"] .r3bk__go{justify-self:start;min-width:min(100%,300px)}
+[data-part="r3-tech-booking"] .r3bk__done{display:grid;gap:14px;min-height:320px;align-content:center;outline:0}
+[data-part="r3-tech-booking"] .r3bk__done-h{font:900 clamp(48px,5vw,80px)/.88 var(--vf-font-display);text-transform:uppercase}
+[data-part="r3-tech-booking"] .r3bk__done-h::after{content:"прототип";display:inline-block;margin-left:12px;padding:5px 8px 4px;border-radius:3px;vertical-align:.5em;background:var(--vf-text);color:var(--vf-primer,#cbd252);font-size:15px;letter-spacing:.12em}
+[data-part="r3-tech-booking"] .r3bk__done-p{font-size:18px;line-height:1.45;max-width:42ch;color:var(--vf-primer-ink,#2b2d0e)}
+[data-part="r3-tech-booking"] .r3bk__done .vf-btn{justify-self:start}
+[data-part="r3-tech-booking"] .r3bk__card.is-flash{animation:r3bk-flash .9s var(--vf-ease)}
+@keyframes r3bk-flash{0%,100%{outline:3px solid transparent;outline-offset:10px}35%{outline:3px solid var(--vf-text);outline-offset:4px}}
+@media (max-width:899px){
+  [data-part="r3-tech-booking"]{grid-template-columns:1fr;padding-left:14px;padding-right:14px}
+  [data-part="r3-tech-booking"] .r3bk__side{position:static;padding:0 2px}
+  [data-part="r3-tech-booking"] .r3bk__h{font-size:clamp(44px,13vw,68px)}
+  [data-part="r3-tech-booking"] .r3bk__row{grid-template-columns:1fr}
+  [data-part="r3-tech-booking"] .r3bk__go{width:100%}
+}
+@media (prefers-reduced-motion:reduce){[data-part="r3-tech-booking"] .r3bk__card.is-flash{animation:none}}
+
+
+/* ── r3-tech-contacts ── */
+[data-part="r3-tech-contacts"]{position:relative;padding:clamp(64px,8vw,120px) var(--vf-pad,28px) clamp(48px,6vw,88px);background:var(--vf-graph,#1a1f22);color:var(--vf-on-graph,#e4e9eb)}
+[data-part="r3-tech-contacts"] ::selection{background:var(--vf-primer,#cbd252);color:#1b2125}
+[data-part="r3-tech-contacts"] :focus-visible{outline-color:var(--vf-primer,#cbd252)}
+[data-part="r3-tech-contacts"] .r3ct__h{display:grid;gap:10px;font-family:var(--vf-font-display);text-transform:uppercase}
+[data-part="r3-tech-contacts"] .r3ct__pre{font-weight:700;font-size:clamp(24px,2.4vw,36px);line-height:1.05;letter-spacing:.005em;text-transform:none;color:var(--vf-on-graph,#e4e9eb)}
+[data-part="r3-tech-contacts"] .r3ct__big{font-weight:900;font-size:clamp(58px,9.4vw,168px);line-height:.84;letter-spacing:-.01em;color:var(--vf-primer,#cbd252);text-wrap:balance}
+[data-part="r3-tech-contacts"] .r3ct__row{display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px clamp(32px,5vw,96px);margin-top:clamp(32px,4vw,56px);padding-top:24px;border-top:1px solid rgba(228,233,235,.2)}
+[data-part="r3-tech-contacts"] .r3ct__map{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 18px;border-radius:4px;box-shadow:inset 0 0 0 1.5px currentColor;text-decoration:none;font:800 20px/1 var(--vf-font-display);letter-spacing:.06em;text-transform:uppercase}
+[data-part="r3-tech-contacts"] .r3ct__map:hover{background:rgba(228,233,235,.08)}
+[data-part="r3-tech-contacts"] .r3ct__map svg{width:18px;height:18px}
+[data-part="r3-tech-contacts"] .r3ct__list{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+[data-part="r3-tech-contacts"] .r3ct__list a{font:800 clamp(26px,2.4vw,36px)/1.1 var(--vf-font-display);letter-spacing:.02em;text-decoration:none;border-bottom:2px solid rgba(228,233,235,.25)}
+[data-part="r3-tech-contacts"] .r3ct__list a:hover{border-bottom-color:currentColor}
+[data-part="r3-tech-contacts"] .r3ct__hours{max-width:28ch;font-size:16px;color:var(--vf-on-graph-2,#a7afb3)}
+[data-part="r3-tech-contacts"] .r3ct__stub{display:inline-block;margin-left:6px;padding:2px 6px;border-radius:3px;border:1px dashed currentColor;font-size:13px}
+@media (max-width:899px){[data-part="r3-tech-contacts"] .r3ct__big{font-size:clamp(52px,15vw,80px)}}
+
+
+/* ── r3-tech-footer ── */
+[data-part="r3-tech-footer"]{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(20px,3vw,48px);padding:26px var(--vf-pad,28px) 30px;background:#121618;color:var(--vf-on-graph-2,#a7afb3);font-size:14px;box-shadow:inset 0 1px 0 rgba(228,233,235,.12)}
+[data-part="r3-tech-footer"] .r3ft__mark{font:700 20px/1 var(--vf-font-display);letter-spacing:.14em;text-transform:uppercase;color:var(--vf-on-graph,#e4e9eb)}
+[data-part="r3-tech-footer"] .r3ft__mark span{font-weight:900;letter-spacing:0}
+[data-part="r3-tech-footer"] .r3ft__legal{margin-left:auto}
+[data-part="r3-tech-footer"] .r3ft__legal a:focus-visible{outline-color:var(--vf-primer,#cbd252)}
+[data-part="r3-tech-footer"] .r3ft__stub{display:inline-block;padding:1px 5px;border-radius:3px;border:1px dashed currentColor;font-size:12px}
+@media (max-width:899px){[data-part="r3-tech-footer"] .r3ft__legal{margin-left:0}}
+
+
+/* ── r3-tech-dock ── */
+[data-part="r3-tech-dock"]{display:none}
+@media (max-width:899px){
+  [data-part="r3-tech-dock"]{display:block;height:calc(76px + env(safe-area-inset-bottom))}
+  [data-part="r3-tech-dock"] .r3dk__bar{position:fixed;left:0;right:0;bottom:0;z-index:45;display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:8px;padding:10px 10px calc(10px + env(safe-area-inset-bottom));background:var(--vf-bg);
+    box-shadow:0 -1px 0 rgba(27,33,37,.25),0 -10px 24px -14px rgba(20,26,29,.5);transition:transform .3s var(--vf-ease)}
+  [data-part="r3-tech-dock"] .r3dk__bar::before{content:"";position:absolute;left:0;right:0;top:4px;height:4px;background:radial-gradient(circle at 2px 2px,rgba(27,33,37,.38) 0 1.1px,rgba(255,255,255,.7) 1.4px,transparent 2px) 0 0/14px 4px repeat-x}
+  [data-part="r3-tech-dock"] .r3dk__a{display:flex;align-items:center;justify-content:center;gap:7px;min-height:52px;border-radius:4px;box-shadow:inset 0 0 0 1.5px var(--vf-text);color:var(--vf-text);text-decoration:none;font:800 18px/1 var(--vf-font-display);letter-spacing:.05em;text-transform:uppercase}
+  [data-part="r3-tech-dock"] .r3dk__a:active{background:rgba(27,33,37,.1)}
+  [data-part="r3-tech-dock"] .r3dk__a svg{width:18px;height:18px}
+  [data-part="r3-tech-dock"] .r3dk__book{min-height:52px;padding-right:14px}
+  [data-part="r3-tech-dock"].is-away .r3dk__bar{transform:translateY(110%)}
+}
+@media (prefers-reduced-motion:reduce){[data-part="r3-tech-dock"] .r3dk__bar{transition:none}}
+
+
+/* ── r3-tech-viewer ── */
+[data-part="r3-tech-viewer"] .r3vw__dlg{width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--vf-graph,#1a1f22);color:var(--vf-on-graph,#e4e9eb);overflow:hidden}
+[data-part="r3-tech-viewer"] .r3vw__dlg::backdrop{background:rgba(10,12,14,.7)}
+[data-part="r3-tech-viewer"] .r3vw__dlg[open]{display:grid;grid-template-rows:1fr auto;animation:r3vw-in .35s var(--vf-ease)}
+[data-part="r3-tech-viewer"] .r3vw__stage{display:grid;place-items:center;min-height:0;padding:clamp(56px,6vw,80px) clamp(16px,7vw,110px) 12px}
+[data-part="r3-tech-viewer"] .r3vw__media{position:relative;display:grid;place-items:center;max-width:100%;max-height:100%;min-height:0;padding:10px;border-radius:14px;background:var(--vf-surface,#edf1f2);box-shadow:0 20px 50px -20px #000}
+[data-part="r3-tech-viewer"] .r3vw__media img,[data-part="r3-tech-viewer"] .r3vw__media video{max-width:min(100%,1400px);max-height:calc(100dvh - 170px);width:auto;height:auto;border-radius:6px;background:#000}
+[data-part="r3-tech-viewer"] .r3vw__cap{padding:0 20px 22px;text-align:center;font-size:16px;color:var(--vf-on-graph-2,#a7afb3)}
+[data-part="r3-tech-viewer"] .r3vw__btn{position:absolute;display:grid;place-items:center;width:52px;height:52px;border:0;border-radius:4px;background:rgba(228,233,235,.08);box-shadow:inset 0 0 0 1.5px rgba(228,233,235,.5);color:inherit;cursor:pointer}
+[data-part="r3-tech-viewer"] .r3vw__btn:hover{background:rgba(228,233,235,.16)}
+[data-part="r3-tech-viewer"] .r3vw__btn:focus-visible{outline:2px solid var(--vf-primer,#cbd252);outline-offset:2px}
+[data-part="r3-tech-viewer"] .r3vw__btn svg{width:22px;height:22px}
+[data-part="r3-tech-viewer"] .r3vw__prev{left:clamp(8px,2vw,28px);top:50%;margin-top:-26px}
+[data-part="r3-tech-viewer"] .r3vw__next{right:clamp(8px,2vw,28px);top:50%;margin-top:-26px}
+[data-part="r3-tech-viewer"] .r3vw__close{right:clamp(8px,2vw,28px);top:clamp(8px,2vw,20px)}
+@keyframes r3vw-in{from{clip-path:inset(8% 8% 8% 8% round 14px);opacity:.4}to{clip-path:inset(0 round 0);opacity:1}}
+@media (max-width:899px){[data-part="r3-tech-viewer"] .r3vw__prev,[data-part="r3-tech-viewer"] .r3vw__next{top:auto;bottom:14px;margin:0}[data-part="r3-tech-viewer"] .r3vw__cap{padding:0 76px 30px}}
+@media (prefers-reduced-motion:reduce){[data-part="r3-tech-viewer"] .r3vw__dlg[open]{animation:none}}
+
+</style>
+</head>
+<body class="vf-page">
+<header data-part="r3-tech-header" data-slot="header" class="r3h">
+  <a class="r3h__brand" href="#top" aria-label="VF swiss — в начало страницы"><span class="r3h__vf">VF</span><span class="r3h__sw">swiss</span></a>
+  <nav class="r3h__nav" aria-label="Разделы">
+    <a href="#r3-teardown">Разборка</a>
+    <a href="#r3-process">Порядок работ</a>
+    <a href="#r3-services">Услуги</a>
+    <a href="#r3-works">Верстак</a>
+    <a href="#r3-contacts">Контакты</a>
+  </nav>
+  <div class="r3h__reach">
+    <a class="r3h__tel" href="tel:+79651716996"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6.2 2.5 8.4 6.6 6.8 8.2c.9 2 2.9 4 5 5l1.6-1.6 4.1 2.2-.9 3.2c-.2.6-.8 1-1.4.9C8.6 17.3 2.7 11.4 2.2 4.8c0-.6.3-1.2.9-1.4l3.1-.9Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>8 (965) 171-69-96</span></a>
+    <a class="r3h__tg" href="https://t.me/VFswissboutique" aria-label="Написать в Telegram"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 9.4 17.3 3.2l-2.6 13.4-4.4-3.3-2.4 2.3.3-3.6 6.2-5.7-7.7 4.8-4.2-1.7Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Telegram</span></a>
+    <button class="vf-btn vf-btn--primary vf-btn--sm r3h__book" type="button">Заявка</button>
+  </div>
+</header>
+
+<section data-part="r3-tech-hero-panel" data-slot="hero" class="r3hp" id="top" aria-labelledby="r3hp-h">
+  <div class="r3hp__pin">
+    <div class="r3hp__win">
+    <div class="r3hp__port">
+      <video class="r3hp__vid" muted loop playsinline preload="metadata" poster="../../media/vid/hero-poster.webp" aria-label="Видео с верстака: пинцет над механизмом часов">
+        <source src="../../media/vid/hero.mp4" type="video/mp4">
+      </video>
+      <p class="r3hp__cap">Видео с верстака мастерской на Петровке</p>
+    </div>
+    <div class="r3hp__frame" aria-hidden="true"><i class="r3hp__screw t" style="--u:.05;--i:0"></i><i class="r3hp__screw t" style="--u:.23;--i:1"></i><i class="r3hp__screw t" style="--u:.41;--i:2"></i><i class="r3hp__screw t" style="--u:.59;--i:3"></i><i class="r3hp__screw t" style="--u:.77;--i:4"></i><i class="r3hp__screw t" style="--u:.95;--i:5"></i><i class="r3hp__screw r" style="--u:.3;--i:6"></i><i class="r3hp__screw r" style="--u:.7;--i:7"></i><i class="r3hp__screw b" style="--u:.95;--i:8"></i><i class="r3hp__screw b" style="--u:.77;--i:9"></i><i class="r3hp__screw b" style="--u:.59;--i:10"></i><i class="r3hp__screw b" style="--u:.41;--i:11"></i><i class="r3hp__screw b" style="--u:.23;--i:12"></i><i class="r3hp__screw b" style="--u:.05;--i:13"></i><i class="r3hp__screw l" style="--u:.7;--i:14"></i><i class="r3hp__screw l" style="--u:.3;--i:15"></i></div>
+    </div>
+    <div class="r3hp__copy">
+      <h1 class="r3hp__h" id="r3hp-h"><span class="r3hp__pre">Ремонт и обслуживание швейцарских часов</span> <span class="r3hp__big">до последнего винта</span></h1>
+      <p class="r3hp__lead">Мастер разбирает механизм полностью, ставит оригинальные комплектующие и проверяет ход на таймграфере. Диагностика бесплатно, гарантия до двух лет.</p>
+      <p class="r3hp__reach"><a href="tel:+79651716996">8 (965) 171-69-96</a><a href="tel:+79162459223">8 (916) 245-92-23</a><a href="https://t.me/VFswissboutique">Telegram @VFswissboutique</a><span class="r3hp__addr">Петровка, 23/10 стр. 5</span></p>
+    </div>
+    <form class="r3hp__card" novalidate aria-labelledby="r3hp-card-h">
+      <div class="r3hp__card-in">
+        <h2 class="r3hp__card-h" id="r3hp-card-h">Заявка на&nbsp;диагностику</h2>
+        <p class="r3hp__card-sub">Бесплатно. Перезвоним или напишем в&nbsp;Telegram.</p>
+        <label class="vf-field"><span>Телефон</span><input class="vf-input" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required aria-describedby="r3hp-err"></label>
+        <label class="vf-field"><span>Марка часов</span><input class="vf-input" type="text" name="brand" autocomplete="off" placeholder="Например, Rolex или Cartier"></label>
+        <fieldset class="r3hp__via"><legend class="visually-hidden">Как связаться</legend>
+          <label><input type="radio" name="contact" value="call" checked><span>Звонок</span></label>
+          <label><input type="radio" name="contact" value="telegram"><span>Telegram</span></label>
+        </fieldset>
+        <label class="r3hp__consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных (<a href="#r3-policy">политика</a>)</span></label>
+        <label class="r3hp__hp" aria-hidden="true">Сайт <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        <p class="r3hp__err" id="r3hp-err" role="alert" hidden></p>
+        <button class="vf-btn vf-btn--primary r3hp__go" type="submit">Записаться на диагностику</button>
+      </div>
+      <div class="r3hp__done" hidden tabindex="-1">
+        <p class="r3hp__done-h">Заявка принята</p>
+        <p>Это прототип — заявка никуда не отправлена. На рабочем сайте мастер свяжется удобным вам способом.</p>
+        <button class="vf-btn vf-btn--ghost vf-btn--sm r3hp__again" type="button">Новая заявка</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section data-part="r3-tech-teardown" data-slot="story" class="r3td" id="r3-teardown" aria-labelledby="r3td-h">
+  <div class="r3td__head">
+    <h2 class="r3td__h" id="r3td-h">Часы клиента, разобранные полностью</h2>
+    <p class="r3td__p">Datejust на листе верстака: механизм, циферблат, стрелки, корпус и крепёж — каждая деталь отдельно. Только при полной разборке видно износ каждой детали, и только так её можно заменить на оригинальную.</p>
+  </div>
+  <figure class="r3td__fig">
+    <div class="r3td__plate">
+      <img class="r3td__img" src="../../media/img/ex_19.webp" width="1200" height="898" loading="lazy" alt="Разобранные часы Rolex Datejust на белом листе: корпус, безель, циферблат, стрелки, диск даты, задняя крышка, заводная головка и десятки деталей механизма">
+      <svg class="r3td__lines" viewBox="0 0 100 58.33" preserveAspectRatio="none" aria-hidden="true"><line x1="34.17" y1="8.08" x2="38.5" y2="16.08" data-n="1"/><circle cx="38.5" cy="16.08" r=".45" data-n="1"/><line x1="47.17" y1="9.41" x2="45.67" y2="18.58" data-n="2"/><circle cx="45.67" cy="18.58" r=".45" data-n="2"/><line x1="59.33" y1="6.08" x2="58.33" y2="12.58" data-n="3"/><circle cx="58.33" cy="12.58" r=".45" data-n="3"/><line x1="88.33" y1="18.41" x2="82.08" y2="16.75" data-n="4"/><circle cx="82.08" cy="16.75" r=".45" data-n="4"/><line x1="88.5" y1="27.58" x2="81.25" y2="30.25" data-n="5"/><circle cx="81.25" cy="30.25" r=".45" data-n="5"/><line x1="79.17" y1="46.08" x2="73.33" y2="38.42" data-n="6"/><circle cx="73.33" cy="38.42" r=".45" data-n="6"/><line x1="50.0" y1="51.08" x2="53.33" y2="41.58" data-n="7"/><circle cx="53.33" cy="41.58" r=".45" data-n="7"/><line x1="15.83" y1="19.25" x2="25.0" y2="26.75" data-n="8"/><circle cx="25.0" cy="26.75" r=".45" data-n="8"/></svg>
+      <button class="r3td__b" type="button" style="--x:34.17%;--y:13.86%" data-n="1" aria-describedby="r3td-l1"><span class="visually-hidden">Позиция </span>1</button><button class="r3td__b" type="button" style="--x:47.17%;--y:16.14%" data-n="2" aria-describedby="r3td-l2"><span class="visually-hidden">Позиция </span>2</button><button class="r3td__b" type="button" style="--x:59.33%;--y:10.43%" data-n="3" aria-describedby="r3td-l3"><span class="visually-hidden">Позиция </span>3</button><button class="r3td__b" type="button" style="--x:88.33%;--y:31.57%" data-n="4" aria-describedby="r3td-l4"><span class="visually-hidden">Позиция </span>4</button><button class="r3td__b" type="button" style="--x:88.5%;--y:47.29%" data-n="5" aria-describedby="r3td-l5"><span class="visually-hidden">Позиция </span>5</button><button class="r3td__b" type="button" style="--x:79.17%;--y:79.0%" data-n="6" aria-describedby="r3td-l6"><span class="visually-hidden">Позиция </span>6</button><button class="r3td__b" type="button" style="--x:50.0%;--y:87.57%" data-n="7" aria-describedby="r3td-l7"><span class="visually-hidden">Позиция </span>7</button><button class="r3td__b" type="button" style="--x:15.83%;--y:33.0%" data-n="8" aria-describedby="r3td-l8"><span class="visually-hidden">Позиция </span>8</button>
+    </div>
+    <figcaption class="r3td__cap"><ol class="r3td__legend"><li id="r3td-l1" data-n="1"><b>1</b> стрелки</li><li id="r3td-l2" data-n="2"><b>2</b> диск даты</li><li id="r3td-l3" data-n="3"><b>3</b> циферблат</li><li id="r3td-l4" data-n="4"><b>4</b> корпус</li><li id="r3td-l5" data-n="5"><b>5</b> заводная головка с валом</li><li id="r3td-l6" data-n="6"><b>6</b> безель</li><li id="r3td-l7" data-n="7"><b>7</b> задняя крышка</li><li id="r3td-l8" data-n="8"><b>8</b> колёса, мосты и пружины механизма</li></ol><span class="r3td__src">Фото из мастерской</span></figcaption>
+  </figure>
+</section>
+
+<section data-part="r3-tech-process" data-slot="process" class="r3pr" id="r3-process" aria-labelledby="r3pr-h">
+  <div class="r3pr__pin">
+    <div class="r3pr__track">
+      <div class="r3pr__intro">
+        <h2 class="r3pr__h" id="r3pr-h">Порядок работ</h2>
+        <p class="r3pr__p">Пять этапов, которые проходят часы на верстаке. <span class="r3pr__hint-d">Прокручивайте — лента едет вбок.</span><span class="r3pr__hint-m">Листайте вбок.</span></p>
+      </div>
+      <ol class="r3pr__list">
+      <li class="r3pr__step">
+        <div class="r3pr__ph"><img src="../../media/vid/ex_14.webp" width="360" height="640" alt="Часы клиента в руках мастера в перчатках"><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i></div>
+        <div class="r3pr__tx"><span class="r3pr__n" aria-hidden="true">1</span><h3 class="r3pr__h3"><span class="visually-hidden">Этап 1. </span>Диагностика — бесплатно</h3><p>Осматриваем часы и проверяем ход на таймграфере. После диагностики понятно, что нужно именно этим часам.</p></div>
+      </li>
+      <li class="r3pr__step">
+        <div class="r3pr__ph"><img src="../../media/img/ex_5.webp" width="600" height="800" alt="Детали механизма, разложенные по ячейкам лотка"><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i></div>
+        <div class="r3pr__tx"><span class="r3pr__n" aria-hidden="true">2</span><h3 class="r3pr__h3"><span class="visually-hidden">Этап 2. </span>Разборка до последнего винта</h3><p>Механизм разбирается полностью. Каждая деталь лежит в своей ячейке — под микроскопом видно износ.</p></div>
+      </li>
+      <li class="r3pr__step">
+        <div class="r3pr__ph"><img src="../../media/img/ex_36.webp" width="866" height="633" alt="Баланс, мост и винты на белом листе"><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i></div>
+        <div class="r3pr__tx"><span class="r3pr__n" aria-hidden="true">3</span><h3 class="r3pr__h3"><span class="visually-hidden">Этап 3. </span>Оригинальные комплектующие</h3><p>Изношенное меняем на оригинальные детали, а не на «похожие».</p></div>
+      </li>
+      <li class="r3pr__step">
+        <div class="r3pr__ph"><img src="../../media/img/ex_33.webp" width="1200" height="900" alt="Часы на датчике таймграфера, на экране прибора показания хода"><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i></div>
+        <div class="r3pr__tx"><span class="r3pr__n" aria-hidden="true">4</span><h3 class="r3pr__h3"><span class="visually-hidden">Этап 4. </span>Сборка и проверка хода</h3><p>Собранный механизм снова встаёт на таймграфер. Герметичность проверяем на тестере.</p></div>
+      </li>
+      <li class="r3pr__step">
+        <div class="r3pr__ph"><img src="../../media/img/face_2.webp" width="675" height="900" alt="Готовые часы на ремешке"><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i><i class="r3pr__sc" aria-hidden="true"></i></div>
+        <div class="r3pr__tx"><span class="r3pr__n" aria-hidden="true">5</span><h3 class="r3pr__h3"><span class="visually-hidden">Этап 5. </span>Гарантия до двух лет</h3><p>Часы возвращаются к вам с гарантией до двух лет.</p></div>
+      </li>
+      </ol>
+      <div class="r3pr__end">
+        <p class="r3pr__end-h">Начните с бесплатной диагностики</p>
+        <button class="vf-btn vf-btn--primary r3pr__book" type="button">Записаться</button>
+        <a class="r3pr__tel" href="tel:+79651716996">или позвоните: 8 (965) 171-69-96</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-part="r3-tech-services" data-slot="services" class="r3sv" id="r3-services" aria-labelledby="r3sv-h">
+  <h2 class="r3sv__h" id="r3sv-h">Услуги мастерской</h2>
+  <div class="r3sv__grid">
+    <ul class="r3sv__list"><li><button class="r3sv__item" type="button" id="r3sv-t0" aria-controls="r3sv-p0" aria-expanded="true" data-i="0">Диагностика</button></li><li><button class="r3sv__item" type="button" id="r3sv-t1" aria-controls="r3sv-p1" aria-expanded="false" data-i="1">Ремонт и обслуживание механизма</button></li><li><button class="r3sv__item" type="button" id="r3sv-t2" aria-controls="r3sv-p2" aria-expanded="false" data-i="2">Полировка</button></li><li><button class="r3sv__item" type="button" id="r3sv-t3" aria-controls="r3sv-p3" aria-expanded="false" data-i="3">Элемент питания</button></li><li><button class="r3sv__item" type="button" id="r3sv-t4" aria-controls="r3sv-p4" aria-expanded="false" data-i="4">Ремешки и браслеты</button></li><li><button class="r3sv__item" type="button" id="r3sv-t5" aria-controls="r3sv-p5" aria-expanded="false" data-i="5">Замена стекла</button></li></ul>
+    <div class="r3sv__panes">
+      <div class="r3sv__pane" id="r3sv-p0" data-i="0" role="region" aria-labelledby="r3sv-t0">
+        <div class="r3sv__ph"><img src="../../media/img/ex_33.webp" loading="lazy" alt="Часы на датчике таймграфера"></div>
+        <h3 class="r3sv__h3">Диагностика</h3>
+        <p class="r3sv__d">Бесплатно. Осмотр и проверка хода на таймграфере — после неё понятно, что нужно часам и что можно не трогать.</p>
+        <button class="vf-btn vf-btn--primary r3sv__book" type="button" data-symptom="Диагностика">Заявка на эту работу</button>
+      </div>
+      <div class="r3sv__pane" id="r3sv-p1" data-i="1" role="region" aria-labelledby="r3sv-t1">
+        <div class="r3sv__ph"><img src="../../media/img/ex_2.webp" loading="lazy" alt="Механизм на держателе, видны колёса и камни"></div>
+        <h3 class="r3sv__h3">Ремонт и обслуживание механизма</h3>
+        <p class="r3sv__d">Полная разборка до последнего винта, замена изношенного на оригинальные детали, сборка и проверка хода.</p>
+        <button class="vf-btn vf-btn--primary r3sv__book" type="button" data-symptom="Ремонт или обслуживание механизма">Заявка на эту работу</button>
+      </div>
+      <div class="r3sv__pane" id="r3sv-p2" data-i="2" role="region" aria-labelledby="r3sv-t2">
+        <div class="r3sv__ph"><img src="../../media/img/ex_12.webp" loading="lazy" alt="Два браслета на верстаке"></div>
+        <h3 class="r3sv__h3">Полировка</h3>
+        <p class="r3sv__d">Полировка корпуса и браслета.</p>
+        <button class="vf-btn vf-btn--primary r3sv__book" type="button" data-symptom="Полировка">Заявка на эту работу</button>
+      </div>
+      <div class="r3sv__pane" id="r3sv-p3" data-i="3" role="region" aria-labelledby="r3sv-t3">
+        <div class="r3sv__ph"><img src="../../media/img/face_4.webp" loading="lazy" alt="Часы на кожаном ремешке"></div>
+        <h3 class="r3sv__h3">Элемент питания</h3>
+        <p class="r3sv__d">Замена батарейки с сохранением герметичности: после замены часы проверяются на тестере герметичности.</p>
+        <button class="vf-btn vf-btn--primary r3sv__book" type="button" data-symptom="Замена элемента питания">Заявка на эту работу</button>
+      </div>
+      <div class="r3sv__pane" id="r3sv-p4" data-i="4" role="region" aria-labelledby="r3sv-t4">
+        <div class="r3sv__ph"><img src="../../media/img/ex_13.webp" loading="lazy" alt="Звенья браслета, разложенные в ряд"></div>
+        <h3 class="r3sv__h3">Ремешки и браслеты</h3>
+        <p class="r3sv__d">Ремешки и браслеты для ваших часов.</p>
+        <button class="vf-btn vf-btn--primary r3sv__book" type="button" data-symptom="Ремешок или браслет">Заявка на эту работу</button>
+      </div>
+      <div class="r3sv__pane" id="r3sv-p5" data-i="5" role="region" aria-labelledby="r3sv-t5">
+        <div class="r3sv__ph"><img src="../../media/img/face_3.webp" loading="lazy" alt="Часы с фигурным корпусом на ремешке"></div>
+        <h3 class="r3sv__h3">Замена стекла</h3>
+        <p class="r3sv__d">Новое стекло вместо поцарапанного или разбитого.</p>
+        <button class="vf-btn vf-btn--primary r3sv__book" type="button" data-symptom="Замена стекла">Заявка на эту работу</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-part="r3-tech-brands" data-slot="brands" class="r3br" aria-labelledby="r3br-h">
+  <h2 class="r3br__h" id="r3br-h">С какими марками работает мастер</h2>
+  <ul class="r3br__list">
+    <li>Rolex</li><li>Patek Philippe</li><li>Audemars Piguet</li><li>Vacheron Constantin</li><li>Breguet</li><li>Cartier</li><li>Breitling</li><li>Franck Muller</li><li>Blancpain</li>
+  </ul>
+  <p class="r3br__more">и другие швейцарские марки — от массовых до высокой часовой механики</p>
+</section>
+
+<section data-part="r3-tech-works" data-slot="works" class="r3wk" id="r3-works" aria-labelledby="r3wk-h">
+  <div class="r3wk__head">
+    <h2 class="r3wk__h" id="r3wk-h">С верстака</h2>
+    <p class="r3wk__p">Настоящие кадры мастерской: часы клиентов, механизмы на сборке, работа под микроскопом. Нажмите на кадр, чтобы открыть крупно.</p>
+  </div>
+  <figure class="r3wk__hero">
+    <img src="../../media/img/ex_32.webp" loading="lazy" alt="Колесо часового механизма под микроскопом: латунные спицы и зубцы">
+    <figcaption>Колесо механизма под микроскопом — снимок с экрана, отсюда лёгкая рябь</figcaption>
+  </figure>
+  <ul class="r3wk__grid">
+      <li class="r3wk__c r3wk__c--a"><button class="r3wk__open" type="button" data-i="0" data-type="img" data-src="../../media/img/ex_2.webp" data-alt="Механизм с перляжем на держателе, синий фон" aria-label="Открыть крупно: Механизм с перляжем на держателе, синий фон"><img src="../../media/img/ex_2.webp" loading="lazy" alt="Механизм с перляжем на держателе, синий фон"><span class="r3wk__cap">Механизм на держателе</span></button></li>
+      <li class="r3wk__c r3wk__c--b"><button class="r3wk__open" type="button" data-i="1" data-type="vid" data-src="../../media/vid/ex_4.mp4" data-alt="Видео: механизм крупным планом" aria-label="Открыть крупно: Видео: механизм крупным планом"><video muted loop playsinline preload="none" poster="../../media/vid/ex_4.webp" aria-label="Видео: механизм крупным планом"><source src="../../media/vid/ex_4.mp4" type="video/mp4"></video><span class="r3wk__cap">Видео с верстака</span></button></li>
+      <li class="r3wk__c r3wk__c--c"><button class="r3wk__open" type="button" data-i="2" data-type="img" data-src="../../media/img/ex_27.webp" data-alt="Баланс под микроскопом, снимок с экрана" aria-label="Открыть крупно: Баланс под микроскопом, снимок с экрана"><img src="../../media/img/ex_27.webp" loading="lazy" alt="Баланс под микроскопом, снимок с экрана"><span class="r3wk__cap">Под микроскопом</span></button></li>
+      <li class="r3wk__c r3wk__c--d"><button class="r3wk__open" type="button" data-i="3" data-type="vid" data-src="../../media/vid/ex_18.mp4" data-alt="Видео: циферблат Rolex Datejust в руке мастера" aria-label="Открыть крупно: Видео: циферблат Rolex Datejust в руке мастера"><video muted loop playsinline preload="none" poster="../../media/vid/ex_18.webp" aria-label="Видео: циферблат Rolex Datejust в руке мастера"><source src="../../media/vid/ex_18.mp4" type="video/mp4"></video><span class="r3wk__cap">Циферблат</span></button></li>
+      <li class="r3wk__c r3wk__c--e"><button class="r3wk__open" type="button" data-i="4" data-type="vid" data-src="../../media/vid/ex_10.mp4" data-alt="Видео: корпус часов в руках мастера в перчатках" aria-label="Открыть крупно: Видео: корпус часов в руках мастера в перчатках"><video muted loop playsinline preload="none" poster="../../media/vid/ex_10.webp" aria-label="Видео: корпус часов в руках мастера в перчатках"><source src="../../media/vid/ex_10.mp4" type="video/mp4"></video><span class="r3wk__cap">Корпус</span></button></li>
+      <li class="r3wk__c r3wk__c--f"><button class="r3wk__open" type="button" data-i="5" data-type="img" data-src="../../media/img/face_1.webp" data-alt="Золотые часы на браслете после работы" aria-label="Открыть крупно: Золотые часы на браслете после работы"><img src="../../media/img/face_1.webp" loading="lazy" alt="Золотые часы на браслете после работы"><span class="r3wk__cap">Часы клиента</span></button></li>
+      <li class="r3wk__c r3wk__c--g"><button class="r3wk__open" type="button" data-i="6" data-type="img" data-src="../../media/img/ex_3.webp" data-alt="Пинцет над механизмом во время сборки" aria-label="Открыть крупно: Пинцет над механизмом во время сборки"><img src="../../media/img/ex_3.webp" loading="lazy" alt="Пинцет над механизмом во время сборки"><span class="r3wk__cap">Сборка</span></button></li>
+  </ul>
+</section>
+
+<section data-part="r3-tech-release" data-slot="warranty" class="r3rl" aria-labelledby="r3rl-h">
+  <h2 class="r3rl__h" id="r3rl-h"><span class="r3rl__pre">Гарантия</span> <span class="r3rl__big">до&nbsp;2&nbsp;лет</span></h2>
+  <div class="r3rl__facts">
+    <p><b>Оригинальные комплектующие.</b> Изношенные детали меняем на оригинальные — гарантия стоит на этой работе.</p>
+    <p><b>Диагностика бесплатно.</b> Сначала понятно, что нужно часам, потом — работа.</p>
+    <p><b>Один мастер.</b> Владелец мастерской Владислав сам ведёт часы от разборки до проверки. Это не сетевой сервис и не будка с батарейками.</p>
+  </div>
+</section>
+
+<section data-part="r3-tech-booking" data-slot="booking" class="r3bk" id="r3-booking" aria-labelledby="r3bk-h">
+  <div class="r3bk__side">
+    <h2 class="r3bk__h" id="r3bk-h">Карта-наряд на&nbsp;ваши часы</h2>
+    <p class="r3bk__p">Опишите, что с часами, — мастер свяжется и пригласит на бесплатную диагностику. Если удобнее голосом или в переписке:</p>
+    <ul class="r3bk__direct">
+      <li><a href="tel:+79651716996">8 (965) 171-69-96</a></li>
+      <li><a href="tel:+79162459223">8 (916) 245-92-23</a></li>
+      <li><a href="https://t.me/VFswissboutique">Telegram @VFswissboutique</a></li>
+    </ul>
+    <p class="r3bk__addr">Мастерская: Москва, Петровка, 23/10 стр. 5</p>
+  </div>
+  <form class="r3bk__card" novalidate aria-labelledby="r3bk-h">
+    <div class="r3bk__in">
+      <div class="r3bk__row">
+        <label class="vf-field"><span>Имя</span><input class="vf-input" type="text" name="name" autocomplete="name" placeholder="Как к вам обращаться"></label>
+        <label class="vf-field"><span>Телефон</span><input class="vf-input" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required></label>
+      </div>
+      <fieldset class="vf-field r3bk__via"><legend>Как связаться</legend>
+        <div class="r3bk__seg">
+          <label><input type="radio" name="contact" value="call" checked><span>Звонок</span></label>
+          <label><input type="radio" name="contact" value="telegram"><span>Telegram</span></label>
+        </div>
+      </fieldset>
+      <label class="vf-field"><span>Марка часов</span><input class="vf-input" type="text" name="brand" list="r3bk-brands" autocomplete="off" placeholder="Например, Breitling"></label>
+      <datalist id="r3bk-brands"><option value="Rolex"><option value="Patek Philippe"><option value="Audemars Piguet"><option value="Vacheron Constantin"><option value="Breguet"><option value="Cartier"><option value="Breitling"><option value="Franck Muller"><option value="Blancpain"></datalist>
+      <fieldset class="vf-field r3bk__q"><legend>Что с часами</legend>
+        <div class="r3bk__chips">
+          <button type="button" aria-pressed="false">Остановились</button><button type="button" aria-pressed="false">Спешат или отстают</button><button type="button" aria-pressed="false">Нужна батарейка</button><button type="button" aria-pressed="false">Стекло</button><button type="button" aria-pressed="false">Ремешок или браслет</button><button type="button" aria-pressed="false">Полировка</button><button type="button" aria-pressed="false">Плановое обслуживание</button>
+        </div>
+        <textarea class="vf-input" name="description" rows="3" placeholder="Своими словами: что случилось и когда" aria-label="Описание"></textarea>
+      </fieldset>
+      <label class="vf-field r3bk__file"><span>Фото часов — по желанию</span><span class="r3bk__fbox"><input type="file" name="photos" accept="image/*" multiple><span class="r3bk__fbtn" aria-hidden="true">Выбрать фото</span><span class="r3bk__fname" aria-hidden="true">Файл не выбран</span></span></label>
+      <label class="r3bk__consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных (<a href="#r3-policy">политика</a>)</span></label>
+      <label class="r3bk__hp" aria-hidden="true">Сайт <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      <p class="r3bk__err" role="alert" hidden></p>
+      <button class="vf-btn vf-btn--primary r3bk__go" type="submit">Отправить заявку</button>
+    </div>
+    <div class="r3bk__done" hidden tabindex="-1">
+      <p class="r3bk__done-h">Заявка принята</p>
+      <p class="r3bk__done-p">Это прототип: заявка никуда не отправлена. На рабочем сайте мастер свяжется <span class="r3bk__done-via">по телефону</span>.</p>
+      <button class="vf-btn vf-btn--ghost vf-btn--sm r3bk__again" type="button">Заполнить заново</button>
+    </div>
+  </form>
+</section>
+
+<section data-part="r3-tech-contacts" data-slot="contacts" class="r3ct" id="r3-contacts" aria-labelledby="r3ct-h">
+  <h2 class="r3ct__h" id="r3ct-h"><span class="r3ct__pre">Мастерская в центре Москвы</span> <span class="r3ct__big">Петровка, 23/10 стр.&nbsp;5</span></h2>
+  <div class="r3ct__row">
+    <a class="r3ct__map" href="https://yandex.ru/maps/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D0%9F%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%BA%D0%B0%2023%2F10%20%D1%81%D1%82%D1%80.%205" target="_blank" rel="noopener">Открыть на карте <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 14 14 6M8 6h6v6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a>
+    <ul class="r3ct__list">
+      <li><a href="tel:+79651716996">8 (965) 171-69-96</a></li>
+      <li><a href="tel:+79162459223">8 (916) 245-92-23</a></li>
+      <li><a href="https://t.me/VFswissboutique">Telegram @VFswissboutique</a></li>
+    </ul>
+    <p class="r3ct__hours">Часы работы уточняйте по телефону <span class="r3ct__stub">заглушка</span></p>
+  </div>
+</section>
+
+<footer data-part="r3-tech-footer" data-slot="footer" class="r3ft" id="r3-policy">
+  <p class="r3ft__mark"><span>VF</span> swiss</p>
+  <p class="r3ft__slogan">Ремонт элитных часов · Service | Restoration | Expertise</p>
+  <p class="r3ft__legal"><a href="#r3-policy">Политика обработки персональных данных</a> <span class="r3ft__stub">заглушка</span> · Реквизиты <span class="r3ft__stub">заглушка</span></p>
+</footer>
+
+<div data-part="r3-tech-dock" data-slot="dock" class="r3dk">
+  <nav class="r3dk__bar" aria-label="Связаться с мастерской">
+    <a class="r3dk__a" href="tel:+79651716996"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6.2 2.5 8.4 6.6 6.8 8.2c.9 2 2.9 4 5 5l1.6-1.6 4.1 2.2-.9 3.2c-.2.6-.8 1-1.4.9C8.6 17.3 2.7 11.4 2.2 4.8c0-.6.3-1.2.9-1.4l3.1-.9Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Позвонить</a>
+    <a class="r3dk__a" href="https://t.me/VFswissboutique"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 9.4 17.3 3.2l-2.6 13.4-4.4-3.3-2.4 2.3.3-3.6 6.2-5.7-7.7 4.8-4.2-1.7Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Telegram</a>
+    <button class="vf-btn vf-btn--primary r3dk__book" type="button">Заявка</button>
+  </nav>
+</div>
+
+<div data-part="r3-tech-viewer" data-slot="overlay" class="r3vw">
+  <dialog class="r3vw__dlg" aria-label="Просмотр кадра">
+    <div class="r3vw__stage"><div class="r3vw__media"></div></div>
+    <p class="r3vw__cap" aria-live="polite"></p>
+    <button class="r3vw__btn r3vw__prev" type="button" aria-label="Предыдущий кадр"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6.5 10l6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+    <button class="r3vw__btn r3vw__next" type="button" aria-label="Следующий кадр"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7.5 4 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+    <button class="r3vw__btn r3vw__close" type="button" aria-label="Закрыть просмотр"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+  </dialog>
+</div>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+<script>
+// Общая логика заявки для всех вариантов VF swiss v2: маска телефона и проверка
+window.VFLead = (() => {
+  function formatPhone(value) {
+    let d = value.replace(/\D/g, '');
+    if (d.startsWith('8') || d.startsWith('7')) d = d.slice(1);
+    d = d.slice(0, 10);
+    if (!d) return '';
+    let r = '+7 (' + d.slice(0, 3);
+    if (d.length > 3) r += ') ' + d.slice(3, 6);
+    if (d.length > 6) r += '-' + d.slice(6, 8);
+    if (d.length > 8) r += '-' + d.slice(8, 10);
+    return r;
+  }
+
+  // Проверка заявки перед отправкой.
+  // data: { name, phone, contact: 'call'|'telegram', brand, description, photos: File[] }
+  // Вернуть { ok: true } или { ok: false, field: 'имя поля', message: 'текст для клиента' }.
+  function validateLead(data) {
+    // TODO(human): правила проверки заявки
+    return { ok: true };
+  }
+
+  // Подключает маску к полю телефона
+  function bindPhone(input) {
+    input.addEventListener('input', () => { input.value = formatPhone(input.value); });
+  }
+
+  return { formatPhone, validateLead, bindPhone };
+})();
+
+</script>
+<script>
+/* ── r3-tech-header ── */
+;(() => {
+VFKit.register('r3-tech-header', root => {
+  root.querySelector('.r3h__book')?.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('vf:book', { cancelable: true, detail: {} }));
+  });
+});
+
+})();
+
+/* ── r3-tech-hero-panel ── */
+;(() => {
+VFKit.register('r3-tech-hero-panel', root => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const wide = matchMedia('(min-width: 900px) and (min-height: 600px)');
+  const pin = root.querySelector('.r3hp__pin');
+  const win = root.querySelector('.r3hp__win');
+  const video = root.querySelector('.r3hp__vid');
+  const clamp = v => Math.min(1, Math.max(0, v));
+  const hh = () => parseFloat(getComputedStyle(root).getPropertyValue('--hh')) || 64;
+  let raf = 0;
+
+  // «Снять панель»: прогресс прокрутки через сцену → --p (винты, рамка, раскрытие считает CSS)
+  function update() {
+    raf = 0;
+    if (reduce.matches) { root.style.setProperty('--p', '0'); return; }
+    let p;
+    if (root.classList.contains('is-pinned')) {
+      const r = root.getBoundingClientRect();
+      const range = r.height - pin.offsetHeight;
+      p = range > 0 ? (hh() - r.top) / range : 0;
+    } else {
+      const r = win.getBoundingClientRect();
+      p = (hh() + 16 - r.top) / (r.height * 0.95);
+    }
+    root.style.setProperty('--p', clamp(p).toFixed(4));
+  }
+  const queue = () => { if (!raf) raf = requestAnimationFrame(update); };
+  function setup() { root.classList.toggle('is-pinned', wide.matches && !reduce.matches); update(); }
+  addEventListener('scroll', queue, { passive: true });
+  addEventListener('resize', setup);
+  wide.addEventListener?.('change', setup);
+  reduce.addEventListener?.('change', setup);
+  setup();
+
+  // видео играет только в зоне видимости и без «уменьшить движение»
+  if (video && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([en]) => {
+      if (en.isIntersecting && !reduce.matches) video.play().catch(() => {}); else video.pause();
+    }, { threshold: 0.15 }).observe(video);
+  }
+
+  // карта-наряд
+  const form = root.querySelector('.r3hp__card');
+  const inner = form.querySelector('.r3hp__card-in');
+  const done = form.querySelector('.r3hp__done');
+  const err = form.querySelector('.r3hp__err');
+  const phone = form.elements.phone;
+  const consent = form.elements.consent;
+  if (window.VFLead) VFLead.bindPhone(phone);
+  const clearErr = () => { err.hidden = true; phone.removeAttribute('aria-invalid'); consent.closest('label').classList.remove('is-bad'); };
+  phone.addEventListener('input', clearErr);
+  consent.addEventListener('change', clearErr);
+  function fail(field, message) {
+    err.textContent = message; err.hidden = false;
+    const el = form.elements[field] || phone;
+    if (field === 'consent') consent.closest('label').classList.add('is-bad'); else el.setAttribute('aria-invalid', 'true');
+    el.focus();
+  }
+  form.addEventListener('submit', e => {
+    e.preventDefault(); clearErr();
+    const fd = new FormData(form);
+    const data = { name: '', phone: String(fd.get('phone') || ''), contact: fd.get('contact') || 'call', brand: String(fd.get('brand') || '').trim(), description: '', photos: [] };
+    if (!fd.get('website')) {
+      const digits = data.phone.replace(/\D/g, '');
+      if (!digits) return fail('phone', 'Введите телефон — по нему мастер свяжется с вами.');
+      if (digits.length < 11) return fail('phone', 'Номер неполный: нужно 10 цифр после +7.');
+      if (!consent.checked) return fail('consent', 'Отметьте согласие на обработку данных — без него заявку не принять.');
+      const v = window.VFLead ? VFLead.validateLead(data) : { ok: true };
+      if (!v.ok) return fail(v.field || 'phone', v.message || 'Проверьте заявку.');
+    }
+    inner.hidden = true; done.hidden = false; done.focus();
+  });
+  form.querySelector('.r3hp__again').addEventListener('click', () => {
+    form.reset(); done.hidden = true; inner.hidden = false; phone.focus();
+  });
+});
+
+})();
+
+/* ── r3-tech-teardown ── */
+;(() => {
+VFKit.register('r3-tech-teardown', root => {
+  const plate = root.querySelector('.r3td__plate');
+  const set = n => {
+    plate.classList.toggle('has-on', !!n);
+    root.querySelectorAll('[data-n]').forEach(el => el.classList.toggle('is-on', !!n && el.dataset.n === n));
+  };
+  root.querySelectorAll('.r3td__b').forEach(b => {
+    b.addEventListener('mouseenter', () => set(b.dataset.n));
+    b.addEventListener('focus', () => set(b.dataset.n));
+    b.addEventListener('click', () => set(b.dataset.n));
+    b.addEventListener('mouseleave', () => { if (document.activeElement !== b) set(''); });
+    b.addEventListener('blur', () => set(''));
+  });
+  root.querySelectorAll('.r3td__legend li').forEach(li => {
+    li.addEventListener('mouseenter', () => set(li.dataset.n));
+    li.addEventListener('mouseleave', () => set(''));
+  });
+});
+
+})();
+
+/* ── r3-tech-process ── */
+;(() => {
+VFKit.register('r3-tech-process', root => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const wide = matchMedia('(min-width: 900px) and (min-height: 600px)');
+  const pin = root.querySelector('.r3pr__pin');
+  const track = root.querySelector('.r3pr__track');
+  const hh = () => parseFloat(getComputedStyle(root).getPropertyValue('--hh')) || 64;
+  let shift = 0, raf = 0;
+  // Закреплённая лента: вертикальная прокрутка двигает фюзеляж вбок
+  function setup() {
+    const on = wide.matches && !reduce.matches;
+    root.classList.toggle('is-pinned', on);
+    if (!on) { root.style.height = ''; root.style.setProperty('--x', '0px'); return; }
+    shift = Math.max(0, track.scrollWidth - pin.clientWidth);
+    root.style.height = `${pin.offsetHeight + shift}px`;
+    update();
+  }
+  function update() {
+    raf = 0;
+    if (!root.classList.contains('is-pinned')) return;
+    const top = root.getBoundingClientRect().top - hh();
+    root.style.setProperty('--x', `${Math.min(shift, Math.max(0, -top)).toFixed(1)}px`);
+  }
+  addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+  addEventListener('resize', setup);
+  reduce.addEventListener?.('change', setup);
+  root.querySelectorAll('img').forEach(img => img.complete || img.addEventListener('load', setup, { once: true }));
+  setup();
+  root.querySelector('.r3pr__book').addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('vf:book', { cancelable: true, detail: {} }));
+  });
+});
+
+})();
+
+/* ── r3-tech-services ── */
+;(() => {
+VFKit.register('r3-tech-services', root => {
+  root.classList.add('is-js');
+  const items = [...root.querySelectorAll('.r3sv__item')];
+  const panes = [...root.querySelectorAll('.r3sv__pane')];
+  const home = root.querySelector('.r3sv__panes');
+  const narrow = matchMedia('(max-width: 899px)');
+  let cur = 0;
+  function show(i, fromUser) {
+    cur = i;
+    items.forEach((b, k) => b.setAttribute('aria-expanded', String(k === i)));
+    panes.forEach((p, k) => p.classList.toggle('is-on', k === i));
+    // на телефоне описание встаёт сразу под выбранной строкой
+    const pane = panes[i];
+    if (narrow.matches) items[i].closest('li').appendChild(pane);
+    else if (pane.parentElement !== home) panes.forEach(p => home.appendChild(p));
+    if (fromUser && narrow.matches) pane.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }
+  items.forEach((b, i) => b.addEventListener('click', () => show(i, true)));
+  narrow.addEventListener?.('change', () => show(cur));
+  show(0);
+  root.querySelectorAll('.r3sv__book').forEach(b => b.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('vf:book', { cancelable: true, detail: { symptom: b.dataset.symptom } }));
+  }));
+});
+
+})();
+
+/* ── r3-tech-works ── */
+;(() => {
+VFKit.register('r3-tech-works', root => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const vids = [...root.querySelectorAll('video')];
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting && !reduce.matches) e.target.play().catch(() => {}); else e.target.pause();
+    }), { threshold: 0.35 });
+    vids.forEach(v => io.observe(v));
+  }
+  const btns = [...root.querySelectorAll('.r3wk__open')];
+  const items = btns.map(b => ({ type: b.dataset.type, src: b.dataset.src, alt: b.dataset.alt, poster: b.querySelector('video')?.getAttribute('poster') || '' }));
+  btns.forEach((b, i) => b.addEventListener('click', () => {
+    const ev = new CustomEvent('vf:view', { cancelable: true, detail: { items, index: i, opener: b } });
+    document.dispatchEvent(ev);
+    if (!ev.defaultPrevented) window.open(items[i].src, '_blank', 'noopener');
+  }));
+});
+
+})();
+
+/* ── r3-tech-booking ── */
+;(() => {
+VFKit.register('r3-tech-booking', root => {
+  const form = root.querySelector('.r3bk__card');
+  const inner = form.querySelector('.r3bk__in');
+  const done = form.querySelector('.r3bk__done');
+  const err = form.querySelector('.r3bk__err');
+  const el = form.elements;
+  const desc = el.description;
+  const consentLabel = el.consent.closest('label');
+  if (window.VFLead) VFLead.bindPhone(el.phone);
+  const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const fname = form.querySelector('.r3bk__fname');
+  const showFiles = () => { const n = el.photos.files.length; fname.textContent = n === 0 ? 'Файл не выбран' : n === 1 ? el.photos.files[0].name : `Выбрано фото: ${n}`; };
+  el.photos.addEventListener('change', showFiles);
+  // быстрые варианты дописывают описание
+  root.querySelectorAll('.r3bk__chips button').forEach(b => b.addEventListener('click', () => {
+    const on = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', String(on));
+    const t = b.textContent.trim();
+    const parts = desc.value.split(/\s*;\s*/).filter(Boolean).filter(x => x !== t);
+    if (on) parts.unshift(t);
+    desc.value = parts.join('; ');
+  }));
+
+  function clear() { err.hidden = true; form.querySelectorAll('[aria-invalid]').forEach(x => x.removeAttribute('aria-invalid')); consentLabel.classList.remove('is-bad'); }
+  form.addEventListener('input', clear);
+  function fail(field, message) {
+    err.textContent = message; err.hidden = false;
+    const f = el[field] && el[field].focus ? el[field] : el.phone;
+    if (field === 'consent') consentLabel.classList.add('is-bad'); else f.setAttribute('aria-invalid', 'true');
+    f.focus();
+  }
+  form.addEventListener('submit', e => {
+    e.preventDefault(); clear();
+    const data = { name: el.name.value.trim(), phone: el.phone.value, contact: el.contact.value || 'call', brand: el.brand.value.trim(), description: desc.value.trim(), photos: [...(el.photos.files || [])] };
+    if (!el.website.value) {
+      const digits = data.phone.replace(/\D/g, '');
+      if (!digits) return fail('phone', 'Введите телефон — по нему мастер свяжется с вами.');
+      if (digits.length < 11) return fail('phone', 'Номер неполный: нужно 10 цифр после +7.');
+      if (!el.consent.checked) return fail('consent', 'Отметьте согласие на обработку данных — без него заявку не принять.');
+      const v = window.VFLead ? VFLead.validateLead(data) : { ok: true };
+      if (!v.ok) return fail(v.field || 'phone', v.message || 'Проверьте заявку.');
+    }
+    form.querySelector('.r3bk__done-via').textContent = data.contact === 'telegram' ? 'в Telegram' : 'по телефону';
+    inner.hidden = true; done.hidden = false; done.focus();
+  });
+  form.querySelector('.r3bk__again').addEventListener('click', () => {
+    form.reset(); showFiles(); root.querySelectorAll('.r3bk__chips button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    done.hidden = true; inner.hidden = false; el.phone.focus();
+  });
+
+  // «Заявка» из любого места страницы: прокрутка сюда, подстановка работы
+  document.addEventListener('vf:book', e => {
+    e.preventDefault();
+    if (inner.hidden) { done.hidden = true; inner.hidden = false; }
+    const s = e.detail && e.detail.symptom;
+    if (s && !desc.value.includes(s)) desc.value = desc.value ? `${s}; ${desc.value}` : s;
+    form.scrollIntoView({ behavior: reduce() ? 'auto' : 'smooth', block: 'start' });
+    form.classList.remove('is-flash'); void form.offsetWidth; form.classList.add('is-flash');
+    setTimeout(() => (el.name.value ? el.phone : el.name).focus({ preventScroll: true }), reduce() ? 0 : 600);
+  });
+});
+
+})();
+
+/* ── r3-tech-dock ── */
+;(() => {
+VFKit.register('r3-tech-dock', root => {
+  root.querySelector('.r3dk__book').addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('vf:book', { cancelable: true, detail: {} }));
+  });
+  // пока на экране форма заявки, док уходит вниз — не закрывает поля
+  const form = document.querySelector('[data-slot="booking"] form');
+  if (form && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => root.classList.toggle('is-away', e.isIntersecting), { threshold: 0.12 }).observe(form);
+  }
+});
+
+})();
+
+/* ── r3-tech-viewer ── */
+;(() => {
+VFKit.register('r3-tech-viewer', root => {
+  const dlg = root.querySelector('.r3vw__dlg');
+  const box = root.querySelector('.r3vw__media');
+  const cap = root.querySelector('.r3vw__cap');
+  let items = [], i = 0, opener = null, x0 = null;
+  function render() {
+    const it = items[i];
+    box.textContent = '';
+    let m;
+    if (it.type === 'vid') {
+      m = document.createElement('video');
+      Object.assign(m, { src: it.src, muted: true, loop: true, playsInline: true, controls: true, autoplay: !matchMedia('(prefers-reduced-motion: reduce)').matches });
+      if (it.poster) m.poster = it.poster;
+      m.setAttribute('aria-label', it.alt);
+    } else {
+      m = document.createElement('img'); m.src = it.src; m.alt = it.alt;
+    }
+    box.appendChild(m);
+    cap.textContent = `${it.alt} — ${i + 1} из ${items.length}`;
+  }
+  const go = d => { i = (i + d + items.length) % items.length; render(); };
+  document.addEventListener('vf:view', e => {
+    if (!e.detail?.items?.length) return;
+    e.preventDefault();
+    items = e.detail.items; i = e.detail.index || 0; opener = e.detail.opener || null;
+    render(); dlg.showModal();
+  });
+  root.querySelector('.r3vw__prev').addEventListener('click', () => go(-1));
+  root.querySelector('.r3vw__next').addEventListener('click', () => go(1));
+  root.querySelector('.r3vw__close').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') go(-1); if (e.key === 'ArrowRight') go(1); });
+  dlg.addEventListener('close', () => { box.textContent = ''; opener?.focus(); });
+  dlg.addEventListener('pointerdown', e => { x0 = e.clientX; });
+  dlg.addEventListener('pointerup', e => { if (x0 !== null && Math.abs(e.clientX - x0) > 50) go(e.clientX < x0 ? 1 : -1); x0 = null; });
+  dlg.addEventListener('click', e => { if (e.target === dlg || e.target.classList.contains('r3vw__stage')) dlg.close(); });
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+</body>
+</html>

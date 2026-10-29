@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>VF kit · Шрифты и иконки</title>
+<link rel="icon" href="../icons/favicon.png">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+  :root { --bg: #f3f1ec; --ink: #1c1b19; --muted: #6d6a63; --line: #d9d5cc; color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 'Golos Text', system-ui, sans-serif; }
+  main { max-width: 1200px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font: 600 28px/1.2 'Onest', sans-serif; margin: 0 0 6px; }
+  .note { color: var(--muted); margin: 0 0 28px; }
+  .face { padding: 22px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 220px 1fr; gap: 20px; }
+  .face h2 { font: 600 15px/1.3 'Golos Text', sans-serif; margin: 0; }
+  .face small { display: block; color: var(--muted); font-size: 13px; }
+  .sample-xl { font-size: clamp(32px, 5vw, 64px); line-height: 1.05; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .sample-m { font-size: 18px; margin: 0 0 6px; max-width: 65ch; }
+  .weights span { margin-right: 14px; font-size: 20px; }
+  .icons { margin-top: 36px; }
+  .set { padding: 18px 0; border-top: 1px solid var(--line); }
+  .set h2 { font: 600 15px/1.3 'Golos Text', sans-serif; margin: 0 0 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+  .ic { display: grid; justify-items: center; gap: 6px; padding: 12px 4px; border-radius: 10px; background: #fff; font-size: 11px; color: var(--muted); }
+  .ic img { width: 28px; height: 28px; }
+  .miss { opacity: .3; }
+  ::selection { background: #1c1b19; color: #f3f1ec; }
+  @media (max-width: 640px) { .face { grid-template-columns: 1fr; gap: 8px; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Шрифты и иконки kit</h1>
+  <p class="note">Все шрифты — локальные (SIL OFL 1.1), иконки — Tabler (MIT), Lucide (ISC), Gravity UI (MIT). Имена иконок общие: набор меняется в рецепте одной строкой.</p>
+  <div id="faces"></div>
+  <section class="icons" id="icons"></section>
+</main>
+<script>
+  const FACES = [
+    ['Golos Text', 'Paratype · гротеск для текста и интерфейса, вариативный'],
+    ['Onest', 'гибридный гротеск для экранов, плотный, вариативный'],
+    ['Unbounded', 'широкий акцидентный — только крупные заголовки, осторожно: частый в рунете'],
+    ['PT Serif', 'Paratype · антиква для чтения'],
+    ['Involve', 'геометрический гротеск (наследник Avant Garde)'],
+  ];
+  const XL = 'Разберём часы до последнего винта';
+  const M = 'Диагностика — бесплатно. Гарантия до двух лет. Оригинальные комплектующие. Петровка, 23/10 стр. 5. ДЛУФЖЩ дуфжщ ёЁ № ₽';
+  document.getElementById('faces').innerHTML = FACES.map(([f, d]) => `
+    <section class="face"><div><h2>${f}</h2><small>${d}</small></div>
+      <div style="font-family:'${f}', serif">
+        <p class="sample-xl">${XL}</p><p class="sample-m">${M}</p>
+        <p class="weights">${[300, 400, 500, 600, 700, 800].map(w => `<span style="font-weight:${w}">Часы ${w}</span>`).join('')}</p>
+      </div></section>`).join('');
+
+  fetch('../icons/names.json').then(r => r.json()).then(names => {
+    const sets = [['tabler', 'Tabler · линия 2px'], ['lucide', 'Lucide · тонкая линия'], ['gravity', 'Gravity UI · строгие системные']];
+    document.getElementById('icons').innerHTML = '<h1>Иконки</h1>' + sets.map(([s, t]) => `
+      <section class="set"><h2>${t}</h2><div class="grid">${Object.keys(names).map(n =>
+        `<div class="ic"><img src="../icons/${s}/${n}.svg" alt="" onerror="this.parentNode.classList.add('miss')">${n}</div>`).join('')}</div></section>`).join('');
+  });
+</script>
+</body>
+</html>

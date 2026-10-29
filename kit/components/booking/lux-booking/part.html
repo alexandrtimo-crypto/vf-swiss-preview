@@ -1,0 +1,50 @@
+<section data-part="lux-booking" data-slot="booking" class="lux-booking" id="visit" aria-labelledby="lux-visitTitle">
+  <div class="visit__bg" aria-hidden="true"><img src="{{media}}/img/ex_6.webp" width="600" height="800" alt="" loading="lazy"></div>
+  <div class="invite">
+    <form class="invite__form" novalidate>
+      <p class="invite__kicker">Приглашение в ателье</p>
+      <h2 class="invite__title" id="lux-visitTitle">Принесите часы —<br><em>мы их выслушаем</em></h2>
+
+      <p class="invite__sentence">
+        Меня зовут
+        <span class="field vf-field"><input class="vf-input" id="lux-fName" name="name" type="text" autocomplete="name" placeholder="имя" aria-label="Ваше имя"></span>,
+        мой телефон
+        <span class="field field--tel vf-field"><input class="vf-input" id="lux-fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" aria-label="Телефон"></span>.
+      </p>
+
+      <fieldset class="invite__how">
+        <legend>Как с вами связаться</legend>
+        <label class="pill"><input type="radio" name="contact" value="call" checked><span>Позвоните мне</span></label>
+        <label class="pill"><input type="radio" name="contact" value="telegram"><span>Напишите в Telegram</span></label>
+      </fieldset>
+
+      <details class="invite__more">
+        <summary>Рассказать о часах <span>— необязательно</span></summary>
+        <p class="invite__sentence invite__sentence--sm">
+          Мои часы
+          <span class="field vf-field"><input class="vf-input" id="lux-fBrand" name="brand" type="text" list="lux-brandList" placeholder="марка" aria-label="Марка часов"></span>,
+          и вот что с ними:
+        </p>
+        <datalist id="lux-brandList">
+          <option value="Rolex"><option value="Patek Philippe"><option value="Audemars Piguet"><option value="Vacheron Constantin"><option value="Breguet"><option value="Cartier"><option value="Breitling"><option value="Franck Muller"><option value="Blancpain">
+        </datalist>
+        <span class="field field--area vf-field"><textarea class="vf-input" id="lux-fDesc" name="description" rows="2" placeholder="опишите, что случилось" aria-label="Описание"></textarea></span>
+        <label class="invite__file"><input id="lux-fPhotos" name="photos" type="file" accept="image/*" multiple><span class="invite__file-label">Приложить фото</span></label>
+      </details>
+
+      <div class="hp" aria-hidden="true"><label>Сайт <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+      <label class="invite__consent"><input type="checkbox" id="lux-fConsent" name="consent"><span>Согласен на обработку персональных данных по <a href="#policy">политике конфиденциальности</a> •</span></label>
+
+      <p class="invite__err" role="alert"></p>
+      <button class="invite__send vf-btn vf-btn--primary" type="submit">Отправить приглашение</button>
+      <noscript><p class="invite__noscript">Чтобы записаться, позвоните по телефону ниже или напишите в Telegram.</p></noscript>
+    </form>
+
+    <div class="invite__done" hidden tabindex="-1">
+      <p class="invite__kicker">Прототип</p>
+      <p class="invite__title">Заявка принята <em>(прототип)</em></p>
+      <p class="invite__done-text">Это демонстрация: данные никуда не отправлены. Чтобы записаться сейчас, позвоните или напишите в Telegram.</p>
+    </div>
+  </div>
+</section>

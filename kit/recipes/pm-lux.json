@@ -1,0 +1,2 @@
+{ "name": "pm-lux", "title": "VF swiss — мастерская швейцарских часов (pm-lux, UI UX Pro Max)", "tokens": "pm-lux", "buttons": "pm-lux", "fields": "pm-lux",
+  "parts": ["pm-lux-header", "pm-lux-hero", "pm-lux-story", "pm-lux-process", "pm-lux-warranty", "pm-lux-works", "pm-lux-services", "pm-lux-brands", "pm-lux-booking", "pm-lux-contacts", "pm-lux-footer", "pm-lux-dock"] }

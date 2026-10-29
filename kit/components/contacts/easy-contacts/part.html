@@ -1,0 +1,37 @@
+<section data-part="easy-contacts" data-slot="contacts" class="easy-contacts" id="gde" aria-labelledby="easy-contacts-h">
+  <div class="mapcard">
+    <svg class="map" viewBox="0 0 640 400" role="img" aria-label="Схема: мастерская VF swiss на Петровке">
+      <rect width="640" height="400" fill="#F7ECDC"/>
+      <g fill="#EEDDC5">
+        <rect x="20" y="20" width="170" height="120" rx="22"/><rect x="20" y="170" width="170" height="90" rx="22"/><rect x="20" y="290" width="170" height="100" rx="22"/>
+        <rect x="290" y="20" width="140" height="140" rx="22"/><rect x="460" y="20" width="160" height="140" rx="22"/>
+        <rect x="290" y="250" width="140" height="130" rx="22"/><rect x="460" y="250" width="160" height="130" rx="22"/>
+      </g>
+      <rect x="0" y="180" width="640" height="54" fill="#CDE9B8"/>
+      <g fill="#8CCB6E"><circle cx="40" cy="207" r="13"/><circle cx="90" cy="203" r="15"/><circle cx="150" cy="208" r="12"/><circle cx="330" cy="205" r="14"/><circle cx="390" cy="208" r="12"/><circle cx="500" cy="204" r="15"/><circle cx="560" cy="208" r="12"/><circle cx="612" cy="205" r="13"/></g>
+      <path d="M220 -10v420" stroke="#fff" stroke-width="54"/>
+      <path d="M220 -10v420" stroke="#F2E2CC" stroke-width="2" stroke-dasharray="14 14"/>
+      <path d="M-10 166h660M-10 248h660" stroke="#fff" stroke-width="16"/>
+      <text x="236" y="120" class="map__street" transform="rotate(90 236 120)">ул. Петровка</text>
+      <g class="pin" transform="translate(292 116)">
+        <ellipse cx="0" cy="56" rx="16" ry="5" style="fill:var(--vf-easy-ink, #2A211C)" opacity=".15"/>
+        <circle class="pin__pulse" cx="0" cy="56" r="14" fill="none" style="stroke:var(--vf-accent, #F0533F)" stroke-width="4"/>
+        <g class="pin__body"><path d="M0 56C-20 30-30 18-30 2a30 30 0 0 1 60 0c0 16-10 28-30 54z" style="fill:var(--vf-accent, #F0533F);stroke:var(--vf-easy-ink, #2A211C)" stroke-width="4"/>
+        <text x="0" y="9" text-anchor="middle" class="pin__t">VF</text></g>
+      </g>
+      <g transform="translate(330 64)"><rect width="150" height="44" rx="22" fill="#fff" style="stroke:var(--vf-easy-ink, #2A211C)" stroke-width="3"/><text x="75" y="29" text-anchor="middle" class="map__lbl">Мы здесь!</text></g>
+    </svg>
+    <div class="mapcard__body">
+      <h2 id="easy-contacts-h">Как нас найти</h2>
+      <p class="addr">Москва, Петровка, 23/10, стр.&nbsp;5</p>
+      <div class="mapcard__btns">
+        <a class="vf-btn vf-btn--primary" href="https://yandex.ru/maps/?rtext=~55.766248%2C37.615030&amp;rtt=auto" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 19-8-4-8 4z"/></svg>Маршрут</a>
+        <button class="vf-btn vf-btn--ghost" type="button" data-copy>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>Скопировать адрес</button>
+      </div>
+      <p class="hours">Часы приёма — уточните по телефону<span class="stub" title="Заглушка: нужны часы приёма">•</span></p>
+    </div>
+  </div>
+  <div class="easy-contacts__toast" role="status" aria-live="polite"></div>
+</section>

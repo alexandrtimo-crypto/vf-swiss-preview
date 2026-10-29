@@ -1,0 +1,8 @@
+/* title: fd-lux — кнопки: воронёная сталь */
+.vf-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5em; min-height: 52px; padding: 0 28px; border: 1px solid var(--vf-accent); border-radius: var(--vf-radius); background: transparent; color: var(--vf-accent); font: 400 18px/1 var(--vf-font-display); letter-spacing: .01em; text-decoration: none; cursor: pointer; transition: background-color .2s var(--vf-ease), color .2s var(--vf-ease); }
+.vf-btn:hover { background: color-mix(in srgb, var(--vf-accent) 8%, transparent); }
+.vf-btn--primary { background: var(--vf-accent); color: var(--vf-on-accent); }
+.vf-btn--primary:hover { background: color-mix(in srgb, var(--vf-accent) 86%, #000); }
+.vf-btn--ghost { border-color: currentColor; color: inherit; }
+.vf-btn--sm { min-height: 40px; padding: 0 18px; font-size: 16px; }
+.vf-btn:focus-visible { outline: 2px solid var(--vf-metal, #A8823A); outline-offset: 3px; }

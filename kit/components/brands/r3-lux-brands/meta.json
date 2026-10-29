@@ -1,0 +1,1 @@
+{ "id": "r3-lux-brands", "slot": "brands", "title": "Марки · строка микротекста", "vision": "r3-lux", "description": "Тихая сцена: названия марок одной строкой с разрядкой, как микротекст, в широкой плетёной рамке-гильоше.", "fonts": [], "needs": ["kit/lib/motion.js", "kit/lib/r3lux-engrave.js"] }

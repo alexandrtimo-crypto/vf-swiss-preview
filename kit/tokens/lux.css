@@ -1,0 +1,48 @@
+/* title: Дорого-богато */
+/* fonts: Manrope:wght@200..500; Playfair Display:wght@400..500; Playfair Display:ital,wght@1,400..500 */
+/* Тема «Дорого-богато»: тёплый чёрный, слоновая кость, шампань-платина. Антиква Playfair Display + гротеск Manrope. */
+
+:root {
+  /* общие токены VF kit */
+  --vf-bg: #0c0a08;
+  --vf-bg-2: #15110d;
+  --vf-surface: #211a14;
+  --vf-text: #f0e9dd;
+  --vf-text-2: #cdc2b0;
+  --vf-muted: #8d8273;
+  --vf-line: rgba(191, 174, 146, .28);
+  --vf-accent: #bfae92;
+  --vf-accent-2: #efe2c8;
+  --vf-on-accent: #0c0a08;
+  --vf-danger: #9a2f22;
+  --vf-font-display: 'Playfair Display', 'Didot', 'Bodoni 72', 'Times New Roman', serif;
+  --vf-font-text: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --vf-font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --vf-radius: 2px;
+  --vf-radius-lg: 4px;
+  --vf-ease: cubic-bezier(.65, 0, .15, 1);
+
+  /* особые токены видения lux (компоненты держат их с запасным значением) */
+  --vf-paper: #f4eee3;
+  --vf-paper-ink: #2a221a;
+  --vf-paper-mute: #7a6d5c;
+  --vf-bronze: #8a6a3e;
+  --vf-gut: clamp(16px, 4vw, 56px);
+}
+
+/* ── глобальное: только здесь ── */
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--vf-bg); color: var(--vf-text); -webkit-text-size-adjust: 100%; }
+.vf-page {
+  margin: 0; background: var(--vf-bg); color: var(--vf-text); font-family: var(--vf-font-text);
+  font-weight: 300; font-size: 16px; line-height: 1.6; overflow-x: clip; -webkit-font-smoothing: antialiased;
+}
+:where(.vf-page) img, :where(.vf-page) video { display: block; max-width: 100%; }
+:where(.vf-page) a { color: inherit; }
+:where(.vf-page) em { font-style: italic; }
+:where(.vf-page) button { font: inherit; color: inherit; }
+:where(.vf-page) :focus-visible { outline: 1px solid var(--vf-accent); outline-offset: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

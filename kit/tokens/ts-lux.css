@@ -1,0 +1,50 @@
+/* title: Taste Skill · дорого (тёмный зал) */
+/* fonts: Unbounded:wght@300..500; Onest:wght@300..600 */
+/* Видение ts-lux. Направление taste-skill «dark-room» + герой «counter-object-wide-wordmark».
+   Палитра warm-black-gold из библиотеки скилла, цвета взяты у визитки владельца (тёмная кожа, золото);
+   чернила смягчены с #fff до тёплого светлого (colour.md §6). Золото — только на действии. */
+:root {
+  --vf-bg: #0c0a08;
+  --vf-bg-2: #14110e;
+  --vf-surface: #1c1915;
+  --vf-text: #ece6dc;
+  --vf-text-2: #d6cfc4;
+  --vf-muted: #9c958b;
+  --vf-line: #2b2620;
+  --vf-accent: #c9a45a;
+  --vf-accent-2: #dcbb76;
+  --vf-on-accent: #0c0a08;
+  --vf-danger: #ef8b72;
+  --vf-font-display: "Unbounded", "Helvetica Neue", Arial, sans-serif;
+  --vf-font-text: "Onest", "Helvetica Neue", Arial, sans-serif;
+  --vf-font-mono: "Onest", "Helvetica Neue", Arial, sans-serif;
+  --vf-radius: 0px;
+  --vf-radius-lg: 0px;
+  --vf-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ts-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ts-ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+  --ts-ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --ts-m: clamp(20px, 2.2vw, 32px);
+  --ts-step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --ts-step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --ts-step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --ts-step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  color-scheme: dark;
+}
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body.vf-page {
+  margin: 0;
+  background: var(--vf-bg);
+  color: var(--vf-text);
+  font-family: var(--vf-font-text);
+  font-weight: 300;
+  font-size: var(--ts-step-body);
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body.vf-page ::selection { background: var(--vf-accent); color: var(--vf-on-accent); }
+body.vf-page :focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+body.vf-page img, body.vf-page video { display: block; max-width: 100%; }

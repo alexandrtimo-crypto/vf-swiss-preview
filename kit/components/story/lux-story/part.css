@@ -1,0 +1,103 @@
+/* Ателье «дорого»: закреплённая горизонтальная лента из пяти кадров */
+.lux-story { --gut: var(--vf-gut, clamp(16px, 4vw, 56px)); position: relative; background: var(--vf-bg); color: var(--vf-text); }
+.lux-story *, .lux-story *::before, .lux-story *::after { box-sizing: border-box; }
+:where(.lux-story) img, :where(.lux-story) video { display: block; max-width: 100%; }
+:where(.lux-story) button { font: inherit; color: inherit; }
+:where(.lux-story) a { color: inherit; }
+.lux-story .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: -1px; }
+/* единая «плёночная» обработка любительских кадров */
+.lux-story .tone { filter: saturate(.5) sepia(.18) contrast(1.06) brightness(.82); }
+.lux-story .tone--soft { filter: saturate(.45) sepia(.14) contrast(1.04) brightness(.9); }
+.lux-story .tone--cool { filter: saturate(.12) sepia(.38) contrast(1.12) brightness(.78); }
+
+.lux-story .atelier__pin { position: relative; }
+.lux-story .atelier__track { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; outline-offset: -6px; }
+.lux-story .atelier__track::-webkit-scrollbar { display: none; }
+.lux-story .frame { position: relative; flex: 0 0 100vw; width: 100vw; height: 100svh; margin: 0; scroll-snap-align: start; overflow: hidden; background: var(--vf-bg); --fx: 0; }
+.lux-story .frame__media { position: absolute; overflow: hidden; }
+.lux-story .frame__media img, .lux-story .frame__media video { width: 100%; height: 100%; object-fit: cover; }
+.lux-story .frame__say { position: absolute; z-index: 2; margin: 0; }
+.lux-story .say-xl { display: block; font: 400 clamp(50px, 8.2vw, 150px)/.94 var(--vf-font-display); letter-spacing: -.02em; }
+.lux-story .say-xl em { color: var(--vf-accent-2); }
+.lux-story .say-sm { display: block; font: 400 11px/1.6 var(--vf-font-text); letter-spacing: .42em; text-transform: uppercase; color: var(--vf-text-2); margin: 0 0 26px; }
+.lux-story .frame__say .say-xl + .say-sm { margin: 28px 0 0; }
+
+.lux-story.is-pin .atelier__pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.lux-story.is-pin .atelier__track { overflow: visible; scroll-snap-type: none; height: 100vh; will-change: transform; }
+.lux-story.is-pin .frame { height: 100vh; }
+.lux-story.is-pin .frame--paper { flex-basis: 88vw; width: 88vw; }
+.lux-story.is-pin .frame--layer { flex-basis: 94vw; width: 94vw; }
+
+/* кадр 1: во весь экран */
+.lux-story .frame--full .frame__media { inset: 0; }
+.lux-story .frame--full img { transform: scale(1.14) translateX(calc(var(--fx) * -7%)); }
+.lux-story .frame--full::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(20deg, color-mix(in srgb, var(--vf-bg) 88%, transparent) 10%, color-mix(in srgb, var(--vf-bg) 20%, transparent) 55%, color-mix(in srgb, var(--vf-bg) 50%, transparent)); }
+.lux-story .frame--full .frame__say { left: 7vw; bottom: 11vh; transform: translateX(calc(var(--fx) * 14%)); }
+.lux-story .frame--full .say-xl { font-size: clamp(58px, 10vw, 180px); }
+
+/* кадр 2: бумага, узкий кадр, текст поверх на «разности» */
+.lux-story .frame--paper { background: var(--vf-paper, #f4eee3); color: var(--vf-paper-ink, #2a221a); }
+.lux-story .frame--paper .frame__media { right: 6%; top: 8vh; height: 84vh; aspect-ratio: 9 / 16; transform: translateX(calc(var(--fx) * 10%)); box-shadow: 0 40px 80px -30px color-mix(in srgb, var(--vf-paper-ink, #2a221a) 60%, transparent); }
+.lux-story .frame--paper .frame__say { left: 7%; top: 50%; transform: translateY(-50%) translateX(calc(var(--fx) * 22%)); color: #f2ebdf; mix-blend-mode: difference; }
+.lux-story .frame--paper .say-xl { font-size: clamp(48px, 6.4vw, 120px); }
+.lux-story .frame--paper .say-xl em { color: inherit; }
+.lux-story .frame--paper .say-sm { color: #f2ebdf; opacity: .9; }
+
+/* кадр 3: лупа */
+.lux-story .frame--loupe { background: radial-gradient(ellipse 50% 70% at 70% 50%, color-mix(in srgb, var(--vf-bg), var(--vf-accent) 15%), var(--vf-bg) 70%); }
+.lux-story .frame--loupe .frame__media { right: 8vw; top: 50%; width: min(78vh, 48vw); aspect-ratio: 1; border-radius: 50%; transform: translateY(-50%);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--vf-accent) 55%, transparent), 0 0 0 16px color-mix(in srgb, var(--vf-bg) 90%, transparent), 0 0 0 17px color-mix(in srgb, var(--vf-accent) 25%, transparent), 0 60px 120px rgba(0,0,0,.6); }
+.lux-story .frame--loupe img { transform: scale(1.35) translate(calc(var(--fx) * -9%), 4%); }
+.lux-story .frame--loupe .frame__say { left: 7vw; top: 50%; transform: translateY(-50%) translateX(calc(var(--fx) * 18%)); }
+.lux-story .frame--loupe .say-xl { font: 200 clamp(30px, 3.4vw, 60px)/1.18 var(--vf-font-text); letter-spacing: .14em; text-transform: uppercase; }
+.lux-story .frame--loupe .say-xl em { font-style: normal; color: var(--vf-accent); }
+
+/* кадр 4: слой — огромное слово позади видео */
+.lux-story .frame--layer { background: color-mix(in srgb, var(--vf-bg), var(--vf-accent) 2%); }
+.lux-story .frame__ghost { position: absolute; left: 50%; top: 50%; z-index: 0; transform: translate(calc(-50% + var(--fx) * 26%), -50%); white-space: nowrap;
+  font: italic 400 clamp(160px, 25vw, 460px)/1 var(--vf-font-display); color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--vf-accent) 40%, transparent); letter-spacing: -.03em; }
+.lux-story .frame--layer .frame__media { left: 50%; top: 11vh; height: 78vh; aspect-ratio: 9 / 16; transform: translateX(-50%); z-index: 1; box-shadow: 0 50px 100px -20px rgba(0,0,0,.9); }
+.lux-story .frame--layer video { filter: saturate(.55) sepia(.15) contrast(1.05) brightness(.85); }
+.lux-story .frame--layer .frame__say { right: 5vw; bottom: 10vh; text-align: right; }
+.lux-story .frame--layer .say-xl { font-size: clamp(40px, 4.6vw, 86px); }
+
+/* кадр 5: бумага, предмет «вживлён» в лист */
+.lux-story .frame--blend { background: var(--vf-paper, #f4eee3); color: var(--vf-paper-ink, #2a221a); }
+.lux-story .frame--blend .frame__media { left: 3vw; top: 50%; width: 54vw; aspect-ratio: 866 / 633; transform: translateY(-50%) translateX(calc(var(--fx) * 8%)); }
+.lux-story .frame--blend img { mix-blend-mode: multiply; filter: grayscale(.4) sepia(.2) brightness(1.32) contrast(1.35); -webkit-mask: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%); mask: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%); }
+.lux-story .frame--blend .frame__say { right: 7vw; top: 50%; transform: translateY(-50%); text-align: right; }
+.lux-story .frame--blend .say-xl { font-size: clamp(46px, 6vw, 112px); }
+.lux-story .frame--blend .say-xl em { color: var(--vf-bronze, #8a6a3e); }
+.lux-story .frame__link { margin-top: 40px; --vf-btn-line: var(--vf-bronze, #8a6a3e); }
+
+.lux-story .frame__hint { display: none; }
+.lux-story .atelier__rail { position: absolute; left: var(--gut); right: var(--gut); bottom: 30px; height: 1px; background: color-mix(in srgb, var(--vf-accent) 22%, transparent); z-index: 3; mix-blend-mode: difference; }
+.lux-story .atelier__rail span { display: block; height: 100%; background: var(--vf-accent-2); transform-origin: left; transform: scaleX(var(--ap, .2)); }
+.lux-story .atelier__nav { position: absolute; right: var(--gut); bottom: 52px; z-index: 3; display: flex; gap: 10px; }
+.lux-story .atelier__nav button { width: 48px; height: 48px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--vf-accent) 50%, transparent); background: color-mix(in srgb, var(--vf-bg) 50%, transparent); color: var(--vf-text); font-size: 22px; cursor: pointer; backdrop-filter: blur(6px); }
+.lux-story.is-pin .atelier__nav { display: none; }
+
+@media (max-width: 899px) {
+  .lux-story .frame { height: 100svh; }
+  .lux-story .frame__hint { display: flex; position: absolute; right: 16px; top: 50%; z-index: 4; writing-mode: vertical-rl; font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--vf-text-2); gap: 10px; align-items: center; }
+  .lux-story .frame__hint::after { content: '→'; writing-mode: horizontal-tb; font-size: 16px; letter-spacing: 0; }
+  .lux-story .atelier__nav { bottom: 46px; right: auto; left: 16px; }
+  .lux-story .atelier__nav button { width: 44px; height: 44px; }
+  .lux-story .say-xl { font-size: clamp(44px, 13vw, 72px) !important; }
+  .lux-story .frame--full .frame__say { left: 16px; right: 16px; bottom: 16svh; }
+  .lux-story .frame--full .say-xl { font-size: clamp(54px, 16vw, 90px) !important; }
+  .lux-story .frame--paper .frame__media { right: auto; left: 50%; top: 9svh; height: 62svh; transform: translateX(-50%); }
+  .lux-story .frame--paper .frame__say { left: 16px; right: 16px; top: auto; bottom: 14svh; transform: none; }
+  .lux-story .frame--paper .say-xl { font-size: clamp(36px, 10.6vw, 56px) !important; }
+  .lux-story .frame--loupe .frame__media { right: auto; left: 50%; top: 10svh; width: 84vw; transform: translateX(-50%); }
+  .lux-story .frame--loupe .frame__say { left: 16px; right: 16px; top: auto; bottom: 14svh; transform: none; }
+  .lux-story .frame--loupe .say-xl { font-size: clamp(38px, 11vw, 60px) !important; }
+  .lux-story .frame__ghost { font-size: 44vw; top: 38%; }
+  .lux-story .frame--layer .frame__media { top: 9svh; height: 56svh; }
+  .lux-story .frame--layer .frame__say { left: 16px; right: 16px; bottom: 14svh; }
+  .lux-story .frame--blend .frame__media { left: 50%; top: 14svh; width: 100vw; transform: translateX(-50%); }
+  .lux-story .frame--blend .frame__say { left: 16px; right: 16px; top: auto; bottom: 14svh; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lux-story *, .lux-story *::before, .lux-story *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

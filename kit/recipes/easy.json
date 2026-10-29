@@ -1,0 +1,8 @@
+{
+  "name": "easy",
+  "title": "VF swiss · Легко",
+  "tokens": "easy",
+  "buttons": "easy",
+  "fields": "easy",
+  "parts": ["easy-header", "easy-hero", "easy-process", "easy-works", "easy-faq", "easy-contacts", "easy-footer", "easy-dock", "easy-chat", "easy-booking", "easy-story"]
+}

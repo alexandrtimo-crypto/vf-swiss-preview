@@ -1,0 +1,40 @@
+/* Мастерство «дорого»: закреплённое изображение, проплывающие фразы, смена кадра маской-ирисом */
+.lux-process { --gut: var(--vf-gut, clamp(16px, 4vw, 56px)); position: relative; background: var(--vf-bg); color: var(--vf-text); }
+.lux-process *, .lux-process *::before, .lux-process *::after { box-sizing: border-box; }
+:where(.lux-process) img { display: block; max-width: 100%; }
+.lux-process .craft__stage { position: sticky; top: 0; height: 100vh; display: grid; place-items: center; overflow: hidden;
+  background: radial-gradient(ellipse 40% 60% at 50% 50%, color-mix(in srgb, var(--vf-bg), var(--vf-accent) 9%), var(--vf-bg) 80%); }
+.lux-process .craft__frame { position: relative; width: min(44vw, 66vh); height: 86vh; }
+.lux-process .craft__frame::after { content: ''; position: absolute; inset: -16px; border: 1px solid color-mix(in srgb, var(--vf-accent) 28%, transparent); pointer-events: none; }
+.lux-process .craft__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; clip-path: circle(0% at 50% 55%); transform: scale(1.18);
+  filter: saturate(.42) sepia(.2) contrast(1.08) brightness(.8); }
+.lux-process .craft__img[data-i="0"], .lux-process .craft__img.is-on { clip-path: circle(75% at 50% 50%); transform: none; }
+.lux-process .craft__img[data-i="0"]:not(.is-on) { transform: none; }
+.lux-process.is-motion .craft__img { transition: clip-path 1.3s var(--vf-ease), transform 3.2s var(--vf-ease); }
+.lux-process.is-js .craft__img[data-i="0"]:not(.is-on) { clip-path: circle(0% at 50% 55%); }
+.lux-process .craft__img[data-i="0"], .lux-process .craft__img[data-i="1"] { filter: saturate(.14) sepia(.38) contrast(1.12) brightness(.74); }
+.lux-process .craft__reserve { position: absolute; right: var(--gut); top: 30vh; height: 40vh; width: 1px; background: color-mix(in srgb, var(--vf-accent) 20%, transparent); }
+.lux-process .craft__reserve span { display: block; width: 100%; height: 100%; background: var(--vf-accent-2); transform-origin: top; transform: scaleY(var(--cp, 0)); }
+.lux-process .craft__lines { position: relative; z-index: 2; margin-top: -100vh; }
+.lux-process .craft__intro { height: 100vh; display: grid; place-items: center; text-align: center; padding: 0 var(--gut); }
+.lux-process .craft__intro h2 { margin: 0; font: 400 clamp(46px, 6.4vw, 118px)/.98 var(--vf-font-display); letter-spacing: -.02em; text-shadow: 0 4px 60px rgba(0,0,0,.8); }
+.lux-process .craft__intro h2 em { color: var(--vf-accent-2); }
+.lux-process .craft__line { height: 100vh; margin: 0; padding: 40vh 0 0 6vw; max-width: 50vw; font: 400 clamp(34px, 4.2vw, 76px)/1.04 var(--vf-font-display); letter-spacing: -.012em;
+  text-shadow: 0 2px 30px color-mix(in srgb, var(--vf-bg) 90%, transparent), 0 0 2px color-mix(in srgb, var(--vf-bg) 60%, transparent); }
+.lux-process .craft__line em { color: var(--vf-accent-2); }
+.lux-process .craft__line:nth-of-type(even) { margin-left: auto; padding: 40vh 6vw 0 0; text-align: right; }
+.lux-process .craft__line:last-child { height: 110vh; }
+/* таймграфер — белый прибор: приглушаем, чтобы фраза поверх читалась */
+.lux-process .craft__img[data-i="4"] { filter: saturate(.3) sepia(.3) contrast(1.05) brightness(.52); }
+
+@media (max-width: 899px) {
+  .lux-process .craft__stage { background: var(--vf-bg); }
+  .lux-process .craft__frame { width: 100vw; height: 100svh; }
+  .lux-process .craft__frame::after { inset: 0; border: 0; background: linear-gradient(color-mix(in srgb, var(--vf-bg) 55%, transparent), color-mix(in srgb, var(--vf-bg) 15%, transparent) 35%, color-mix(in srgb, var(--vf-bg) 85%, transparent) 80%); }
+  .lux-process .craft__reserve { right: 12px; }
+  .lux-process .craft__intro h2 { font-size: clamp(42px, 12vw, 64px); }
+  .lux-process .craft__line, .lux-process .craft__line:nth-of-type(even) { max-width: none; margin: 0; padding: 58svh 16px 0; text-align: left; font-size: clamp(32px, 9.4vw, 46px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lux-process *, .lux-process *::before, .lux-process *::after { animation: none !important; transition-duration: .01ms !important; }
+}

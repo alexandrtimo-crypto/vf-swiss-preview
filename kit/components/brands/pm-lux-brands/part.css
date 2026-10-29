@@ -1,0 +1,7 @@
+.pm-lux-brands { padding: var(--pm-s-2xl, 64px) 0 var(--pm-s-3xl, 96px); }
+.pm-lux-brands .pm-lux-brands__wrap { max-width: var(--pm-wrap, 1240px); margin: 0 auto; padding: 0 var(--pm-gutter, 24px); }
+.pm-lux-brands .pm-lux-brands__title { margin: 0 0 var(--pm-s-lg, 32px); font: 600 12px/1.4 var(--vf-font-text); letter-spacing: .2em; text-transform: uppercase; color: var(--vf-text-2); }
+.pm-lux-brands .pm-lux-brands__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 0; font: 400 clamp(30px, 4.2vw, 60px)/1.25 var(--vf-font-display); }
+.pm-lux-brands .pm-lux-brands__list li::after { content: ""; display: inline-block; width: 1px; height: .6em; margin: 0 .5em; background: var(--vf-accent); transform: rotate(18deg); }
+.pm-lux-brands .pm-lux-brands__list li:last-child::after { display: none; }
+.pm-lux-brands .pm-lux-brands__etc { font-style: italic; color: var(--vf-text-2); font-size: .62em; }

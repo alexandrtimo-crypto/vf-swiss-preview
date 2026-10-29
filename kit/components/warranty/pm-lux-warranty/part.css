@@ -1,0 +1,22 @@
+.pm-lux-warranty { --pm-w-gold: #D9B45A; padding: var(--pm-s-3xl, 96px) 0; background: var(--vf-accent-2); color: #FAFAF9; }
+.pm-lux-warranty .pm-lux-warranty__wrap { max-width: var(--pm-wrap, 1240px); margin: 0 auto; padding: 0 var(--pm-gutter, 24px); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+.pm-lux-warranty .pm-lux-warranty__head { grid-column: 1 / span 3; }
+.pm-lux-warranty .pm-lux-warranty__num { margin: 0; font: italic 400 clamp(80px, 9vw, 140px)/.8 var(--vf-font-display); color: var(--pm-w-gold); }
+.pm-lux-warranty .pm-lux-warranty__label { margin: 20px 0 0; font: 600 12px/1.4 var(--vf-font-text); letter-spacing: .2em; text-transform: uppercase; color: #D6D3D1; }
+.pm-lux-warranty .pm-lux-warranty__body { grid-column: 4 / span 9; }
+.pm-lux-warranty .pm-lux-warranty__title { margin: 0; max-width: 14em; font: 400 clamp(40px, 5.2vw, 76px)/1.02 var(--vf-font-display); letter-spacing: -.01em; text-wrap: balance; }
+.pm-lux-warranty .pm-lux-warranty__title em { color: var(--pm-w-gold); }
+.pm-lux-warranty .pm-lux-warranty__list { list-style: none; margin: var(--pm-s-2xl, 64px) 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+.pm-lux-warranty .pm-lux-warranty__list li { padding: 28px 0 32px; border-top: 1px solid rgba(250, 250, 249, .22); }
+.pm-lux-warranty .pm-lux-warranty__list h3 { margin: 0; font: 400 28px/1.15 var(--vf-font-display); }
+.pm-lux-warranty .pm-lux-warranty__list p { margin: 12px 0 0; color: #D6D3D1; max-width: 28em; }
+.pm-lux-warranty .pm-lux-warranty__more { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: var(--pm-s-md, 24px); font: 600 13px/1 var(--vf-font-text); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: #FAFAF9; border-bottom: 1px solid var(--pm-w-gold); }
+.pm-lux-warranty .pm-lux-warranty__more:hover { color: var(--pm-w-gold); }
+@media (max-width: 900px) {
+  .pm-lux-warranty { padding: var(--pm-s-2xl, 64px) 0; }
+  .pm-lux-warranty .pm-lux-warranty__head, .pm-lux-warranty .pm-lux-warranty__body { grid-column: 1 / -1; }
+  .pm-lux-warranty .pm-lux-warranty__head { display: flex; align-items: end; gap: 16px; margin-bottom: 24px; }
+  .pm-lux-warranty .pm-lux-warranty__num { font-size: 72px; }
+  .pm-lux-warranty .pm-lux-warranty__label { margin: 0; }
+  .pm-lux-warranty .pm-lux-warranty__list { grid-template-columns: 1fr; margin-top: 40px; }
+}

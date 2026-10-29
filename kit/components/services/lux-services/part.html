@@ -1,0 +1,49 @@
+<section data-part="lux-services" data-slot="services" class="lux-services" id="services" aria-labelledby="lux-svcTitle">
+  <h2 class="dialscene__title" id="lux-svcTitle">Что нужно<br><em>вашим часам?</em></h2>
+  <p class="dialscene__hint">Поверните заводную головку<br>или выберите отметку</p>
+
+  <div class="dial">
+    <input class="dial__in" type="radio" name="lux-svc" id="lux-svc0" value="0" checked>
+    <input class="dial__in" type="radio" name="lux-svc" id="lux-svc1" value="1">
+    <input class="dial__in" type="radio" name="lux-svc" id="lux-svc2" value="2">
+    <input class="dial__in" type="radio" name="lux-svc" id="lux-svc3" value="3">
+    <input class="dial__in" type="radio" name="lux-svc" id="lux-svc4" value="4">
+    <input class="dial__in" type="radio" name="lux-svc" id="lux-svc5" value="5">
+
+    <div class="dial__ring" aria-hidden="true"></div>
+    <div class="dial__hand" aria-hidden="true"><i></i></div>
+
+    <div class="dial__photo">
+      <img class="dial__img" data-i="0" src="{{media}}/img/ex_33.webp" width="1200" height="900" alt="" loading="lazy">
+      <img class="dial__img" data-i="1" src="{{media}}/img/ex_2.webp" width="600" height="800" alt="" loading="lazy">
+      <img class="dial__img" data-i="2" src="{{media}}/vid/ex_14.webp" width="360" height="640" alt="" loading="lazy">
+      <img class="dial__img" data-i="3" src="{{media}}/vid/ex_16.webp" width="544" height="640" alt="" loading="lazy">
+      <img class="dial__img" data-i="4" src="{{media}}/img/ex_12.webp" width="600" height="800" alt="" loading="lazy">
+      <img class="dial__img" data-i="5" src="{{media}}/vid/ex_10.webp" width="352" height="640" alt="" loading="lazy">
+    </div>
+
+    <label class="dial__opt" for="lux-svc0" style="--i:0"><span class="dial__idx"></span><span class="dial__txt">Диагностика</span></label>
+    <label class="dial__opt" for="lux-svc1" style="--i:1"><span class="dial__idx"></span><span class="dial__txt">Ремонт и обслуживание механизма</span></label>
+    <label class="dial__opt" for="lux-svc2" style="--i:2"><span class="dial__idx"></span><span class="dial__txt">Полировка</span></label>
+    <label class="dial__opt" for="lux-svc3" style="--i:3"><span class="dial__idx"></span><span class="dial__txt">Замена элемента питания</span></label>
+    <label class="dial__opt" for="lux-svc4" style="--i:4"><span class="dial__idx"></span><span class="dial__txt">Ремешки и браслеты</span></label>
+    <label class="dial__opt" for="lux-svc5" style="--i:5"><span class="dial__idx"></span><span class="dial__txt">Замена стекла</span></label>
+
+    <button class="dial__crown" type="button" aria-label="Следующая услуга"><span></span></button>
+
+    <div class="dial__say" aria-live="polite">
+      <p class="dial__line" data-i="0"><b>Диагностика</b>Бесплатно. Детальная проверка механизма перед ремонтом.</p>
+      <p class="dial__line" data-i="1"><b>Механизм</b>Полная разборка, обслуживание и настройка.</p>
+      <p class="dial__line" data-i="2"><b>Полировка</b>Возвращает часам их внешний вид.</p>
+      <p class="dial__line" data-i="3"><b>Элемент питания</b>Замена по регламенту — с сохранением герметичности корпуса.</p>
+      <p class="dial__line" data-i="4"><b>Ремешки и браслеты</b>Подбор и изготовление оригинальных ремешков под модель.</p>
+      <p class="dial__line" data-i="5"><b>Стекло</b>Сапфировые, минеральные и нестандартные стёкла.</p>
+    </div>
+  </div>
+
+  <div class="dial__step" aria-hidden="true">
+    <button type="button" class="dial__arrow" data-step="-1" tabindex="-1">‹</button>
+    <span>проведите по циферблату</span>
+    <button type="button" class="dial__arrow" data-step="1" tabindex="-1">›</button>
+  </div>
+</section>

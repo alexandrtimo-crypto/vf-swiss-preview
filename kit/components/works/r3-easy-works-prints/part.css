@@ -1,0 +1,45 @@
+[data-part="r3-easy-works-prints"] { position: relative; color: var(--vf-text); padding: clamp(64px, 9vw, 128px) 0 clamp(72px, 9vw, 136px); background: var(--vf-bg-2); overflow: hidden; }
+.r3wk__in { max-width: var(--vf-max, 1320px); margin: 0 auto; padding: 0 var(--vf-gutter, 20px); }
+.r3wk__top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 40px; }
+[data-part="r3-easy-works-prints"] .r3wk__title { font-size: clamp(36px, 4.6vw, 64px); line-height: .98; }
+[data-part="r3-easy-works-prints"] .r3wk__lede { max-width: 34ch; font-size: 17px; color: var(--vf-text-2); }
+
+.r3wk__board { margin-top: clamp(40px, 5vw, 72px); display: grid; grid-template-columns: 1fr 1.16fr 1fr; gap: clamp(20px, 3vw, 48px); align-items: start; }
+.r3wk__col { display: grid; gap: clamp(28px, 3.6vw, 52px); justify-items: center; }
+.r3wk__col--a { padding-top: 8px; }
+.r3wk__col--b { padding-top: clamp(40px, 6vw, 88px); }
+.r3wk__col--c { padding-top: clamp(16px, 2.4vw, 36px); }
+
+/* отпечаток: белое поле шире снизу, мягкая бумажная тень */
+.r3wk__print {
+  --rot: 0deg; position: relative; margin: 0; width: 100%; max-width: 330px; padding: 10px 10px 0;
+  background: var(--vf-tag-paper, #FAFAF7); color: var(--vf-tag-ink, #1E1A14); border-radius: 2px;
+  box-shadow: var(--vf-tag-shadow); transform: rotate(var(--rot));
+  transition: transform .5s var(--vf-ease), box-shadow .5s var(--vf-ease);
+}
+.r3wk__print--wide { max-width: 420px; }
+.r3wk__print--big { max-width: 420px; }
+.r3wk__print img { width: 100%; height: auto; background: #cfd6de; }
+.r3wk__print figcaption { padding: 11px 4px 13px; font: 500 14.5px/1.3 var(--vf-font-text); color: var(--vf-tag-ink-2, #5B4A2A); }
+.r3wk__print:hover { transform: rotate(0deg) translateY(-4px) scale(1.015); box-shadow: 0 1px 1px rgba(10, 24, 48, .2), 0 18px 30px -10px rgba(10, 24, 48, .5), 0 40px 60px -28px rgba(10, 24, 48, .5); }
+/* кусочек малярной ленты */
+.r3wk__print--tape::before {
+  content: ""; position: absolute; top: -13px; left: 50%; width: 86px; height: 26px; margin-left: -43px; transform: rotate(-3deg);
+  background: rgba(238, 228, 200, .86); box-shadow: 0 1px 2px rgba(10, 24, 48, .25);
+  clip-path: polygon(0 8%, 6% 0, 12% 10%, 18% 0, 24% 10%, 30% 0, 100% 0, 100% 100%, 30% 100%, 24% 90%, 18% 100%, 12% 90%, 6% 100%, 0 92%);
+}
+
+@media (max-width: 1000px) {
+  .r3wk__board { grid-template-columns: 1fr 1fr; }
+  .r3wk__col--c { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; align-items: start; padding-top: 0; }
+  .r3wk__col--c .r3wk__print { max-width: 300px; }
+}
+@media (max-width: 640px) {
+  .r3wk__board { grid-template-columns: 1fr; gap: 30px; }
+  .r3wk__col, .r3wk__col--c { display: contents; }
+  .r3wk__print { justify-self: center; width: 92%; max-width: none; }
+  .r3wk__print:not(.r3wk__print--wide):not(.r3wk__print--big) { width: 68%; }
+  .r3wk__col--a .r3wk__print:nth-child(2), .r3wk__col--c .r3wk__print:nth-child(2) { justify-self: start; }
+  .r3wk__col--c .r3wk__print:nth-child(1) { justify-self: end; }
+}
+@media (hover: none) { .r3wk__print:hover { transform: rotate(var(--rot)); box-shadow: var(--vf-tag-shadow); } }

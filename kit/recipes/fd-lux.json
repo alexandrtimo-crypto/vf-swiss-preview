@@ -1,0 +1,2 @@
+{ "name": "fd-lux", "title": "VF swiss — мастерская швейцарских часов (fd-lux)", "tokens": "fd-lux", "buttons": "fd-lux", "fields": "fd-lux",
+  "parts": ["fd-lux-header", "fd-lux-hero", "fd-lux-story", "fd-lux-services", "fd-lux-process", "fd-lux-works", "fd-lux-brands", "fd-lux-booking", "fd-lux-contacts", "fd-lux-footer", "fd-lux-dock"] }

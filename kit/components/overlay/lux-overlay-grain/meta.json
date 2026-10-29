@@ -1,0 +1,3 @@
+{ "id": "lux-overlay-grain", "slot": "overlay", "title": "Зерно плёнки", "vision": "lux",
+  "description": "Лёгкое плёночное зерно поверх всей страницы (фиксированный слой, не ловит клики).",
+  "fonts": [], "needs": [] }

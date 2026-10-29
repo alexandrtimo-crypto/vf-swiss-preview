@@ -1,0 +1,16 @@
+.pm-lux-contacts { padding: var(--pm-s-3xl, 96px) 0; background: var(--vf-bg-2); }
+.pm-lux-contacts .pm-lux-contacts__wrap { max-width: var(--pm-wrap, 1240px); margin: 0 auto; padding: 0 var(--pm-gutter, 24px); }
+.pm-lux-contacts .pm-lux-contacts__title { margin: 0; font: 400 clamp(38px, 4.6vw, 68px)/1.03 var(--vf-font-display); letter-spacing: -.01em; }
+.pm-lux-contacts .pm-lux-contacts__title em { color: var(--vf-accent); }
+.pm-lux-contacts .pm-lux-contacts__list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 24px; margin: var(--pm-s-2xl, 64px) 0 0; border-top: 1px solid var(--vf-text); }
+.pm-lux-contacts .pm-lux-contacts__list > div { padding: 24px 0; }
+.pm-lux-contacts dt { font: 600 11px/1.3 var(--vf-font-text); letter-spacing: .2em; text-transform: uppercase; color: var(--vf-muted); }
+.pm-lux-contacts dd { margin: 12px 0 0; display: grid; gap: 2px; justify-items: start; font: 400 22px/1.3 var(--vf-font-display); }
+.pm-lux-contacts dd a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; border-bottom: 1px solid var(--vf-line); }
+.pm-lux-contacts dd a:hover { color: var(--vf-accent); border-color: var(--vf-accent); }
+.pm-lux-contacts .pm-lux-contacts__stub { font: 500 10px/1 var(--vf-font-text); letter-spacing: .12em; text-transform: uppercase; color: var(--vf-muted); border: 1px solid var(--vf-line); padding: 3px 6px; vertical-align: middle; }
+@media (max-width: 900px) {
+  .pm-lux-contacts { padding: var(--pm-s-2xl, 64px) 0; }
+  .pm-lux-contacts .pm-lux-contacts__list { grid-template-columns: 1fr; margin-top: 40px; }
+  .pm-lux-contacts .pm-lux-contacts__list > div { border-bottom: 1px solid var(--vf-line); }
+}

@@ -1,0 +1,28 @@
+[data-part="fd-lux-works"] { padding: 120px 40px; }
+[data-part="fd-lux-works"] .fd-lux-works__in { max-width: 1200px; margin: 0 auto; }
+[data-part="fd-lux-works"] .fd-lux-works__title { margin: 0 0 14px; font: 400 var(--fd-s7, 48px)/1.1 var(--vf-font-display); color: var(--vf-accent); }
+[data-part="fd-lux-works"] .fd-lux-works__lead { margin: 0 0 56px; max-width: 34em; font-size: var(--fd-s3, 18px); color: var(--vf-muted); }
+[data-part="fd-lux-works"] .fd-lux-works__grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 28px; align-items: start; }
+[data-part="fd-lux-works"] figure { margin: 0; }
+[data-part="fd-lux-works"] img { display: block; width: 100%; height: auto; object-fit: cover; border-radius: var(--vf-radius); background: var(--vf-bg-2); }
+[data-part="fd-lux-works"] figcaption { margin-top: 10px; font-style: italic; font-size: var(--fd-s2, 16px); color: var(--vf-muted); }
+[data-part="fd-lux-works"] .a { grid-column: 1 / span 8; }
+[data-part="fd-lux-works"] .a img { aspect-ratio: 4 / 3; }
+[data-part="fd-lux-works"] .b { grid-column: 9 / span 4; margin-top: 120px; }
+[data-part="fd-lux-works"] .b img { aspect-ratio: 3 / 4; }
+[data-part="fd-lux-works"] .c { grid-column: 2 / span 4; }
+[data-part="fd-lux-works"] .c img { aspect-ratio: 4 / 3; }
+[data-part="fd-lux-works"] .d { grid-column: 6 / span 3; margin-top: -60px; }
+[data-part="fd-lux-works"] .d img { aspect-ratio: 3 / 4; }
+[data-part="fd-lux-works"] .e { grid-column: 9 / span 4; margin-top: 40px; }
+[data-part="fd-lux-works"] .e img { aspect-ratio: 4 / 3; }
+@media (max-width: 900px) {
+  [data-part="fd-lux-works"] { padding: 72px 20px; }
+  [data-part="fd-lux-works"] .fd-lux-works__title { font-size: var(--fd-s6, 36px); }
+  [data-part="fd-lux-works"] .fd-lux-works__lead { margin-bottom: 32px; }
+  [data-part="fd-lux-works"] .fd-lux-works__grid { grid-template-columns: 1fr 1fr; gap: 20px 14px; }
+  [data-part="fd-lux-works"] .fd-lux-works__grid > figure { grid-column: auto; margin-top: 0; }
+  [data-part="fd-lux-works"] .a { grid-column: 1 / -1 !important; }
+  [data-part="fd-lux-works"] .e { grid-column: 1 / -1 !important; }
+  [data-part="fd-lux-works"] figcaption { font-size: 14px; }
+}

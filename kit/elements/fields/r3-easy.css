@@ -1,0 +1,29 @@
+/* title: Р3 · Поля · графа бирки */
+/* Поле — напечатанная графа: подпись красной печатью, строка для записи чёрной линией.
+   Контекст задаёт --vf-field-fg (текст, линия), --vf-field-label (подпись), --vf-field-accent (фокус). */
+.vf-field { display: grid; gap: 4px; min-width: 0; }
+.vf-field > label, .vf-field__label {
+  font: 600 14px/1.25 var(--vf-font-text); letter-spacing: .01em;
+  color: var(--vf-field-label, var(--vf-tag-red-text, #9A2614));
+}
+.vf-input {
+  width: 100%; min-height: 52px; padding: 10px 2px 6px; margin: 0;
+  font: 600 22px/1.2 var(--vf-font-display); font-variant-numeric: tabular-nums; letter-spacing: .01em;
+  color: var(--vf-field-fg, var(--vf-tag-ink, #1E1A14));
+  background: transparent; border: 0; border-radius: 0; outline: none;
+  border-bottom: 2px solid color-mix(in srgb, var(--vf-field-fg, var(--vf-tag-ink, #1E1A14)) 70%, transparent);
+  transition: border-color .2s, box-shadow .2s, background-color .2s;
+  -webkit-appearance: none; appearance: none;
+}
+.vf-input::placeholder { color: color-mix(in srgb, var(--vf-field-fg, var(--vf-tag-ink, #1E1A14)) 42%, transparent); font-weight: 500; }
+.vf-input:hover { border-bottom-color: var(--vf-field-fg, var(--vf-tag-ink, #1E1A14)); }
+.vf-input:focus, .vf-input:focus-visible {
+  outline: none; border-bottom-color: var(--vf-field-accent, var(--vf-accent));
+  box-shadow: 0 2px 0 var(--vf-field-accent, var(--vf-accent));
+  background: color-mix(in srgb, var(--vf-field-accent, var(--vf-accent)) 6%, transparent);
+}
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); box-shadow: 0 2px 0 var(--vf-danger); }
+textarea.vf-input { resize: vertical; min-height: 80px; font-size: 19px; line-height: 1.35; }
+.vf-field__err { font: 600 14px/1.3 var(--vf-font-text); color: var(--vf-danger); }
+.vf-field__err:empty { display: none; }
+.vf-field__hint { font: 400 14px/1.35 var(--vf-font-text); color: var(--vf-field-hint, var(--vf-tag-ink-2, #5B4A2A)); }

@@ -1,0 +1,1 @@
+{ "id": "lib-sound-toggle", "slot": "overlay", "title": "Переключатель звука", "vision": "lib", "description": "Звук интерфейса по умолчанию выключен; кнопка включает и запоминает выбор. Звуки — [data-sound] и событие vf:sound.", "fonts": [], "needs": ["kit/lib/sound.js"] }

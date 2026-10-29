@@ -1,0 +1,16 @@
+/* title: Taste Skill · дорого — кнопки: плоские, прямые углы, золото только на главном действии */
+.vf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+  min-height: 48px; padding: 0 1.6em;
+  font: 400 15px/1 var(--vf-font-text); letter-spacing: 0.02em;
+  color: var(--vf-text); background: var(--vf-surface);
+  border: 0; border-radius: 0; cursor: pointer; text-decoration: none;
+  transition: transform 140ms var(--vf-ease), background-color 180ms ease, color 180ms ease;
+}
+.vf-btn:hover { background: #29251f; }
+.vf-btn:active { transform: scale(0.97); }
+.vf-btn--primary { background: var(--vf-accent); color: var(--vf-on-accent); font-weight: 500; }
+.vf-btn--primary:hover { background: var(--vf-accent-2); }
+.vf-btn--ghost { background: transparent; padding: 0 0.2em; min-height: 44px; text-decoration: underline; text-decoration-color: rgba(236,230,220,.35); text-underline-offset: 0.3em; }
+.vf-btn--ghost:hover { background: transparent; text-decoration-color: currentColor; }
+.vf-btn--sm { min-height: 40px; padding: 0 1.1em; font-size: 14px; }

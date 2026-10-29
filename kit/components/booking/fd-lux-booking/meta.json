@@ -1,0 +1,1 @@
+{ "id": "fd-lux-booking", "slot": "booking", "title": "Заявка на ночном фоне", "vision": "fd-lux", "description": "Форма заявки на полосе воронёной стали; прототип без отправки.", "fonts": [], "needs": ["{{shared}}/lead.js"] }

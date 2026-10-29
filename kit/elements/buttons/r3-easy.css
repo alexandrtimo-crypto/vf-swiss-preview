@@ -1,0 +1,34 @@
+/* title: Р3 · Кнопки · печать бирки */
+/* Кнопка — вырубка из картона с красной печатью: прямые углы со скруглением 6px,
+   мягкая бумажная тень, нажатие прижимает к коврику. Контекст может задать
+   --vf-btn-bg / --vf-btn-fg / --vf-btn-line (например, на манильской бирке). */
+.vf-btn {
+  --vf-btn-bg: var(--vf-tag-paper, #FAFAF7);
+  --vf-btn-fg: var(--vf-tag-ink, #1E1A14);
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 56px; padding: 0 24px; border-radius: var(--vf-radius, 6px); border: 0;
+  font-family: var(--vf-font-display); font-weight: 700; font-size: 20px; line-height: 1.1; letter-spacing: .005em;
+  text-decoration: none; cursor: pointer; text-align: center;
+  background: var(--vf-btn-bg); color: var(--vf-btn-fg);
+  box-shadow: 0 1px 0 rgba(10, 24, 48, .22), 0 6px 14px -8px rgba(10, 24, 48, .55);
+  transition: transform .18s var(--vf-ease), box-shadow .18s var(--vf-ease), background-color .18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.vf-btn:hover { box-shadow: 0 1px 0 rgba(10, 24, 48, .22), 0 10px 20px -8px rgba(10, 24, 48, .6); transform: translateY(-1px); }
+.vf-btn:active { transform: translateY(1px); box-shadow: 0 0 0 rgba(10, 24, 48, .2), 0 2px 4px -2px rgba(10, 24, 48, .5); }
+.vf-btn:focus-visible { outline: 3px solid var(--vf-btn-line, var(--vf-tag-ink, #1E1A14)); outline-offset: 3px; }
+.vf-btn:disabled, .vf-btn[aria-disabled="true"] { opacity: .55; cursor: default; transform: none; }
+.vf-btn > svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.vf-btn--primary { --vf-btn-bg: var(--vf-accent); --vf-btn-fg: var(--vf-on-accent); }
+.vf-btn--primary:hover { --vf-btn-bg: color-mix(in srgb, var(--vf-accent) 86%, #000); }
+
+.vf-btn--ghost {
+  --vf-btn-bg: transparent; --vf-btn-fg: currentColor;
+  box-shadow: inset 0 0 0 1.5px var(--vf-btn-line, currentColor);
+}
+.vf-btn--ghost:hover { --vf-btn-bg: color-mix(in srgb, currentColor 8%, transparent); box-shadow: inset 0 0 0 2px var(--vf-btn-line, currentColor); transform: none; }
+.vf-btn--ghost:active { box-shadow: inset 0 0 0 2px var(--vf-btn-line, currentColor); }
+
+.vf-btn--sm { min-height: 44px; padding: 0 16px; font-size: 17px; gap: 8px; }
+.vf-btn--sm > svg { width: 18px; height: 18px; }

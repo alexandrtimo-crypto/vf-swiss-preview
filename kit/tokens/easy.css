@@ -1,0 +1,59 @@
+/* title: Интуитивно-легко */
+/* fonts: Nunito:wght@500..900 */
+/* Тема видения easy: тёплые светлые цвета, толстый контур, пружинистые движения.
+   Общие токены --vf-*; цвета плиток и иллюстраций — --vf-easy-* (компоненты берут их с запасным значением). */
+:root {
+  --vf-bg: #FFF6EA;
+  --vf-bg-2: #FFEFD9;
+  --vf-surface: #fff;
+  --vf-text: #2A211C;
+  --vf-text-2: #6E5E52;
+  --vf-muted: #E4DCD3;
+  --vf-line: #2A211C;
+  --vf-accent: #F0533F;
+  --vf-accent-2: #FFD25E;
+  --vf-on-accent: #fff;
+  --vf-danger: #C23A28;
+  --vf-font-display: Nunito, ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --vf-font-text: Nunito, ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --vf-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --vf-radius: 20px;
+  --vf-radius-lg: 34px;
+  --vf-ease: cubic-bezier(.34, 1.56, .64, 1);
+
+  /* особые цвета видения easy */
+  --vf-easy-ink: #2A211C;          /* обводка рисунков и «объёмные» тени */
+  --vf-easy-accent-d: #C23A28;     /* тёмно-красный: выделение в репликах, нижняя грань кнопки */
+  --vf-easy-ok: #18A866;           /* «на связи», галочки, включённый переключатель */
+  --vf-easy-sun: #FFD25E;
+  --vf-easy-sky: #9FD8FF;
+  --vf-easy-coral: #FFA98F;
+  --vf-easy-lilac: #C8B6FF;
+  --vf-easy-mint: #8EE0B8;
+  --vf-easy-pink: #FFC2DA;
+  --vf-easy-lime: #B9E37A;
+  --vf-easy-soft: cubic-bezier(.22, 1, .36, 1);
+  --vf-easy-dock-h: 76px;
+  color-scheme: light;
+}
+
+/* ---------- базовый стиль страницы (раньше был глобальным в easy/style.css) ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+.vf-page {
+  margin: 0; background: var(--vf-bg); color: var(--vf-text);
+  font-family: var(--vf-font-text);
+  font-size: 17px; line-height: 1.45; font-weight: 600;
+  overflow-x: hidden;
+}
+:where(.vf-page) a { color: inherit; }
+:where(.vf-page) button { font: inherit; color: inherit; cursor: pointer; }
+:where(.vf-page) :where(img, video, svg) { display: block; max-width: 100%; }
+:where(.vf-page) :where(h1, h2, h3) { margin: 0; line-height: 1.05; font-weight: 900; letter-spacing: -.02em; font-family: var(--vf-font-display); }
+:where(.vf-page) p { margin: 0; }
+:focus-visible { outline: 3px solid var(--vf-line); outline-offset: 3px; border-radius: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}

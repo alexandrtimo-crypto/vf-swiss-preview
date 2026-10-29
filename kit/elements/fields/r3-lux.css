@@ -1,0 +1,15 @@
+/* title: Поля · строки бланка */
+/* Подпись — мелкой разрядкой над строкой; поле — строка бланка на защитной сетке, нижняя кромка плотнее. */
+.vf-field{display:grid;gap:7px;border:0;margin:0;padding:0;min-width:0}
+.vf-field > span,.vf-field > legend{font-family:var(--vf-font-text);font-weight:600;font-size:11.5px;line-height:1.2;letter-spacing:.14em;text-transform:uppercase;color:var(--vf-text-2);padding:0}
+.vf-input{width:100%;min-height:50px;padding:12px 14px;border:1px solid rgba(18,63,48,.42);border-bottom:2px solid var(--vf-ink);border-radius:var(--vf-radius);background:rgba(246,249,243,.72);color:var(--vf-text);font:400 17px/1.35 var(--vf-font-text);transition:background-color .2s,border-color .2s,box-shadow .2s;caret-color:var(--vf-accent)}
+.vf-input::placeholder{color:#4d695f;opacity:1}
+.vf-input:hover{border-color:rgba(18,63,48,.75);border-bottom-color:var(--vf-ink)}
+.vf-input:focus{outline:0;background:#fbfdf9;border-color:var(--vf-ink);box-shadow:0 0 0 1px var(--vf-ink),0 0 0 4px rgba(123,30,52,.18)}
+.vf-input[aria-invalid="true"]{border-color:var(--vf-danger);border-bottom-color:var(--vf-danger);background:#fbf1ee;box-shadow:0 0 0 1px var(--vf-danger)}
+.vf-input:disabled{opacity:.55}
+textarea.vf-input{min-height:104px;resize:vertical;line-height:1.5}
+input[type="file"].vf-input{padding:10px 12px;font-size:15px}
+input[type="file"].vf-input::file-selector-button{margin-right:12px;padding:7px 14px;border:0;border-radius:1px;background:var(--vf-ink);color:var(--vf-bg);font:700 12px/1.1 var(--vf-font-display);letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+@media (max-width:820px){.vf-input{font-size:16.5px}}
+@media (prefers-reduced-motion:reduce){.vf-input{transition:none}}

@@ -1,0 +1,433 @@
+{
+ "phone": {
+  "tabler": [
+   "phone"
+  ],
+  "lucide": [
+   "phone"
+  ],
+  "gravity": [
+   "handset",
+   "phone"
+  ]
+ },
+ "telegram": {
+  "tabler": [
+   "brand-telegram"
+  ],
+  "lucide": [
+   "send"
+  ],
+  "gravity": [
+   "paper-plane",
+   "send"
+  ]
+ },
+ "map-pin": {
+  "tabler": [
+   "map-pin"
+  ],
+  "lucide": [
+   "map-pin"
+  ],
+  "gravity": [
+   "map-pin",
+   "geo"
+  ]
+ },
+ "route": {
+  "tabler": [
+   "route"
+  ],
+  "lucide": [
+   "route"
+  ],
+  "gravity": [
+   "route",
+   "arrow-up-right-from-square"
+  ]
+ },
+ "copy": {
+  "tabler": [
+   "copy"
+  ],
+  "lucide": [
+   "copy"
+  ],
+  "gravity": [
+   "copy"
+  ]
+ },
+ "clock": {
+  "tabler": [
+   "clock"
+  ],
+  "lucide": [
+   "clock"
+  ],
+  "gravity": [
+   "clock"
+  ]
+ },
+ "calendar": {
+  "tabler": [
+   "calendar"
+  ],
+  "lucide": [
+   "calendar"
+  ],
+  "gravity": [
+   "calendar"
+  ]
+ },
+ "shield-check": {
+  "tabler": [
+   "shield-check"
+  ],
+  "lucide": [
+   "shield-check"
+  ],
+  "gravity": [
+   "shield-check"
+  ]
+ },
+ "wrench": {
+  "tabler": [
+   "tool"
+  ],
+  "lucide": [
+   "wrench"
+  ],
+  "gravity": [
+   "wrench"
+  ]
+ },
+ "search": {
+  "tabler": [
+   "search"
+  ],
+  "lucide": [
+   "search"
+  ],
+  "gravity": [
+   "magnifier"
+  ]
+ },
+ "microscope": {
+  "tabler": [
+   "microscope"
+  ],
+  "lucide": [
+   "microscope"
+  ],
+  "gravity": [
+   "flask",
+   "magnifier-plus"
+  ]
+ },
+ "droplet": {
+  "tabler": [
+   "droplet"
+  ],
+  "lucide": [
+   "droplet"
+  ],
+  "gravity": [
+   "droplet"
+  ]
+ },
+ "battery": {
+  "tabler": [
+   "battery-2",
+   "battery"
+  ],
+  "lucide": [
+   "battery-medium",
+   "battery"
+  ],
+  "gravity": [
+   "battery",
+   "thunderbolt"
+  ]
+ },
+ "watch": {
+  "tabler": [
+   "device-watch",
+   "clock-hour-4"
+  ],
+  "lucide": [
+   "watch"
+  ],
+  "gravity": [
+   "clock"
+  ]
+ },
+ "sparkles": {
+  "tabler": [
+   "sparkles"
+  ],
+  "lucide": [
+   "sparkles"
+  ],
+  "gravity": [
+   "sparkles",
+   "star"
+  ]
+ },
+ "camera": {
+  "tabler": [
+   "camera"
+  ],
+  "lucide": [
+   "camera"
+  ],
+  "gravity": [
+   "camera"
+  ]
+ },
+ "photo": {
+  "tabler": [
+   "photo"
+  ],
+  "lucide": [
+   "image"
+  ],
+  "gravity": [
+   "picture"
+  ]
+ },
+ "upload": {
+  "tabler": [
+   "upload"
+  ],
+  "lucide": [
+   "upload"
+  ],
+  "gravity": [
+   "arrow-up-from-line",
+   "upload"
+  ]
+ },
+ "check": {
+  "tabler": [
+   "check"
+  ],
+  "lucide": [
+   "check"
+  ],
+  "gravity": [
+   "check"
+  ]
+ },
+ "close": {
+  "tabler": [
+   "x"
+  ],
+  "lucide": [
+   "x"
+  ],
+  "gravity": [
+   "xmark"
+  ]
+ },
+ "arrow-right": {
+  "tabler": [
+   "arrow-right"
+  ],
+  "lucide": [
+   "arrow-right"
+  ],
+  "gravity": [
+   "arrow-right"
+  ]
+ },
+ "arrow-left": {
+  "tabler": [
+   "arrow-left"
+  ],
+  "lucide": [
+   "arrow-left"
+  ],
+  "gravity": [
+   "arrow-left"
+  ]
+ },
+ "chevron-down": {
+  "tabler": [
+   "chevron-down"
+  ],
+  "lucide": [
+   "chevron-down"
+  ],
+  "gravity": [
+   "chevron-down"
+  ]
+ },
+ "menu": {
+  "tabler": [
+   "menu-2"
+  ],
+  "lucide": [
+   "menu"
+  ],
+  "gravity": [
+   "bars"
+  ]
+ },
+ "qr-code": {
+  "tabler": [
+   "qrcode"
+  ],
+  "lucide": [
+   "qr-code"
+  ],
+  "gravity": [
+   "qr-code"
+  ]
+ },
+ "file-text": {
+  "tabler": [
+   "file-text"
+  ],
+  "lucide": [
+   "file-text"
+  ],
+  "gravity": [
+   "file-text"
+  ]
+ },
+ "user": {
+  "tabler": [
+   "user"
+  ],
+  "lucide": [
+   "user"
+  ],
+  "gravity": [
+   "person"
+  ]
+ },
+ "message": {
+  "tabler": [
+   "message"
+  ],
+  "lucide": [
+   "message-circle"
+  ],
+  "gravity": [
+   "comment"
+  ]
+ },
+ "info": {
+  "tabler": [
+   "info-circle"
+  ],
+  "lucide": [
+   "info"
+  ],
+  "gravity": [
+   "circle-info"
+  ]
+ },
+ "alert": {
+  "tabler": [
+   "alert-triangle"
+  ],
+  "lucide": [
+   "triangle-alert",
+   "alert-triangle"
+  ],
+  "gravity": [
+   "triangle-exclamation"
+  ]
+ },
+ "gauge": {
+  "tabler": [
+   "gauge"
+  ],
+  "lucide": [
+   "gauge"
+  ],
+  "gravity": [
+   "gauge",
+   "speedometer"
+  ]
+ },
+ "award": {
+  "tabler": [
+   "award"
+  ],
+  "lucide": [
+   "award"
+  ],
+  "gravity": [
+   "medal",
+   "star"
+  ]
+ },
+ "ruble": {
+  "tabler": [
+   "currency-ruble",
+   "currency-rubel"
+  ],
+  "lucide": [
+   "russian-ruble"
+  ],
+  "gravity": [
+   "circle-ruble",
+   "file-ruble",
+   "tag-ruble"
+  ]
+ },
+ "settings": {
+  "tabler": [
+   "settings"
+  ],
+  "lucide": [
+   "settings"
+  ],
+  "gravity": [
+   "gear"
+  ]
+ },
+ "hand": {
+  "tabler": [
+   "hand-finger",
+   "hand-stop"
+  ],
+  "lucide": [
+   "hand"
+  ],
+  "gravity": [
+   "hand-pointer",
+   "hand"
+  ]
+ },
+ "volume": {
+  "tabler": [
+   "volume"
+  ],
+  "lucide": [
+   "volume-2"
+  ],
+  "gravity": [
+   "volume",
+   "speaker"
+  ]
+ },
+ "volume-off": {
+  "tabler": [
+   "volume-off",
+   "volume-3"
+  ],
+  "lucide": [
+   "volume-x",
+   "volume-off"
+  ],
+  "gravity": [
+   "volume-xmark",
+   "volume-slash",
+   "speaker-xmark"
+  ]
+ }
+}

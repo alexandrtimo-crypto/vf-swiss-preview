@@ -1,0 +1,35 @@
+<section data-part="tech-process-dial" data-slot="process" class="tech-process-dial" id="put" aria-labelledby="tech-pr-h">
+  <div class="pr-pin">
+    <h2 id="tech-pr-h" class="pr-h">Путь часов по&nbsp;мастерской</h2>
+    <div class="dial">
+      <svg class="dial-svg" viewBox="-300 -300 600 600" aria-hidden="true">
+        <defs>
+          <radialGradient id="tech-pr-dg" r="0.5"><stop class="dg-0" offset="0" stop-color="#11171a"/><stop class="dg-1" offset="1" stop-color="#070a0c"/></radialGradient>
+          <filter id="tech-pr-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+        </defs>
+        <circle r="262" fill="url(#tech-pr-dg)"/>
+        <g class="dial-ticks"></g>
+        <circle class="dial-track" r="236"/>
+        <circle class="dial-arc" r="236" transform="rotate(-90)"/>
+        <g class="dial-stations"></g>
+        <g class="dial-hand">
+          <line x1="0" y1="-196" x2="0" y2="-226"/>
+          <circle class="dial-hand-tip" cy="-236" r="7"/>
+          <circle class="dial-hand-glow" cy="-236" r="14" filter="url(#tech-pr-glow)"/>
+        </g>
+      </svg>
+      <div class="dial-center" aria-live="polite">
+        <p class="dial-name">Принято</p>
+        <p class="dial-sub">Вы приносите часы на&nbsp;Петровку, 23/10</p>
+      </div>
+      <ol class="stations">
+        <li><button type="button" data-i="0" data-sub="Вы приносите часы на&nbsp;Петровку, 23/10">Принято</button></li>
+        <li><button type="button" data-i="1" data-sub="Бесплатно. Таймграфер, микроскоп, тестер герметичности">Диагностика</button></li>
+        <li><button type="button" data-i="2" data-sub="Обсуждаем с&nbsp;вами, что нужно сделать">Согласование</button></li>
+        <li><button type="button" data-i="3" data-sub="Оригинальные комплектующие, ювелирная точность">Работа</button></li>
+        <li><button type="button" data-i="4" data-sub="Ход&nbsp;— на&nbsp;таймграфере, герметичность&nbsp;— на&nbsp;тестере">Проверка на&nbsp;таймграфере</button></li>
+        <li><button type="button" data-i="5" data-sub="Гарантия до&nbsp;двух лет">Выдача</button></li>
+      </ol>
+    </div>
+  </div>
+</section>

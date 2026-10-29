@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>VF kit · Конструктор</title>
+<link rel="icon" href="../icons/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&display=swap">
+<style>
+  :root { --bg: #111214; --panel: #1a1c20; --line: #2d3036; --text: #eceae4; --muted: #8f939c; --acc: #e8c66f; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; height: 100vh; display: grid; grid-template-columns: 360px 1fr; background: var(--bg); color: var(--text); font: 14px/1.4 'Inter Tight', system-ui, sans-serif; }
+  aside { overflow: auto; border-right: 1px solid var(--line); padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  h1 { font-size: 17px; margin: 0; } h1 small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; margin-top: 2px; }
+  label.row { display: grid; gap: 4px; font-size: 12px; color: var(--muted); }
+  select, button { font: inherit; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; min-height: 36px; padding: 0 10px; }
+  button { cursor: pointer; } button:hover, select:hover { border-color: var(--acc); }
+  .primary { background: var(--acc); color: #1a1408; border: 0; font-weight: 600; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .slots { display: grid; gap: 6px; }
+  .slot { display: grid; grid-template-columns: 56px 1fr auto; gap: 6px; align-items: center; padding: 6px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+  .slot img { width: 56px; height: 35px; object-fit: cover; border-radius: 4px; background: #000; }
+  .slot b { display: block; font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; }
+  .slot select { width: 100%; min-height: 30px; }
+  .slot .ops { display: flex; gap: 2px; } .slot .ops button { min-height: 28px; width: 28px; padding: 0; }
+  .actions { display: grid; gap: 8px; margin-top: auto; position: sticky; bottom: 0; background: var(--bg); padding-top: 8px; }
+  main { display: grid; grid-template-rows: auto 1fr; min-width: 0; }
+  .top { display: flex; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .top .seg button.on { border-color: var(--acc); color: var(--acc); }
+  .top .info { margin-left: auto; color: var(--muted); font-size: 12px; }
+  .stage { position: relative; overflow: auto; background: #0a0b0c; display: flex; justify-content: center; padding: 16px; }
+  .frame { background: #fff; box-shadow: 0 10px 40px rgba(0,0,0,.6); transform-origin: top center; border-radius: 6px; }
+  .frame iframe { display: block; border: 0; width: 100%; height: 100%; border-radius: 6px; }
+  .warn { color: #f0a868; font-size: 12px; }
+  @media (max-width: 900px) { body { grid-template-columns: 1fr; height: auto; } aside { border-right: 0; } main { height: 90vh; } }
+</style>
+</head>
+<body>
+<aside>
+  <h1>VF kit · Конструктор<small>Соберите сайт из вариантов элементов</small></h1>
+  <label class="row">Начать с рецепта<select id="recipe"></select></label>
+  <div class="grid3">
+    <label class="row">Тема<select id="tokens"></select></label>
+    <label class="row">Кнопки<select id="buttons"></select></label>
+    <label class="row">Поля<select id="fields"></select></label>
+  </div>
+  <div class="grid3" style="grid-template-columns:1fr 1fr">
+    <label class="row">Иконки<select id="icons"></select></label>
+    <label class="row">Звуки<select id="sounds"></select></label>
+  </div>
+  <div class="slots" id="slots"></div>
+  <label class="row">Добавить элемент<select id="add"></select></label>
+  <p class="warn" id="warn" hidden></p>
+  <div class="actions">
+    <button class="primary" id="dlHtml">Скачать сайт (один HTML)</button>
+    <div class="grid3" style="grid-template-columns:1fr 1fr">
+      <button id="dlRecipe">Рецепт JSON</button>
+      <button id="copyCmd">Команда сборки</button>
+    </div>
+  </div>
+</aside>
+<main>
+  <div class="top">
+    <div class="seg" id="device"><button data-w="1440" class="on">Компьютер</button> <button data-w="390">Телефон</button></div>
+    <button id="reload">Обновить</button>
+    <span class="info" id="info"></span>
+  </div>
+  <div class="stage" id="stage"><div class="frame" id="frame"><iframe id="preview" title="Предпросмотр"></iframe></div></div>
+</main>
+<script type="module" src="konstruktor.js"></script>
+</body>
+</html>

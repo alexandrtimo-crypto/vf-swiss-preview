@@ -1,0 +1,17 @@
+[data-part="r3-tech-viewer"] .r3vw__dlg{width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--vf-graph,#1a1f22);color:var(--vf-on-graph,#e4e9eb);overflow:hidden}
+[data-part="r3-tech-viewer"] .r3vw__dlg::backdrop{background:rgba(10,12,14,.7)}
+[data-part="r3-tech-viewer"] .r3vw__dlg[open]{display:grid;grid-template-rows:1fr auto;animation:r3vw-in .35s var(--vf-ease)}
+[data-part="r3-tech-viewer"] .r3vw__stage{display:grid;place-items:center;min-height:0;padding:clamp(56px,6vw,80px) clamp(16px,7vw,110px) 12px}
+[data-part="r3-tech-viewer"] .r3vw__media{position:relative;display:grid;place-items:center;max-width:100%;max-height:100%;min-height:0;padding:10px;border-radius:14px;background:var(--vf-surface,#edf1f2);box-shadow:0 20px 50px -20px #000}
+[data-part="r3-tech-viewer"] .r3vw__media img,[data-part="r3-tech-viewer"] .r3vw__media video{max-width:min(100%,1400px);max-height:calc(100dvh - 170px);width:auto;height:auto;border-radius:6px;background:#000}
+[data-part="r3-tech-viewer"] .r3vw__cap{padding:0 20px 22px;text-align:center;font-size:16px;color:var(--vf-on-graph-2,#a7afb3)}
+[data-part="r3-tech-viewer"] .r3vw__btn{position:absolute;display:grid;place-items:center;width:52px;height:52px;border:0;border-radius:4px;background:rgba(228,233,235,.08);box-shadow:inset 0 0 0 1.5px rgba(228,233,235,.5);color:inherit;cursor:pointer}
+[data-part="r3-tech-viewer"] .r3vw__btn:hover{background:rgba(228,233,235,.16)}
+[data-part="r3-tech-viewer"] .r3vw__btn:focus-visible{outline:2px solid var(--vf-primer,#cbd252);outline-offset:2px}
+[data-part="r3-tech-viewer"] .r3vw__btn svg{width:22px;height:22px}
+[data-part="r3-tech-viewer"] .r3vw__prev{left:clamp(8px,2vw,28px);top:50%;margin-top:-26px}
+[data-part="r3-tech-viewer"] .r3vw__next{right:clamp(8px,2vw,28px);top:50%;margin-top:-26px}
+[data-part="r3-tech-viewer"] .r3vw__close{right:clamp(8px,2vw,28px);top:clamp(8px,2vw,20px)}
+@keyframes r3vw-in{from{clip-path:inset(8% 8% 8% 8% round 14px);opacity:.4}to{clip-path:inset(0 round 0);opacity:1}}
+@media (max-width:899px){[data-part="r3-tech-viewer"] .r3vw__prev,[data-part="r3-tech-viewer"] .r3vw__next{top:auto;bottom:14px;margin:0}[data-part="r3-tech-viewer"] .r3vw__cap{padding:0 76px 30px}}
+@media (prefers-reduced-motion:reduce){[data-part="r3-tech-viewer"] .r3vw__dlg[open]{animation:none}}

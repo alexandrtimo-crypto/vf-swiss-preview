@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="ru" data-recipe="fd-lux">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../kit/icons/favicon.png">
+<title>VF swiss — мастерская швейцарских часов (fd-lux)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400%3B0,700%3B1,400&display=swap">
+<style>
+/* title: fd-lux — эмаль и воронёная сталь */
+/* fonts: Old Standard TT:ital,wght@0,400%3B0,700%3B1,400 */
+:root {
+  --vf-bg: #EDEFF1;          /* эмаль циферблата */
+  --vf-bg-2: #E3E6EA;
+  --vf-surface: #F6F7F8;
+  --vf-text: #1C2340;        /* чернила */
+  --vf-text-2: #3A4260;
+  --vf-muted: #59607A;
+  --vf-line: #C9CDD6;
+  --vf-accent: #22388A;      /* воронёная сталь */
+  --vf-accent-2: #121C3E;    /* ночь — тёмные полосы */
+  --vf-on-accent: #F3F4F6;
+  --vf-danger: #A3261D;
+  --vf-metal: #A8823A;       /* золото механизма: только линии и декор */
+  --vf-metal-on-dark: #CDAA63;
+  --vf-font-display: 'Old Standard TT', 'Times New Roman', serif;
+  --vf-font-text: 'Old Standard TT', 'Times New Roman', serif;
+  --vf-font-mono: 'Old Standard TT', serif;
+  --vf-radius: 3px;
+  --vf-radius-lg: 6px;
+  --vf-ease: cubic-bezier(.2, .7, .2, 1);
+  /* шкала Брингхерста: 14 16 18 21 24 36 48 60 72 */
+  --fd-s1: 14px; --fd-s2: 16px; --fd-s3: 18px; --fd-s4: 21px; --fd-s5: 24px;
+  --fd-s6: 36px; --fd-s7: 48px; --fd-s8: 60px; --fd-s9: 72px;
+}
+html { background: var(--vf-bg); -webkit-text-size-adjust: 100%; scroll-padding-top: 84px; }
+body.vf-page { margin: 0; background: var(--vf-bg); color: var(--vf-text); font: 400 18px/1.65 var(--vf-font-text); font-kerning: normal; text-rendering: optimizeLegibility; }
+body.vf-page :focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* title: fd-lux — кнопки: воронёная сталь */
+.vf-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5em; min-height: 52px; padding: 0 28px; border: 1px solid var(--vf-accent); border-radius: var(--vf-radius); background: transparent; color: var(--vf-accent); font: 400 18px/1 var(--vf-font-display); letter-spacing: .01em; text-decoration: none; cursor: pointer; transition: background-color .2s var(--vf-ease), color .2s var(--vf-ease); }
+.vf-btn:hover { background: color-mix(in srgb, var(--vf-accent) 8%, transparent); }
+.vf-btn--primary { background: var(--vf-accent); color: var(--vf-on-accent); }
+.vf-btn--primary:hover { background: color-mix(in srgb, var(--vf-accent) 86%, #000); }
+.vf-btn--ghost { border-color: currentColor; color: inherit; }
+.vf-btn--sm { min-height: 40px; padding: 0 18px; font-size: 16px; }
+.vf-btn:focus-visible { outline: 2px solid var(--vf-metal, #A8823A); outline-offset: 3px; }
+
+/* title: fd-lux — поля: строка на эмали */
+.vf-field { display: grid; gap: 6px; }
+.vf-field > span, .vf-field > label { font: italic 400 16px/1.3 var(--vf-font-text); color: inherit; opacity: .85; }
+.vf-input { width: 100%; box-sizing: border-box; min-height: 52px; padding: 12px 2px; border: 0; border-bottom: 1px solid currentColor; border-radius: 0; background: transparent; color: inherit; font: 400 20px/1.3 var(--vf-font-text); }
+textarea.vf-input { min-height: 96px; resize: vertical; }
+.vf-input::placeholder { color: inherit; opacity: .5; }
+.vf-input:focus { outline: none; border-bottom-width: 2px; border-bottom-color: var(--vf-metal-on-dark, #CDAA63); }
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); }
+.vf-field__err { font: 400 15px/1.4 var(--vf-font-text); color: inherit; }
+
+/* Локальные шрифты kit (SIL OFL 1.1, лицензии — в папках семейств). Генерация: kit/fonts/build-fonts.mjs */
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Golos Text'; font-style: normal; font-weight: 400 900; font-display: swap; src: url('../../kit/fonts/golos-text/golos-text-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Onest'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../../kit/fonts/onest/onest-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-cyrillic-wght-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'Unbounded'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('../../kit/fonts/unbounded/unbounded-latin-wght-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-italic.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-cyrillic-700-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+20BD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: italic; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-italic.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'PT Serif'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../kit/fonts/pt-serif/pt-serif-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Involve'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-Oblique-VF.ttf') format('truetype'); }
+@font-face { font-family: 'Involve'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('../../kit/fonts/involve/Involve-VF.ttf') format('truetype'); }
+
+
+/* ── fd-lux-header ── */
+[data-part="fd-lux-header"] { position: sticky; top: 0; z-index: 30; background: color-mix(in srgb, var(--vf-bg) 92%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+[data-part="fd-lux-header"] .fd-lux-header__in { max-width: 1200px; margin: 0 auto; padding: 14px 40px; box-sizing: content-box; display: flex; align-items: center; gap: 36px; }
+[data-part="fd-lux-header"] .fd-lux-header__mark { font: 400 26px/1 var(--vf-font-display); color: var(--vf-accent); text-decoration: none; letter-spacing: .01em; margin-right: auto; }
+[data-part="fd-lux-header"] .fd-lux-header__nav { display: flex; gap: 28px; }
+[data-part="fd-lux-header"] .fd-lux-header__nav a, [data-part="fd-lux-header"] .fd-lux-header__tel { color: var(--vf-text); text-decoration: none; font-size: 17px; }
+[data-part="fd-lux-header"] .fd-lux-header__nav a:hover, [data-part="fd-lux-header"] .fd-lux-header__tel:hover { color: var(--vf-accent); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+[data-part="fd-lux-header"] .fd-lux-header__tel { font-variant-numeric: lining-nums; white-space: nowrap; }
+@media (max-width: 980px) { [data-part="fd-lux-header"] .fd-lux-header__nav { display: none; } }
+@media (max-width: 600px) {
+  [data-part="fd-lux-header"] .fd-lux-header__in { padding: 12px 20px; gap: 16px; }
+  [data-part="fd-lux-header"] .fd-lux-header__cta { display: none; }
+  [data-part="fd-lux-header"] .fd-lux-header__mark { font-size: 24px; }
+}
+
+
+/* ── fd-lux-hero ── */
+[data-part="fd-lux-hero"] { --fd-win: min(560px, 42vw); padding: 56px 40px 96px; }
+[data-part="fd-lux-hero"] .fd-lux-hero__in { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) var(--fd-win); gap: 64px; align-items: center; }
+[data-part="fd-lux-hero"] .fd-lux-hero__title { margin: 0 0 28px; font: 400 var(--fd-s9, 72px)/1.04 var(--vf-font-display); letter-spacing: -.012em; color: var(--vf-accent); max-width: 11ch; text-wrap: balance; }
+[data-part="fd-lux-hero"] .fd-lux-hero__lead { margin: 0 0 40px; max-width: 34em; font-size: var(--fd-s4, 21px); line-height: 1.6; color: var(--vf-text-2); }
+[data-part="fd-lux-hero"] .fd-lux-hero__acts { display: flex; flex-wrap: wrap; gap: 14px; }
+[data-part="fd-lux-hero"] .fd-lux-hero__window { position: relative; margin: 0; width: var(--fd-win); }
+[data-part="fd-lux-hero"] .fd-lux-hero__dial { position: relative; aspect-ratio: 1; }
+[data-part="fd-lux-hero"] .fd-lux-hero__glass { position: absolute; top: 0; left: 0; width: 84%; margin: 8%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--vf-accent-2); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vf-metal, #A8823A) 70%, transparent), 0 30px 60px -30px rgba(18, 28, 62, .55); }
+[data-part="fd-lux-hero"] .fd-lux-hero__glass::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(120% 80% at 30% 15%, rgba(255,255,255,.22), transparent 45%); pointer-events: none; }
+[data-part="fd-lux-hero"] .fd-lux-hero__vid { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.12); }
+[data-part="fd-lux-hero"] .fd-lux-hero__track { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--vf-metal, #A8823A); }
+[data-part="fd-lux-hero"] .fd-lux-hero__track line { stroke: currentColor; stroke-width: .5; }
+[data-part="fd-lux-hero"] .fd-lux-hero__track line.h { stroke-width: 1.1; }
+[data-part="fd-lux-hero"] .fd-lux-hero__track circle { fill: none; stroke: currentColor; stroke-width: .4; }
+[data-part="fd-lux-hero"] figcaption { margin: 10px auto 0; max-width: 30em; text-align: center; font-style: italic; font-size: var(--fd-s2, 16px); color: var(--vf-muted); }
+/* единственный оркестрованный момент: минутная дорожка «набирается» при загрузке */
+@keyframes fd-lux-hero-tick { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fd-lux-hero-glass { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+[data-part="fd-lux-hero"] .fd-lux-hero__track line { animation: fd-lux-hero-tick .5s var(--vf-ease) both; animation-delay: calc(var(--i) * 18ms + .2s); }
+[data-part="fd-lux-hero"] .fd-lux-hero__glass { animation: fd-lux-hero-glass 1.2s var(--vf-ease) both .1s; }
+@media (prefers-reduced-motion: reduce) {
+  [data-part="fd-lux-hero"] .fd-lux-hero__track line, [data-part="fd-lux-hero"] .fd-lux-hero__glass { animation: none; }
+}
+@media (max-width: 980px) {
+  [data-part="fd-lux-hero"] { --fd-win: min(400px, 78vw); padding: 16px 24px 72px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__in { grid-template-columns: 1fr; gap: 8px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__window { order: -1; margin: 0 auto; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__title { font-size: clamp(40px, 10.4vw, 60px); max-width: 12ch; margin-top: 16px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__lead { font-size: var(--fd-s3, 18px); margin-bottom: 28px; }
+}
+@media (max-width: 600px) {
+  [data-part="fd-lux-hero"] { padding: 8px 20px 64px; }
+  [data-part="fd-lux-hero"] .fd-lux-hero__acts .vf-btn { flex: 1 1 100%; }
+  [data-part="fd-lux-hero"] figcaption { font-size: 14px; }
+}
+
+
+/* ── fd-lux-story ── */
+[data-part="fd-lux-story"] { padding: 112px 40px; background: var(--vf-bg-2); }
+[data-part="fd-lux-story"] .fd-lux-story__in { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 5fr 7fr; gap: 80px; align-items: center; }
+[data-part="fd-lux-story"] .fd-lux-story__pic { margin: 0; }
+[data-part="fd-lux-story"] .fd-lux-story__pic img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--vf-radius); }
+[data-part="fd-lux-story"] .fd-lux-story__title { margin: 0 0 32px; font: 400 var(--fd-s7, 48px)/1.1 var(--vf-font-display); color: var(--vf-accent); max-width: 14ch; text-wrap: balance; }
+[data-part="fd-lux-story"] p { margin: 0 0 20px; max-width: 33em; font-size: var(--fd-s3, 18px); line-height: 1.7; color: var(--vf-text); }
+[data-part="fd-lux-story"] .fd-lux-story__sign { margin-top: 36px; font-style: italic; color: var(--vf-muted); }
+@media (max-width: 900px) {
+  [data-part="fd-lux-story"] { padding: 72px 20px; }
+  [data-part="fd-lux-story"] .fd-lux-story__in { grid-template-columns: 1fr; gap: 36px; }
+  [data-part="fd-lux-story"] .fd-lux-story__pic img { aspect-ratio: 4 / 3; }
+  [data-part="fd-lux-story"] .fd-lux-story__title { font-size: var(--fd-s6, 36px); }
+}
+
+
+/* ── fd-lux-services ── */
+[data-part="fd-lux-services"] { padding: 120px 40px; }
+[data-part="fd-lux-services"] .fd-lux-services__in { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 4fr 8fr; gap: 64px; align-items: start; }
+[data-part="fd-lux-services"] .fd-lux-services__title { margin: 0; position: sticky; top: 110px; font: 400 var(--fd-s7, 48px)/1.1 var(--vf-font-display); color: var(--vf-accent); max-width: 9ch; }
+[data-part="fd-lux-services"] .fd-lux-services__list { list-style: none; margin: 0; padding: 0; }
+[data-part="fd-lux-services"] li + li { margin-top: 8px; }
+[data-part="fd-lux-services"] a { display: grid; gap: 6px; padding: 22px 0 24px; color: inherit; text-decoration: none; }
+[data-part="fd-lux-services"] .n { font: 400 var(--fd-s6, 36px)/1.15 var(--vf-font-display); color: var(--vf-text); transition: color .2s var(--vf-ease); }
+[data-part="fd-lux-services"] .d { font-size: var(--fd-s3, 18px); line-height: 1.6; color: var(--vf-muted); max-width: 36em; }
+[data-part="fd-lux-services"] a:hover .n, [data-part="fd-lux-services"] a:focus-visible .n { color: var(--vf-accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 8px; text-decoration-color: var(--vf-metal, #A8823A); }
+@media (max-width: 900px) {
+  [data-part="fd-lux-services"] { padding: 72px 20px; }
+  [data-part="fd-lux-services"] .fd-lux-services__in { grid-template-columns: 1fr; gap: 16px; }
+  [data-part="fd-lux-services"] .fd-lux-services__title { position: static; font-size: var(--fd-s6, 36px); max-width: none; }
+  [data-part="fd-lux-services"] .n { font-size: var(--fd-s5, 24px); }
+  [data-part="fd-lux-services"] .d { font-size: var(--fd-s2, 16px); }
+  [data-part="fd-lux-services"] a { padding: 16px 0; }
+}
+
+
+/* ── fd-lux-process ── */
+[data-part="fd-lux-process"] { padding: 112px 40px; background: var(--vf-surface); }
+[data-part="fd-lux-process"] .fd-lux-process__in { max-width: 1200px; margin: 0 auto; }
+[data-part="fd-lux-process"] .fd-lux-process__title { margin: 0 0 64px; font: 400 var(--fd-s7, 48px)/1.1 var(--vf-font-display); color: var(--vf-accent); max-width: 16ch; }
+[data-part="fd-lux-process"] .fd-lux-process__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px; }
+[data-part="fd-lux-process"] li { padding-top: 20px; border-top: 1px solid var(--vf-metal, #A8823A); }
+[data-part="fd-lux-process"] .r { display: block; font: 400 var(--fd-s6, 36px)/1 var(--vf-font-display); color: var(--vf-metal, #A8823A); margin-bottom: 18px; }
+[data-part="fd-lux-process"] h3 { margin: 0 0 10px; font: 700 var(--fd-s3, 18px)/1.3 var(--vf-font-display); color: var(--vf-text); }
+[data-part="fd-lux-process"] p { margin: 0; font-size: var(--fd-s2, 16px); line-height: 1.6; color: var(--vf-text-2); }
+@media (max-width: 980px) {
+  [data-part="fd-lux-process"] { padding: 72px 20px; }
+  [data-part="fd-lux-process"] .fd-lux-process__title { font-size: var(--fd-s6, 36px); margin-bottom: 40px; }
+  [data-part="fd-lux-process"] .fd-lux-process__list { grid-template-columns: 1fr; gap: 0; }
+  [data-part="fd-lux-process"] li { display: grid; grid-template-columns: 64px 1fr; column-gap: 12px; padding: 20px 0 24px; }
+  [data-part="fd-lux-process"] .r { grid-row: span 2; font-size: var(--fd-s5, 24px); margin: 0; }
+}
+
+
+/* ── fd-lux-works ── */
+[data-part="fd-lux-works"] { padding: 120px 40px; }
+[data-part="fd-lux-works"] .fd-lux-works__in { max-width: 1200px; margin: 0 auto; }
+[data-part="fd-lux-works"] .fd-lux-works__title { margin: 0 0 14px; font: 400 var(--fd-s7, 48px)/1.1 var(--vf-font-display); color: var(--vf-accent); }
+[data-part="fd-lux-works"] .fd-lux-works__lead { margin: 0 0 56px; max-width: 34em; font-size: var(--fd-s3, 18px); color: var(--vf-muted); }
+[data-part="fd-lux-works"] .fd-lux-works__grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 28px; align-items: start; }
+[data-part="fd-lux-works"] figure { margin: 0; }
+[data-part="fd-lux-works"] img { display: block; width: 100%; height: auto; object-fit: cover; border-radius: var(--vf-radius); background: var(--vf-bg-2); }
+[data-part="fd-lux-works"] figcaption { margin-top: 10px; font-style: italic; font-size: var(--fd-s2, 16px); color: var(--vf-muted); }
+[data-part="fd-lux-works"] .a { grid-column: 1 / span 8; }
+[data-part="fd-lux-works"] .a img { aspect-ratio: 4 / 3; }
+[data-part="fd-lux-works"] .b { grid-column: 9 / span 4; margin-top: 120px; }
+[data-part="fd-lux-works"] .b img { aspect-ratio: 3 / 4; }
+[data-part="fd-lux-works"] .c { grid-column: 2 / span 4; }
+[data-part="fd-lux-works"] .c img { aspect-ratio: 4 / 3; }
+[data-part="fd-lux-works"] .d { grid-column: 6 / span 3; margin-top: -60px; }
+[data-part="fd-lux-works"] .d img { aspect-ratio: 3 / 4; }
+[data-part="fd-lux-works"] .e { grid-column: 9 / span 4; margin-top: 40px; }
+[data-part="fd-lux-works"] .e img { aspect-ratio: 4 / 3; }
+@media (max-width: 900px) {
+  [data-part="fd-lux-works"] { padding: 72px 20px; }
+  [data-part="fd-lux-works"] .fd-lux-works__title { font-size: var(--fd-s6, 36px); }
+  [data-part="fd-lux-works"] .fd-lux-works__lead { margin-bottom: 32px; }
+  [data-part="fd-lux-works"] .fd-lux-works__grid { grid-template-columns: 1fr 1fr; gap: 20px 14px; }
+  [data-part="fd-lux-works"] .fd-lux-works__grid > figure { grid-column: auto; margin-top: 0; }
+  [data-part="fd-lux-works"] .a { grid-column: 1 / -1 !important; }
+  [data-part="fd-lux-works"] .e { grid-column: 1 / -1 !important; }
+  [data-part="fd-lux-works"] figcaption { font-size: 14px; }
+}
+
+
+/* ── fd-lux-brands ── */
+[data-part="fd-lux-brands"] { padding: 96px 40px 112px; background: var(--vf-bg-2); }
+[data-part="fd-lux-brands"] .fd-lux-brands__in { max-width: 1200px; margin: 0 auto; }
+[data-part="fd-lux-brands"] .fd-lux-brands__title { margin: 0 0 28px; font: 400 var(--fd-s4, 21px)/1.3 var(--vf-font-display); color: var(--vf-muted); }
+[data-part="fd-lux-brands"] .fd-lux-brands__list { margin: 0; max-width: 22em; font: italic 400 var(--fd-s8, 60px)/1.12 var(--vf-font-display); letter-spacing: -.01em; color: var(--vf-accent); text-wrap: pretty; }
+@media (max-width: 900px) {
+  [data-part="fd-lux-brands"] { padding: 64px 20px 72px; }
+  [data-part="fd-lux-brands"] .fd-lux-brands__list { font-size: var(--fd-s6, 36px); }
+}
+
+
+/* ── fd-lux-booking ── */
+[data-part="fd-lux-booking"] { padding: 120px 40px; background: var(--vf-accent-2); color: #E7E9EF; --vf-danger: #F0A39B; }
+[data-part="fd-lux-booking"] .fd-lux-booking__in { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 5fr 6fr; gap: 96px; align-items: start; }
+[data-part="fd-lux-booking"] .fd-lux-booking__title { margin: 0 0 24px; font: 400 var(--fd-s7, 48px)/1.1 var(--vf-font-display); color: #FFFFFF; max-width: 12ch; }
+[data-part="fd-lux-booking"] .fd-lux-booking__intro p { margin: 0 0 16px; font-size: var(--fd-s3, 18px); line-height: 1.65; color: #C9CEDA; max-width: 28em; }
+[data-part="fd-lux-booking"] a { color: var(--vf-metal-on-dark, #CDAA63); text-underline-offset: 4px; }
+[data-part="fd-lux-booking"] .fd-lux-booking__form { display: grid; gap: 22px; }
+[data-part="fd-lux-booking"] .vf-field > span { color: #C9CEDA; }
+[data-part="fd-lux-booking"] .vf-input { color: #FFFFFF; border-bottom-color: #6C7799; }
+[data-part="fd-lux-booking"] .vf-field__err { margin: -14px 0 0; color: var(--vf-danger); }
+[data-part="fd-lux-booking"] .fd-lux-booking__how { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 28px; }
+[data-part="fd-lux-booking"] .fd-lux-booking__how legend { padding: 0; margin-bottom: 10px; font-style: italic; font-size: 16px; color: #C9CEDA; }
+[data-part="fd-lux-booking"] .fd-lux-booking__how label, [data-part="fd-lux-booking"] .fd-lux-booking__consent { display: inline-flex; gap: 10px; align-items: baseline; font-size: 17px; color: #E7E9EF; cursor: pointer; }
+[data-part="fd-lux-booking"] input[type="radio"], [data-part="fd-lux-booking"] input[type="checkbox"] { accent-color: var(--vf-metal-on-dark, #CDAA63); width: 18px; height: 18px; flex: none; transform: translateY(3px); }
+[data-part="fd-lux-booking"] .fd-lux-booking__consent { font-size: 15px; line-height: 1.5; color: #C9CEDA; }
+[data-part="fd-lux-booking"] .fd-lux-booking__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+[data-part="fd-lux-booking"] .fd-lux-booking__send { justify-self: start; background: var(--vf-metal-on-dark, #CDAA63); border-color: var(--vf-metal-on-dark, #CDAA63); color: var(--vf-accent-2); }
+[data-part="fd-lux-booking"] .fd-lux-booking__send:hover { background: #DDBE7E; }
+[data-part="fd-lux-booking"] .fd-lux-booking__done { padding-top: 8px; outline: none; }
+[data-part="fd-lux-booking"] .fd-lux-booking__done h3 { margin: 0 0 12px; font: 400 var(--fd-s6, 36px)/1.15 var(--vf-font-display); color: var(--vf-metal-on-dark, #CDAA63); }
+[data-part="fd-lux-booking"] .fd-lux-booking__done p { margin: 0; max-width: 30em; color: #C9CEDA; }
+@media (max-width: 900px) {
+  [data-part="fd-lux-booking"] { padding: 72px 20px; }
+  [data-part="fd-lux-booking"] .fd-lux-booking__in { grid-template-columns: 1fr; gap: 40px; }
+  [data-part="fd-lux-booking"] .fd-lux-booking__title { font-size: var(--fd-s6, 36px); }
+  [data-part="fd-lux-booking"] .fd-lux-booking__send { justify-self: stretch; }
+}
+
+
+/* ── fd-lux-contacts ── */
+[data-part="fd-lux-contacts"] { padding: 112px 40px; }
+[data-part="fd-lux-contacts"] .fd-lux-contacts__in { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 4fr 8fr; gap: 64px; }
+[data-part="fd-lux-contacts"] .fd-lux-contacts__title { margin: 0; font: 400 var(--fd-s7, 48px)/1.1 var(--vf-font-display); color: var(--vf-accent); max-width: 9ch; }
+[data-part="fd-lux-contacts"] .fd-lux-contacts__list { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 40px 48px; }
+[data-part="fd-lux-contacts"] dt { margin-bottom: 6px; font-style: italic; font-size: 16px; color: var(--vf-muted); }
+[data-part="fd-lux-contacts"] dd { margin: 0; font: 400 var(--fd-s5, 24px)/1.4 var(--vf-font-display); color: var(--vf-text); }
+[data-part="fd-lux-contacts"] a { color: var(--vf-accent); text-decoration: none; }
+[data-part="fd-lux-contacts"] a:hover { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+[data-part="fd-lux-contacts"] .fd-lux-contacts__stub { display: inline-block; margin-left: 6px; padding: 1px 8px; border: 1px dashed var(--vf-muted); border-radius: 99px; font: italic 400 13px/1.5 var(--vf-font-text); color: var(--vf-muted); vertical-align: middle; }
+@media (max-width: 900px) {
+  [data-part="fd-lux-contacts"] { padding: 72px 20px; }
+  [data-part="fd-lux-contacts"] .fd-lux-contacts__in { grid-template-columns: 1fr; gap: 32px; }
+  [data-part="fd-lux-contacts"] .fd-lux-contacts__title { font-size: var(--fd-s6, 36px); max-width: none; }
+  [data-part="fd-lux-contacts"] .fd-lux-contacts__list { grid-template-columns: 1fr; gap: 24px; }
+  [data-part="fd-lux-contacts"] dd { font-size: var(--fd-s4, 21px); }
+}
+
+
+/* ── fd-lux-footer ── */
+[data-part="fd-lux-footer"] { padding: 48px 40px; background: var(--vf-accent-2); color: #9AA3BC; border-top: 1px solid color-mix(in srgb, var(--vf-metal-on-dark, #CDAA63) 35%, transparent); }
+[data-part="fd-lux-footer"] .fd-lux-footer__in { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px 40px; align-items: baseline; }
+[data-part="fd-lux-footer"] p { margin: 0; font-size: 15px; }
+[data-part="fd-lux-footer"] .fd-lux-footer__mark { font: 400 22px/1 var(--vf-font-display); color: var(--vf-metal-on-dark, #CDAA63); }
+[data-part="fd-lux-footer"] .fd-lux-footer__note { margin-left: auto; font-style: italic; }
+@media (max-width: 760px) { [data-part="fd-lux-footer"] { padding: 40px 20px 112px; } [data-part="fd-lux-footer"] .fd-lux-footer__note { margin-left: 0; } }
+
+
+/* ── fd-lux-dock ── */
+[data-part="fd-lux-dock"] { display: none; }
+@media (max-width: 760px) {
+  [data-part="fd-lux-dock"] { position: fixed; z-index: 40; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: 1fr 1fr 1.2fr; border-radius: var(--vf-radius-lg); overflow: hidden; background: var(--vf-accent-2); box-shadow: 0 12px 30px -12px rgba(18, 28, 62, .6); border: 1px solid color-mix(in srgb, var(--vf-metal-on-dark, #CDAA63) 40%, transparent); }
+  [data-part="fd-lux-dock"] a { display: flex; align-items: center; justify-content: center; min-height: 54px; font: 400 17px/1 var(--vf-font-display); color: #E7E9EF; text-decoration: none; }
+  [data-part="fd-lux-dock"] a + a { border-left: 1px solid rgba(255, 255, 255, .12); }
+  [data-part="fd-lux-dock"] .fd-lux-dock__book { background: var(--vf-metal-on-dark, #CDAA63); color: var(--vf-accent-2); }
+}
+
+</style>
+</head>
+<body class="vf-page">
+<header data-part="fd-lux-header" data-slot="header" class="fd-lux-header">
+  <div class="fd-lux-header__in">
+    <a class="fd-lux-header__mark" href="#top" aria-label="VF swiss — в начало">VF swiss</a>
+    <nav class="fd-lux-header__nav" aria-label="Разделы">
+      <a href="#services">Услуги</a>
+      <a href="#process">Как мы работаем</a>
+      <a href="#works">Работы</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <a class="fd-lux-header__tel" href="tel:+79651716996">8 (965) 171-69-96</a>
+    <a class="vf-btn vf-btn--primary vf-btn--sm fd-lux-header__cta" href="#booking" data-book>Записаться</a>
+  </div>
+</header>
+
+<section data-part="fd-lux-hero" data-slot="hero" class="fd-lux-hero" id="top">
+  <div class="fd-lux-hero__in">
+    <div class="fd-lux-hero__text">
+      <h1 class="fd-lux-hero__title">Мастерская швейцарских часов на&nbsp;Петровке</h1>
+      <p class="fd-lux-hero__lead">Владислав разбирает механизм до&nbsp;последнего винта, проверяет ход на&nbsp;таймграфере и&nbsp;ставит оригинальные детали. Диагностика бесплатно, гарантия до&nbsp;двух лет.</p>
+      <div class="fd-lux-hero__acts">
+        <a class="vf-btn vf-btn--primary" href="#booking" data-book>Записаться на диагностику</a>
+        <a class="vf-btn" href="https://t.me/VFswissboutique" rel="noopener">Написать в Telegram</a>
+      </div>
+    </div>
+    <figure class="fd-lux-hero__window">
+      <div class="fd-lux-hero__dial">
+      <div class="fd-lux-hero__glass">
+        <video class="fd-lux-hero__vid" muted loop playsinline preload="metadata" poster="../../media/vid/hero-poster.webp" aria-hidden="true">
+          <source src="../../media/vid/hero.mp4" type="video/mp4">
+        </video>
+      </div>
+      <svg class="fd-lux-hero__track" viewBox="0 0 200 200" aria-hidden="true"></svg>
+      </div>
+      <figcaption>Механизм на&nbsp;верстаке мастерской: пинцет у&nbsp;балансового узла</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section data-part="fd-lux-story" data-slot="story" class="fd-lux-story" id="story">
+  <div class="fd-lux-story__in">
+    <figure class="fd-lux-story__pic">
+      <img src="../../media/img/ex_3.webp" alt="Механизм часов на синем рабочем коврике, пинцет у колеса" loading="lazy" width="600" height="800">
+    </figure>
+    <div class="fd-lux-story__text">
+      <h2 class="fd-lux-story__title">Часы от приёмки до&nbsp;выдачи в&nbsp;одних руках</h2>
+      <p>VF swiss — небольшая мастерская, а&nbsp;не&nbsp;сетевой сервис. Владелец и&nbsp;мастер — Владислав. Он сам принимает часы, сам их&nbsp;разбирает и&nbsp;сам отдаёт обратно.</p>
+      <p>Механизм разбирается полностью, до&nbsp;последнего винта. Ход проверяется на&nbsp;таймграфере, детали осматриваются под микроскопом, корпус — на&nbsp;тестере герметичности. Комплектующие только оригинальные.</p>
+      <p class="fd-lux-story__sign">Владислав, часовой мастер</p>
+    </div>
+  </div>
+</section>
+
+<section data-part="fd-lux-services" data-slot="services" class="fd-lux-services" id="services">
+  <div class="fd-lux-services__in">
+    <h2 class="fd-lux-services__title">Что делает мастерская</h2>
+    <ul class="fd-lux-services__list">
+      <li><a href="#booking" data-symptom="Диагностика"><span class="n">Диагностика</span><span class="d">Бесплатно. Мастер вскрывает часы, смотрит механизм и&nbsp;говорит, что нужно.</span></a></li>
+      <li><a href="#booking" data-symptom="Ремонт и обслуживание механизма"><span class="n">Ремонт и&nbsp;обслуживание механизма</span><span class="d">Полная разборка, чистка, смазка, оригинальные детали, проверка хода на&nbsp;таймграфере.</span></a></li>
+      <li><a href="#booking" data-symptom="Полировка"><span class="n">Полировка</span><span class="d">Корпус и&nbsp;браслет возвращают блеск без потери граней.</span></a></li>
+      <li><a href="#booking" data-symptom="Замена элемента питания"><span class="n">Замена элемента питания</span><span class="d">С&nbsp;сохранением герметичности — проверяем на&nbsp;тестере.</span></a></li>
+      <li><a href="#booking" data-symptom="Ремешок или браслет"><span class="n">Ремешки и&nbsp;браслеты</span><span class="d">Подбор, замена, ремонт звеньев и&nbsp;замков.</span></a></li>
+      <li><a href="#booking" data-symptom="Замена стекла"><span class="n">Замена стекла</span><span class="d">Новое стекло по&nbsp;размеру и&nbsp;проверка герметичности после установки.</span></a></li>
+    </ul>
+  </div>
+</section>
+
+<section data-part="fd-lux-process" data-slot="process" class="fd-lux-process" id="process">
+  <div class="fd-lux-process__in">
+    <h2 class="fd-lux-process__title">Как мастер работает с&nbsp;вашими часами</h2>
+    <ol class="fd-lux-process__list">
+      <li><span class="r" aria-hidden="true">I</span><h3>Приёмка</h3><p>Вы приносите часы на&nbsp;Петровку, 23/10, стр.&nbsp;5. Можно сначала написать в&nbsp;Telegram.</p></li>
+      <li><span class="r" aria-hidden="true">II</span><h3>Диагностика</h3><p>Бесплатно. Вы узнаёте, что с&nbsp;часами и&nbsp;какая работа нужна, и&nbsp;решаете, делать ли&nbsp;её.</p></li>
+      <li><span class="r" aria-hidden="true">III</span><h3>Разборка до&nbsp;последнего винта</h3><p>Чистка, смазка, замена изношенного только на&nbsp;оригинальные детали.</p></li>
+      <li><span class="r" aria-hidden="true">IV</span><h3>Проверка</h3><p>Ход — на&nbsp;таймграфере, герметичность — на&nbsp;тестере.</p></li>
+      <li><span class="r" aria-hidden="true">V</span><h3>Выдача</h3><p>Часы возвращаются к&nbsp;вам с&nbsp;гарантией до&nbsp;двух лет.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section data-part="fd-lux-works" data-slot="works" class="fd-lux-works" id="works">
+  <div class="fd-lux-works__in">
+    <h2 class="fd-lux-works__title">С&nbsp;верстака мастерской</h2>
+    <p class="fd-lux-works__lead">Снимки сделаны в&nbsp;мастерской, во&nbsp;время работы с&nbsp;часами клиентов.</p>
+    <div class="fd-lux-works__grid">
+      <figure class="a"><img src="../../media/img/ex_19.webp" alt="Часы, разобранные полностью: механизм, стрелки, циферблат, корпус и винты разложены на белом" loading="lazy" width="1200" height="898"><figcaption>Разборка до&nbsp;последнего винта: каждая деталь отдельно</figcaption></figure>
+      <figure class="b"><img src="../../media/img/ex_20.webp" alt="Rolex с золотым безелем и браслетом после обслуживания" loading="lazy" width="900" height="1200"><figcaption>Rolex после обслуживания</figcaption></figure>
+      <figure class="c"><img src="../../media/img/ex_36.webp" alt="Баланс и мост механизма на белом фоне" loading="lazy" width="866" height="633"><figcaption>Балансовый узел, снятый с&nbsp;механизма</figcaption></figure>
+      <figure class="d"><img src="../../media/img/face_1.webp" alt="Золотые часы с синим циферблатом на золотом браслете" loading="lazy" width="675" height="900"><figcaption>Золотые часы на&nbsp;браслете</figcaption></figure>
+      <figure class="e"><img src="../../media/img/ex_13.webp" alt="Двухцветный браслет, разобранный по звеньям" loading="lazy" width="800" height="600"><figcaption>Браслет перед полировкой и&nbsp;сборкой</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section data-part="fd-lux-brands" data-slot="brands" class="fd-lux-brands" id="brands">
+  <div class="fd-lux-brands__in">
+    <h2 class="fd-lux-brands__title">Марки, с&nbsp;которыми работает мастер</h2>
+    <p class="fd-lux-brands__list">Rolex, Patek Philippe, Audemars Piguet, Vacheron Constantin, Breguet, Cartier, Breitling, Franck Muller, Blancpain и&nbsp;другие швейцарские часы.</p>
+  </div>
+</section>
+
+<section data-part="fd-lux-booking" data-slot="booking" class="fd-lux-booking" id="booking">
+  <div class="fd-lux-booking__in">
+    <div class="fd-lux-booking__intro">
+      <h2 class="fd-lux-booking__title">Записаться на&nbsp;бесплатную диагностику</h2>
+      <p>Оставьте имя и&nbsp;телефон — Владислав перезвонит или напишет в&nbsp;Telegram, как вам удобнее.</p>
+      <p class="fd-lux-booking__alt">Или сразу: <a href="tel:+79651716996">8 (965) 171-69-96</a>, <a href="https://t.me/VFswissboutique" rel="noopener">@VFswissboutique</a></p>
+    </div>
+    <form class="fd-lux-booking__form" action="#booking" method="post">
+      <label class="vf-field"><span>Имя</span><input class="vf-input" name="name" autocomplete="name" required></label>
+      <p class="vf-field__err" data-err="name" hidden></p>
+      <label class="vf-field"><span>Телефон</span><input class="vf-input" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required></label>
+      <p class="vf-field__err" data-err="phone" hidden></p>
+      <fieldset class="fd-lux-booking__how">
+        <legend>Как с&nbsp;вами связаться</legend>
+        <label><input type="radio" name="contact" value="call" checked> Позвонить</label>
+        <label><input type="radio" name="contact" value="telegram"> Написать в&nbsp;Telegram</label>
+      </fieldset>
+      <label class="vf-field"><span>Марка часов, если знаете</span><input class="vf-input" name="brand" placeholder="Например, Patek Philippe"></label>
+      <label class="vf-field"><span>Что с&nbsp;часами</span><textarea class="vf-input" name="description" rows="3" placeholder="Остановились, отстают, нужна полировка…"></textarea></label>
+      <label class="fd-lux-booking__hp" aria-hidden="true">Сайт <input name="website" tabindex="-1" autocomplete="off"></label>
+      <label class="fd-lux-booking__consent"><input type="checkbox" name="consent" required> Согласен на&nbsp;обработку персональных данных для ответа на&nbsp;заявку</label>
+      <p class="vf-field__err" data-err="consent" hidden></p>
+      <button class="vf-btn fd-lux-booking__send" type="submit">Отправить заявку</button>
+    </form>
+    <div class="fd-lux-booking__done" data-done hidden tabindex="-1" role="status">
+      <h3>Заявка принята (прототип)</h3>
+      <p>Это демонстрация: заявка никуда не&nbsp;отправлена. На&nbsp;настоящем сайте Владислав свяжется с&nbsp;вами выбранным способом.</p>
+    </div>
+  </div>
+</section>
+
+<section data-part="fd-lux-contacts" data-slot="contacts" class="fd-lux-contacts" id="contacts">
+  <div class="fd-lux-contacts__in">
+    <h2 class="fd-lux-contacts__title">Мастерская на&nbsp;Петровке</h2>
+    <dl class="fd-lux-contacts__list">
+      <div><dt>Адрес</dt><dd>Москва, ул.&nbsp;Петровка, 23/10, стр.&nbsp;5</dd></div>
+      <div><dt>Телефоны</dt><dd><a href="tel:+79651716996">8 (965) 171-69-96</a><br><a href="tel:+79162459223">8 (916) 245-92-23</a></dd></div>
+      <div><dt>Telegram</dt><dd><a href="https://t.me/VFswissboutique" rel="noopener">@VFswissboutique</a></dd></div>
+      <div><dt>Часы работы</dt><dd>Уточняйте по&nbsp;телефону <small class="fd-lux-contacts__stub">заглушка</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+<footer data-part="fd-lux-footer" data-slot="footer" class="fd-lux-footer">
+  <div class="fd-lux-footer__in">
+    <p class="fd-lux-footer__mark">VF swiss</p>
+    <p>Ремонт и&nbsp;обслуживание швейцарских часов. Москва, Петровка, 23/10, стр.&nbsp;5.</p>
+    <p class="fd-lux-footer__note">Прототип сайта: заявки не&nbsp;отправляются.</p>
+  </div>
+</footer>
+
+<nav data-part="fd-lux-dock" data-slot="dock" class="fd-lux-dock" aria-label="Связаться с мастерской">
+  <a href="tel:+79651716996">Позвонить</a>
+  <a href="https://t.me/VFswissboutique" rel="noopener">Telegram</a>
+  <a href="#booking" class="fd-lux-dock__book" data-book>Заявка</a>
+</nav>
+
+<script>
+// VF kit: запуск JS компонентов после сборки страницы
+window.VFKit = window.VFKit || {
+  parts: {},
+  register(id, init) { this.parts[id] = init; },
+  boot() {
+    document.querySelectorAll('[data-part]').forEach(root => {
+      const init = this.parts[root.dataset.part];
+      if (!init || root.__vfBooted) return;
+      root.__vfBooted = true;
+      try { init(root); } catch (err) { console.error(`[VFKit] ${root.dataset.part}:`, err); }
+    });
+    // По умолчанию «записаться» прокручивает к слоту заявки, если его компонент не перехватил событие
+    document.addEventListener('vf:book', e => {
+      if (e.defaultPrevented) return;
+      document.querySelector('[data-slot="booking"]')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  },
+};
+
+</script>
+<script>
+// Общая логика заявки для всех вариантов VF swiss v2: маска телефона и проверка
+window.VFLead = (() => {
+  function formatPhone(value) {
+    let d = value.replace(/\D/g, '');
+    if (d.startsWith('8') || d.startsWith('7')) d = d.slice(1);
+    d = d.slice(0, 10);
+    if (!d) return '';
+    let r = '+7 (' + d.slice(0, 3);
+    if (d.length > 3) r += ') ' + d.slice(3, 6);
+    if (d.length > 6) r += '-' + d.slice(6, 8);
+    if (d.length > 8) r += '-' + d.slice(8, 10);
+    return r;
+  }
+
+  // Проверка заявки перед отправкой.
+  // data: { name, phone, contact: 'call'|'telegram', brand, description, photos: File[] }
+  // Вернуть { ok: true } или { ok: false, field: 'имя поля', message: 'текст для клиента' }.
+  function validateLead(data) {
+    // TODO(human): правила проверки заявки
+    return { ok: true };
+  }
+
+  // Подключает маску к полю телефона
+  function bindPhone(input) {
+    input.addEventListener('input', () => { input.value = formatPhone(input.value); });
+  }
+
+  return { formatPhone, validateLead, bindPhone };
+})();
+
+</script>
+<script>
+/* ── fd-lux-header ── */
+;(() => {
+VFKit.register('fd-lux-header', root => {
+  root.querySelectorAll('[data-book]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    document.dispatchEvent(new CustomEvent('vf:book', { cancelable: true, detail: {} }));
+  }));
+});
+
+})();
+
+/* ── fd-lux-hero ── */
+;(() => {
+VFKit.register('fd-lux-hero', root => {
+  // минутная дорожка безеля: 60 рисок, каждая пятая длиннее
+  const svg = root.querySelector('.fd-lux-hero__track');
+  const NS = 'http://www.w3.org/2000/svg';
+  const ring = document.createElementNS(NS, 'circle');
+  ring.setAttribute('cx', 100); ring.setAttribute('cy', 100); ring.setAttribute('r', 99.2);
+  svg.appendChild(ring);
+  for (let i = 0; i < 60; i++) {
+    const a = (i / 60) * Math.PI * 2, h = i % 5 === 0;
+    const r1 = h ? 92.5 : 95, r2 = 98;
+    const l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', (100 + r1 * Math.sin(a)).toFixed(2)); l.setAttribute('y1', (100 - r1 * Math.cos(a)).toFixed(2));
+    l.setAttribute('x2', (100 + r2 * Math.sin(a)).toFixed(2)); l.setAttribute('y2', (100 - r2 * Math.cos(a)).toFixed(2));
+    if (h) l.setAttribute('class', 'h');
+    l.style.setProperty('--i', i);
+    svg.appendChild(l);
+  }
+  const v = root.querySelector('video');
+  if (v && !matchMedia('(prefers-reduced-motion: reduce)').matches) { v.play().catch(() => {}); }
+  root.querySelectorAll('[data-book]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    document.dispatchEvent(new CustomEvent('vf:book', { cancelable: true, detail: {} }));
+  }));
+});
+
+})();
+
+/* ── fd-lux-services ── */
+;(() => {
+VFKit.register('fd-lux-services', root => {
+  root.querySelectorAll('[data-symptom]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    document.dispatchEvent(new CustomEvent('vf:book', { cancelable: true, detail: { symptom: a.dataset.symptom } }));
+  }));
+});
+
+})();
+
+/* ── fd-lux-booking ── */
+;(() => {
+VFKit.register('fd-lux-booking', root => {
+  const form = root.querySelector('form');
+  const done = root.querySelector('[data-done]');
+  if (!form) return;
+  form.noValidate = true;
+  const f = n => form.elements[n];
+  if (window.VFLead && f('phone')) VFLead.bindPhone(f('phone'));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Открыть заявку из любого места страницы: vf:book { symptom }
+  document.addEventListener('vf:book', e => {
+    e.preventDefault();
+    const s = e.detail && e.detail.symptom;
+    if (s && f('description') && !f('description').value.trim()) f('description').value = s + '. ';
+    if (s && f('topic')) f('topic').value = s;
+    root.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    setTimeout(() => f('name') && f('name').focus({ preventScroll: true }), reduce ? 0 : 500);
+  });
+
+  const setErr = (name, msg) => {
+    const el = f(name); const box = root.querySelector(`[data-err="${name}"]`);
+    if (el && el.setAttribute) { msg ? el.setAttribute('aria-invalid', 'true') : el.removeAttribute('aria-invalid'); }
+    if (box) { box.textContent = msg || ''; box.hidden = !msg; }
+  };
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    ['name', 'phone', 'consent'].forEach(n => setErr(n, ''));
+    if (f('website') && f('website').value) { form.hidden = true; done.hidden = false; return; } // honeypot
+    const data = {
+      name: f('name').value.trim(),
+      phone: f('phone').value.trim(),
+      contact: (form.querySelector('[name="contact"]:checked') || {}).value || 'call',
+      brand: f('brand') ? f('brand').value.trim() : '',
+      description: f('description') ? f('description').value.trim() : '',
+      photos: [],
+    };
+    let res = { ok: true };
+    if (!data.name) res = { ok: false, field: 'name', message: 'Напишите, как к вам обращаться.' };
+    else if (data.phone.replace(/\D/g, '').length < 11) res = { ok: false, field: 'phone', message: 'Номер неполный: нужно 10 цифр после +7.' };
+    else if (!f('consent').checked) res = { ok: false, field: 'consent', message: 'Отметьте согласие на обработку данных — без него заявку не принять.' };
+    if (res.ok && window.VFLead) res = VFLead.validateLead(data) || { ok: true };
+    if (!res.ok) { setErr(res.field, res.message); const el = f(res.field); el && el.focus && el.focus(); return; }
+    form.hidden = true; done.hidden = false; done.focus();
+  });
+});
+
+})();
+
+/* ── fd-lux-dock ── */
+;(() => {
+VFKit.register('fd-lux-dock', root => {
+  root.querySelector('[data-book]').addEventListener('click', e => {
+    e.preventDefault();
+    document.dispatchEvent(new CustomEvent('vf:book', { cancelable: true, detail: {} }));
+  });
+});
+
+})();
+</script>
+<script>VFKit.boot();</script>
+</body>
+</html>

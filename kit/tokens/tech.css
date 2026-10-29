@@ -1,0 +1,46 @@
+/* title: Современно-технологично */
+/* fonts: Onest:wght@300..700; IBM Plex Mono:wght@400; IBM Plex Mono:wght@500 */
+/* Тема «живой прибор»: графит и один люминесцентный акцент. Глобальные правила сайта — только здесь. */
+:root{
+  --vf-bg:#05070a;
+  --vf-bg-2:#0a0e11;
+  --vf-surface:#10161a;
+  --vf-text:#eaf1f2;
+  --vf-text-2:#93a0a5;
+  --vf-muted:#5b676d;
+  --vf-line:rgba(214,236,240,.09);
+  --vf-accent:#6ff2d0;
+  --vf-accent-2:#b9fff0;
+  --vf-on-accent:#03140f;
+  --vf-danger:#ff8a7a;
+  --vf-font-display:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --vf-font-text:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --vf-font-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --vf-radius:18px;
+  --vf-radius-lg:26px;
+  --vf-ease:cubic-bezier(.2,.7,.1,1);
+  /* особые токены видения tech (компоненты читают их с запасным значением) */
+  --vf-surface-2:#080b0d;
+  --vf-line-2:rgba(214,236,240,.16);
+  --vf-tint:#d6ecf0;
+  --vf-danger-soft:#ff9d8f;
+  --vf-pad:clamp(20px,5.5vw,88px);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:90px}
+.vf-page{margin:0;background:var(--vf-bg);color:var(--vf-text);font-family:var(--vf-font-text);font-weight:400;font-size:17px;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.vf-page::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+img,video,canvas,svg{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit}
+.mono{font-family:var(--vf-font-mono);font-feature-settings:"zero" 1;letter-spacing:0}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:2px solid var(--vf-accent);outline-offset:3px;border-radius:8px}
+sup{color:var(--vf-accent);font-size:.7em;margin-left:1px}
+@media (max-width:820px){.vf-page{font-size:16px}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}

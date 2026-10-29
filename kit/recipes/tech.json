@@ -1,0 +1,2 @@
+{ "name": "tech", "title": "VF swiss · Технологично", "tokens": "tech", "buttons": "tech", "fields": "tech",
+  "parts": ["tech-header", "tech-hero", "tech-story-explode", "tech-services-bento", "tech-works-loupe", "tech-overlay-viewer", "tech-process-dial", "tech-booking-form", "tech-contacts-reach", "tech-footer", "tech-dock"] }

@@ -1,0 +1,8 @@
+/* easy-footer: телефоны и Telegram, мелкий текст */
+.easy-footer { max-width: 1100px; margin: 0 auto; padding: 26px 20px 20px; text-align: center; box-sizing: border-box; }
+.easy-footer :where(p) { margin: 0; }
+.easy-footer a { color: inherit; }
+.easy-footer__contacts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; font-weight: 900; font-size: 18px; }
+.easy-footer__contacts a { text-decoration: none; border-bottom: 3px solid var(--vf-accent-2); }
+.easy-footer__small { margin-top: 12px; font-size: 13.5px; color: var(--vf-text-2); }
+.easy-footer__stub { color: var(--vf-accent); font-weight: 900; margin-left: 3px; }

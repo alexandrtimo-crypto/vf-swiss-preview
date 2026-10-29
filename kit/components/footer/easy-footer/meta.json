@@ -1,0 +1,9 @@
+{
+  "id": "easy-footer",
+  "slot": "footer",
+  "title": "Подвал · легко",
+  "vision": "easy",
+  "description": "Оба телефона и Telegram с жёлтым подчёркиванием, список марок, заглушка политики.",
+  "fonts": ["Nunito:wght@500..900"],
+  "needs": []
+}

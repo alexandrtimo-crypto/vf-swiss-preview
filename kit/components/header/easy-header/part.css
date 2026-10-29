@@ -1,0 +1,21 @@
+/* easy-header: логотип-наклейка и телефон-«таблетка» */
+.easy-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 16px 0; max-width: 1240px; margin: 0 auto; box-sizing: border-box;
+}
+.easy-header a { color: var(--vf-text); }
+.easy-header__logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.easy-header__badge {
+  width: 44px; height: 44px; border-radius: 15px; background: var(--vf-accent); color: var(--vf-on-accent);
+  display: grid; place-items: center; font-weight: 900; font-size: 17px; letter-spacing: -.02em; box-sizing: border-box;
+  border: 3px solid var(--vf-line); box-shadow: 0 3px 0 var(--vf-line); transform: rotate(-6deg);
+}
+.easy-header__name { font-family: var(--vf-font-display); font-weight: 900; font-size: 20px; letter-spacing: -.02em; }
+.easy-header__phone {
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 800; font-size: 15.5px;
+  background: var(--vf-surface); border: 2.5px solid var(--vf-line); border-radius: 999px; padding: 8px 14px 8px 10px; box-shadow: 0 3px 0 var(--vf-line);
+}
+.easy-header__phone svg { display: block; width: 22px; height: 22px; fill: var(--vf-easy-mint, #8EE0B8); stroke: var(--vf-line); stroke-width: 1.8; stroke-linejoin: round; }
+@media (min-width: 760px) {
+  .easy-header { padding: 22px 32px 0; }
+}

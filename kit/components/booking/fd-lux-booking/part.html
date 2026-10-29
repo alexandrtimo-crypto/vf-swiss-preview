@@ -1,0 +1,30 @@
+<section data-part="fd-lux-booking" data-slot="booking" class="fd-lux-booking" id="booking">
+  <div class="fd-lux-booking__in">
+    <div class="fd-lux-booking__intro">
+      <h2 class="fd-lux-booking__title">Записаться на&nbsp;бесплатную диагностику</h2>
+      <p>Оставьте имя и&nbsp;телефон — Владислав перезвонит или напишет в&nbsp;Telegram, как вам удобнее.</p>
+      <p class="fd-lux-booking__alt">Или сразу: <a href="tel:+79651716996">8 (965) 171-69-96</a>, <a href="https://t.me/VFswissboutique" rel="noopener">@VFswissboutique</a></p>
+    </div>
+    <form class="fd-lux-booking__form" action="#booking" method="post">
+      <label class="vf-field"><span>Имя</span><input class="vf-input" name="name" autocomplete="name" required></label>
+      <p class="vf-field__err" data-err="name" hidden></p>
+      <label class="vf-field"><span>Телефон</span><input class="vf-input" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required></label>
+      <p class="vf-field__err" data-err="phone" hidden></p>
+      <fieldset class="fd-lux-booking__how">
+        <legend>Как с&nbsp;вами связаться</legend>
+        <label><input type="radio" name="contact" value="call" checked> Позвонить</label>
+        <label><input type="radio" name="contact" value="telegram"> Написать в&nbsp;Telegram</label>
+      </fieldset>
+      <label class="vf-field"><span>Марка часов, если знаете</span><input class="vf-input" name="brand" placeholder="Например, Patek Philippe"></label>
+      <label class="vf-field"><span>Что с&nbsp;часами</span><textarea class="vf-input" name="description" rows="3" placeholder="Остановились, отстают, нужна полировка…"></textarea></label>
+      <label class="fd-lux-booking__hp" aria-hidden="true">Сайт <input name="website" tabindex="-1" autocomplete="off"></label>
+      <label class="fd-lux-booking__consent"><input type="checkbox" name="consent" required> Согласен на&nbsp;обработку персональных данных для ответа на&nbsp;заявку</label>
+      <p class="vf-field__err" data-err="consent" hidden></p>
+      <button class="vf-btn fd-lux-booking__send" type="submit">Отправить заявку</button>
+    </form>
+    <div class="fd-lux-booking__done" data-done hidden tabindex="-1" role="status">
+      <h3>Заявка принята (прототип)</h3>
+      <p>Это демонстрация: заявка никуда не&nbsp;отправлена. На&nbsp;настоящем сайте Владислав свяжется с&nbsp;вами выбранным способом.</p>
+    </div>
+  </div>
+</section>

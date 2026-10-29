@@ -1,0 +1,18 @@
+{
+ "name": "lib-on-lux",
+ "title": "VF swiss · библиотеки поверх lux",
+ "tokens": "lux",
+ "buttons": "lux",
+ "fields": "lux",
+ "icons": "tabler",
+ "sounds": "mechanical",
+ "parts": [
+  "lux-header",
+  "lux-hero",
+  "lib-works-dome",
+  "lib-process-stack",
+  "lib-process-board",
+  "lux-footer",
+  "lib-sound-toggle"
+ ]
+}

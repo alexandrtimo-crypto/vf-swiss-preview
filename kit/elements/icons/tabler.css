@@ -1,0 +1,40 @@
+/* title: Иконки · Tabler (MIT, линия 2px) */
+/* MIT © Paweł Kuna (tabler-icons). Сборка: kit/icons/build-icons.mjs */
+.vf-i { display: inline-block; width: 1em; height: 1em; flex: none; vertical-align: -0.125em; background-color: currentColor; -webkit-mask: var(--vf-i) center / contain no-repeat; mask: var(--vf-i) center / contain no-repeat; }
+.vf-i--phone { --vf-i: url("/kit/icons/tabler/phone.svg"); }
+.vf-i--telegram { --vf-i: url("/kit/icons/tabler/telegram.svg"); }
+.vf-i--map-pin { --vf-i: url("/kit/icons/tabler/map-pin.svg"); }
+.vf-i--route { --vf-i: url("/kit/icons/tabler/route.svg"); }
+.vf-i--copy { --vf-i: url("/kit/icons/tabler/copy.svg"); }
+.vf-i--clock { --vf-i: url("/kit/icons/tabler/clock.svg"); }
+.vf-i--calendar { --vf-i: url("/kit/icons/tabler/calendar.svg"); }
+.vf-i--shield-check { --vf-i: url("/kit/icons/tabler/shield-check.svg"); }
+.vf-i--wrench { --vf-i: url("/kit/icons/tabler/wrench.svg"); }
+.vf-i--search { --vf-i: url("/kit/icons/tabler/search.svg"); }
+.vf-i--microscope { --vf-i: url("/kit/icons/tabler/microscope.svg"); }
+.vf-i--droplet { --vf-i: url("/kit/icons/tabler/droplet.svg"); }
+.vf-i--battery { --vf-i: url("/kit/icons/tabler/battery.svg"); }
+.vf-i--watch { --vf-i: url("/kit/icons/tabler/watch.svg"); }
+.vf-i--sparkles { --vf-i: url("/kit/icons/tabler/sparkles.svg"); }
+.vf-i--camera { --vf-i: url("/kit/icons/tabler/camera.svg"); }
+.vf-i--photo { --vf-i: url("/kit/icons/tabler/photo.svg"); }
+.vf-i--upload { --vf-i: url("/kit/icons/tabler/upload.svg"); }
+.vf-i--check { --vf-i: url("/kit/icons/tabler/check.svg"); }
+.vf-i--close { --vf-i: url("/kit/icons/tabler/close.svg"); }
+.vf-i--arrow-right { --vf-i: url("/kit/icons/tabler/arrow-right.svg"); }
+.vf-i--arrow-left { --vf-i: url("/kit/icons/tabler/arrow-left.svg"); }
+.vf-i--chevron-down { --vf-i: url("/kit/icons/tabler/chevron-down.svg"); }
+.vf-i--menu { --vf-i: url("/kit/icons/tabler/menu.svg"); }
+.vf-i--qr-code { --vf-i: url("/kit/icons/tabler/qr-code.svg"); }
+.vf-i--file-text { --vf-i: url("/kit/icons/tabler/file-text.svg"); }
+.vf-i--user { --vf-i: url("/kit/icons/tabler/user.svg"); }
+.vf-i--message { --vf-i: url("/kit/icons/tabler/message.svg"); }
+.vf-i--info { --vf-i: url("/kit/icons/tabler/info.svg"); }
+.vf-i--alert { --vf-i: url("/kit/icons/tabler/alert.svg"); }
+.vf-i--gauge { --vf-i: url("/kit/icons/tabler/gauge.svg"); }
+.vf-i--award { --vf-i: url("/kit/icons/tabler/award.svg"); }
+.vf-i--ruble { --vf-i: url("/kit/icons/tabler/ruble.svg"); }
+.vf-i--settings { --vf-i: url("/kit/icons/tabler/settings.svg"); }
+.vf-i--hand { --vf-i: url("/kit/icons/tabler/hand.svg"); }
+.vf-i--volume { --vf-i: url("/kit/icons/tabler/volume.svg"); }
+.vf-i--volume-off { --vf-i: url("/kit/icons/tabler/volume-off.svg"); }

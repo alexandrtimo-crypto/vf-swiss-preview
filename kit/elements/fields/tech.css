@@ -1,0 +1,10 @@
+/* title: Поля · технологично */
+/* Крупные поля-«экраны» прибора: тонкая рамка, при фокусе — люминесцентный контур. */
+.vf-field{display:block;border:0;margin:0;padding:0;min-width:0}
+.vf-input{width:100%;height:68px;padding:0 22px;border-radius:var(--vf-radius);border:0;background:color-mix(in srgb,var(--vf-text) 4%,transparent);box-shadow:inset 0 0 0 1px var(--vf-line-2,var(--vf-line));color:var(--vf-text);font:400 24px/1 var(--vf-font-text);transition:box-shadow .3s,background .3s}
+.vf-input::placeholder{color:var(--vf-muted)}
+.vf-input:focus{outline:0;background:color-mix(in srgb,var(--vf-accent) 5%,transparent);box-shadow:inset 0 0 0 1.5px var(--vf-accent),0 0 40px -12px color-mix(in srgb,var(--vf-accent) 60%,transparent)}
+.vf-input[aria-invalid="true"]{box-shadow:inset 0 0 0 1.5px var(--vf-danger)}
+textarea.vf-input{height:auto;min-height:110px;padding:18px 22px;font-size:19px;line-height:1.4;resize:vertical}
+@media (max-width:820px){.vf-input,textarea.vf-input{height:60px;font-size:20px}}
+@media (prefers-reduced-motion:reduce){.vf-input{transition:none}}

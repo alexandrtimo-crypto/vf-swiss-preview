@@ -1,0 +1,21 @@
+/* title: PM · кнопки швейцарской главы — прямые углы, волосяная рамка, золото только на главном действии */
+.vf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 0 28px; border: 1px solid var(--vf-text); border-radius: var(--vf-radius);
+  background: transparent; color: var(--vf-text); cursor: pointer; text-decoration: none;
+  font: 600 13px/1 var(--vf-font-text); letter-spacing: .14em; text-transform: uppercase;
+  transition: background-color var(--vf-dur-exit, 300ms) var(--vf-ease), color var(--vf-dur-exit, 300ms) var(--vf-ease), border-color var(--vf-dur-exit, 300ms) var(--vf-ease);
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.vf-btn:hover { background: var(--vf-text); color: var(--vf-bg); }
+.vf-btn:active { opacity: .85; }
+.vf-btn--primary { background: var(--vf-accent-2); border-color: var(--vf-accent-2); color: var(--vf-on-accent); }
+.vf-btn--primary:hover { background: var(--vf-accent); border-color: var(--vf-accent); color: var(--vf-on-accent); }
+.vf-btn--ghost { border-color: var(--vf-line); }
+.vf-btn--ghost:hover { border-color: var(--vf-text); }
+.vf-btn--sm { min-height: 44px; padding: 0 18px; font-size: 12px; }
+.vf-btn[disabled], .vf-btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
+.vf-btn svg { width: 18px; height: 18px; flex: none; }
+body.vf-page a.vf-btn { color: var(--vf-text); }
+body.vf-page a.vf-btn:hover { color: var(--vf-bg); }
+body.vf-page a.vf-btn--primary, body.vf-page a.vf-btn--primary:hover { color: var(--vf-on-accent); }

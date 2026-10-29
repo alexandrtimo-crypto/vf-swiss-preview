@@ -1,0 +1,59 @@
+/* Гарантия «дорого», компактно: сертификат-предмет по центру, заголовок и пометка */
+.lux-warranty-cert { position: relative; padding: clamp(80px, 14vh, 140px) 16px; display: flex; flex-direction: column; align-items: center; overflow: hidden; color: var(--vf-text);
+  background: radial-gradient(ellipse 60% 55% at 50% 55%, color-mix(in srgb, var(--vf-bg), var(--vf-accent) 22%) 0%, color-mix(in srgb, var(--vf-bg), var(--vf-accent) 7%) 50%, var(--vf-bg) 100%); }
+.lux-warranty-cert *, .lux-warranty-cert *::before, .lux-warranty-cert *::after { box-sizing: border-box; }
+.lux-warranty-cert .certsolo__title { margin: 0 0 clamp(40px, 7vh, 72px); text-align: center; font: 400 clamp(40px, 4.6vw, 80px)/1 var(--vf-font-display); letter-spacing: -.02em; }
+.lux-warranty-cert .certsolo__title em { color: var(--vf-accent); }
+.lux-warranty-cert .cert-stage { width: min(720px, 100%); }
+.lux-warranty-cert .certsolo__note { margin: clamp(40px, 7vh, 72px) 0 0; font-size: 12px; color: var(--vf-muted); letter-spacing: .04em; }
+
+.lux-warranty-cert .cert-stage { position: relative; z-index: 1; perspective: 1400px; }
+.lux-warranty-cert.is-motion .cert-stage { animation: lux-warranty-cert-sway 9s ease-in-out infinite alternate; }
+@keyframes lux-warranty-cert-sway { from { transform: rotate(-.6deg) translateY(-6px); } to { transform: rotate(.6deg) translateY(6px); } }
+.lux-warranty-cert .cert { position: relative; aspect-ratio: 1.414; container-type: inline-size; color: var(--vf-paper-ink, #2a221a);
+  background: radial-gradient(ellipse at 28% 18%, #fdfaf3, #f0e7d6 60%, #e6dac4);
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) rotateZ(-3deg); transform-style: preserve-3d; transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  box-shadow: 0 70px 90px -30px rgba(0,0,0,.85), 0 20px 40px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.6); }
+.lux-warranty-cert .cert::before { content: ''; position: absolute; inset: 0; opacity: .5; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .47 0 0 0 0 .36 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"); }
+.lux-warranty-cert .cert__guilloche { position: absolute; inset: 3cqw; padding: 1.7cqw;
+  background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--vf-bronze, #8a6a3e) 32%, transparent) 0 1px, transparent 1px 5px), repeating-linear-gradient(-45deg, color-mix(in srgb, var(--vf-bronze, #8a6a3e) 32%, transparent) 0 1px, transparent 1px 5px);
+  -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.lux-warranty-cert .cert__guilloche::after { content: ''; position: absolute; left: 50%; top: 50%; width: 46cqw; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; opacity: .5;
+  background: repeating-conic-gradient(color-mix(in srgb, var(--vf-bronze, #8a6a3e) 12%, transparent) 0 1deg, transparent 1deg 4deg); }
+.lux-warranty-cert .cert__in { position: absolute; inset: 7.5cqw 8.5cqw 6.5cqw; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.lux-warranty-cert .cert__mono { margin: 0; font: 400 8cqw/1 var(--vf-font-display); color: #ebe1cf; letter-spacing: -.03em;
+  text-shadow: -1px -1px 0 rgba(255,255,255,.95), 1px 1px 1px rgba(90,68,40,.45), 2px 2px 4px rgba(90,68,40,.12); }
+.lux-warranty-cert .cert__mono i { display: block; font: 400 1.2cqw/1 var(--vf-font-text); letter-spacing: .9em; padding-left: .9em; text-transform: uppercase; color: var(--vf-bronze, #8a6a3e); text-shadow: none; margin-top: 1cqw; }
+.lux-warranty-cert .cert__title { margin: 2cqw 0 2.4cqw; font: 400 4.4cqw/1.1 var(--vf-font-display); letter-spacing: .01em; }
+.lux-warranty-cert .cert__text { margin: 0; max-width: 68cqw; font: 400 2.1cqw/1.6 var(--vf-font-text); color: #4c4135; }
+.lux-warranty-cert .cert__term { margin: 1.8cqw 0 0; font: 400 3cqw/1.3 var(--vf-font-display); }
+.lux-warranty-cert .cert__term em { color: var(--vf-bronze, #8a6a3e); }
+.lux-warranty-cert .cert__foot { margin-top: auto; width: 100%; display: flex; align-items: flex-end; justify-content: space-between; }
+.lux-warranty-cert .cert__qr { width: 11cqw; fill: #2b231b; }
+.lux-warranty-cert .cert__sign { font: italic 400 3.4cqw/1 var(--vf-font-display); color: #3b3127; padding: 0 5cqw 1cqw; border-bottom: 1px solid rgba(43,35,27,.35); transform: rotate(-3deg); }
+.lux-warranty-cert .cert__seal { width: 15cqw; fill: none; stroke: #ad8d58; stroke-width: 1; filter: drop-shadow(1px 1px 0 rgba(255,255,255,.8)) drop-shadow(-1px -1px 0 rgba(120,90,50,.25)); }
+.lux-warranty-cert .cert__seal text { fill: #a58552; stroke: none; font: 500 8.6px var(--vf-font-text); letter-spacing: 1.6px; }
+.lux-warranty-cert .cert__seal .cert__seal-vf { font: 400 26px var(--vf-font-display); letter-spacing: -1px; }
+.lux-warranty-cert .cert__stamp { position: absolute; right: 9cqw; top: 8.5cqw; transform: rotate(11deg); padding: .7cqw 2cqw; border: 2px solid rgba(146,44,32,.55); color: rgba(146,44,32,.7);
+  font: 500 1.9cqw/1 var(--vf-font-text); letter-spacing: .42em; text-transform: uppercase; mix-blend-mode: multiply; }
+.lux-warranty-cert .cert__shine { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light;
+  background: radial-gradient(circle at var(--mx, 30%) var(--my, 20%), rgba(255,255,255,.75), transparent 48%); }
+
+@media (max-width: 899px) {
+  .lux-warranty-cert .cert { aspect-ratio: .7; touch-action: pan-y; }
+  .lux-warranty-cert .cert__in { inset: 11cqw 9cqw 9cqw; }
+  .lux-warranty-cert .cert__guilloche { inset: 4cqw; padding: 2.6cqw; }
+  .lux-warranty-cert .cert__mono { font-size: 15cqw; }
+  .lux-warranty-cert .cert__mono i { font-size: 2.4cqw; }
+  .lux-warranty-cert .cert__title { font-size: 7.6cqw; margin: 4cqw 0 4cqw; }
+  .lux-warranty-cert .cert__text { font-size: 3.9cqw; max-width: none; }
+  .lux-warranty-cert .cert__term { font-size: 5.6cqw; margin-top: 4cqw; }
+  .lux-warranty-cert .cert__qr { width: 19cqw; }
+  .lux-warranty-cert .cert__sign { font-size: 5cqw; padding: 0 2cqw 1.5cqw; }
+  .lux-warranty-cert .cert__seal { width: 24cqw; }
+  .lux-warranty-cert .cert__stamp { font-size: 3.2cqw; top: auto; bottom: 34cqw; right: 6cqw; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lux-warranty-cert *, .lux-warranty-cert *::before, .lux-warranty-cert *::after { animation: none !important; transition-duration: .01ms !important; }
+}

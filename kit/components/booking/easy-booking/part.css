@@ -1,0 +1,71 @@
+/* easy-booking: заявка на диагностику одной карточкой — окно поверх страницы (там же, где панель чата) */
+.easy-booking { position: fixed; inset: 0; z-index: 110; color: var(--vf-text); }
+.easy-booking[hidden] { display: none; }
+.easy-booking *, .easy-booking *::before, .easy-booking *::after { box-sizing: border-box; }
+.easy-booking :where(h3, h4, p) { margin: 0; }
+.easy-booking :where(h3, h4) { line-height: 1.05; font-weight: 900; letter-spacing: -.02em; font-family: var(--vf-font-display); }
+.easy-booking :where(button) { font: inherit; color: inherit; cursor: pointer; }
+.easy-booking :where(svg) { display: block; max-width: 100%; }
+.easy-booking .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+.easy-booking .booking__backdrop { position: absolute; inset: 0; background: color-mix(in srgb, var(--vf-easy-ink, #2A211C) 40%, transparent); backdrop-filter: blur(3px); opacity: 0; transition: opacity .35s; }
+.easy-booking.open .booking__backdrop { opacity: 1; }
+.easy-booking.is-over .booking__backdrop { opacity: 0; backdrop-filter: none; }
+.easy-booking .booking__panel {
+  position: absolute; left: 0; right: 0; bottom: 0; top: 10px; background: var(--vf-bg);
+  border-radius: 30px 30px 0 0; border: 3px solid var(--vf-line); border-bottom: 0;
+  overflow-y: auto; overscroll-behavior: contain; padding: 14px;
+  transform: translateY(105%); transition: transform .55s var(--vf-ease);
+}
+.easy-booking.open .booking__panel, .easy-booking.is-over .booking__panel { transform: none; }
+.easy-booking.is-over .booking__panel { transition: none; }
+
+.easy-booking .lead { background: var(--vf-surface); border: 3px solid var(--vf-line); border-radius: 30px; padding: 18px 16px 20px; box-shadow: 0 6px 0 var(--vf-line); display: grid; gap: 14px; animation: easy-booking-up .5s var(--vf-ease) both; }
+@keyframes easy-booking-up { from { transform: translateY(30%); opacity: 0; } to { transform: none; opacity: 1; } }
+.easy-booking .lead__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.easy-booking .lead h3 { font-size: 26px; letter-spacing: -.03em; }
+.easy-booking .iconbtn { width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0; background: color-mix(in srgb, var(--vf-text) 7%, transparent); display: grid; place-items: center; flex: none; }
+.easy-booking .iconbtn svg { width: 22px; height: 22px; fill: none; stroke: var(--vf-text); stroke-width: 2.6; stroke-linecap: round; }
+
+.easy-booking .pick { border: 0; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; }
+.easy-booking .pick legend { font-weight: 900; font-size: 15px; margin-bottom: 6px; padding: 0; }
+.easy-booking .pick__b input { position: absolute; opacity: 0; }
+.easy-booking .pick__b span { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; padding: 12px 8px; border: 2.5px solid var(--vf-line); border-radius: 20px; font-weight: 900; font-size: 15px; background: var(--vf-surface); box-shadow: 0 3px 0 var(--vf-line); transition: transform .2s var(--vf-ease), background .2s; cursor: pointer; }
+.easy-booking .pick__b span svg { width: 34px; height: 34px; }
+.easy-booking .pick__b input:checked + span { background: var(--vf-easy-mint, #8EE0B8); color: var(--vf-easy-ink, #2A211C); transform: translateY(2px); box-shadow: 0 1px 0 var(--vf-line); }
+.easy-booking .pick__b:nth-child(3) input:checked + span { background: var(--vf-easy-sky, #9FD8FF); }
+.easy-booking .pick__b input:focus-visible + span { outline: 3px solid var(--vf-line); outline-offset: 3px; }
+.easy-booking .photo { position: relative; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.easy-booking .photo input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.easy-booking .photo__b { display: inline-flex; align-items: center; gap: 8px; border: 2.5px dashed var(--vf-line); border-radius: 18px; padding: 12px 16px; font-weight: 900; cursor: pointer; background: var(--vf-bg); }
+.easy-booking .photo__b svg { width: 26px; height: 26px; }
+.easy-booking .photo i { font-style: normal; font-weight: 700; color: var(--vf-text-2); font-size: 13.5px; }
+.easy-booking .photo input:focus-visible + .photo__b { outline: 3px solid var(--vf-line); outline-offset: 3px; }
+.easy-booking .photo__n { font-size: 14px; font-weight: 800; color: var(--vf-easy-ok, #18A866); }
+.easy-booking .toggle { display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 15px; font-weight: 700; line-height: 1.3; margin: 4px 0 14px; position: relative; }
+.easy-booking .toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.easy-booking .toggle__ui { flex: none; width: 58px; height: 34px; border-radius: 99px; background: var(--vf-muted, #E4DCD3); border: 2.5px solid var(--vf-line); position: relative; transition: background .25s; }
+.easy-booking .toggle__ui::after { content: ""; position: absolute; top: 2px; left: 2px; width: 25px; height: 25px; border-radius: 50%; background: #fff; border: 2.5px solid var(--vf-line); transition: transform .4s var(--vf-ease); }
+.easy-booking .toggle input:checked + .toggle__ui { background: var(--vf-easy-ok, #18A866); }
+.easy-booking .toggle input:checked + .toggle__ui::after { transform: translateX(24px); }
+.easy-booking .toggle input:focus-visible + .toggle__ui { outline: 3px solid var(--vf-line); outline-offset: 3px; }
+.easy-booking .lead__err { color: var(--vf-danger); font-weight: 900; font-size: 15px; min-height: 0; }
+.easy-booking .lead__err:empty { display: none; }
+.easy-booking .lead__send { width: 100%; }
+.easy-booking .shake { animation: easy-booking-shake .4s ease-in-out 1 !important; }
+@keyframes easy-booking-shake { 25% { transform: translateX(-3px) rotate(-3deg); } 75% { transform: translateX(3px) rotate(3deg); } }
+
+/* итог, если чата на странице нет */
+.easy-booking .ticket { position: relative; background: var(--vf-easy-sun, var(--vf-accent-2)); color: var(--vf-easy-ink, #2A211C); border: 3px solid var(--vf-line); border-radius: 26px; padding: 18px 18px 20px; box-shadow: 0 6px 0 var(--vf-line); text-align: center; display: grid; gap: 6px; justify-items: center; animation: easy-booking-up .6s var(--vf-ease) both; }
+.easy-booking .ticket svg { width: 84px; height: 84px; }
+.easy-booking .ticket h4 { font-size: 24px; }
+.easy-booking .ticket p { font-size: 15px; }
+.easy-booking .ticket .ticket__note { font-size: 13px; opacity: .75; }
+.easy-booking .ticket .vf-btn { margin-top: 8px; }
+
+@media (min-width: 760px) {
+  .easy-booking .booking__panel { left: auto; right: 24px; top: 24px; bottom: 24px; width: 440px; border-radius: 34px; border-bottom: 3px solid var(--vf-line); box-shadow: 0 10px 0 var(--vf-line); transform: translateX(120%) rotate(4deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .easy-booking *, .easy-booking *::before, .easy-booking *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}

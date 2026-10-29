@@ -1,0 +1,24 @@
+.r3le{position:relative;overflow:hidden;background-color:var(--vf-enamel,#123f30);color:var(--vf-on-enamel,#e6ece4);padding:clamp(72px,10vw,150px) var(--vf-pad) clamp(76px,10vw,144px);isolation:isolate;
+  --r3e-paper:var(--vf-enamel,#123f30)}
+.r3le ::selection{background:var(--vf-on-enamel,#e6ece4);color:var(--vf-enamel,#123f30)}
+.r3le :focus-visible{outline-color:var(--vf-on-enamel,#e6ece4)}
+/* кромка эмали: двойная линейка бумажным цветом */
+.r3le::before,.r3le::after{content:"";position:absolute;left:clamp(8px,1.4vw,18px);right:clamp(8px,1.4vw,18px);height:1px;background:rgba(230,236,228,.42);z-index:0}
+.r3le::before{top:14px;box-shadow:0 4px 0 rgba(230,236,228,.2)}
+.r3le::after{bottom:14px;box-shadow:0 -4px 0 rgba(230,236,228,.2)}
+.r3le__ros{position:absolute;z-index:0;right:calc(-1 * clamp(110px,15vw,240px));top:50%;width:clamp(480px,48vw,760px);aspect-ratio:1;translate:0 -50%;color:var(--vf-on-enamel,#e6ece4);pointer-events:none}
+.r3le__ros svg{width:100%;height:100%}
+.r3le__in{position:relative;z-index:1;display:grid;gap:clamp(20px,2.6vw,34px);max-width:var(--vf-wrap);margin:0 auto}
+.r3le__h{font-family:var(--vf-font-display);font-weight:700;font-size:clamp(44px,7.2vw,96px);line-height:1;letter-spacing:.01em}
+.r3le__h span{display:block;white-space:nowrap}
+.r3le__lead{font-size:clamp(17px,1.5vw,20px);line-height:1.55;max-width:38ch;color:var(--vf-on-enamel,#e6ece4)}
+.r3le__facts{display:grid;grid-template-columns:1.25fr 1fr 1.1fr;gap:0;max-width:860px;margin-top:clamp(12px,3vw,40px)}
+.r3le__fact{padding:4px clamp(16px,2.2vw,32px) 4px 0;font-size:15.5px;line-height:1.55;color:var(--vf-on-enamel-2,#b5c9bc)}
+.r3le__fact + .r3le__fact{padding-left:clamp(16px,2.2vw,32px);border-left:1px solid rgba(230,236,228,.32)}
+.r3le__fact b{display:block;margin-bottom:8px;font-family:var(--vf-font-display);font-weight:700;font-size:clamp(19px,1.7vw,23px);line-height:1.2;color:var(--vf-on-enamel,#e6ece4)}
+@media (max-width:860px){
+  .r3le__facts{grid-template-columns:1fr;gap:20px}
+  .r3le__fact,.r3le__fact + .r3le__fact{padding:0;border:0}
+  .r3le__fact + .r3le__fact{padding-top:18px;border-top:1px solid rgba(230,236,228,.28)}
+  .r3le__ros{width:120vw;right:-50vw;top:auto;bottom:-16vw;translate:0;opacity:.4}
+}

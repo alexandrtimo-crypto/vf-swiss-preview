@@ -1,0 +1,19 @@
+/* title: PM · поля швейцарской главы — подпись над полем, линия снизу, ошибка под полем */
+.vf-field { display: grid; gap: 8px; }
+.vf-field > label, .vf-field > .vf-field__label { font: 600 12px/1.3 var(--vf-font-text); letter-spacing: .12em; text-transform: uppercase; color: var(--vf-text-2); }
+.vf-field__req { color: var(--vf-accent); }
+.vf-input {
+  width: 100%; box-sizing: border-box; min-height: 52px; padding: 12px 0;
+  border: 0; border-bottom: 1px solid var(--vf-line); border-radius: 0; background: transparent;
+  color: var(--vf-text); font: 400 17px/1.4 var(--vf-font-text);
+  transition: border-color 250ms var(--vf-ease);
+}
+textarea.vf-input { min-height: 112px; resize: vertical; }
+.vf-input::placeholder { color: #78716C; }
+.vf-input:hover { border-bottom-color: var(--vf-text-2); }
+.vf-input:focus { outline: none; border-bottom: 2px solid var(--vf-accent); }
+.vf-input:focus-visible { outline: none; }
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); }
+.vf-field__hint { font-size: 13px; color: var(--vf-muted); }
+.vf-field__error { font-size: 14px; color: var(--vf-danger); min-height: 0; }
+.vf-field__error:empty { display: none; }

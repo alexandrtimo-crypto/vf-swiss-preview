@@ -1,0 +1,54 @@
+/* easy-works: «Загляните в мастерскую» — кружки-сторис и «окно с верстака» с видео-петлёй */
+.easy-works { padding: 72px 0 20px; box-sizing: border-box; }
+.easy-works *, .easy-works *::before, .easy-works *::after { box-sizing: border-box; }
+.easy-works :where(h2, p) { margin: 0; }
+.easy-works :where(h2) { line-height: 1.05; font-weight: 900; letter-spacing: -.02em; font-family: var(--vf-font-display); }
+.easy-works :where(img, video, svg) { display: block; max-width: 100%; }
+
+.easy-works .scene-head { text-align: center; max-width: 640px; margin: 0 auto 26px; padding: 0 16px; }
+.easy-works .scene-head h2 { font-size: clamp(38px, 10vw, 72px); letter-spacing: -.04em; }
+.easy-works .scene-head p { margin-top: 10px; color: var(--vf-text-2); font-size: 17px; }
+
+.easy-works .rings { display: flex; gap: 14px; overflow-x: auto; padding: 6px 16px 14px; scroll-snap-type: x mandatory; scrollbar-width: none; justify-content: flex-start; }
+.easy-works .rings::-webkit-scrollbar { display: none; }
+.easy-works .ring { flex: none; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: inherit; scroll-snap-align: start; -webkit-tap-highlight-color: transparent; }
+.easy-works .ring__img {
+  width: 96px; height: 96px; border-radius: 50%; padding: 4px;
+  background: conic-gradient(from 200deg, var(--g1), var(--g2), var(--g1));
+  transition: transform .35s var(--vf-ease); animation: easy-works-bob 3.6s ease-in-out infinite;
+}
+.easy-works .ring:nth-child(2n) .ring__img { animation-delay: -1.2s; } .easy-works .ring:nth-child(3n) .ring__img { animation-delay: -2.1s; }
+@keyframes easy-works-bob { 0%, 100% { translate: 0 0 } 50% { translate: 0 -5px } }
+.easy-works .ring__img img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid var(--vf-bg); }
+.easy-works .ring:hover .ring__img, .easy-works .ring:focus-visible .ring__img { transform: scale(1.08) rotate(-4deg); animation-play-state: paused; }
+.easy-works .ring:active .ring__img { transform: scale(.94); }
+.easy-works .ring__t { font-weight: 800; font-size: 15px; }
+.easy-works .ring.seen .ring__img { background: var(--vf-easy-seen, #D9CEC2); }
+
+.easy-works .window {
+  display: block; position: relative; margin: 22px 16px 0; width: calc(100% - 32px); max-width: 760px; aspect-ratio: 960 / 780;
+  border-radius: 48px 48px 48px 14px; overflow: hidden; border: 3px solid var(--vf-line); box-shadow: 0 8px 0 var(--vf-line); padding: 0; background: #222;
+  transform: rotate(-1deg); transition: transform .4s var(--vf-ease); cursor: pointer; font: inherit; color: var(--vf-easy-ink, #2A211C);
+}
+.easy-works .window:hover { transform: rotate(0) scale(1.01); }
+.easy-works .window video { width: 100%; height: 100%; object-fit: cover; }
+.easy-works .window__tag { position: absolute; left: 16px; top: 16px; background: var(--vf-surface); color: var(--vf-text); border: 2.5px solid var(--vf-line); border-radius: 999px; padding: 6px 14px 6px 10px; font-weight: 900; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+.easy-works .live { width: 10px; height: 10px; border-radius: 50%; background: var(--vf-accent); animation: easy-works-live 1.4s ease-in-out infinite; }
+@keyframes easy-works-live { 50% { transform: scale(1.5); opacity: .5; } }
+.easy-works .window__play { position: absolute; right: 16px; bottom: 16px; width: 64px; height: 64px; border-radius: 50%; background: var(--vf-easy-sun, #FFD25E); border: 3px solid var(--vf-line); display: grid; place-items: center; box-shadow: 0 4px 0 var(--vf-line); }
+.easy-works .window__play svg { width: 28px; height: 28px; fill: var(--vf-easy-ink, #2A211C); margin-left: 3px; }
+
+@media (min-width: 760px) {
+  .easy-works .rings { justify-content: center; gap: 26px; }
+  .easy-works .ring__img { width: 120px; height: 120px; }
+  .easy-works .window { margin: 34px auto 0; }
+}
+@media (min-width: 1100px) {
+  .easy-works { display: grid; grid-template-columns: 1fr 1.1fr; grid-template-areas: "head win" "rings win"; max-width: 1200px; margin: 0 auto; padding: 100px 32px 30px; column-gap: 40px; align-items: center; }
+  .easy-works .scene-head { grid-area: head; text-align: left; margin: 0; padding: 0; align-self: end; }
+  .easy-works .rings { grid-area: rings; flex-wrap: wrap; justify-content: flex-start; padding: 26px 0 0; overflow: visible; gap: 22px 26px; align-self: start; }
+  .easy-works .window { grid-area: win; margin: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .easy-works *, .easy-works *::before, .easy-works *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}

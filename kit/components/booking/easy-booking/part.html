@@ -1,0 +1,26 @@
+<div data-part="easy-booking" data-slot="booking" class="easy-booking" hidden>
+  <div class="booking__backdrop" data-close></div>
+  <section class="booking__panel" role="dialog" aria-modal="true" aria-labelledby="easy-booking-h">
+    <form class="lead" novalidate>
+      <div class="lead__top">
+        <h3 id="easy-booking-h">Заявка на&nbsp;диагностику</h3>
+        <button class="iconbtn" type="button" data-close aria-label="Вернуться в чат"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="vf-field"><span>Как вас зовут</span><input class="vf-input" name="name" autocomplete="given-name" required></label>
+      <label class="vf-field"><span>Телефон</span><input class="vf-input" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (" required></label>
+      <fieldset class="pick">
+        <legend>Как связаться</legend>
+        <label class="pick__b"><input type="radio" name="contact" value="call" checked><span data-icon="call">Позвоните мне</span></label>
+        <label class="pick__b"><input type="radio" name="contact" value="telegram"><span data-icon="tg">Напишите в Telegram</span></label>
+      </fieldset>
+      <label class="vf-field"><span>Марка часов <i>по желанию</i></span><input class="vf-input" name="brand" list="easy-booking-brands"></label>
+      <datalist id="easy-booking-brands"><option>Rolex</option><option>Patek Philippe</option><option>Audemars Piguet</option><option>Vacheron Constantin</option><option>Breguet</option><option>Cartier</option><option>Breitling</option><option>Franck Muller</option><option>Blancpain</option></datalist>
+      <label class="vf-field"><span>Что с часами <i>по желанию</i></span><textarea class="vf-input" name="description" rows="2"></textarea></label>
+      <label class="photo"><input type="file" name="photos" accept="image/*" multiple><span class="photo__b" data-icon="cam">Добавить фото <i>по желанию</i></span><span class="photo__n"></span></label>
+      <label class="toggle"><input type="checkbox" name="consent" role="switch"><span class="toggle__ui" aria-hidden="true"></span><span>Согласен на обработку персональных данных</span></label>
+      <p class="lead__err" role="alert"></p>
+      <button class="vf-btn vf-btn--primary lead__send" type="submit">Отправить заявку</button>
+    </form>
+  </section>
+</div>

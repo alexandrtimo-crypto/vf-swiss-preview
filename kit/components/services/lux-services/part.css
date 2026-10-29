@@ -1,0 +1,95 @@
+/* Услуги «дорого»: циферблат-селектор. Работает и без JS (radio + :has()) */
+.lux-services { --gut: var(--vf-gut, clamp(16px, 4vw, 56px)); position: relative; min-height: 100vh; display: grid; place-items: center; padding: 14vh 0; overflow: hidden; color: var(--vf-text);
+  background: radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--vf-bg), var(--vf-accent) 12%) 0, color-mix(in srgb, var(--vf-bg), var(--vf-accent) 3%) 45%, var(--vf-bg) 75%); }
+.lux-services *, .lux-services *::before, .lux-services *::after { box-sizing: border-box; }
+:where(.lux-services) img { display: block; max-width: 100%; }
+:where(.lux-services) button { font: inherit; color: inherit; }
+.lux-services .dialscene__title { position: absolute; left: var(--gut); top: clamp(90px, 13vh, 150px); margin: 0; font: 400 clamp(34px, 3.4vw, 58px)/1.04 var(--vf-font-display); }
+.lux-services .dialscene__title em { color: var(--vf-accent); }
+.lux-services .dialscene__hint { position: absolute; left: var(--gut); bottom: 11vh; margin: 0; font-size: 11px; line-height: 2.1; letter-spacing: .3em; text-transform: uppercase; color: var(--vf-muted); }
+
+.lux-services .dial { --s: min(70vh, 52vw, 760px); --a: 0deg; position: relative; width: var(--s); height: var(--s); border-radius: 50%; touch-action: pan-y; user-select: none; -webkit-user-select: none;
+  background: repeating-radial-gradient(circle, color-mix(in srgb, var(--vf-accent-2) 3.5%, transparent) 0 1px, transparent 1px 5px), radial-gradient(circle, color-mix(in srgb, var(--vf-bg), var(--vf-accent) 12%), color-mix(in srgb, var(--vf-bg), var(--vf-accent) 2%) 70%);
+  box-shadow: 0 50px 140px rgba(0,0,0,.7), inset 0 0 0 1px color-mix(in srgb, var(--vf-accent) 35%, transparent), inset 0 0 60px rgba(0,0,0,.6); }
+.lux-services .dial:has(.dial__in[value="1"]:checked) { --a: 60deg; } .lux-services .dial:has(.dial__in[value="2"]:checked) { --a: 120deg; } .lux-services .dial:has(.dial__in[value="3"]:checked) { --a: 180deg; }
+.lux-services .dial:has(.dial__in[value="4"]:checked) { --a: 240deg; } .lux-services .dial:has(.dial__in[value="5"]:checked) { --a: 300deg; }
+.lux-services .dial__in { position: absolute; left: 50%; top: 50%; width: 1px; height: 1px; opacity: 0; margin: 0; }
+.lux-services .dial__ring { position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background: repeating-conic-gradient(from -.35deg, rgba(207,190,160,.6) 0 .7deg, transparent .7deg 6deg);
+  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 26px), #000 calc(100% - 25px) calc(100% - 12px), transparent calc(100% - 11px));
+          mask: radial-gradient(closest-side, transparent calc(100% - 26px), #000 calc(100% - 25px) calc(100% - 12px), transparent calc(100% - 11px)); }
+.lux-services .dial::after { content: ''; position: absolute; inset: 34px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--vf-accent) 14%, transparent); pointer-events: none; }
+.lux-services .dial:has(.dial__in:focus-visible) { outline: 1px solid var(--vf-accent); outline-offset: 10px; }
+
+.lux-services .dial__photo { position: absolute; inset: 20%; border-radius: 50%; overflow: hidden; z-index: 1;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--vf-accent) 50%, transparent), 0 0 0 12px color-mix(in srgb, var(--vf-bg) 55%, transparent), 0 0 0 13px color-mix(in srgb, var(--vf-accent) 18%, transparent); }
+.lux-services .dial__photo::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, color-mix(in srgb, var(--vf-bg) 42%, transparent), color-mix(in srgb, var(--vf-bg) 78%, transparent) 75%); }
+.lux-services .dial__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.14) rotate(-4deg);
+  filter: saturate(.4) sepia(.22) contrast(1.08) brightness(.82); transition: opacity 1.2s var(--vf-ease), transform 2.6s var(--vf-ease); }
+.lux-services .dial:has(.dial__in[value="0"]:checked) .dial__img[data-i="0"], .lux-services .dial:has(.dial__in[value="1"]:checked) .dial__img[data-i="1"], .lux-services .dial:has(.dial__in[value="2"]:checked) .dial__img[data-i="2"],
+.lux-services .dial:has(.dial__in[value="3"]:checked) .dial__img[data-i="3"], .lux-services .dial:has(.dial__in[value="4"]:checked) .dial__img[data-i="4"], .lux-services .dial:has(.dial__in[value="5"]:checked) .dial__img[data-i="5"] { opacity: 1; transform: none; }
+
+.lux-services .dial__hand { position: absolute; inset: 0; z-index: 2; pointer-events: none; transform: rotate(var(--a)); transition: transform 1.4s cubic-bezier(.68, -0.05, .2, 1.12); }
+.lux-services .dial__hand i { position: absolute; left: 50%; top: 10px; width: 2px; height: calc(20% - 4px); margin-left: -1px; background: linear-gradient(var(--vf-accent-2), color-mix(in srgb, var(--vf-accent) 20%, transparent)); }
+.lux-services .dial__hand i::before { content: ''; position: absolute; left: 50%; top: -2px; width: 12px; height: 12px; margin-left: -6px; transform: rotate(45deg); background: var(--vf-accent-2); box-shadow: 0 0 18px color-mix(in srgb, var(--vf-accent-2) 60%, transparent); }
+
+.lux-services .dial__opt { cursor: pointer; }
+.lux-services .dial__idx { position: absolute; left: 50%; top: 50%; z-index: 3; width: 30px; height: 46px; margin: -23px 0 0 -15px;
+  transform: rotate(calc(var(--i) * 60deg)) translateY(calc(var(--s) / -2 + 64px)); }
+.lux-services .dial__idx::before { content: ''; position: absolute; left: 11px; right: 11px; top: 6px; bottom: 6px; border-radius: 1px; background: linear-gradient(90deg, #8f8068, #e3d4b8 50%, #8f8068); transition: box-shadow .6s, background .6s; }
+.lux-services .dial__txt { position: absolute; z-index: 3; width: max-content; max-width: 210px;
+  left: calc(50% + sin(var(--i) * 60deg) * (var(--s) / 2 + 30px)); top: calc(50% - cos(var(--i) * 60deg) * (var(--s) / 2 + 30px));
+  font: italic 400 clamp(18px, 1.5vw, 24px)/1.2 var(--vf-font-display); color: #a3978a; transition: color .6s; }
+.lux-services .dial__opt:nth-of-type(1) .dial__txt { transform: translate(-50%, -100%); text-align: center; }
+.lux-services .dial__opt:nth-of-type(2) .dial__txt, .lux-services .dial__opt:nth-of-type(3) .dial__txt { transform: translate(0, -50%); }
+.lux-services .dial__opt:nth-of-type(4) .dial__txt { transform: translate(-50%, 0); text-align: center; }
+.lux-services .dial__opt:nth-of-type(5) .dial__txt, .lux-services .dial__opt:nth-of-type(6) .dial__txt { transform: translate(-100%, -50%); text-align: right; }
+.lux-services .dial__opt:hover .dial__txt { color: var(--vf-text-2); }
+.lux-services .dial:has(.dial__in[value="0"]:checked) .dial__opt:nth-of-type(1) .dial__txt, .lux-services .dial:has(.dial__in[value="1"]:checked) .dial__opt:nth-of-type(2) .dial__txt,
+.lux-services .dial:has(.dial__in[value="2"]:checked) .dial__opt:nth-of-type(3) .dial__txt, .lux-services .dial:has(.dial__in[value="3"]:checked) .dial__opt:nth-of-type(4) .dial__txt,
+.lux-services .dial:has(.dial__in[value="4"]:checked) .dial__opt:nth-of-type(5) .dial__txt, .lux-services .dial:has(.dial__in[value="5"]:checked) .dial__opt:nth-of-type(6) .dial__txt { color: var(--vf-accent-2); }
+.lux-services .dial:has(.dial__in[value="0"]:checked) .dial__opt:nth-of-type(1) .dial__idx::before, .lux-services .dial:has(.dial__in[value="1"]:checked) .dial__opt:nth-of-type(2) .dial__idx::before,
+.lux-services .dial:has(.dial__in[value="2"]:checked) .dial__opt:nth-of-type(3) .dial__idx::before, .lux-services .dial:has(.dial__in[value="3"]:checked) .dial__opt:nth-of-type(4) .dial__idx::before,
+.lux-services .dial:has(.dial__in[value="4"]:checked) .dial__opt:nth-of-type(5) .dial__idx::before, .lux-services .dial:has(.dial__in[value="5"]:checked) .dial__opt:nth-of-type(6) .dial__idx::before {
+  background: var(--vf-accent-2); box-shadow: 0 0 16px color-mix(in srgb, var(--vf-accent-2) 70%, transparent); }
+
+.lux-services .dial__crown { position: absolute; z-index: 3; right: -30px; top: 50%; width: 30px; height: 70px; margin-top: -35px; border: 0; padding: 0; cursor: pointer;
+  border-radius: 3px 10px 10px 3px; background: repeating-linear-gradient(#cdbd9f 0 2px, #6f6353 2px 4px); background-size: 100% 4px;
+  box-shadow: inset -6px 0 10px rgba(0,0,0,.45), inset 4px 0 6px rgba(255,255,255,.2), 0 10px 20px rgba(0,0,0,.5); transition: background-position .6s var(--vf-ease); }
+.lux-services .dial__crown::before { content: ''; position: absolute; left: -12px; top: 50%; width: 12px; height: 26px; margin-top: -13px; background: linear-gradient(#a99a80, #5e5446); border-radius: 2px 0 0 2px; }
+.lux-services .dial__crown.is-turn { background-position: 0 40px; }
+.lux-services .dial__crown:focus-visible { outline-offset: 6px; }
+
+.lux-services .dial__say { position: absolute; inset: 20%; z-index: 2; display: grid; place-items: center; text-align: center; pointer-events: none; }
+.lux-services .dial__line { grid-area: 1 / 1; margin: 0; max-width: 74%; font-size: clamp(13px, 1vw, 15px); line-height: 1.55; color: var(--vf-text-2);
+  opacity: 0; transform: translateY(14px); transition: opacity .9s var(--vf-ease), transform 1.2s var(--vf-ease); }
+.lux-services .dial__line b { display: block; font: italic 400 clamp(28px, 2.7vw, 46px)/1.08 var(--vf-font-display); color: var(--vf-text); margin-bottom: 14px; }
+.lux-services .dial:has(.dial__in[value="0"]:checked) .dial__line[data-i="0"], .lux-services .dial:has(.dial__in[value="1"]:checked) .dial__line[data-i="1"], .lux-services .dial:has(.dial__in[value="2"]:checked) .dial__line[data-i="2"],
+.lux-services .dial:has(.dial__in[value="3"]:checked) .dial__line[data-i="3"], .lux-services .dial:has(.dial__in[value="4"]:checked) .dial__line[data-i="4"], .lux-services .dial:has(.dial__in[value="5"]:checked) .dial__line[data-i="5"] { opacity: 1; transform: none; transition-delay: .25s; }
+.lux-services .dial__step { display: none; }
+/* первая услуга — белый прибор: приглушаем, чтобы фраза поверх читалась */
+.lux-services .dial__img[data-i="0"] { filter: saturate(.3) sepia(.3) contrast(1.05) brightness(.6); }
+
+@media (max-width: 899px) {
+  .lux-services { padding: 120px 16px 80px; display: flex; flex-direction: column; align-items: center; }
+  .lux-services .dialscene__title { position: static; align-self: flex-start; margin-bottom: 44px; font-size: clamp(34px, 9vw, 46px); }
+  .lux-services .dialscene__hint { display: none; }
+  .lux-services .dial { --s: min(86vw, 62svh); margin-bottom: 190px; }
+  .lux-services .dial__txt { display: none; }
+  .lux-services .dial__idx { width: 34px; height: 44px; margin: -22px 0 0 -17px; transform: rotate(calc(var(--i) * 60deg)) translateY(calc(var(--s) / -2 + 44px)); }
+  .lux-services .dial__idx::before { left: 14px; right: 14px; top: 8px; bottom: 8px; }
+  .lux-services .dial__ring { -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 18px), #000 calc(100% - 17px) calc(100% - 8px), transparent calc(100% - 7px)); mask: radial-gradient(closest-side, transparent calc(100% - 18px), #000 calc(100% - 17px) calc(100% - 8px), transparent calc(100% - 7px)); }
+  .lux-services .dial::after { inset: 24px; }
+  .lux-services .dial__photo { inset: 22%; }
+  .lux-services .dial__hand i { top: 6px; height: calc(22% - 2px); }
+  .lux-services .dial__crown { right: -20px; width: 20px; height: 54px; margin-top: -27px; }
+  .lux-services .dial__crown::before { left: -8px; width: 8px; height: 20px; margin-top: -10px; }
+  .lux-services .dial__say { inset: auto 0; top: calc(100% + 34px); display: grid; place-items: start center; }
+  .lux-services .dial__line { max-width: 100%; font-size: 15px; }
+  .lux-services .dial__line b { font-size: 32px; }
+  .lux-services .dial__step { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: -20px; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: var(--vf-muted); }
+  .lux-services .dial__arrow { width: 48px; height: 48px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--vf-accent) 45%, transparent); background: none; font-size: 22px; cursor: pointer; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lux-services *, .lux-services *::before, .lux-services *::after { animation: none !important; transition-duration: .01ms !important; }
+}

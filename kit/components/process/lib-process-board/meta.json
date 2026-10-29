@@ -1,0 +1,3 @@
+{ "id": "lib-process-board", "slot": "process", "title": "Статус заказа · табло", "vision": "lib",
+  "description": "SplitFlapText (React Bits, на vanilla): механическое табло перещёлкивает статусы демо-заказа — ПРИНЯТ, ДИАГНОСТИКА, РЕМОНТ, ПРОВЕРКА, ГОТОВ. Статус можно выбрать кнопкой; при reduced-motion буквы меняются без перещёлкивания. Пометка «демо», строка про личный кабинет по QR.",
+  "fonts": [], "needs": ["/kit/lib/motion.js"] }

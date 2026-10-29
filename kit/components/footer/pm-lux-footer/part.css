@@ -1,0 +1,12 @@
+.pm-lux-footer { padding: var(--pm-s-2xl, 64px) 0 var(--pm-s-xl, 48px); background: var(--vf-accent-2); color: #D6D3D1; }
+.pm-lux-footer .pm-lux-footer__wrap { max-width: var(--pm-wrap, 1240px); margin: 0 auto; padding: 0 var(--pm-gutter, 24px); display: grid; grid-template-columns: 1fr auto; gap: 24px 48px; align-items: end; }
+.pm-lux-footer .pm-lux-footer__mark { grid-row: 1 / span 2; margin: 0; font: 400 clamp(44px, 6vw, 84px)/1 var(--vf-font-display); color: #FAFAF9; }
+.pm-lux-footer .pm-lux-footer__mark span { font-style: italic; color: #D9B45A; }
+.pm-lux-footer .pm-lux-footer__text { margin: 0; text-align: right; font-size: 14px; line-height: 1.7; }
+.pm-lux-footer .pm-lux-footer__note { margin: 0; text-align: right; font-size: 12px; letter-spacing: .08em; color: #A8A29E; }
+@media (max-width: 640px) {
+  .pm-lux-footer { padding-bottom: 96px; }
+  .pm-lux-footer .pm-lux-footer__wrap { grid-template-columns: 1fr; }
+  .pm-lux-footer .pm-lux-footer__mark { grid-row: auto; }
+  .pm-lux-footer .pm-lux-footer__text, .pm-lux-footer .pm-lux-footer__note { text-align: left; }
+}

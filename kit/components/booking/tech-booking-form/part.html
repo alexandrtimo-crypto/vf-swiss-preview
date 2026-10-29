@@ -1,0 +1,67 @@
+<section data-part="tech-booking-form" data-slot="booking" class="tech-booking-form" id="zayavka" aria-labelledby="tech-ord-h">
+  <div class="ord-dev">
+    <div class="ring" aria-hidden="true">
+      <svg viewBox="-110 -110 220 220">
+        <circle class="ring-bg" r="96"/>
+        <circle class="ring-fg" r="96" transform="rotate(-90)"/>
+        <g class="ring-ticks"></g>
+      </svg>
+      <span class="ring-num mono">1/6</span>
+    </div>
+
+    <form class="form" method="post" action="#" novalidate>
+      <h2 id="tech-ord-h" class="form-h">Заявка в&nbsp;мастерскую</h2>
+      <p class="form-note">Ответим звонком или в&nbsp;Telegram&nbsp;— как удобнее.</p>
+      <div class="steps">
+        <fieldset class="step vf-field" data-step="0">
+          <label class="q" for="tech-f-name">Как вас зовут?</label>
+          <input class="vf-input" id="tech-f-name" name="name" type="text" autocomplete="name" placeholder="Имя">
+        </fieldset>
+        <fieldset class="step vf-field" data-step="1">
+          <label class="q" for="tech-f-phone">Номер телефона</label>
+          <input class="vf-input mono" id="tech-f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__">
+        </fieldset>
+        <fieldset class="step vf-field" data-step="2">
+          <legend class="q">Как удобнее связаться?</legend>
+          <div class="sw">
+            <input type="radio" id="tech-c-call" name="contact" value="call" checked><label for="tech-c-call">Звонок</label>
+            <input type="radio" id="tech-c-tg" name="contact" value="telegram"><label for="tech-c-tg">Telegram</label>
+            <span class="sw-thumb" aria-hidden="true"></span>
+          </div>
+        </fieldset>
+        <fieldset class="step vf-field" data-step="3">
+          <label class="q" for="tech-f-brand">Какие часы?</label>
+          <input class="vf-input" id="tech-f-brand" name="brand" type="text" placeholder="Марка, если знаете" list="tech-brands">
+          <datalist id="tech-brands"><option>Rolex</option><option>Patek Philippe</option><option>Audemars Piguet</option><option>Vacheron Constantin</option><option>Breguet</option><option>Cartier</option><option>Breitling</option><option>Franck Muller</option><option>Blancpain</option></datalist>
+          <div class="chips" aria-label="Быстрый выбор марки">
+            <button type="button">Rolex</button><button type="button">Patek Philippe</button><button type="button">Audemars Piguet</button><button type="button">Cartier</button><button type="button">Breguet</button><button type="button">Breitling</button>
+          </div>
+        </fieldset>
+        <fieldset class="step vf-field" data-step="4">
+          <label class="q" for="tech-f-desc">Что случилось?</label>
+          <textarea class="vf-input" id="tech-f-desc" name="description" rows="3" placeholder="Например: отстают, нужна полировка, замена стекла"></textarea>
+          <label class="drop" for="tech-f-photos"><input id="tech-f-photos" name="photos" type="file" accept="image/*" multiple><span class="drop-txt">+ Фото часов&nbsp;— по желанию</span></label>
+        </fieldset>
+        <fieldset class="step vf-field" data-step="5">
+          <legend class="q">Проверим и&nbsp;отправим</legend>
+          <div class="summary" aria-live="polite"></div>
+          <label class="consent"><input type="checkbox" id="tech-f-consent" name="consent"><span class="box" aria-hidden="true"></span><span>Согласен на&nbsp;обработку персональных данных <a href="#policy" class="stub-link">политика<sup>•</sup></a></span></label>
+          <div class="hp" aria-hidden="true"><label for="tech-f-web">Сайт</label><input id="tech-f-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+          <button class="vf-btn vf-btn--primary btn-xl submit" type="submit" disabled>Отправить заявку</button>
+          <noscript><p class="form-err">Отправка работает с&nbsp;включённым JavaScript. Позвоните: 8&nbsp;(965)&nbsp;171-69-96.</p></noscript>
+        </fieldset>
+      </div>
+      <p class="form-err" role="alert"></p>
+      <div class="nav-steps">
+        <button class="vf-btn vf-btn--ghost prev" type="button">Назад</button>
+        <button class="vf-btn vf-btn--primary next" type="button">Далее <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="done" tabindex="-1">
+        <p class="done-h">Заявка принята <span>(прототип)</span></p>
+        <p>Это демонстрация: данные никуда не отправлены.</p>
+        <button class="vf-btn vf-btn--ghost again" type="button">Заполнить снова</button>
+      </div>
+    </form>
+  </div>
+  <div class="ord-side" aria-hidden="true"></div>
+</section>

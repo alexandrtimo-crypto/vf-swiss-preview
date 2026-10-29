@@ -1,0 +1,15 @@
+/* title: Поля · дорого */
+/* Поле-строка внутри фразы: курсивная антиква над тонкой линией.
+   Контекст может задать цвета: --vf-field-fg (текст и линия), --vf-field-accent (фокус). */
+
+.vf-field { position: relative; }
+.vf-input {
+  font: italic 400 1em/1.4 var(--vf-font-display); color: var(--vf-field-fg, var(--vf-text));
+  background: transparent; border: 0; border-radius: 0; outline: none; padding: 2px 6px 4px;
+  border-bottom: 1px solid color-mix(in srgb, var(--vf-field-fg, var(--vf-text)) 45%, transparent);
+  transition: border-color .4s;
+}
+.vf-input::placeholder { color: color-mix(in srgb, var(--vf-field-fg, var(--vf-text)) 34%, transparent); }
+.vf-input:focus { border-bottom-color: var(--vf-field-accent, var(--vf-accent)); box-shadow: 0 1px 0 var(--vf-field-accent, var(--vf-accent)); }
+.vf-input[aria-invalid="true"] { border-bottom-color: var(--vf-danger); }
+textarea.vf-input { resize: vertical; }

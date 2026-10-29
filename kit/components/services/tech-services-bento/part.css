@@ -1,0 +1,146 @@
+/* tech-services-bento — VF kit, видение tech. Цвета/шрифты — общие токены --vf-*, особые tech-токены с запасным значением. */
+.tech-services-bento{--t-tint:var(--vf-tint,var(--vf-text));--t-line2:var(--vf-line-2,var(--vf-line));--t-pad:var(--vf-pad,clamp(20px,5.5vw,88px))}
+:where(.tech-services-bento),:where(.tech-services-bento) *{box-sizing:border-box}
+:where(.tech-services-bento) :where(h1,h2,h3,p){margin:0}
+:where(.tech-services-bento) :where(img,video,canvas,svg){display:block;max-width:100%}
+:where(.tech-services-bento) :where(a){color:inherit}
+:where(.tech-services-bento) :where(button){font:inherit;color:inherit}
+:where(.tech-services-bento) .mono{font-family:var(--vf-font-mono);font-feature-settings:"zero" 1;letter-spacing:0}
+:where(.tech-services-bento) .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:where(.tech-services-bento) sup{color:var(--vf-accent);font-size:.7em;margin-left:1px}
+.tech-services-bento{padding:clamp(90px,14vh,160px) var(--t-pad) clamp(60px,10vh,120px);max-width:1360px;margin:0 auto}
+.tech-services-bento .svc-h{font-weight:500;font-size:clamp(36px,4.4vw,68px);letter-spacing:-.045em;line-height:1;max-width:12em;margin-bottom:clamp(30px,5vh,56px)}
+.tech-services-bento .bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(220px,25vh,270px);gap:14px;
+  grid-template-areas:"diag diag mech glass" "diag diag mech batt" "pol pol strap brand"}
+.tech-services-bento .tile{position:relative;overflow:hidden;border-radius:var(--vf-radius-lg);background:linear-gradient(160deg,var(--vf-surface),var(--vf-surface-2,var(--vf-bg-2)) 70%);box-shadow:inset 0 0 0 1px var(--vf-line),inset 0 1px 0 rgba(255,255,255,.06);isolation:isolate;transition:box-shadow .4s,transform .5s var(--vf-ease)}
+.tech-services-bento .tile::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:inherit;opacity:0;transition:opacity .4s;
+  background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--vf-accent) 12%,transparent),transparent 60%);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--vf-accent) 28%,transparent)}
+.tech-services-bento .tile:hover::after{opacity:1}
+.tech-services-bento .tile-top{position:absolute;z-index:4;left:22px;right:22px;top:20px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;pointer-events:none}
+.tech-services-bento .tile h3{font-weight:500;font-size:19px;letter-spacing:-.02em;line-height:1.15;text-shadow:0 2px 16px rgba(0,0,0,.7)}
+.tech-services-bento .hint{font-size:11px;color:var(--vf-muted);white-space:nowrap;padding-top:4px}
+.tech-services-bento .t-diag{grid-area:diag}
+.tech-services-bento .t-mech{grid-area:mech}
+.tech-services-bento .t-glass{grid-area:glass}
+.tech-services-bento .t-batt{grid-area:batt}
+.tech-services-bento .t-polish{grid-area:pol}
+.tech-services-bento .t-strap{grid-area:strap}
+.tech-services-bento .t-brand{grid-area:brand}
+.tech-services-bento .diag-c{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
+.tech-services-bento .diag-free{position:absolute;left:22px;bottom:52px;font-size:clamp(44px,5vw,76px);font-weight:500;letter-spacing:-.05em;line-height:1;color:var(--vf-accent);text-shadow:0 0 40px color-mix(in srgb,var(--vf-accent) 45%,transparent);pointer-events:none}
+.tech-services-bento .diag-tools{position:absolute;left:24px;bottom:22px;font-size:12px;color:var(--vf-text-2);pointer-events:none}
+.tech-services-bento .mech-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.75) contrast(1.05)}
+.tech-services-bento .t-mech::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,color-mix(in srgb,var(--vf-bg) 75%,transparent),transparent 35%,transparent 70%,color-mix(in srgb,var(--vf-bg) 60%,transparent)),repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px)}
+@keyframes tech-svc-blink{50%{opacity:.25}}
+.tech-services-bento .rec{position:absolute;z-index:4;left:22px;bottom:20px;font-size:11px;color:var(--vf-text);display:flex;align-items:center;gap:8px}
+.tech-services-bento .rec i{width:7px;height:7px;border-radius:50%;background:var(--vf-accent);box-shadow:0 0 8px var(--vf-accent);animation:tech-svc-blink 1.2s steps(2,end) infinite}
+.tech-services-bento .mech-ret{position:absolute;z-index:3;width:84px;height:84px;left:var(--mx,50%);top:var(--my,55%);transform:translate(-50%,-50%);border-radius:50%;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--vf-accent) 70%,transparent),0 0 0 2000px rgba(0,0,0,0);opacity:0;transition:opacity .3s;pointer-events:none}
+.tech-services-bento .mech-ret::before,.tech-services-bento .mech-ret::after{content:"";position:absolute;background:color-mix(in srgb,var(--vf-accent) 80%,transparent)}
+.tech-services-bento .mech-ret::before{left:50%;top:-12px;bottom:-12px;width:1px}
+.tech-services-bento .mech-ret::after{top:50%;left:-12px;right:-12px;height:1px}
+.tech-services-bento .t-mech:hover .mech-ret{opacity:1}
+.tech-services-bento .glass-dial{position:absolute;inset:-10%;transform:translate(calc(var(--px,0)*-10px),calc(var(--py,0)*-10px)) scale(1.04);transition:transform .25s ease-out}
+.tech-services-bento .glass-dial img{width:100%;height:100%;object-fit:cover;object-position:50% 46%;filter:brightness(.8) contrast(1.1)}
+.tech-services-bento .glass-crys{position:absolute;z-index:2;left:50%;top:56%;width:min(78%,210px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),inset 0 0 0 5px rgba(255,255,255,.04),inset 0 0 30px color-mix(in srgb,var(--vf-accent) 25%,transparent),0 0 0 1px rgba(0,0,0,.6);
+  backdrop-filter:saturate(1.35) brightness(1.15) contrast(1.08);-webkit-backdrop-filter:saturate(1.35) brightness(1.15) contrast(1.08)}
+.tech-services-bento .glass-glint{position:absolute;z-index:3;inset:-60%;pointer-events:none;mix-blend-mode:screen;
+  background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.0) 44%,rgba(255,255,255,.32) 48.5%,rgba(170,255,235,.22) 50%,rgba(255,170,220,.12) 51%,transparent 55%);
+  transform:translate(calc(var(--px,0)*28%),calc(var(--py,0)*12%));transition:transform .2s ease-out}
+.tech-services-bento .batt-svg{position:absolute;left:50%;top:56%;width:min(84%,250px);transform:translate(-50%,-50%);overflow:visible}
+.tech-services-bento .b-shell{fill:rgba(255,255,255,.02);stroke:var(--t-line2);stroke-width:2}
+.tech-services-bento .b-cap{fill:var(--t-line2)}
+.tech-services-bento .b-cells rect{fill:var(--vf-accent);opacity:.08;transition:opacity .2s}
+.tech-services-bento .t-batt.play .b-cells rect{animation:tech-svc-cell 3.6s infinite}
+.tech-services-bento .t-batt.play .b-cells rect:nth-child(2){animation-delay:.25s}
+.tech-services-bento .t-batt.play .b-cells rect:nth-child(3){animation-delay:.5s}
+.tech-services-bento .t-batt.play .b-cells rect:nth-child(4){animation-delay:.75s}
+.tech-services-bento .t-batt.play .b-cells rect:nth-child(5){animation-delay:1s}
+@keyframes tech-svc-cell{0%,8%{opacity:.08;filter:none}14%,82%{opacity:1;filter:drop-shadow(0 0 6px var(--vf-accent))}92%,100%{opacity:.08}}
+.tech-services-bento .b-seal{fill:none;stroke:var(--vf-accent);stroke-width:2.4;stroke-linecap:round;filter:drop-shadow(0 0 5px var(--vf-accent))}
+.tech-services-bento .b-drop{fill:#8fd4ff;opacity:0}
+.tech-services-bento .b-splash circle{fill:#8fd4ff;opacity:0}
+.tech-services-bento .t-batt.play .b-drop{animation:tech-svc-drop 3.6s infinite cubic-bezier(.5,0,1,.6)}
+.tech-services-bento .t-batt.play .b-splash circle{animation:tech-svc-splash 3.6s infinite}
+@keyframes tech-svc-drop{0%,40%{opacity:0;transform:translateY(-40px)}46%{opacity:.9}62%{opacity:.9;transform:translateY(24px)}66%,100%{opacity:0;transform:translateY(26px)}}
+@keyframes tech-svc-splash{0%,61%{opacity:0;transform:none}64%{opacity:.9}78%,100%{opacity:0;transform:translateY(-10px) scale(.5)}}
+.tech-services-bento .t-batt.play .b-splash circle:first-child{transform-origin:168px 110px}
+.tech-services-bento .batt-seal{position:absolute;left:22px;bottom:20px;font-size:12px;color:var(--vf-accent)}
+.tech-services-bento .t-polish{cursor:ew-resize}
+.tech-services-bento .pol-after,.tech-services-bento .pol-before{position:absolute;inset:0}
+.tech-services-bento .pol-after{background:
+  linear-gradient(100deg,#1a1f22 0%,#7c878c 18%,#e9f0f2 30%,#38424a 42%,#aeb9be 56%,#f5fafb 63%,#4a555c 76%,#1b2124 100%)}
+.tech-services-bento .pol-glint{position:absolute;inset:0;background:radial-gradient(220px 120px at var(--gx,60%) var(--gy,50%),rgba(255,255,255,.75),color-mix(in srgb,var(--vf-accent-2) 18%,transparent) 40%,transparent 70%);mix-blend-mode:screen;transition:background-position .1s}
+.tech-services-bento .pol-before{clip-path:inset(0 calc(100% - var(--v,46)*1%) 0 0);
+  background-color:#3d464b;background-image:var(--scratch,none),repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px),linear-gradient(100deg,#2a3135,#59646a 40%,#3a4348 70%,#2a3034);
+  filter:contrast(.9) saturate(.6)}
+.tech-services-bento .pol-handle{position:absolute;z-index:3;top:0;bottom:0;left:calc(var(--v,46)*1%);width:2px;margin-left:-1px;background:var(--vf-accent);box-shadow:0 0 18px var(--vf-accent);pointer-events:none}
+.tech-services-bento .pol-handle i{position:absolute;top:50%;left:50%;width:38px;height:38px;margin:-19px;border-radius:50%;background:color-mix(in srgb,var(--vf-bg) 75%,transparent);box-shadow:inset 0 0 0 1.5px var(--vf-accent),0 0 24px color-mix(in srgb,var(--vf-accent) 50%,transparent);backdrop-filter:blur(6px)}
+.tech-services-bento .pol-handle i::before{content:"‹ ›";position:absolute;inset:0;display:grid;place-items:center;color:var(--vf-accent);font:500 16px/1 var(--vf-font-mono);letter-spacing:4px;padding-left:4px}
+.tech-services-bento .pol-range{position:absolute;inset:0;z-index:6;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;-webkit-appearance:none;appearance:none}
+.tech-services-bento .pol-range:focus-visible + .tile-top h3{outline:2px solid var(--vf-accent)}
+.tech-services-bento .pol-lbl{position:absolute;z-index:4;bottom:18px;font-size:11px;color:rgba(255,255,255,.75);padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--vf-bg) 55%,transparent)}
+.tech-services-bento .pol-l{left:20px}
+.tech-services-bento .pol-r{right:20px}
+.tech-services-bento .strap-w{position:absolute;inset:0 0 44px;display:grid;place-items:center;perspective:600px}
+.tech-services-bento .strap{position:absolute;left:50%;width:74px;margin-left:-37px;height:46%;border-radius:10px;transition:filter .4s;transform-origin:50% 0}
+.tech-services-bento .strap-a{top:-8%;border-radius:10px 10px 4px 4px}
+.tech-services-bento .strap-b{bottom:-8%;border-radius:4px 4px 10px 10px}
+.tech-services-bento .strap-case{position:relative;z-index:2;width:128px;height:128px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f2f7f8,#8c979c 45%,#2f373b 75%,#7d888c);box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.2) inset;display:grid;place-items:center;transition:background .5s}
+.tech-services-bento .strap-dial{width:76%;height:76%;border-radius:50%;background:radial-gradient(circle,#11191c,#05080a);box-shadow:inset 0 0 0 1px rgba(255,255,255,.15);position:relative}
+.tech-services-bento .strap-dial::before{content:"";position:absolute;left:50%;top:12%;width:2px;height:40%;margin-left:-1px;background:var(--vf-accent);box-shadow:0 0 6px var(--vf-accent);transform-origin:50% 95%;transform:rotate(38deg);border-radius:2px}
+.tech-services-bento .strap-dial::after{content:"";position:absolute;left:50%;top:22%;width:3px;height:30%;margin-left:-1.5px;background:#dfe8ea;transform-origin:50% 95%;transform:rotate(-62deg);border-radius:2px}
+.tech-services-bento .strap-w[data-m="leather"] .strap{background:linear-gradient(90deg,#1c120d,#3b271b 30%,#4a3122 50%,#3b271b 70%,#1c120d);outline:1px dashed rgba(230,205,170,.45);outline-offset:-7px}
+.tech-services-bento .strap-w[data-m="steel"] .strap{background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(255,255,255,.25) 35%,rgba(255,255,255,.05) 50%,rgba(255,255,255,.25) 65%,rgba(0,0,0,.55)),repeating-linear-gradient(180deg,#b9c3c7 0 13px,#20272a 13px 15px);width:80px;margin-left:-40px}
+.tech-services-bento .strap-w[data-m="gold"] .strap{background:linear-gradient(90deg,rgba(0,0,0,.5),rgba(255,250,220,.35) 35%,rgba(255,255,255,.05) 50%,rgba(255,250,220,.35) 65%,rgba(0,0,0,.5)),repeating-linear-gradient(180deg,#d8b468 0 13px,#3a2c10 13px 15px);width:80px;margin-left:-40px}
+.tech-services-bento .strap-w[data-m="gold"] .strap-case{background:radial-gradient(circle at 35% 30%,#fff3cf,#c9a254 45%,#4d3a14 75%,#b48f45)}
+.tech-services-bento .strap-w.swap .strap-a{animation:tech-svc-strapIn .55s var(--vf-ease)}
+.tech-services-bento .strap-w.swap .strap-b{animation:tech-svc-strapIn2 .55s var(--vf-ease)}
+@keyframes tech-svc-strapIn{from{transform:scaleY(.2);filter:brightness(2)}}
+@keyframes tech-svc-strapIn2{from{transform:scaleY(.2) ;transform-origin:50% 100%;filter:brightness(2)}}
+.tech-services-bento .seg{position:absolute;z-index:6;left:14px;right:14px;bottom:14px;display:grid;grid-template-columns:repeat(3,1fr);padding:4px;border-radius:999px;background:color-mix(in srgb,var(--vf-bg) 70%,transparent);box-shadow:inset 0 0 0 1px var(--t-line2);backdrop-filter:blur(10px)}
+.tech-services-bento .seg button{position:relative;z-index:1;height:36px;border:0;background:none;font-size:13px;color:var(--vf-text-2);cursor:pointer;border-radius:999px;transition:color .3s}
+.tech-services-bento .seg button[aria-checked="true"]{color:var(--vf-on-accent);font-weight:500}
+.tech-services-bento .seg-thumb{position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);border-radius:999px;background:var(--vf-accent);box-shadow:0 0 20px color-mix(in srgb,var(--vf-accent) 50%,transparent);transform:translateX(calc(var(--i,0)*100%));transition:transform .45s var(--vf-ease)}
+.tech-services-bento .drum{position:absolute;inset:0;border:0;background:none;cursor:pointer;perspective:500px;display:grid;place-items:center;padding:40px 18px 16px}
+.tech-services-bento .drum::before,.tech-services-bento .drum::after{content:"";position:absolute;left:0;right:0;height:38%;z-index:2;pointer-events:none}
+.tech-services-bento .drum::before{top:0;background:linear-gradient(color-mix(in srgb,var(--vf-surface) 70%,var(--vf-surface-2,var(--vf-bg-2))),transparent)}
+.tech-services-bento .drum::after{bottom:0;background:linear-gradient(transparent,var(--vf-surface-2,var(--vf-bg-2)))}
+.tech-services-bento .drum-in{display:block;font-size:clamp(24px,2.3vw,34px);font-weight:500;letter-spacing:-.03em;line-height:1.05;text-align:center;transform-origin:50% 50% -40px;transition:transform .5s var(--vf-ease),opacity .5s}
+.tech-services-bento .drum-in.out{transform:rotateX(80deg);opacity:0;transition-duration:.25s}
+.tech-services-bento .drum-in.in{transform:rotateX(-80deg);opacity:0;transition:none}
+.tech-services-bento .drum-in.end{color:var(--vf-accent)}
+.tech-services-bento .drum-dots{position:absolute;left:0;right:0;bottom:22px;display:flex;justify-content:center;gap:7px;pointer-events:none}
+.tech-services-bento .drum-dots i{width:5px;height:5px;border-radius:50%;background:color-mix(in srgb,var(--t-tint) 18%,transparent);transition:.3s}
+.tech-services-bento .drum-dots i.on{background:var(--vf-accent);box-shadow:0 0 8px var(--vf-accent);transform:scale(1.4)}
+@media (max-width:820px){
+  .tech-services-bento{padding:80px 16px 50px}
+  .tech-services-bento .svc-h{font-size:36px}
+  .tech-services-bento .bento{grid-template-columns:1fr 1fr;grid-auto-rows:190px;gap:10px;
+    grid-template-areas:"diag diag" "diag diag" "mech glass" "mech batt" "pol pol" "strap brand"}
+  .tech-services-bento .tile{border-radius:22px}
+  .tech-services-bento .tile-top{left:16px;right:16px;top:14px}
+  .tech-services-bento .tile h3{font-size:16px}
+  .tech-services-bento .hint{display:none}
+  .tech-services-bento .diag-free{left:16px;bottom:46px;font-size:48px}
+  .tech-services-bento .diag-tools{left:16px;bottom:18px;font-size:10.5px;right:16px}
+  @keyframes tech-svc-blink{50%{opacity:.25}}
+.tech-services-bento .rec{left:16px;bottom:14px}
+  .tech-services-bento .batt-seal{left:16px;bottom:14px;font-size:10.5px}
+  .tech-services-bento .batt-svg{top:52%;width:86%}
+  .tech-services-bento .seg{left:10px;right:10px;bottom:10px}
+  .tech-services-bento .seg button{font-size:12px;height:32px}
+  .tech-services-bento .strap-case{width:76px;height:76px}
+  .tech-services-bento .strap{width:48px;margin-left:-24px}
+  .tech-services-bento .strap-w[data-m="steel"] .strap,.tech-services-bento .strap-w[data-m="gold"] .strap{width:52px;margin-left:-26px}
+  .tech-services-bento .strap-w{top:34px;bottom:44px}
+  .tech-services-bento .drum-in{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){
+  .tech-services-bento .b-cells rect{opacity:1}
+  .tech-services-bento .b-drop{opacity:.9;transform:translateY(10px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .tech-services-bento,.tech-services-bento *,.tech-services-bento *::before,.tech-services-bento *::after{animation:none!important;transition:none!important}
+}

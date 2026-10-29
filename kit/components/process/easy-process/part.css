@@ -1,0 +1,50 @@
+/* easy-process: «Как это будет» — колода из 4 карточек, смахивается пальцем или кнопкой */
+.easy-process {
+  margin: 40px 10px 0; padding: 48px 0 40px; border-radius: 44px; background: var(--vf-easy-sky, #9FD8FF);
+  border: 3px solid var(--vf-line); position: relative; overflow: hidden; color: var(--vf-easy-ink, #2A211C);
+}
+.easy-process *, .easy-process *::before, .easy-process *::after { box-sizing: border-box; }
+.easy-process :where(h2, h3, p) { margin: 0; }
+.easy-process :where(h2, h3) { line-height: 1.05; font-weight: 900; letter-spacing: -.02em; font-family: var(--vf-font-display); }
+.easy-process svg { display: block; max-width: 100%; }
+.easy-process::before, .easy-process::after { content: ""; position: absolute; border-radius: 50%; background: rgba(255,255,255,.35); }
+.easy-process::before { width: 260px; height: 260px; left: -80px; top: -60px; }
+.easy-process::after { width: 180px; height: 180px; right: -50px; bottom: 60px; }
+
+.easy-process .scene-head { text-align: center; max-width: 640px; margin: 0 auto 26px; padding: 0 16px; position: relative; }
+.easy-process .scene-head h2 { font-size: clamp(38px, 10vw, 72px); letter-spacing: -.04em; }
+.easy-process .scene-head p { margin-top: 10px; font-size: 17px; opacity: .75; }
+
+.easy-process .deck { position: relative; width: min(330px, calc(100% - 52px)); height: 410px; margin: 0 auto; z-index: 1; touch-action: pan-y; }
+.easy-process .card {
+  --c: #FFD25E;
+  position: absolute; inset: 0; background: var(--vf-surface); color: var(--vf-text); border: 3px solid var(--vf-line); border-radius: 30px;
+  padding: 16px 20px 22px; box-shadow: 0 8px 0 var(--vf-line); display: flex; flex-direction: column;
+  transition: transform .55s var(--vf-ease), opacity .3s, background .35s; will-change: transform; user-select: none; cursor: grab;
+}
+.easy-process .card.is-back { background: color-mix(in srgb, var(--c) 70%, #fff); }
+.easy-process .card > * { transition: opacity .3s; }
+.easy-process .card.is-back > * { opacity: 0; }
+.easy-process .card.is-drag { transition: none; cursor: grabbing; }
+.easy-process .card__ill { width: 100%; height: 180px; background: color-mix(in srgb, var(--c) 45%, #fff); border-radius: 22px; padding: 14px; margin-bottom: 18px; border: 2.5px solid var(--vf-easy-ink, #2A211C); }
+.easy-process .card h3 { font-size: 27px; letter-spacing: -.03em; margin-bottom: 10px; }
+.easy-process .card p { color: var(--vf-text-2); font-size: 16.5px; }
+.easy-process .card .mag { animation: easy-process-magx 3s ease-in-out infinite; }
+@keyframes easy-process-magx { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-14px, 6px); } }
+
+.easy-process .deck__ctrl { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 34px; position: relative; z-index: 1; }
+.easy-process .dots { display: flex; gap: 8px; }
+.easy-process .dots i { width: 12px; height: 12px; border-radius: 99px; background: color-mix(in srgb, var(--vf-easy-ink, #2A211C) 22%, transparent); transition: width .4s var(--vf-ease), background .3s; }
+.easy-process .dots i.on { width: 32px; background: var(--vf-easy-ink, #2A211C); }
+.easy-process .deck__hint { text-align: center; margin-top: 12px; font-size: 14px; opacity: .7; position: relative; z-index: 1; }
+
+@media (min-width: 760px) {
+  .easy-process { margin: 60px 24px 0; padding: 70px 0 56px; border-radius: 60px; }
+  .easy-process .deck { width: 380px; height: 440px; }
+}
+@media (min-width: 1100px) {
+  .easy-process .deck { width: 420px; height: 450px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .easy-process *, .easy-process *::before, .easy-process *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}

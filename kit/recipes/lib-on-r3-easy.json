@@ -1,0 +1,22 @@
+{
+ "name": "lib-on-r3-easy",
+ "title": "Бирка + элементы библиотек",
+ "tokens": "r3-easy",
+ "buttons": "r3-easy",
+ "fields": "r3-easy",
+ "icons": "tabler",
+ "sounds": "zen",
+ "parts": [
+  "r3-easy-header",
+  "r3-easy-hero-tag",
+  "r3-easy-services-rail",
+  "lib-process-stack",
+  "lib-process-board",
+  "lib-works-dome",
+  "r3-easy-brands",
+  "r3-easy-contacts",
+  "r3-easy-footer",
+  "r3-easy-dock",
+  "lib-sound-toggle"
+ ]
+}

@@ -1,0 +1,27 @@
+/* title: Кнопки · дорого */
+/* Прямоугольные кнопки с разрядкой капителью и «подчёркнутая» кнопка-ссылка.
+   Контекст может подсказать цвета переменными: --vf-btn-fg, --vf-btn-bg, --vf-btn-on, --vf-btn-bg-hover, --vf-btn-line. */
+
+.vf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .6em;
+  min-height: 48px; margin: 0; padding: 0 28px; border: 1px solid transparent; border-radius: 0;
+  background: none; color: var(--vf-btn-fg, inherit); -webkit-appearance: none; appearance: none;
+  font: 400 12px/1 var(--vf-font-text); letter-spacing: .34em; text-transform: uppercase; text-decoration: none;
+  cursor: pointer; transition: background .5s, color .5s, border-color .5s, letter-spacing .8s var(--vf-ease);
+}
+.vf-btn--primary {
+  min-height: 60px; letter-spacing: .38em;
+  background: var(--vf-btn-bg, var(--vf-accent-2)); color: var(--vf-btn-on, var(--vf-on-accent));
+}
+.vf-btn--primary:hover { background: var(--vf-btn-bg-hover, var(--vf-text)); letter-spacing: .44em; }
+
+/* призрачная: текст капителью над тонкой линией */
+.vf-btn--ghost {
+  min-height: 0; padding: 16px 0 10px; border: 0;
+  border-bottom: 1px solid var(--vf-btn-line, var(--vf-accent));
+}
+.vf-btn--ghost:hover { color: var(--vf-btn-fg-hover, var(--vf-btn-fg, inherit)); }
+
+.vf-btn--sm { font-size: 11px; letter-spacing: .3em; font-weight: 300; }
+.vf-btn--sm:not(.vf-btn--ghost) { min-height: 44px; padding: 0 18px; }
+.vf-btn--ghost.vf-btn--sm { padding: 12px 0 6px; line-height: 1.6; }

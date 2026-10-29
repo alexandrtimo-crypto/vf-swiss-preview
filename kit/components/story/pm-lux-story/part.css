@@ -1,0 +1,22 @@
+.pm-lux-story { padding: var(--pm-s-3xl, 96px) 0; }
+.pm-lux-story .pm-lux-story__wrap { max-width: var(--pm-wrap, 1240px); margin: 0 auto; padding: 0 var(--pm-gutter, 24px); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; border-top: 1px solid var(--vf-line); padding-top: var(--pm-s-xl, 48px); }
+.pm-lux-story .pm-lux-story__head { grid-column: 1 / span 3; }
+.pm-lux-story .pm-lux-story__num { margin: 0; font: italic 400 clamp(80px, 9vw, 140px)/.8 var(--vf-font-display); color: var(--vf-accent); }
+.pm-lux-story .pm-lux-story__label { margin: 20px 0 0; font: 600 12px/1.4 var(--vf-font-text); letter-spacing: .2em; text-transform: uppercase; color: var(--vf-text-2); }
+.pm-lux-story .pm-lux-story__body { grid-column: 4 / span 9; }
+.pm-lux-story .pm-lux-story__title { margin: 0; max-width: 15em; font: 400 clamp(36px, 4.4vw, 64px)/1.05 var(--vf-font-display); letter-spacing: -.01em; text-wrap: balance; }
+.pm-lux-story .pm-lux-story__title em { color: var(--vf-accent); }
+.pm-lux-story .pm-lux-story__cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: var(--pm-s-xl, 48px); }
+.pm-lux-story .pm-lux-story__cols p { margin: 0; color: var(--vf-text-2); max-width: 34em; }
+.pm-lux-story .pm-lux-story__fig { margin: var(--pm-s-xl, 48px) 0 0; display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: end; }
+.pm-lux-story .pm-lux-story__fig img { width: 100%; height: auto; aspect-ratio: 866 / 633; object-fit: cover; background: var(--vf-bg-2); }
+.pm-lux-story .pm-lux-story__fig figcaption { font-size: 13px; color: var(--vf-muted); border-top: 1px solid var(--vf-line); padding-top: 12px; }
+.pm-lux-story .pm-lux-story__more { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: var(--pm-s-lg, 32px); font: 600 13px/1 var(--vf-font-text); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid var(--vf-accent); }
+.pm-lux-story .pm-lux-story__more:hover { color: var(--vf-accent); }
+@media (max-width: 900px) {
+  .pm-lux-story { padding: var(--pm-s-2xl, 64px) 0; }
+  .pm-lux-story .pm-lux-story__head, .pm-lux-story .pm-lux-story__body { grid-column: 1 / -1; }
+  .pm-lux-story .pm-lux-story__head { display: flex; align-items: end; gap: 16px; margin-bottom: 24px; }
+  .pm-lux-story .pm-lux-story__num { font-size: 72px; }
+  .pm-lux-story .pm-lux-story__cols, .pm-lux-story .pm-lux-story__fig { grid-template-columns: 1fr; gap: 16px; }
+}

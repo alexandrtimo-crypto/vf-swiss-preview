@@ -1,0 +1,29 @@
+<section data-part="pm-lux-booking" data-slot="booking" class="pm-lux-booking" id="pm-booking" aria-labelledby="pm-lux-booking-title">
+  <div class="pm-lux-booking__wrap">
+    <div class="pm-lux-booking__intro">
+      <p class="pm-lux-booking__label">Заявка</p>
+      <h2 class="pm-lux-booking__title" id="pm-lux-booking-title">Начнём с&nbsp;<em>бесплатной</em> диагностики.</h2>
+      <p class="pm-lux-booking__text">Оставьте имя и&nbsp;телефон — Владислав свяжется с&nbsp;вами выбранным способом.</p>
+      <p class="pm-lux-booking__alt"><a href="tel:+79651716996">8 (965) 171-69-96</a><a href="https://t.me/VFswissboutique" rel="noopener" target="_blank">@VFswissboutique</a></p>
+    </div>
+    <form class="pm-lux-booking__form" action="#pm-booking" method="post" novalidate>
+      <div class="vf-field"><label for="pm-b-name">Имя <span class="vf-field__req" aria-hidden="true">*</span></label><input class="vf-input" id="pm-b-name" name="name" autocomplete="name" required><p class="vf-field__error" data-err="name"></p></div>
+      <div class="vf-field"><label for="pm-b-phone">Телефон <span class="vf-field__req" aria-hidden="true">*</span></label><input class="vf-input" id="pm-b-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required><p class="vf-field__error" data-err="phone"></p></div>
+      <fieldset class="pm-lux-booking__how">
+        <legend>Как связаться</legend>
+        <label><input type="radio" name="contact" value="call" checked><span>Позвонить</span></label>
+        <label><input type="radio" name="contact" value="telegram"><span>Написать в&nbsp;Telegram</span></label>
+      </fieldset>
+      <div class="vf-field"><label for="pm-b-brand">Марка часов, если знаете</label><input class="vf-input" id="pm-b-brand" name="brand" placeholder="Например, Patek Philippe"></div>
+      <div class="vf-field"><label for="pm-b-desc">Что с&nbsp;часами</label><textarea class="vf-input" id="pm-b-desc" name="description" rows="3" placeholder="Остановились, отстают, нужна полировка…"></textarea></div>
+      <label class="pm-lux-booking__hp" aria-hidden="true">Сайт <input name="website" tabindex="-1" autocomplete="off"></label>
+      <div class="pm-lux-booking__consent"><label><input type="checkbox" name="consent" required><span>Согласен на&nbsp;обработку персональных данных для ответа на&nbsp;заявку</span></label><p class="vf-field__error" data-err="consent"></p></div>
+      <button class="vf-btn vf-btn--primary pm-lux-booking__send" type="submit">Отправить заявку</button>
+    </form>
+    <div class="pm-lux-booking__done" data-done hidden tabindex="-1" role="status">
+      <p class="pm-lux-booking__label">Заявка</p>
+      <h3>Заявка принята (прототип)</h3>
+      <p>Это демонстрация: заявка никуда не&nbsp;отправлена. На&nbsp;настоящем сайте Владислав свяжется с&nbsp;вами выбранным способом.</p>
+    </div>
+  </div>
+</section>

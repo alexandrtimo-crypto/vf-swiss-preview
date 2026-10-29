@@ -1,0 +1,70 @@
+/* title: Р3 · Бирка на верстаке */
+/* fonts: Sofia Sans:wght@400..800; Sofia Sans Condensed:wght@600..900 */
+/* Видение r3-easy: синий антистатический коврик верстака — поле страницы;
+   манильский картон бирок с красной типографской печатью и чёрными цифрами нумератора.
+   Общие токены --vf-*; материалы мира — --vf-tag-* (компоненты берут их с запасным значением). */
+:root {
+  --vf-bg: #2B5F9E;            /* коврик верстака */
+  --vf-bg-2: #224F86;          /* тот же коврик в тени */
+  --vf-surface: #E8C886;       /* манильский картон */
+  --vf-text: #F7F8FA;
+  --vf-text-2: #CFDBEE;        /* вторичный текст на коврике, из его же синего */
+  --vf-muted: rgba(247, 248, 250, .16);
+  --vf-line: rgba(247, 248, 250, .32);
+  --vf-accent: #B8301C;        /* красная печать бирки — действие */
+  --vf-accent-2: #E8C886;
+  --vf-on-accent: #FFFFFF;
+  --vf-danger: #9A2614;
+  --vf-font-display: "Sofia Sans Condensed", "Arial Narrow", sans-serif;
+  --vf-font-text: "Sofia Sans", "Segoe UI", Roboto, sans-serif;
+  --vf-font-mono: "Sofia Sans Condensed", "Arial Narrow", sans-serif; /* цифры нумератора — табличные */
+  --vf-radius: 6px;
+  --vf-radius-lg: 12px;
+  --vf-ease: cubic-bezier(.16, 1, .3, 1);
+
+  /* материалы мира */
+  --vf-tag-card: #E8C886;      /* манила */
+  --vf-tag-card-2: #DDB873;    /* манила, усиливающее кольцо и тень сгиба */
+  --vf-tag-ink: #1E1A14;       /* чёрная краска нумератора */
+  --vf-tag-ink-2: #5B4A2A;     /* вторичный текст на маниле */
+  --vf-tag-red: #B8301C;       /* красная печать: линии, крупные слова */
+  --vf-tag-red-text: #9A2614;  /* красная печать для мелкого текста */
+  --vf-tag-paper: #FAFAF7;     /* белая карточка K, поля фото */
+  --vf-tag-thread: #EFE9DC;    /* хлопковая нитка */
+  --vf-tag-shadow: 0 1px 1px rgba(10, 24, 48, .18), 0 10px 22px -8px rgba(10, 24, 48, .45), 0 28px 48px -24px rgba(10, 24, 48, .5);
+  --vf-gutter: clamp(16px, 4.2vw, 64px);
+  --vf-max: 1320px;
+
+  color-scheme: light;
+  accent-color: var(--vf-accent);
+  caret-color: var(--vf-tag-red);
+  scrollbar-color: var(--vf-tag-card) var(--vf-bg-2);
+}
+
+/* ---------- основа страницы ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 12px; }
+.vf-page {
+  margin: 0; background: var(--vf-bg); color: var(--vf-text);
+  font-family: var(--vf-font-text); font-size: 17px; line-height: 1.5; font-weight: 400;
+  font-feature-settings: "tnum" 0; overflow-x: hidden;
+  /* матовая фактура коврика */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:where(.vf-page a) { color: inherit; text-underline-offset: .2em; text-decoration-thickness: 1px; }
+:where(.vf-page a:hover) { text-decoration-thickness: 2px; }
+:where(.vf-page button) { font: inherit; color: inherit; cursor: pointer; }
+:where(.vf-page img, .vf-page video, .vf-page svg) { display: block; max-width: 100%; }
+:where(.vf-page h1, .vf-page h2, .vf-page h3) { margin: 0; font-family: var(--vf-font-display); font-weight: 800; line-height: 1; letter-spacing: -.01em; text-wrap: balance; }
+:where(.vf-page p) { margin: 0; text-wrap: pretty; }
+.vf-page ::selection { background: var(--vf-tag-card); color: var(--vf-tag-ink); }
+:where(.vf-page) :focus-visible { outline: 3px solid var(--vf-tag-card); outline-offset: 3px; border-radius: 4px; }
+.vf-page ::-webkit-scrollbar { width: 12px; height: 10px; }
+.vf-page ::-webkit-scrollbar-track { background: var(--vf-bg-2); }
+.vf-page ::-webkit-scrollbar-thumb { background: var(--vf-tag-card); border-radius: 6px; border: 3px solid var(--vf-bg-2); }
+.vf-page .vf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}

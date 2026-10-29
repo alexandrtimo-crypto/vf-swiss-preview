@@ -1,0 +1,8 @@
+{
+ "name": "lux",
+ "title": "VF swiss · Дорого-богато",
+ "tokens": "lux",
+ "buttons": "lux",
+ "fields": "lux",
+ "parts": ["lux-header", "lux-hero", "lux-story", "lux-services", "lux-process", "lux-brands", "lux-warranty", "lux-booking", "lux-footer", "lux-dock", "lux-overlay-grain"]
+}

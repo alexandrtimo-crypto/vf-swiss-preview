@@ -1,0 +1,8 @@
+[data-part="fd-lux-brands"] { padding: 96px 40px 112px; background: var(--vf-bg-2); }
+[data-part="fd-lux-brands"] .fd-lux-brands__in { max-width: 1200px; margin: 0 auto; }
+[data-part="fd-lux-brands"] .fd-lux-brands__title { margin: 0 0 28px; font: 400 var(--fd-s4, 21px)/1.3 var(--vf-font-display); color: var(--vf-muted); }
+[data-part="fd-lux-brands"] .fd-lux-brands__list { margin: 0; max-width: 22em; font: italic 400 var(--fd-s8, 60px)/1.12 var(--vf-font-display); letter-spacing: -.01em; color: var(--vf-accent); text-wrap: pretty; }
+@media (max-width: 900px) {
+  [data-part="fd-lux-brands"] { padding: 64px 20px 72px; }
+  [data-part="fd-lux-brands"] .fd-lux-brands__list { font-size: var(--fd-s6, 36px); }
+}

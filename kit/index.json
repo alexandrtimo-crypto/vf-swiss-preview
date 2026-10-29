@@ -1,0 +1,1599 @@
+{
+ "slots": [
+  "header",
+  "hero",
+  "story",
+  "services",
+  "process",
+  "works",
+  "brands",
+  "warranty",
+  "faq",
+  "booking",
+  "contacts",
+  "footer",
+  "dock",
+  "overlay"
+ ],
+ "tokens": [
+  {
+   "id": "easy",
+   "title": "Интуитивно-легко",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ]
+  },
+  {
+   "id": "fd-lux",
+   "title": "fd-lux — эмаль и воронёная сталь",
+   "fonts": [
+    "Old Standard TT:ital,wght@0,400%3B0,700%3B1,400"
+   ]
+  },
+  {
+   "id": "lux",
+   "title": "Дорого-богато",
+   "fonts": [
+    "Manrope:wght@200..500",
+    "Playfair Display:wght@400..500",
+    "Playfair Display:ital,wght@1,400..500"
+   ]
+  },
+  {
+   "id": "pm-lux",
+   "title": "PM · Швейцарская глава (дорого-богато)",
+   "fonts": [
+    "Cormorant:ital,wght@0,400..600%3B1,400..500",
+    "Montserrat:wght@400..600"
+   ]
+  },
+  {
+   "id": "r3-easy",
+   "title": "Р3 · Бирка на верстаке",
+   "fonts": [
+    "Sofia Sans:wght@400..800",
+    "Sofia Sans Condensed:wght@600..900"
+   ]
+  },
+  {
+   "id": "r3-lux",
+   "title": "Ценная бумага (r3)",
+   "fonts": [
+    "Old Standard TT:wght@400",
+    "Old Standard TT:wght@700"
+   ]
+  },
+  {
+   "id": "r3-tech",
+   "title": "Ангар · техобслуживание часов",
+   "fonts": [
+    "Sofia Sans Extra Condensed:wght@600..900",
+    "Sofia Sans:wght@400..700"
+   ]
+  },
+  {
+   "id": "tech",
+   "title": "Современно-технологично",
+   "fonts": [
+    "Onest:wght@300..700",
+    "IBM Plex Mono:wght@400",
+    "IBM Plex Mono:wght@500"
+   ]
+  },
+  {
+   "id": "ts-lux",
+   "title": "Taste Skill · дорого (тёмный зал)",
+   "fonts": [
+    "Unbounded:wght@300..500",
+    "Onest:wght@300..600"
+   ]
+  }
+ ],
+ "buttons": [
+  {
+   "id": "easy",
+   "title": "Кнопки · легко",
+   "fonts": []
+  },
+  {
+   "id": "fd-lux",
+   "title": "fd-lux — кнопки: воронёная сталь",
+   "fonts": []
+  },
+  {
+   "id": "lux",
+   "title": "Кнопки · дорого",
+   "fonts": []
+  },
+  {
+   "id": "pm-lux",
+   "title": "PM · кнопки швейцарской главы — прямые углы, волосяная рамка, золото только на главном действии",
+   "fonts": []
+  },
+  {
+   "id": "r3-easy",
+   "title": "Р3 · Кнопки · печать бирки",
+   "fonts": []
+  },
+  {
+   "id": "r3-lux",
+   "title": "Кнопки · печать и гравированная рамка",
+   "fonts": []
+  },
+  {
+   "id": "r3-tech",
+   "title": "Кнопки · бирка и трафарет",
+   "fonts": []
+  },
+  {
+   "id": "tech",
+   "title": "Кнопки · технологично",
+   "fonts": []
+  },
+  {
+   "id": "ts-lux",
+   "title": "Taste Skill · дорого — кнопки: плоские, прямые углы, золото только на главном действии",
+   "fonts": []
+  }
+ ],
+ "fields": [
+  {
+   "id": "easy",
+   "title": "Поля · легко",
+   "fonts": []
+  },
+  {
+   "id": "fd-lux",
+   "title": "fd-lux — поля: строка на эмали",
+   "fonts": []
+  },
+  {
+   "id": "lux",
+   "title": "Поля · дорого",
+   "fonts": []
+  },
+  {
+   "id": "pm-lux",
+   "title": "PM · поля швейцарской главы — подпись над полем, линия снизу, ошибка под полем",
+   "fonts": []
+  },
+  {
+   "id": "r3-easy",
+   "title": "Р3 · Поля · графа бирки",
+   "fonts": []
+  },
+  {
+   "id": "r3-lux",
+   "title": "Поля · строки бланка",
+   "fonts": []
+  },
+  {
+   "id": "r3-tech",
+   "title": "Поля · карта-наряд",
+   "fonts": []
+  },
+  {
+   "id": "tech",
+   "title": "Поля · технологично",
+   "fonts": []
+  },
+  {
+   "id": "ts-lux",
+   "title": "Taste Skill · дорого — поля: залитые тоном, без рамок, фокус золотом",
+   "fonts": []
+  }
+ ],
+ "icons": [
+  {
+   "id": "gravity",
+   "title": "Иконки · Gravity UI (MIT, строгие)",
+   "fonts": []
+  },
+  {
+   "id": "lucide",
+   "title": "Иконки · Lucide (ISC, тонкая линия)",
+   "fonts": []
+  },
+  {
+   "id": "tabler",
+   "title": "Иконки · Tabler (MIT, линия 2px)",
+   "fonts": []
+  }
+ ],
+ "sounds": [
+  {
+   "id": "glass",
+   "title": "Звуки · glass"
+  },
+  {
+   "id": "mechanical",
+   "title": "Звуки · mechanical"
+  },
+  {
+   "id": "zen",
+   "title": "Звуки · zen"
+  }
+ ],
+ "components": [
+  {
+   "id": "easy-header",
+   "slot": "header",
+   "title": "Шапка · легко",
+   "vision": "easy",
+   "description": "Логотип-наклейка VF с наклоном и телефон в «таблетке» с объёмной тенью.",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/header/easy-header/thumb.jpg"
+  },
+  {
+   "id": "fd-lux-header",
+   "slot": "header",
+   "title": "Шапка: словесный знак и телефон",
+   "vision": "fd-lux",
+   "description": "Тонкая шапка на эмали: VF swiss, разделы, телефон и запись.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "lux-header",
+   "slot": "header",
+   "title": "Шапка · дорого",
+   "vision": "lux",
+   "description": "Тонкая шапка: знак VF swiss, телефон, «Записаться» с линией. Проявляется после первого экрана (событие vf:hero), ссылка «Записаться» шлёт vf:book.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/header/lux-header/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-header",
+   "slot": "header",
+   "title": "Шапка: знак, главы, телефон",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Шапка: знак, главы, телефон.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-easy-header",
+   "slot": "header",
+   "title": "Р3 · Шапка · полоса коврика",
+   "vision": "r3-easy",
+   "description": "Узкая полоса на коврике: знак VF swiss, адрес мастерской, звонок и Telegram. На телефоне номер сворачивается в кнопку-иконку.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": null
+  },
+  {
+   "id": "r3-lux-header",
+   "slot": "header",
+   "title": "Шапка · полоса ценной бумаги",
+   "vision": "r3-lux",
+   "description": "Тонкая липкая полоса на защитной бумаге: гильоше-эмблема и «VF SWISS», якоря, телефон, бордовая кнопка-печать «Записаться». Нижний край — гильоше-линейка.",
+   "fonts": [],
+   "needs": [
+    "kit/lib/motion.js",
+    "kit/lib/r3lux-engrave.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/header/r3-lux-header/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-header",
+   "slot": "header",
+   "title": "Шапка · полоса обшивки",
+   "vision": "r3-tech",
+   "description": "Липкая полоса алюминиевой обшивки со швом из заклёпок: марка, разделы, телефон, Telegram и красная бирка «Заявка».",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "tech-header",
+   "slot": "header",
+   "title": "Шапка-капсула с живыми часами МСК",
+   "vision": "tech",
+   "description": "Плавающая стеклянная капсула: вращающийся знак, мигающие часы МСК, телефон, кнопка «Заявка» (vf:book). Ссылка «К содержанию» ведёт к следующему элементу.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/header/tech-header/thumb.jpg"
+  },
+  {
+   "id": "ts-lux-header",
+   "slot": "header",
+   "title": "Шапка · ts-lux",
+   "vision": "ts-lux",
+   "description": "Простая полоса без хрома: словесный знак, четыре ссылки, телефон и одно действие текстом. На телефоне — меню на <details>, работает без JS.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "easy-hero",
+   "slot": "hero",
+   "title": "Первый экран «Что с часами?» · легко",
+   "vision": "easy",
+   "description": "Аватар мастера с репликой, огромный вопрос «Что с часами?» и 8 живых плиток-наклеек с иллюстрациями. Плитка открывает чат: событие vf:chat { symptom }.",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [
+    "{{shared}}/../kit/elements/icons/easy.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/hero/easy-hero/thumb.jpg"
+  },
+  {
+   "id": "fd-lux-hero",
+   "slot": "hero",
+   "title": "Сапфировое окно",
+   "vision": "fd-lux",
+   "description": "Круглое окно задней крышки с живым видео механизма и золотой минутной дорожкой; заголовок слева.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "lux-hero",
+   "slot": "hero",
+   "title": "Первый экран · видео в арку",
+   "vision": "lux",
+   "description": "Видео мастера во весь экран, знак VF swiss и фраза; прокрутка сжимает видео в арочное окно, по бокам — «Ремонт и обслуживание / швейцарских часов». Шлёт vf:hero { over } для шапки.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/hero/lux-hero/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-hero",
+   "slot": "hero",
+   "title": "Первый экран: «До последнего винта»",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Первый экран: «До последнего винта».",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-easy-hero-tag",
+   "slot": "hero",
+   "title": "Р3 · Первый экран · бирка на нитке",
+   "vision": "r3-easy",
+   "description": "Заголовок «Часы в ремонт — под номером», отпечаток фото разобранного механизма и висящая на нитке ремонтная бирка — рабочая форма: звонок мастеру крупным номером, поле телефона, звонок/Telegram, согласие. При отправке корешок отрывается по перфорации и показывает «Заявка принята (прототип)». Ловит vf:book (detail.symptom заполняет «что случилось»), шлёт vf:hero { over }.",
+   "fonts": [],
+   "needs": [
+    "{{shared}}/lead.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/hero/r3-easy-hero-tag/thumb.jpg"
+  },
+  {
+   "id": "r3-lux-medallion",
+   "slot": "hero",
+   "title": "Первый экран · медальон и бланк",
+   "vision": "r3-lux",
+   "description": "Лист ценной бумаги: овальный медальон с реальным фото часов (media/img/ex_1.webp) в рамке-гильоше, вокруг — розетка из сотен линий, которая вытравливается при загрузке (Anime.js); справа заголовок и рабочий бланк записи с микротекстовой рамкой. После отправки — номер бордо и тиснёная печать «ПРИНЯТО (прототип)». Фото — оригинал мастерской, не обработано.",
+   "fonts": [],
+   "needs": [
+    "kit/lib/motion.js",
+    "kit/lib/r3lux-engrave.js",
+    "{{shared}}/lead.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/hero/r3-lux-medallion/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-hero-panel",
+   "slot": "hero",
+   "title": "Первый экран · лючок на винтах",
+   "vision": "r3-tech",
+   "description": "Обшивка с широким лючком, за которым видео верстака; 16 винтов по рамке. При прокрутке винты выкручиваются, рамка снимается, лючок раскрывается до полного кадра. Маркировка «до последнего винта» и карта-наряд с рабочей заявкой.",
+   "fonts": [],
+   "needs": [
+    "{{shared}}/lead.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/hero/r3-tech-hero-panel/thumb.jpg"
+  },
+  {
+   "id": "tech-hero",
+   "slot": "hero",
+   "title": "Живой механизм (canvas)",
+   "vision": "tech",
+   "description": "Процедурный скелетон-механизм в аксонометрии: наклон и параллакс слоёв за курсором, дуга амплитуды баланса, линейка, бегущая трасса таймграфера (демо). Кнопка заявки — vf:book.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/hero/tech-hero/thumb.jpg"
+  },
+  {
+   "id": "ts-lux-hero",
+   "slot": "hero",
+   "title": "Первый экран · ts-lux · прилавок",
+   "vision": "ts-lux",
+   "description": "Блюпринт скилла counter-object-wide-wordmark: как на часовом прилавке — один низкоключевой кадр 4:5 (видео работы под лупой), под ним сверхширокий знак VF SWISS, заголовок и строка «факт · действие · факт».",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "fd-lux-story",
+   "slot": "story",
+   "title": "Один мастер",
+   "vision": "fd-lux",
+   "description": "Владислав и верстак: от приёмки до выдачи часы в одних руках.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": null
+  },
+  {
+   "id": "lux-story",
+   "slot": "story",
+   "title": "Ателье · лента кадров",
+   "vision": "lux",
+   "description": "Пять кадров ателье в горизонтальной ленте: точность, оригинальные комплектующие, лупа с оборудованием, «Петровка» за видео, «Диагностика — бесплатно». На широком экране закрепляется и едет вбок от прокрутки, на телефоне — свайп. Ссылка шлёт vf:book.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/story/lux-story/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-story",
+   "slot": "story",
+   "title": "Глава I: доверие",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Глава I: доверие.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-lux-vignettes",
+   "slot": "story",
+   "title": "Каждая деталь отдельно · виньетки",
+   "vision": "r3-lux",
+   "description": "Четыре реальных кадра разборки (media/img/ex_19, ex_3, ex_36, ex_5) в гравированных рамках разной формы: прямоугольник со срезанными углами, круг, овал, арка. Асимметричная сетка с большими паузами; рамки вытравливаются при появлении сцены (Anime.js). Фото — оригиналы мастерской, не обработаны.",
+   "fonts": [],
+   "needs": [
+    "kit/lib/motion.js",
+    "kit/lib/r3lux-engrave.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/story/r3-lux-vignettes/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-teardown",
+   "slot": "story",
+   "title": "Разборка · каталог деталей",
+   "vision": "r3-tech",
+   "description": "Полноширинный кадр: часы клиента, разобранные до винта на белом листе, с выносками позиций как в каталоге деталей. Наведение или касание выноски подсвечивает позицию в подписи.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/story/r3-tech-teardown/thumb.jpg"
+  },
+  {
+   "id": "tech-story-explode",
+   "slot": "story",
+   "title": "Разбор механизма на слои",
+   "vision": "tech",
+   "description": "Закреплённая сцена: при прокрутке механизм наклоняется и разлетается по оси z на 6 слоёв, выноски загораются по одной, линейка «разнос слоёв», в конце — гарантия до двух лет.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/story/tech-story-explode/thumb.jpg"
+  },
+  {
+   "id": "fd-lux-services",
+   "slot": "services",
+   "title": "Услуги строками",
+   "vision": "fd-lux",
+   "description": "Крупные строки услуг без карточек; каждая открывает заявку с темой.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "lux-services",
+   "slot": "services",
+   "title": "Услуги · циферблат",
+   "vision": "lux",
+   "description": "Шесть услуг стоят как часовые индексы; стрелка поворачивается к выбранной, в центре меняются фото, название и фраза. Головка, наведение, перетаскивание, свайп; без JS работает на radio + :has().",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/services/lux-services/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-services",
+   "slot": "services",
+   "title": "Глава V: услуги списком",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Глава V: услуги списком.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-easy-services-rail",
+   "slot": "services",
+   "title": "Р3 · Услуги · бирки на рейке",
+   "vision": "r3-easy",
+   "description": "Шесть ремонтных бирок висят на рейке на нитках разной длины; диагностика — красная бирка. Нажатие на бирку шлёт vf:book { symptom } — услуга попадает в заявку. На телефоне рейка прокручивается вбок.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/services/r3-easy-services-rail/thumb.jpg"
+  },
+  {
+   "id": "r3-lux-denominations",
+   "slot": "services",
+   "title": "Услуги · гравированные купоны",
+   "vision": "r3-lux",
+   "description": "Шесть услуг как купоны разного достоинства и размера: диагностика и обслуживание механизма — крупные, остальные — малые; у каждого своя гравированная рамка, своя розетка и реальное фото-виньетка (ex_33, ex_2, ex_24, ex_22, ex_12, ex_20). Нажатие — vf:book с названием услуги. Фото не обработаны.",
+   "fonts": [],
+   "needs": [
+    "kit/lib/motion.js",
+    "kit/lib/r3lux-engrave.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/services/r3-lux-denominations/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-services",
+   "slot": "services",
+   "title": "Услуги · панель на грунте",
+   "vision": "r3-tech",
+   "description": "Раздел, залитый цинк-хроматным грунтом: услуги крупной маркировкой, выбор одной показывает рядом лючок с фото, описание и кнопку заявки на эту работу (событие vf:book с symptom).",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/services/r3-tech-services/thumb.jpg"
+  },
+  {
+   "id": "tech-services-bento",
+   "slot": "services",
+   "title": "Услуги — bento из плиток-виджетов",
+   "vision": "tech",
+   "description": "7 интерактивных плиток в одной сетке: диагностика-осциллограмма со щупом, видео с верстака с прицелом, стекло с бликом, элемент питания с каплей, полировка до/после, ремешки кожа/сталь/золото, барабан брендов.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/services/tech-services-bento/thumb.jpg"
+  },
+  {
+   "id": "easy-process",
+   "slot": "process",
+   "title": "Колода «Как это будет» · легко",
+   "vision": "easy",
+   "description": "4 иллюстрированные карточки с наклоном на голубой подложке: смахиваются пальцем или кнопкой «Дальше». Без JS — горизонтальная лента.",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/process/easy-process/thumb.jpg"
+  },
+  {
+   "id": "fd-lux-process",
+   "slot": "process",
+   "title": "Порядок работы I–V",
+   "vision": "fd-lux",
+   "description": "Последовательность из пяти шагов с римскими цифрами циферблата.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": null
+  },
+  {
+   "id": "lib-process-board",
+   "slot": "process",
+   "title": "Статус заказа · табло",
+   "vision": "lib",
+   "description": "SplitFlapText (React Bits, на vanilla): механическое табло перещёлкивает статусы демо-заказа — ПРИНЯТ, ДИАГНОСТИКА, РЕМОНТ, ПРОВЕРКА, ГОТОВ. Статус можно выбрать кнопкой; при reduced-motion буквы меняются без перещёлкивания. Пометка «демо», строка про личный кабинет по QR.",
+   "fonts": [],
+   "needs": [
+    "/kit/lib/motion.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/process/lib-process-board/thumb.jpg"
+  },
+  {
+   "id": "lib-process-stack",
+   "slot": "process",
+   "title": "Как мы работаем · листы стопкой",
+   "vision": "lib",
+   "description": "ScrollStack (React Bits, на vanilla): шесть этапов ремонта — Приёмка, Бесплатная диагностика, Согласование цены и срока, Ремонт, Проверка, Выдача и гарантия — листами, которые при прокрутке ложатся стопкой (sticky + масштаб предыдущих). В каждом листе реальное фото. Без собственной темы.",
+   "fonts": [],
+   "needs": [
+    "/kit/lib/motion.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/process/lib-process-stack/thumb.jpg"
+  },
+  {
+   "id": "lux-process",
+   "slot": "process",
+   "title": "Мастерство · от разбора до винта",
+   "vision": "lux",
+   "description": "Большое закреплённое изображение; пока проплывают шесть фраз «от разбора до последнего винта», кадры меняются маской-ирисом. Справа тонкая шкала «запаса хода».",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/process/lux-process/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-process",
+   "slot": "process",
+   "title": "Глава II: путь часов (липкая сцена)",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Глава II: путь часов (липкая сцена).",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-easy-process-card",
+   "slot": "process",
+   "title": "Р3 · Путь часов · оборот бирки",
+   "vision": "r3-easy",
+   "description": "Оборот манильской бирки: красная линия пути часов змейкой — приёмка, бесплатная диагностика, согласование цены и срока до начала работ, ремонт, проверка, выдача с гарантией до двух лет. Рядом белая карточка клиента K-xxxx с QR личного кабинета. На телефоне линия идёт вертикально; остановки по очереди проявляются при показе.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/process/r3-easy-process-card/thumb.jpg"
+  },
+  {
+   "id": "r3-lux-serials",
+   "slot": "process",
+   "title": "Порядок работ · серийные номера",
+   "vision": "r3-lux",
+   "description": "Шесть этапов с серийными номерами бордо (№ 01 — № 06) — последовательность несёт смысл. Лесенка по диагонали, через номера проведена плетёная гильоше-нить, которая прорисовывается при появлении сцены. Тихая сцена: много бумаги, мало линий.",
+   "fonts": [],
+   "needs": [
+    "kit/lib/motion.js",
+    "kit/lib/r3lux-engrave.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/process/r3-lux-serials/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-process",
+   "slot": "process",
+   "title": "Порядок работ · лента лючков",
+   "vision": "r3-tech",
+   "description": "Пять этапов ТО часов как ряд лючков вдоль фюзеляжа: на десктопе лента едет вбок при прокрутке (закреплённая сцена), на телефоне листается пальцем. В каждом лючке — фото из мастерской.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/process/r3-tech-process/thumb.jpg"
+  },
+  {
+   "id": "tech-process-dial",
+   "slot": "process",
+   "title": "Путь часов — циферблат из 6 станций",
+   "vision": "tech",
+   "description": "Закреплённый циферблат: при прокрутке стрелка шагами проходит станции «Принято → Выдача», дуга и риски загораются, активный этап крупно в центре. Станции можно нажать.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/process/tech-process-dial/thumb.jpg"
+  },
+  {
+   "id": "easy-works",
+   "slot": "works",
+   "title": "Мастерская: кружки-сторис · легко",
+   "vision": "easy",
+   "description": "6 кружков-сторис с цветной обводкой и большое «окно с верстака» с видео-петлёй. Нажатие открывает просмотр (событие vf:story { group }); без просмотрщика — ссылка на файл.",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/works/easy-works/thumb.jpg"
+  },
+  {
+   "id": "fd-lux-works",
+   "slot": "works",
+   "title": "Работы с верстака",
+   "vision": "fd-lux",
+   "description": "Асимметричная композиция реальных кадров с подписями.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": null
+  },
+  {
+   "id": "lib-works-dome",
+   "slot": "works",
+   "title": "Работы · купол",
+   "vision": "lib",
+   "description": "DomeGallery (React Bits, на vanilla): 24 фото работ на куполе, вращается перетаскиванием, горизонтальным колесом/трекпадом и стрелками; клик — фото крупно в диалоге. На телефоне 18 плиток. Без собственной темы: только --vf-*.",
+   "fonts": [],
+   "needs": [
+    "/kit/lib/motion.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/works/lib-works-dome/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-works",
+   "slot": "works",
+   "title": "Глава IV: работы, асимметричная сетка",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Глава IV: работы, асимметричная сетка.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-easy-works-prints",
+   "slot": "works",
+   "title": "Р3 · Работы · отпечатки на коврике",
+   "vision": "r3-easy",
+   "description": "Шесть настоящих кадров верстака — механизм на держателе, разборка пинцетом, детали в ячейках, таймграфер, балансовый узел, часы на подложке — лежат на синем коврике как фотоотпечатки с белыми полями, под разными углами, два на кусочках малярной ленты. На телефоне отпечатки идут колонкой вразбежку.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/works/r3-easy-works-prints/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-works",
+   "slot": "works",
+   "title": "Верстак · тёмный ангар",
+   "vision": "r3-tech",
+   "description": "Тёмный раздел с полноэкранным предметным кадром и неровной раскладкой фото и видео верстака; видео играют в зоне видимости, по нажатию открывается просмотрщик (событие vf:view).",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/works/r3-tech-works/thumb.jpg"
+  },
+  {
+   "id": "tech-works-loupe",
+   "slot": "works",
+   "title": "Под микроскопом — световой стол с лупой",
+   "vision": "tech",
+   "description": "8 снимков свободной композицией с угловыми метками и шкалами, параллакс при прокрутке, круглая лупа ×2.6 с прицелом. Клик — vf:viewer (просмотрщик tech-overlay-viewer).",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/works/tech-works-loupe/thumb.jpg"
+  },
+  {
+   "id": "fd-lux-brands",
+   "slot": "brands",
+   "title": "Марки строкой",
+   "vision": "fd-lux",
+   "description": "Марки набраны как текст, без логотипов.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": null
+  },
+  {
+   "id": "lux-brands",
+   "slot": "brands",
+   "title": "Бренды · бегущая строка",
+   "vision": "lux",
+   "description": "Две медленные бегущие строки навстречу: крупная антиква «гравируется» бликом, ниже — тонкий гротеск капителью. Пауза наведением и кнопкой; для скринридеров — обычный список. Без движения — статичная стена имён.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/brands/lux-brands/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-brands",
+   "slot": "brands",
+   "title": "Марки строкой",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Марки строкой.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-easy-brands",
+   "slot": "brands",
+   "title": "Р3 · Марки · крупная печать",
+   "vision": "r3-easy",
+   "description": "Названия марок набраны крупной печатной строкой на коврике, между ними — дырочки-люверсы; справа на нитке висит манильская бирка «и другие швейцарские марки» с кнопкой спросить про свои часы (событие vf:book).",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/brands/r3-easy-brands/thumb.jpg"
+  },
+  {
+   "id": "r3-lux-brands",
+   "slot": "brands",
+   "title": "Марки · строка микротекста",
+   "vision": "r3-lux",
+   "description": "Тихая сцена: названия марок одной строкой с разрядкой, как микротекст, в широкой плетёной рамке-гильоше.",
+   "fonts": [],
+   "needs": [
+    "kit/lib/motion.js",
+    "kit/lib/r3lux-engrave.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/brands/r3-lux-brands/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-brands",
+   "slot": "brands",
+   "title": "Марки · бортовая маркировка",
+   "vision": "r3-tech",
+   "description": "Марки, с которыми работает мастер, — крупной маркировкой по обшивке, между ними потайные винты.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/brands/r3-tech-brands/thumb.jpg"
+  },
+  {
+   "id": "lux-warranty",
+   "slot": "warranty",
+   "title": "Гарантия · сцена с сертификатом",
+   "description": "«Гарантия до двух лет» огромной антиквой и сертификат-предмет: бумага, гильош, тиснение VF, печать, QR, штамп «образец». Наклоняется за курсором, пальцем и гироскопом.",
+   "vision": "lux",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/warranty/lux-warranty/thumb.jpg"
+  },
+  {
+   "id": "lux-warranty-cert",
+   "slot": "warranty",
+   "title": "Гарантия · сертификат-предмет",
+   "description": "Только сертификат-предмет по центру с заголовком «Гарантия до двух лет»: бумага, гильош, печать, QR, штамп «образец», 3D-наклон. Компактнее полной сцены.",
+   "vision": "lux",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/warranty/lux-warranty-cert/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-warranty",
+   "slot": "warranty",
+   "title": "Глава III: обязательства на тёмной полосе",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Глава III: обязательства на тёмной полосе.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-lux-enamel",
+   "slot": "warranty",
+   "title": "Гарантия · эмалевое поле",
+   "vision": "r3-lux",
+   "description": "Одно глубокое эмалевое поле #123f30 во всю ширину: «Гарантия до двух лет» крупно бумажным цветом, гильоше-розетка из сотен линий бумажного цвета на краю поля (вытравливается при появлении), три факта набором в колонки с разными ширинами.",
+   "fonts": [],
+   "needs": [
+    "kit/lib/motion.js",
+    "kit/lib/r3lux-engrave.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/warranty/r3-lux-enamel/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-release",
+   "slot": "warranty",
+   "title": "Гарантия · допуск к эксплуатации",
+   "vision": "r3-tech",
+   "description": "Гарантия до двух лет крупной бортовой маркировкой на грунте, рядом три коротких факта: оригинальные детали, бесплатная диагностика, один мастер.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/warranty/r3-tech-release/thumb.jpg"
+  },
+  {
+   "id": "easy-faq",
+   "slot": "faq",
+   "title": "Облако вопросов · легко",
+   "vision": "easy",
+   "description": "Разноцветные покачивающиеся пузыри-вопросы (на телефоне листаются вбок). Нажатие — вопрос «улетает» в чат: событие vf:chat { question, land }. Кнопка «Задать свой вопрос» — vf:chat { ask: true }.",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/faq/easy-faq/thumb.jpg"
+  },
+  {
+   "id": "easy-booking",
+   "slot": "booking",
+   "title": "Заявка одной карточкой · легко",
+   "vision": "easy",
+   "description": "Форма заявки на бесплатную диагностику (имя, телефон с маской, способ связи, марка, описание, фото, согласие, поле-ловушка) — окно на месте панели чата. Открывается vf:book { form: true } или vf:book, если на странице нет чата. Готовую заявку отдаёт событием vf:lead; если чата нет — показывает свою квитанцию.",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [
+    "{{shared}}/lead.js",
+    "{{shared}}/../kit/elements/icons/easy.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/booking/easy-booking/thumb.jpg"
+  },
+  {
+   "id": "fd-lux-booking",
+   "slot": "booking",
+   "title": "Заявка на ночном фоне",
+   "vision": "fd-lux",
+   "description": "Форма заявки на полосе воронёной стали; прототип без отправки.",
+   "fonts": [],
+   "needs": [
+    "{{shared}}/lead.js"
+   ],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "lux-booking",
+   "slot": "booking",
+   "title": "Запись · карточка-приглашение",
+   "vision": "lux",
+   "description": "Полноэкранное тёмное фото и бумажная карточка-приглашение: «Меня зовут ___, мой телефон ___», выбор связи, «Рассказать о часах» (марка, описание, фото), согласие, honeypot. Прототип: ничего не отправляет. Слушает vf:book, шлёт vf:dock.",
+   "fonts": [],
+   "needs": [
+    "{{shared}}/lead.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/booking/lux-booking/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-booking",
+   "slot": "booking",
+   "title": "Заявка на белом листе",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Заявка на белом листе.",
+   "fonts": [],
+   "needs": [
+    "{{shared}}/lead.js"
+   ],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-lux-form",
+   "slot": "booking",
+   "title": "Заявка · полный бланк",
+   "vision": "r3-lux",
+   "description": "Полный бланк записи в микротекстовой рамке: имя, телефон, звонок/Telegram, марка, что с часами (быстрые варианты), фото; согласие ПДн, honeypot, VFLead.validateLead. После успеха — номер бордо и печать «ПРИНЯТО (прототип)», звук stamp. Слушает vf:book (detail.symptom).",
+   "fonts": [],
+   "needs": [
+    "kit/lib/motion.js",
+    "kit/lib/r3lux-engrave.js",
+    "{{shared}}/lead.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/booking/r3-lux-form/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-booking",
+   "slot": "booking",
+   "title": "Заявка · полная карта-наряд",
+   "vision": "r3-tech",
+   "description": "Карта-наряд: имя, телефон, звонок/Telegram, марка, что с часами (быстрые варианты), фото; согласие ПДн, honeypot, проверка VFLead.validateLead, экран «Заявка принята (прототип)». Рядом прямые телефоны и Telegram. Слушает vf:book (detail.symptom).",
+   "fonts": [],
+   "needs": [
+    "{{shared}}/lead.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/booking/r3-tech-booking/thumb.jpg"
+  },
+  {
+   "id": "tech-booking-form",
+   "slot": "booking",
+   "title": "Заявка-прибор: шаги и кольцо прогресса",
+   "vision": "tech",
+   "description": "Одно поле на шаг (имя, телефон, Звонок/Telegram, марка с быстрым выбором, описание и фото, итог и согласие), кольцо 1/6…6/6, проверка VFLead.validateLead, honeypot, экран «Заявка принята (прототип)». Справа оставляет место для панели с data-beside=\"booking\".",
+   "fonts": [],
+   "needs": [
+    "{{shared}}/lead.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/booking/tech-booking-form/thumb.jpg"
+  },
+  {
+   "id": "easy-contacts",
+   "slot": "contacts",
+   "title": "Карта «Как нас найти» · легко",
+   "vision": "easy",
+   "description": "Нарисованная схема (ул. Петровка, прыгающий пин VF), адрес, кнопки «Маршрут» (Яндекс Карты) и «Скопировать адрес» с тостом.",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/contacts/easy-contacts/thumb.jpg"
+  },
+  {
+   "id": "fd-lux-contacts",
+   "slot": "contacts",
+   "title": "Контакты",
+   "vision": "fd-lux",
+   "description": "Адрес, телефоны, Telegram; часы работы — заглушка.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": null
+  },
+  {
+   "id": "lux-contacts",
+   "slot": "contacts",
+   "title": "Контакты · адрес антиквой",
+   "vision": "lux",
+   "description": "Только контакты: адрес Петровка 23/10 стр. 5 со ссылкой на карту, два телефона, Telegram. Для сборок с чужим подвалом (lux-footer уже содержит контакты).",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/contacts/lux-contacts/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-contacts",
+   "slot": "contacts",
+   "title": "Контакты",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Контакты.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-easy-contacts",
+   "slot": "contacts",
+   "title": "Р3 · Контакты · бирка-адрес с корешком",
+   "vision": "r3-easy",
+   "description": "Широкая манильская бирка: слева адрес Петровка, 23/10 стр. 5 крупным нумератором, кнопки «Маршрут» (Яндекс Карты) и «Скопировать адрес», часы работы — заглушка; справа по перфорации корешок с двумя телефонами и Telegram. На телефоне корешок уходит под бирку.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/contacts/r3-easy-contacts/thumb.jpg"
+  },
+  {
+   "id": "r3-lux-contacts",
+   "slot": "contacts",
+   "title": "Контакты · адрес на бумаге",
+   "vision": "r3-lux",
+   "description": "Тихая сцена: адрес Петровка, 23/10 стр. 5 крупно антиквой, телефоны и Telegram, «Маршрут» и «Скопировать адрес»; часы работы — заглушка-маркер.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/contacts/r3-lux-contacts/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-contacts",
+   "slot": "contacts",
+   "title": "Контакты · адрес маркировкой",
+   "vision": "r3-tech",
+   "description": "Тёмный ангар: адрес мастерской крупной маркировкой, ссылка на карту, телефоны и Telegram. Часы работы — заглушка.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/contacts/r3-tech-contacts/thumb.jpg"
+  },
+  {
+   "id": "tech-contacts-reach",
+   "slot": "contacts",
+   "title": "Панель контактов (рядом с заявкой)",
+   "vision": "tech",
+   "description": "Крупные телефоны, Telegram, адрес со ссылкой на карту, часы работы. Сразу после заявки, оставившей место (.ord-side), встаёт справа от неё; иначе — отдельной панелью на всю ширину.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/contacts/tech-contacts-reach/thumb.jpg"
+  },
+  {
+   "id": "easy-footer",
+   "slot": "footer",
+   "title": "Подвал · легко",
+   "vision": "easy",
+   "description": "Оба телефона и Telegram с жёлтым подчёркиванием, список марок, заглушка политики.",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/footer/easy-footer/thumb.jpg"
+  },
+  {
+   "id": "fd-lux-footer",
+   "slot": "footer",
+   "title": "Подвал",
+   "vision": "fd-lux",
+   "description": "Короткий подвал с отступом под мобильную панель.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": null
+  },
+  {
+   "id": "lux-footer",
+   "slot": "footer",
+   "title": "Подвал · знак и адрес",
+   "vision": "lux",
+   "description": "Огромный тиснёный знак VF swiss, поверх — адрес Петровка 23/10 стр. 5 (ссылка на карту), два телефона, Telegram и пометка о прототипе (якорь #policy). Содержит контакты: с ним отдельный слот contacts не нужен.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/footer/lux-footer/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-footer",
+   "slot": "footer",
+   "title": "Подвал",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Подвал.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-easy-footer",
+   "slot": "footer",
+   "title": "Р3 · Подвал · линия отрыва",
+   "vision": "r3-easy",
+   "description": "Тёмный коврик с перфорированной линией отрыва по верхнему краю: знак и слоган VF swiss, адрес, телефоны, Telegram, политика и реквизиты (заглушки).",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/footer/r3-easy-footer/thumb.jpg"
+  },
+  {
+   "id": "r3-lux-footer",
+   "slot": "footer",
+   "title": "Подвал · кромка листа",
+   "vision": "r3-lux",
+   "description": "Кромка ценной бумаги: полоса микротекста, эмблема-розетка, слоган, юридические пометки-заглушки. Внизу запас под плавающую панель связи на телефоне.",
+   "fonts": [],
+   "needs": [
+    "kit/lib/motion.js",
+    "kit/lib/r3lux-engrave.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/footer/r3-lux-footer/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-footer",
+   "slot": "footer",
+   "title": "Подвал · шильдик",
+   "vision": "r3-tech",
+   "description": "Узкая тёмная полоса: марка, слоган владельца, политика ПДн (заглушка).",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": null
+  },
+  {
+   "id": "tech-footer",
+   "slot": "footer",
+   "title": "Подвал в одну строку",
+   "vision": "tech",
+   "description": "Название, адрес и телефоны, «Реквизиты и политика ПДн» (якорь #policy). На телефоне — колонкой с запасом снизу под плавающую панель.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/footer/tech-footer/thumb.jpg"
+  },
+  {
+   "id": "easy-dock",
+   "slot": "dock",
+   "title": "Нижняя панель связи · легко",
+   "vision": "easy",
+   "description": "Плавающая панель «Позвонить / Telegram / Записаться» (красная кнопка шлёт vf:book). Уезжает вниз, пока открыт чат или сторис (событие vf:overlay).",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/dock/easy-dock/thumb.jpg"
+  },
+  {
+   "id": "fd-lux-dock",
+   "slot": "dock",
+   "title": "Панель связи (телефон)",
+   "vision": "fd-lux",
+   "description": "На телефоне: позвонить, Telegram, заявка — внизу экрана.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "lux-dock",
+   "slot": "dock",
+   "title": "Плавающая связь · круглая кнопка",
+   "vision": "lux",
+   "description": "На телефоне — круглая кнопка цвета бумаги с ореолом, раскрывается в «Позвонить» / «Telegram» (на <details>, работает без JS). Прячется по событию vf:dock { hide }.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/dock/lux-dock/thumb.jpg"
+  },
+  {
+   "id": "pm-lux-dock",
+   "slot": "dock",
+   "title": "Нижняя панель связи (телефон)",
+   "vision": "pm-lux",
+   "description": "UI UX Pro Max · дорого-богато: Swiss Style + Premium black/gold, Cormorant и Montserrat. Нижняя панель связи (телефон).",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "r3-easy-dock",
+   "slot": "dock",
+   "title": "Р3 · Док связи · рейка с тремя бирками",
+   "vision": "r3-easy",
+   "description": "Только на телефоне, снизу: Позвонить, Telegram и красная «Записаться» (событие vf:book). Уходит вниз, пока на экране бирка-заявка из первого экрана.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/dock/r3-easy-dock/thumb.jpg"
+  },
+  {
+   "id": "r3-lux-dock",
+   "slot": "dock",
+   "title": "Док связи · нижняя полоса бланка",
+   "vision": "r3-lux",
+   "description": "Только телефон: снизу всегда «Позвонить», «Telegram» и бордовая печать «Записаться». Прячется, пока на экране полный бланк записи.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/dock/r3-lux-dock/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-dock",
+   "slot": "dock",
+   "title": "Док связи · планка обшивки",
+   "vision": "r3-tech",
+   "description": "На телефоне снизу всегда: Позвонить, Telegram и красная бирка «Заявка». Прячется, пока на экране форма заявки.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "tech-dock",
+   "slot": "dock",
+   "title": "Плавающая панель «Позвонить · Telegram · Заявка»",
+   "vision": "tech",
+   "description": "Только на телефоне (≤820px): стеклянная капсула внизу экрана с тремя кнопками; «Заявка» — vf:book.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/dock/tech-dock/thumb.jpg"
+  },
+  {
+   "id": "easy-chat",
+   "slot": "overlay",
+   "title": "Чат с мастером · легко",
+   "vision": "easy",
+   "description": "Главная механика: чат-помощник выезжает снизу (на десктопе — панель справа). Ответы по плиткам и вопросам, быстрые ответы, запись прямо в чате (имя, телефон, способ связи, марка, фото, согласие) и квитанция с конфетти. Открывается событием vf:chat { symptom | question | ask }, перехватывает vf:book (запись в чате) и vf:lead (заявка из формы). «Заполнить формой» шлёт vf:book { form: true }.",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [
+    "{{shared}}/lead.js",
+    "{{shared}}/../kit/elements/icons/easy.js"
+   ],
+   "hasJs": true,
+   "thumb": "kit/components/overlay/easy-chat/thumb.jpg"
+  },
+  {
+   "id": "easy-story",
+   "slot": "overlay",
+   "title": "Просмотр сторис · легко",
+   "vision": "easy",
+   "description": "Полноэкранный просмотр историй мастерской: полоски прогресса, тап влево/вправо, удержание — пауза, свайп вниз — закрыть, Esc и стрелки. Видео ex_*.mp4 и фото. Открывается событием vf:story { group }, сообщает vf:story-seen { group }.",
+   "fonts": [
+    "Nunito:wght@500..900"
+   ],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/overlay/easy-story/thumb.jpg"
+  },
+  {
+   "id": "lib-sound-toggle",
+   "slot": "overlay",
+   "title": "Переключатель звука",
+   "vision": "lib",
+   "description": "Звук интерфейса по умолчанию выключен; кнопка включает и запоминает выбор. Звуки — [data-sound] и событие vf:sound.",
+   "fonts": [],
+   "needs": [
+    "kit/lib/sound.js"
+   ],
+   "hasJs": false,
+   "thumb": null
+  },
+  {
+   "id": "lux-overlay-grain",
+   "slot": "overlay",
+   "title": "Зерно плёнки",
+   "vision": "lux",
+   "description": "Лёгкое плёночное зерно поверх всей страницы (фиксированный слой, не ловит клики).",
+   "fonts": [],
+   "needs": [],
+   "hasJs": false,
+   "thumb": "kit/components/overlay/lux-overlay-grain/thumb.jpg"
+  },
+  {
+   "id": "r3-tech-viewer",
+   "slot": "overlay",
+   "title": "Просмотрщик · смотровое окно",
+   "vision": "r3-tech",
+   "description": "Полноэкранный просмотр кадров и видео верстака (событие vf:view): тёмный ангар, рамка с винтами, листание стрелками, клавишами и свайпом, Esc закрывает.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": null
+  },
+  {
+   "id": "tech-overlay-viewer",
+   "slot": "overlay",
+   "title": "Просмотрщик снимков (полный экран)",
+   "vision": "tech",
+   "description": "Модальный <dialog>: снимок на весь экран, касание — увеличение ×2.6 в точке, свайп и стрелки ←/→. Открывается событием vf:viewer { items, index } от любого блока работ.",
+   "fonts": [],
+   "needs": [],
+   "hasJs": true,
+   "thumb": "kit/components/overlay/tech-overlay-viewer/thumb.jpg"
+  }
+ ],
+ "recipes": [
+  {
+   "name": "easy",
+   "title": "VF swiss · Легко",
+   "tokens": "easy",
+   "buttons": "easy",
+   "fields": "easy",
+   "parts": [
+    "easy-header",
+    "easy-hero",
+    "easy-process",
+    "easy-works",
+    "easy-faq",
+    "easy-contacts",
+    "easy-footer",
+    "easy-dock",
+    "easy-chat",
+    "easy-booking",
+    "easy-story"
+   ]
+  },
+  {
+   "name": "fd-lux",
+   "title": "VF swiss — мастерская швейцарских часов (fd-lux)",
+   "tokens": "fd-lux",
+   "buttons": "fd-lux",
+   "fields": "fd-lux",
+   "parts": [
+    "fd-lux-header",
+    "fd-lux-hero",
+    "fd-lux-story",
+    "fd-lux-services",
+    "fd-lux-process",
+    "fd-lux-works",
+    "fd-lux-brands",
+    "fd-lux-booking",
+    "fd-lux-contacts",
+    "fd-lux-footer",
+    "fd-lux-dock"
+   ]
+  },
+  {
+   "name": "lib-on-lux",
+   "title": "VF swiss · библиотеки поверх lux",
+   "tokens": "lux",
+   "buttons": "lux",
+   "fields": "lux",
+   "icons": "tabler",
+   "sounds": "mechanical",
+   "parts": [
+    "lux-header",
+    "lux-hero",
+    "lib-works-dome",
+    "lib-process-stack",
+    "lib-process-board",
+    "lux-footer",
+    "lib-sound-toggle"
+   ]
+  },
+  {
+   "name": "lib-on-r3-easy",
+   "title": "Бирка + элементы библиотек",
+   "tokens": "r3-easy",
+   "buttons": "r3-easy",
+   "fields": "r3-easy",
+   "icons": "tabler",
+   "sounds": "zen",
+   "parts": [
+    "r3-easy-header",
+    "r3-easy-hero-tag",
+    "r3-easy-services-rail",
+    "lib-process-stack",
+    "lib-process-board",
+    "lib-works-dome",
+    "r3-easy-brands",
+    "r3-easy-contacts",
+    "r3-easy-footer",
+    "r3-easy-dock",
+    "lib-sound-toggle"
+   ]
+  },
+  {
+   "name": "lux",
+   "title": "VF swiss · Дорого-богато",
+   "tokens": "lux",
+   "buttons": "lux",
+   "fields": "lux",
+   "parts": [
+    "lux-header",
+    "lux-hero",
+    "lux-story",
+    "lux-services",
+    "lux-process",
+    "lux-brands",
+    "lux-warranty",
+    "lux-booking",
+    "lux-footer",
+    "lux-dock",
+    "lux-overlay-grain"
+   ]
+  },
+  {
+   "name": "pm-lux",
+   "title": "VF swiss — мастерская швейцарских часов (pm-lux, UI UX Pro Max)",
+   "tokens": "pm-lux",
+   "buttons": "pm-lux",
+   "fields": "pm-lux",
+   "parts": [
+    "pm-lux-header",
+    "pm-lux-hero",
+    "pm-lux-story",
+    "pm-lux-process",
+    "pm-lux-warranty",
+    "pm-lux-works",
+    "pm-lux-services",
+    "pm-lux-brands",
+    "pm-lux-booking",
+    "pm-lux-contacts",
+    "pm-lux-footer",
+    "pm-lux-dock"
+   ]
+  },
+  {
+   "name": "r3-easy",
+   "title": "VF swiss — ремонт швейцарских часов на Петровке",
+   "tokens": "r3-easy",
+   "buttons": "r3-easy",
+   "fields": "r3-easy",
+   "icons": "tabler",
+   "sounds": "zen",
+   "parts": [
+    "r3-easy-header",
+    "r3-easy-hero-tag",
+    "r3-easy-services-rail",
+    "r3-easy-process-card",
+    "r3-easy-works-prints",
+    "r3-easy-brands",
+    "r3-easy-contacts",
+    "r3-easy-footer",
+    "r3-easy-dock",
+    "lib-sound-toggle"
+   ]
+  },
+  {
+   "name": "r3-lux",
+   "title": "VF swiss — ремонт и обслуживание швейцарских часов",
+   "tokens": "r3-lux",
+   "buttons": "r3-lux",
+   "fields": "r3-lux",
+   "icons": "lucide",
+   "sounds": "zen",
+   "parts": [
+    "r3-lux-header",
+    "r3-lux-medallion",
+    "r3-lux-vignettes",
+    "r3-lux-denominations",
+    "r3-lux-serials",
+    "r3-lux-enamel",
+    "r3-lux-brands",
+    "r3-lux-form",
+    "r3-lux-contacts",
+    "r3-lux-footer",
+    "r3-lux-dock",
+    "lib-sound-toggle"
+   ]
+  },
+  {
+   "name": "r3-tech-x",
+   "title": "r3-tech + стопка этапов из библиотек",
+   "tokens": "r3-tech",
+   "buttons": "r3-tech",
+   "fields": "r3-tech",
+   "parts": [
+    "r3-tech-header",
+    "r3-tech-hero-panel",
+    "r3-tech-teardown",
+    "lib-process-stack",
+    "r3-tech-services",
+    "r3-tech-brands",
+    "r3-tech-works",
+    "r3-tech-release",
+    "r3-tech-booking",
+    "r3-tech-contacts",
+    "r3-tech-footer",
+    "r3-tech-dock",
+    "r3-tech-viewer"
+   ],
+   "icons": "tabler"
+  },
+  {
+   "name": "r3-tech",
+   "title": "VF swiss — ремонт и обслуживание швейцарских часов",
+   "tokens": "r3-tech",
+   "buttons": "r3-tech",
+   "fields": "r3-tech",
+   "parts": [
+    "r3-tech-header",
+    "r3-tech-hero-panel",
+    "r3-tech-teardown",
+    "r3-tech-process",
+    "r3-tech-services",
+    "r3-tech-brands",
+    "r3-tech-works",
+    "r3-tech-release",
+    "r3-tech-booking",
+    "r3-tech-contacts",
+    "r3-tech-footer",
+    "r3-tech-dock",
+    "r3-tech-viewer"
+   ]
+  },
+  {
+   "name": "tech",
+   "title": "VF swiss · Технологично",
+   "tokens": "tech",
+   "buttons": "tech",
+   "fields": "tech",
+   "parts": [
+    "tech-header",
+    "tech-hero",
+    "tech-story-explode",
+    "tech-services-bento",
+    "tech-works-loupe",
+    "tech-overlay-viewer",
+    "tech-process-dial",
+    "tech-booking-form",
+    "tech-contacts-reach",
+    "tech-footer",
+    "tech-dock"
+   ]
+  }
+ ]
+}
