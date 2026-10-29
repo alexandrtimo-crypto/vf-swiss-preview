@@ -87,5 +87,16 @@
   document.addEventListener('vf:sound', e => play(e.detail?.name, e.detail));
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => set(on, true)); else set(on, true);
 
-  window.VFSound = { play, set, get enabled() { return on; } };
+  // Фон: тихое тиканье часов («тик-так» из набора звуков), пока включены звук и фон. Запоминается отдельно от звука.
+  let ambOn = false, ambTimer = null, tock = false;
+  try { ambOn = localStorage.getItem('vf-ambient') === 'on'; } catch {}
+  const ambTick = () => { if (!on || !ambOn || document.hidden) return; play('tick', { volume: 0.14, rate: tock ? 0.82 : 1 }); tock = !tock; };
+  function ambient(state) {
+    ambOn = !!state;
+    try { localStorage.setItem('vf-ambient', ambOn ? 'on' : 'off'); } catch {}
+    clearInterval(ambTimer); if (ambOn) ambTimer = setInterval(ambTick, 1000);
+  }
+  if (ambOn) ambTimer = setInterval(ambTick, 1000);
+
+  window.VFSound = { play, set, ambient, get enabled() { return on; }, get ambientOn() { return ambOn; } };
 })();

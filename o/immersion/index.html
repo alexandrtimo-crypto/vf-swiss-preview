@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ru" data-sound-pack="zen"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<title>Погружение и лёгкий режим · наша фишка</title>
+<link rel="icon" href="../../kit/icons/favicon.png"><link rel="stylesheet" href="../../kit/fonts/fonts.css">
+<style>
+:root{--bg:#171512;--bg2:#201d19;--line:#36312b;--text:#f2ede4;--muted:#aba395;--acc:#e6c27a;--acc-ink:#1b160d;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 'Golos Text',system-ui,sans-serif;padding-bottom:150px}
+a{color:var(--acc);text-underline-offset:3px}.vf-wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.vf-strip{display:flex;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line);font-size:14px}.vf-strip span{flex:1;text-align:center;color:var(--muted)}
+.vf-badge{display:inline-block;padding:4px 12px;border-radius:999px;border:1px solid var(--acc);color:var(--acc);font-size:13px;font-weight:600;margin:26px 0 10px}
+h1{font:700 clamp(28px,5vw,46px)/1.08 'Onest',sans-serif;margin:0 0 8px;letter-spacing:-.01em}.vf-en{color:var(--muted);margin:0 0 16px}
+.vf-what{font-size:19px;margin:0 0 8px;max-width:64ch}.vf-why{color:var(--muted);margin:0 0 18px;max-width:64ch}.vf-why b{color:var(--text)}
+.vf-meta{display:flex;gap:10px 22px;flex-wrap:wrap;color:var(--muted);font-size:14.5px;margin:0 0 18px}
+.vf-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;background:var(--acc);color:var(--acc-ink);font-weight:600;text-decoration:none;font-size:15px}.vf-btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.vf-stage{margin:18px 0 20px;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative;padding:16px;background:#0b0a10;color:#f4f4f5}
+.vf-hb{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px;justify-items:center}.vf-hb figure{margin:0;text-align:center}.vf-hb figcaption{font-size:12.5px;color:#6b6558}
+details{margin:8px 0}summary{cursor:pointer;color:var(--acc);padding:8px 0}pre{margin:8px 0 0;padding:14px;border-radius:12px;background:#0f0e0c;border:1px solid var(--line);overflow:auto;max-height:480px;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#d8d2c4}
+.vf-note{color:var(--muted);font-size:14px}
+</style></head><body><script>// VF kit · режим погружения. Анимации и звук включаются отдельно; «лёгкий режим» = оба выключены (слабые устройства, экономия трафика).
+// Выбор анимаций хранится в 'vf-motion' ('on' | 'off'). Пока выбора нет, лёгкий режим включается сам, если система просит меньше движения
+// (prefers-reduced-motion), включена экономия трафика или у устройства ≤2 ГБ памяти. Ссылка с ?mode=lite или ?mode=full задаёт выбор явно.
+// Как работает «выкл»: правила @media (prefers-reduced-motion: reduce) всех компонентов включаются принудительно, matchMedia для них
+// отвечает «reduce», видео с автозапуском останавливаются. Это тот же путь, что у людей с настройкой «уменьшить движение», он проверен в каждом компоненте.
+// Подключать в самом начале <body>, до скриптов компонентов. Переключение применяется после перезагрузки страницы (JS компонентов читает настройку при старте).
+(() => {
+  if (window.VFMode) return;
+  const KEY = 'vf-motion';
+  const doc = document.documentElement;
+  const native = window.matchMedia.bind(window);
+  let stored = null;
+  try {
+    const q = new URLSearchParams(location.search).get('mode');
+    if (q === 'lite' || q === 'full') localStorage.setItem(KEY, q === 'lite' ? 'off' : 'on');
+    stored = localStorage.getItem(KEY);
+  } catch {}
+  const sys = native('(prefers-reduced-motion: reduce)').matches;
+  const conn = navigator.connection;
+  const weak = !!(conn && conn.saveData) || (navigator.deviceMemory && navigator.deviceMemory <= 2);
+  const auto = !stored && !!(sys || weak);
+  const lite = stored ? stored === 'off' : auto;
+  doc.dataset.motion = lite ? 'off' : 'on';
+  doc.dataset.motionAuto = auto ? 'yes' : 'no';
+
+  const RE_REDUCE = /\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)/g;
+  const RE_NOPREF = /\(\s*prefers-reduced-motion\s*:\s*no-preference\s*\)/g;
+
+  if (lite) {
+    // JS компонентов: matchMedia('(prefers-reduced-motion: …)') отвечает так, будто движение отключено
+    window.matchMedia = q => {
+      const m = native(q);
+      if (typeof q !== 'string' || !/prefers-reduced-motion/.test(q)) return m;
+      const val = RE_REDUCE.test(q) && !/not\s+all/.test(q); RE_REDUCE.lastIndex = 0;
+      return new Proxy(m, { get: (t, p) => (p === 'matches' ? val : typeof t[p] === 'function' ? t[p].bind(t) : t[p]) });
+    };
+    // CSS компонентов: условия reduced-motion становятся всегда истинными, no-preference — всегда ложными
+    const flip = () => {
+      const walk = rules => { for (const r of rules) { if (r.cssRules) { if (r.media && !r.__vf) { const t = r.media.mediaText; if (RE_REDUCE.test(t) || RE_NOPREF.test(t)) { r.media.mediaText = t.replace(RE_REDUCE, '(min-width: 0px)').replace(RE_NOPREF, '(min-width: 99999px)'); r.__vf = 1; } RE_REDUCE.lastIndex = RE_NOPREF.lastIndex = 0; } walk(r.cssRules); } } };
+      for (const sh of document.styleSheets) { try { walk(sh.cssRules); } catch {} }
+    };
+    flip();
+    // Видео с автозапуском: стоп, пока человек сам не нажмёт
+    const stopVideos = () => document.querySelectorAll('video').forEach(v => {
+      if (v.dataset.vfLite) return; v.dataset.vfLite = '1';
+      v.autoplay = false; v.removeAttribute('autoplay'); v.preload = 'metadata'; v.pause();
+      v.addEventListener('play', e => { if (!v.dataset.vfUser) v.pause(); });
+      v.addEventListener('click', () => { v.dataset.vfUser = '1'; });
+    });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { flip(); stopVideos(); }); else stopVideos();
+    window.addEventListener('load', () => { flip(); stopVideos(); });
+  }
+
+  const emit = () => document.dispatchEvent(new CustomEvent('vf:mode', { detail: api.state() }));
+  const paint = () => {
+    document.querySelectorAll('[data-motion-toggle]').forEach(b => { b.setAttribute('aria-pressed', !lite); b.dataset.state = lite ? 'off' : 'on'; b.dataset.auto = auto ? 'yes' : 'no'; });
+  };
+  const api = {
+    get motion() { return !lite; },
+    get auto() { return auto; },
+    get sound() { return !!(window.VFSound && window.VFSound.enabled); },
+    get ambient() { return !!(window.VFSound && window.VFSound.ambientOn); },
+    state() { return { motion: !lite, sound: api.sound, ambient: api.ambient, auto, lite: lite && !api.sound }; },
+    // Анимации: применяется после перезагрузки (небольшая пауза, чтобы успел прозвучать подтверждающий сигнал)
+    setMotion(on, delay = 120) {
+      if (on === !lite) return;
+      try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch {}
+      setTimeout(() => { const u = new URL(location.href); u.searchParams.delete('mode'); location.replace(u.toString()); }, delay);
+    },
+    setSound(on) { if (window.VFSound) { window.VFSound.set(on); if (!on) window.VFSound.ambient(false); } emit(); },
+    // «Включить погружение»: звук + тихий фон + анимации. «Лёгкий режим»: всё выключено.
+    setImmersive(on) {
+      if (window.VFSound) { window.VFSound.set(on); window.VFSound.ambient(on); }
+      emit();
+      api.setMotion(on, on ? 700 : 120);
+    },
+  };
+  window.VFMode = api;
+
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-motion-toggle]');
+    if (t) api.setMotion(lite);
+  });
+  document.addEventListener('vf:mode', paint);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint); else paint();
+})();
+</script>
+<div class="vf-strip"><a href="../../#biblioteka">← Библиотека возможностей</a><span>Погружение и лёгкий режим</span><a href="../../opros/">Опрос</a></div>
+<div class="vf-wrap">
+  <span class="vf-badge">Наша фишка · не из библиотеки</span>
+  <h1>Погружение и лёгкий режим</h1><p class="vf-en">immersion</p>
+  <p class="vf-what">Кнопка «Включить погружение» запускает звуки и анимации. Для слабых устройств есть лёгкий режим: без анимаций, звуков и фонового видео. Нажмите кнопку и посмотрите, что меняется.</p>
+  <div class="vf-stage"><style>
+.imm{font-family:'Golos Text',system-ui,sans-serif;color:#f4f4f5}.imm *{box-sizing:border-box}
+.imm__bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 16px;border-radius:14px;background:#15131a;border:1px solid #2b2733}
+.imm__bar b{font:700 17px/1 'Onest',sans-serif;letter-spacing:.04em;margin-right:auto}.imm__bar span{color:#a6a1b4;font-size:14px}
+.imm__btn{all:unset;cursor:pointer;position:relative;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:#e6c27a;color:#1b160d;font:600 15px/1.2 'Golos Text',sans-serif}
+.imm__btn:focus-visible,.imm__lite:focus-visible,.imm__row button:focus-visible{outline:2px solid #e6c27a;outline-offset:3px}
+.imm__btn .on{display:none}.imm__btn[data-on=yes] .on{display:inline}.imm__btn[data-on=yes] .off{display:none}.imm__btn[data-on=yes]{background:#2c3a2f;color:#cdeed6;box-shadow:inset 0 0 0 1px #7ed39a}
+.imm__body{display:grid;grid-template-columns:240px 1fr;gap:28px;align-items:center;padding:26px 8px 8px}
+.imm__dial{position:relative;width:220px;height:220px;border-radius:50%;margin:auto;background:radial-gradient(circle at 50% 40%,#2a2733,#15131a);border:2px solid #4b4559;box-shadow:inset 0 0 0 10px #15131a,inset 0 0 0 11px #3a3547}
+.imm__dial i{position:absolute;left:50%;bottom:50%;transform-origin:50% 100%;background:#f4f4f5;border-radius:3px}
+.imm__dial .h{width:6px;height:54px;margin-left:-3px;transform:rotate(60deg)}.imm__dial .m{width:4px;height:80px;margin-left:-2px;transform:rotate(200deg)}.imm__dial .s{width:2px;height:90px;margin-left:-1px;background:#e5484d;transform:rotate(0deg)}
+.imm__dial::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px;border-radius:50%;background:#e6c27a}
+.imm__h{font:700 clamp(24px,4vw,36px)/1.1 'Onest',sans-serif;margin:0 0 10px}.imm p{margin:0 0 12px;color:#c9c5d3;max-width:56ch}
+.imm__st{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0 0 14px;font-size:15px}.imm__st dt{color:#a6a1b4}.imm__st dd{margin:0;font-weight:600}
+.imm__row{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}.imm__row button,.imm__lite{all:unset;cursor:pointer;padding:9px 14px;border-radius:10px;border:1px solid #4b4559;color:#f4f4f5;font:500 14px/1.2 'Golos Text',sans-serif}
+.imm__row button:hover,.imm__lite:hover{border-color:#e6c27a}.imm__auto{color:#e6c27a!important;font-size:14px}
+@media (prefers-reduced-motion:no-preference){
+  .imm__dial .s{animation:immsec 60s linear infinite}.imm__dial .m{animation:immmin 3600s linear infinite}
+  .imm__h{animation:immrise .9s cubic-bezier(.22,1,.36,1) both}.imm p{animation:immrise .9s .12s cubic-bezier(.22,1,.36,1) both}
+  .imm__btn[data-on=no]::after{content:"";position:absolute;inset:-4px;border-radius:999px;border:2px solid #e6c27a;animation:immring 2.4s ease-out infinite}
+}
+@keyframes immsec{to{transform:rotate(360deg)}}@keyframes immmin{from{transform:rotate(200deg)}to{transform:rotate(560deg)}}
+@keyframes immrise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@keyframes immring{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(1.18)}}
+@media (max-width:640px){.imm__body{grid-template-columns:1fr}.imm__dial{width:180px;height:180px}.imm__dial .s{height:72px}.imm__dial .m{height:64px}.imm__dial .h{height:44px}}
+</style><div class="imm">
+  <div class="imm__bar"><b>VF swiss</b><span>8 (965) 171-69-96</span>
+    <button class="imm__btn" id="immBtn" type="button" data-on="no"><span class="off">Включить погружение</span><span class="on">Погружение включено</span></button></div>
+  <div class="imm__body">
+    <div class="imm__dial" aria-hidden="true"><i class="h"></i><i class="m"></i><i class="s"></i></div>
+    <div>
+      <h2 class="imm__h">Часы, которые слышно</h2>
+      <p>Погружение добавляет звуки к анимациям и тихое тиканье часов на фоне. По умолчанию сайт спокойный и тихий, клиент сам решает, включать ли.</p>
+      <dl class="imm__st"><dt>Анимации</dt><dd id="stM"></dd><dt>Звук</dt><dd id="stS"></dd><dt>Тиканье на фоне</dt><dd id="stA"></dd></dl>
+      <div class="imm__row"><button type="button" data-sound="click">Щелчок</button><button type="button" data-sound="stamp">Штамп «Принято»</button><button type="button" data-sound="success">Готово</button></div>
+      <button class="imm__lite" id="immLite" type="button">Лёгкий режим: без анимаций и звуков</button>
+      <p class="imm__auto" id="stAuto" style="margin-top:12px"></p>
+    </div>
+  </div>
+</div></div>
+  <p class="vf-why"><b>Для сайта мастерской:</b> Клиент сам выбирает, насколько «живым» будет сайт: по умолчанию спокойный и быстрый, по кнопке — со звуком и движением. На слабом телефоне или медленном интернете лёгкий режим включается сам.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="vf-btn vf-btn--ghost" href="../../v/r3-lux/#r3-lux-header">Как это в нашей сборке: выключатели вверху любого макета</a></div>
+  
+  <p class="vf-note">Это наша разработка: в сайт встраивается как есть, цвета берёт у выбранного дизайна.</p>
+  
+</div>
+<style>#vfq{all:initial;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:2147483000;width:min(560px,calc(100vw - 16px));box-sizing:border-box;padding:8px;border-radius:18px;background:rgba(23,21,18,.97);border:1px solid #4a443c;box-shadow:0 10px 30px rgba(0,0,0,.55);font:600 14px/1.2 system-ui,sans-serif;color:#f2ede4}
+#vfq *{box-sizing:border-box;font:inherit}
+#vfq .q{display:grid;grid-template-columns:44px 1.25fr 1fr 1.25fr;gap:6px}
+#vfq button,#vfq a.b{display:flex;align-items:center;justify-content:center;white-space:nowrap;min-height:46px;padding:0 8px;border-radius:12px;border:1px solid #4a443c;background:transparent;color:#f2ede4;text-decoration:none;cursor:pointer}
+#vfq .go{background:#e6c27a;color:#1b160d;border-color:#e6c27a}
+#vfq .like[aria-pressed=true]{background:#e6c27a22;border-color:#e6c27a;color:#e6c27a}
+#vfq .meta{display:flex;justify-content:space-between;padding:8px 4px 0;color:#aba395;font-weight:500;font-size:12.5px}
+#vfq .meta a{color:#e6c27a;text-decoration:none}
+#vfq textarea{display:none;width:100%;margin:0 0 8px;padding:10px 12px;border-radius:12px;border:1px solid #4a443c;background:#201d19;color:#f2ede4;min-height:68px;resize:vertical;font-weight:500}
+#vfq.open textarea{display:block}</style>
+<div id="vfq" role="region" aria-label="Оценка элемента">
+  <textarea placeholder="Что понравилось? Что поменять? Одной фразой — это уйдёт в ответ."></textarea>
+  <div class="q">
+    <a class="b" href="../hamburgers/" aria-label="Назад">←</a>
+    <button type="button" class="like" aria-pressed="false">♡ Хочу это</button>
+    <button type="button" class="cm">Заметка</button>
+    <a class="b go" href="../../opros/">К опросу →</a>
+  </div>
+  <div class="meta"><span>Приём 14 из 14</span><a href="../../#biblioteka">Вся библиотека</a></div>
+</div>
+<script>(function(){var C={"id":"immersion","key":"vf-opros-v1","n":14,"i":13,"prev":"../hamburgers/","next":"../../opros/","last":true,"lift":false};var S;try{S=JSON.parse(localStorage.getItem(C.key)||'{}')}catch(e){S={}}S.e=S.e||{};S.ec=S.ec||{};
+var q=document.getElementById('vfq');var like=q.querySelector('.like'),note=q.querySelector('textarea');
+function save(){try{localStorage.setItem(C.key,JSON.stringify(S))}catch(e){}}
+function paint(){like.setAttribute('aria-pressed',!!S.e[C.id]);like.textContent=S.e[C.id]?'\u2665 Хочу это':'\u2661 Хочу это'}
+note.value=S.ec[C.id]||'';if(note.value)q.classList.add('open');paint();
+like.onclick=function(){S.e[C.id]=!S.e[C.id];save();paint()};
+q.querySelector('.cm').onclick=function(){q.classList.toggle('open');if(q.classList.contains('open'))note.focus()};
+note.oninput=function(){S.ec[C.id]=note.value;save()};
+})();</script>
+<script>// VF kit · звуковой слой. По умолчанию ВЫКЛЮЧЕН: включает посетитель (переключатель [data-sound-toggle]),
+// выбор запоминается. Звук только в ответ на действие: [data-sound="click|tick|wind|stamp|tear|paper|success|error"].
+// Файлы — kit/sounds/<имя>.{ogg,mp3} (CC0, источники — kit/sounds/SOURCES.md); если файла нет — короткий синтез Web Audio.
+(() => {
+  if (window.VFSound) return;
+  const KEY = 'vf-sound';
+  const PACK = () => document.documentElement.dataset.soundPack || 'mechanical';
+  let ctx = null, on = false;
+  const buffers = new Map();
+  try { on = localStorage.getItem(KEY) === 'on'; } catch {}
+
+  const ac = () => (ctx ||= new (window.AudioContext || window.webkitAudioContext)());
+
+  async function load(name) {
+    if (buffers.has(name)) return buffers.get(name);
+    const p = (async () => {
+      for (const ext of ['ogg', 'mp3']) {
+        try {
+          const r = await fetch(`../../kit/sounds/${PACK()}/${name}.${ext}`);
+          if (r.ok) return await ac().decodeAudioData(await r.arrayBuffer());
+        } catch {}
+      }
+      return null;
+    })();
+    buffers.set(name, p);
+    return p;
+  }
+
+  // Синтез на случай отсутствия файла: короткий механический щелчок/тик
+  function synth(name, gain) {
+    const a = ac(), t = a.currentTime;
+    const freq = { tick: 3200, click: 1800, wind: 900, stamp: 140, tear: 600, paper: 500, success: 880, error: 220 }[name] || 1500;
+    const len = name === 'stamp' ? 0.12 : name === 'success' ? 0.18 : 0.035;
+    const osc = a.createOscillator(), g = a.createGain();
+    osc.type = name === 'stamp' || name === 'error' ? 'triangle' : 'square';
+    osc.frequency.setValueAtTime(freq, t);
+    if (name === 'success') osc.frequency.exponentialRampToValueAtTime(freq * 1.5, t + len);
+    g.gain.setValueAtTime(gain * 0.25, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+    osc.connect(g).connect(a.destination);
+    osc.start(t); osc.stop(t + len + 0.02);
+  }
+
+  async function play(name, { volume = 0.6, rate = 1 } = {}) {
+    if (!on || !name) return;
+    const a = ac(); if (a.state === 'suspended') await a.resume().catch(() => {});
+    const buf = await load(name);
+    if (!buf) return synth(name, volume);
+    const src = a.createBufferSource(), g = a.createGain();
+    src.buffer = buf; src.playbackRate.value = rate * (0.97 + Math.random() * 0.06); // живой разброс
+    g.gain.value = volume;
+    src.connect(g).connect(a.destination); src.start();
+  }
+
+  // iPhone глушит веб-звук беззвучным переключателем, пока страница не «играет медиа»: переводим сессию в playback
+  // и один раз проигрываем тишину (после жеста пользователя)
+  let unlocked = false;
+  function unlock() {
+    if (unlocked) return; unlocked = true;
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
+    try {
+      const n = 4410, b = new DataView(new ArrayBuffer(44 + n * 2));
+      const w = (o, t) => [...t].forEach((c, i) => b.setUint8(o + i, c.charCodeAt(0)));
+      w(0, 'RIFF'); b.setUint32(4, 36 + n * 2, true); w(8, 'WAVEfmt '); b.setUint32(16, 16, true); b.setUint16(20, 1, true); b.setUint16(22, 1, true);
+      b.setUint32(24, 44100, true); b.setUint32(28, 88200, true); b.setUint16(32, 2, true); b.setUint16(34, 16, true); w(36, 'data'); b.setUint32(40, n * 2, true);
+      const a = new Audio(URL.createObjectURL(new Blob([b], { type: 'audio/wav' })));
+      a.play().catch(() => {});
+    } catch {}
+  }
+
+  function set(state, silent = false) {
+    on = state;
+    try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch {}
+    document.querySelectorAll('[data-sound-toggle]').forEach(b => { b.setAttribute('aria-pressed', on); b.dataset.state = on ? 'on' : 'off'; });
+    if (on) unlock();
+    if (on && !silent) play('success', { volume: 0.7 });   // слышимое подтверждение: звук включён
+  }
+
+  // Делегирование: звук по атрибуту на любом элементе, без правки компонентов
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-sound-toggle]');
+    if (t) { set(!on); return; }
+    const s = e.target.closest('[data-sound]');
+    if (s) play(s.dataset.sound);
+  });
+  // События компонентов: vf:sound { detail: { name } } — например, отрыв талона или штамп после анимации
+  document.addEventListener('vf:sound', e => play(e.detail?.name, e.detail));
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => set(on, true)); else set(on, true);
+
+  // Фон: тихое тиканье часов («тик-так» из набора звуков), пока включены звук и фон. Запоминается отдельно от звука.
+  let ambOn = false, ambTimer = null, tock = false;
+  try { ambOn = localStorage.getItem('vf-ambient') === 'on'; } catch {}
+  const ambTick = () => { if (!on || !ambOn || document.hidden) return; play('tick', { volume: 0.14, rate: tock ? 0.82 : 1 }); tock = !tock; };
+  function ambient(state) {
+    ambOn = !!state;
+    try { localStorage.setItem('vf-ambient', ambOn ? 'on' : 'off'); } catch {}
+    clearInterval(ambTimer); if (ambOn) ambTimer = setInterval(ambTick, 1000);
+  }
+  if (ambOn) ambTimer = setInterval(ambTick, 1000);
+
+  window.VFSound = { play, set, ambient, get enabled() { return on; }, get ambientOn() { return ambOn; } };
+})();
+</script>
+<script>(function(){
+var btn=document.getElementById('immBtn');
+function t(on,a,b){return on?a:b}
+function paint(){var s=VFMode.state();document.getElementById('stM').textContent=t(s.motion,'включены','выключены');document.getElementById('stS').textContent=t(s.sound,'включён','выключен');document.getElementById('stA').textContent=t(s.ambient&&s.sound,'включено','выключено');
+ btn.dataset.on=(s.motion&&s.sound)?'yes':'no';document.getElementById('stAuto').textContent=s.auto?'Лёгкий режим включился сам: система или устройство просят меньше движения. Нажмите «Включить погружение», чтобы вернуть анимации и звук.':''}
+btn.onclick=function(){VFMode.setImmersive(!(VFMode.motion&&VFMode.sound))};
+document.getElementById('immLite').onclick=function(){VFMode.setImmersive(false)};
+document.addEventListener('vf:mode',paint);paint();
+})();</script>
+</body></html>

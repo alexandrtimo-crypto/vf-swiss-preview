@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-sound-pack="glass" data-recipe="fd-lux">
+<html lang="ru" data-recipe="fd-lux">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -296,8 +296,97 @@ textarea.vf-input { min-height: 96px; resize: vertical; }
 
 </style>
 </head>
-<body class="vf-page"><div style="all:initial;display:flex;gap:14px;align-items:center;padding:8px 16px;background:#171512;color:#aba395;font:500 13px/1.3 system-ui,sans-serif">
-<a href="../../#makety" style="color:#e6c27a;text-decoration:none">← Макеты</a><span style="flex:1;text-align:center">«Классика · официальный скилл»</span><button type="button" data-sound-toggle aria-pressed="false" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;border:1px solid #6b5a40;color:#e6c27a;font:600 13px/1.2 system-ui,sans-serif;white-space:nowrap"><span class="vfs-off">🔇 Звук</span><span class="vfs-on" style="display:none">🔊 Звук вкл.</span></button><style>[data-sound-toggle][data-state=on] .vfs-off{display:none}[data-sound-toggle][data-state=on] .vfs-on{display:inline!important}[data-sound-toggle][data-state=on]{background:#e6c27a22!important}</style><a href="../../opros/" style="color:#e6c27a;text-decoration:none">Опрос</a></div>
+<body class="vf-page"><script>// VF kit · режим погружения. Анимации и звук включаются отдельно; «лёгкий режим» = оба выключены (слабые устройства, экономия трафика).
+// Выбор анимаций хранится в 'vf-motion' ('on' | 'off'). Пока выбора нет, лёгкий режим включается сам, если система просит меньше движения
+// (prefers-reduced-motion), включена экономия трафика или у устройства ≤2 ГБ памяти. Ссылка с ?mode=lite или ?mode=full задаёт выбор явно.
+// Как работает «выкл»: правила @media (prefers-reduced-motion: reduce) всех компонентов включаются принудительно, matchMedia для них
+// отвечает «reduce», видео с автозапуском останавливаются. Это тот же путь, что у людей с настройкой «уменьшить движение», он проверен в каждом компоненте.
+// Подключать в самом начале <body>, до скриптов компонентов. Переключение применяется после перезагрузки страницы (JS компонентов читает настройку при старте).
+(() => {
+  if (window.VFMode) return;
+  const KEY = 'vf-motion';
+  const doc = document.documentElement;
+  const native = window.matchMedia.bind(window);
+  let stored = null;
+  try {
+    const q = new URLSearchParams(location.search).get('mode');
+    if (q === 'lite' || q === 'full') localStorage.setItem(KEY, q === 'lite' ? 'off' : 'on');
+    stored = localStorage.getItem(KEY);
+  } catch {}
+  const sys = native('(prefers-reduced-motion: reduce)').matches;
+  const conn = navigator.connection;
+  const weak = !!(conn && conn.saveData) || (navigator.deviceMemory && navigator.deviceMemory <= 2);
+  const auto = !stored && !!(sys || weak);
+  const lite = stored ? stored === 'off' : auto;
+  doc.dataset.motion = lite ? 'off' : 'on';
+  doc.dataset.motionAuto = auto ? 'yes' : 'no';
+
+  const RE_REDUCE = /\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)/g;
+  const RE_NOPREF = /\(\s*prefers-reduced-motion\s*:\s*no-preference\s*\)/g;
+
+  if (lite) {
+    // JS компонентов: matchMedia('(prefers-reduced-motion: …)') отвечает так, будто движение отключено
+    window.matchMedia = q => {
+      const m = native(q);
+      if (typeof q !== 'string' || !/prefers-reduced-motion/.test(q)) return m;
+      const val = RE_REDUCE.test(q) && !/not\s+all/.test(q); RE_REDUCE.lastIndex = 0;
+      return new Proxy(m, { get: (t, p) => (p === 'matches' ? val : typeof t[p] === 'function' ? t[p].bind(t) : t[p]) });
+    };
+    // CSS компонентов: условия reduced-motion становятся всегда истинными, no-preference — всегда ложными
+    const flip = () => {
+      const walk = rules => { for (const r of rules) { if (r.cssRules) { if (r.media && !r.__vf) { const t = r.media.mediaText; if (RE_REDUCE.test(t) || RE_NOPREF.test(t)) { r.media.mediaText = t.replace(RE_REDUCE, '(min-width: 0px)').replace(RE_NOPREF, '(min-width: 99999px)'); r.__vf = 1; } RE_REDUCE.lastIndex = RE_NOPREF.lastIndex = 0; } walk(r.cssRules); } } };
+      for (const sh of document.styleSheets) { try { walk(sh.cssRules); } catch {} }
+    };
+    flip();
+    // Видео с автозапуском: стоп, пока человек сам не нажмёт
+    const stopVideos = () => document.querySelectorAll('video').forEach(v => {
+      if (v.dataset.vfLite) return; v.dataset.vfLite = '1';
+      v.autoplay = false; v.removeAttribute('autoplay'); v.preload = 'metadata'; v.pause();
+      v.addEventListener('play', e => { if (!v.dataset.vfUser) v.pause(); });
+      v.addEventListener('click', () => { v.dataset.vfUser = '1'; });
+    });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { flip(); stopVideos(); }); else stopVideos();
+    window.addEventListener('load', () => { flip(); stopVideos(); });
+  }
+
+  const emit = () => document.dispatchEvent(new CustomEvent('vf:mode', { detail: api.state() }));
+  const paint = () => {
+    document.querySelectorAll('[data-motion-toggle]').forEach(b => { b.setAttribute('aria-pressed', !lite); b.dataset.state = lite ? 'off' : 'on'; b.dataset.auto = auto ? 'yes' : 'no'; });
+  };
+  const api = {
+    get motion() { return !lite; },
+    get auto() { return auto; },
+    get sound() { return !!(window.VFSound && window.VFSound.enabled); },
+    get ambient() { return !!(window.VFSound && window.VFSound.ambientOn); },
+    state() { return { motion: !lite, sound: api.sound, ambient: api.ambient, auto, lite: lite && !api.sound }; },
+    // Анимации: применяется после перезагрузки (небольшая пауза, чтобы успел прозвучать подтверждающий сигнал)
+    setMotion(on, delay = 120) {
+      if (on === !lite) return;
+      try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch {}
+      setTimeout(() => { const u = new URL(location.href); u.searchParams.delete('mode'); location.replace(u.toString()); }, delay);
+    },
+    setSound(on) { if (window.VFSound) { window.VFSound.set(on); if (!on) window.VFSound.ambient(false); } emit(); },
+    // «Включить погружение»: звук + тихий фон + анимации. «Лёгкий режим»: всё выключено.
+    setImmersive(on) {
+      if (window.VFSound) { window.VFSound.set(on); window.VFSound.ambient(on); }
+      emit();
+      api.setMotion(on, on ? 700 : 120);
+    },
+  };
+  window.VFMode = api;
+
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-motion-toggle]');
+    if (t) api.setMotion(lite);
+  });
+  document.addEventListener('vf:mode', paint);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint); else paint();
+})();
+</script><div id="vfstrip" style="all:initial;display:block;background:#171512;color:#aba395;font:500 13px/1.3 system-ui,sans-serif">
+<div style="display:flex;gap:12px;align-items:center;padding:8px 16px 4px"><a href="../../#makety" style="color:#e6c27a;text-decoration:none;white-space:nowrap">← Макеты</a><span style="flex:1;text-align:center">«Классика · официальный скилл»</span><a href="../../opros/" style="color:#e6c27a;text-decoration:none">Опрос</a></div>
+<div style="display:flex;gap:8px;align-items:center;padding:2px 16px 9px;flex-wrap:wrap"><button type="button" data-motion-toggle aria-pressed="true" data-state="on" title="Включить или выключить анимации" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;border:1px solid #4a443c;color:#f2ede4;font:600 13px/1.2 system-ui,sans-serif;white-space:nowrap"><i class="vfd"></i>Анимации <b class="vfo">выкл</b><b class="vfn">вкл</b></button>
+<button type="button" data-sound-toggle aria-pressed="false" title="Включить или выключить звук" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;border:1px solid #4a443c;color:#f2ede4;font:600 13px/1.2 system-ui,sans-serif;white-space:nowrap"><i class="vfd"></i>Звук <b class="vfo">выкл</b><b class="vfn">вкл</b></button>
+<style>#vfstrip .vfd{width:8px;height:8px;border-radius:50%;background:#6b5a40;display:inline-block}#vfstrip [data-state=on] .vfd{background:#7ed39a}#vfstrip b{font-weight:500}#vfstrip .vfn{display:none;color:#7ed39a;font-weight:600}#vfstrip [data-state=on] .vfn{display:inline}#vfstrip [data-state=on] .vfo{display:none}#vfstrip .vfo{color:#aba395}#vfstrip button:focus-visible,#vfstrip a:focus-visible{outline:2px solid #e6c27a;outline-offset:2px}#vfstrip [data-motion-toggle][data-auto=yes][data-state=off]::after{content:"· авто";color:#aba395}</style><a href="../../o/immersion/" style="color:#e6c27a;text-decoration:none;margin-left:2px">Что это?</a></div></div>
 <header data-part="fd-lux-header" data-slot="header" class="fd-lux-header">
   <div class="fd-lux-header__in">
     <a class="fd-lux-header__mark" href="#top" aria-label="VF swiss — в начало">VF swiss</a>
@@ -624,98 +713,5 @@ VFKit.register('fd-lux-dock', root => {
 </script>
 <script>VFKit.boot();</script>
 <script>(()=>{const p=decodeURIComponent(location.hash.slice(1));const el=p&&document.querySelector('[data-part="'+CSS.escape(p)+'"]');if(!el)return;setTimeout(()=>{el.scrollIntoView({block:'start'});el.style.outline='3px solid #e6c27a';el.style.outlineOffset='-3px';setTimeout(()=>{el.style.outline=''},2600)},400)})()</script>
-<script>// VF kit · звуковой слой. По умолчанию ВЫКЛЮЧЕН: включает посетитель (переключатель [data-sound-toggle]),
-// выбор запоминается. Звук только в ответ на действие: [data-sound="click|tick|wind|stamp|tear|paper|success|error"].
-// Файлы — kit/sounds/<имя>.{ogg,mp3} (CC0, источники — kit/sounds/SOURCES.md); если файла нет — короткий синтез Web Audio.
-(() => {
-  if (window.VFSound) return;
-  const KEY = 'vf-sound';
-  const PACK = () => document.documentElement.dataset.soundPack || 'mechanical';
-  let ctx = null, on = false;
-  const buffers = new Map();
-  try { on = localStorage.getItem(KEY) === 'on'; } catch {}
-
-  const ac = () => (ctx ||= new (window.AudioContext || window.webkitAudioContext)());
-
-  async function load(name) {
-    if (buffers.has(name)) return buffers.get(name);
-    const p = (async () => {
-      for (const ext of ['ogg', 'mp3']) {
-        try {
-          const r = await fetch(`../../kit/sounds/${PACK()}/${name}.${ext}`);
-          if (r.ok) return await ac().decodeAudioData(await r.arrayBuffer());
-        } catch {}
-      }
-      return null;
-    })();
-    buffers.set(name, p);
-    return p;
-  }
-
-  // Синтез на случай отсутствия файла: короткий механический щелчок/тик
-  function synth(name, gain) {
-    const a = ac(), t = a.currentTime;
-    const freq = { tick: 3200, click: 1800, wind: 900, stamp: 140, tear: 600, paper: 500, success: 880, error: 220 }[name] || 1500;
-    const len = name === 'stamp' ? 0.12 : name === 'success' ? 0.18 : 0.035;
-    const osc = a.createOscillator(), g = a.createGain();
-    osc.type = name === 'stamp' || name === 'error' ? 'triangle' : 'square';
-    osc.frequency.setValueAtTime(freq, t);
-    if (name === 'success') osc.frequency.exponentialRampToValueAtTime(freq * 1.5, t + len);
-    g.gain.setValueAtTime(gain * 0.25, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + len);
-    osc.connect(g).connect(a.destination);
-    osc.start(t); osc.stop(t + len + 0.02);
-  }
-
-  async function play(name, { volume = 0.6, rate = 1 } = {}) {
-    if (!on || !name) return;
-    const a = ac(); if (a.state === 'suspended') await a.resume().catch(() => {});
-    const buf = await load(name);
-    if (!buf) return synth(name, volume);
-    const src = a.createBufferSource(), g = a.createGain();
-    src.buffer = buf; src.playbackRate.value = rate * (0.97 + Math.random() * 0.06); // живой разброс
-    g.gain.value = volume;
-    src.connect(g).connect(a.destination); src.start();
-  }
-
-  // iPhone глушит веб-звук беззвучным переключателем, пока страница не «играет медиа»: переводим сессию в playback
-  // и один раз проигрываем тишину (после жеста пользователя)
-  let unlocked = false;
-  function unlock() {
-    if (unlocked) return; unlocked = true;
-    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
-    try {
-      const n = 4410, b = new DataView(new ArrayBuffer(44 + n * 2));
-      const w = (o, t) => [...t].forEach((c, i) => b.setUint8(o + i, c.charCodeAt(0)));
-      w(0, 'RIFF'); b.setUint32(4, 36 + n * 2, true); w(8, 'WAVEfmt '); b.setUint32(16, 16, true); b.setUint16(20, 1, true); b.setUint16(22, 1, true);
-      b.setUint32(24, 44100, true); b.setUint32(28, 88200, true); b.setUint16(32, 2, true); b.setUint16(34, 16, true); w(36, 'data'); b.setUint32(40, n * 2, true);
-      const a = new Audio(URL.createObjectURL(new Blob([b], { type: 'audio/wav' })));
-      a.play().catch(() => {});
-    } catch {}
-  }
-
-  function set(state, silent = false) {
-    on = state;
-    try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch {}
-    document.querySelectorAll('[data-sound-toggle]').forEach(b => { b.setAttribute('aria-pressed', on); b.dataset.state = on ? 'on' : 'off'; });
-    if (on) unlock();
-    if (on && !silent) play('success', { volume: 0.7 });   // слышимое подтверждение: звук включён
-  }
-
-  // Делегирование: звук по атрибуту на любом элементе, без правки компонентов
-  document.addEventListener('click', e => {
-    const t = e.target.closest('[data-sound-toggle]');
-    if (t) { set(!on); return; }
-    const s = e.target.closest('[data-sound]');
-    if (s) play(s.dataset.sound);
-  });
-  // События компонентов: vf:sound { detail: { name } } — например, отрыв талона или штамп после анимации
-  document.addEventListener('vf:sound', e => play(e.detail?.name, e.detail));
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => set(on, true)); else set(on, true);
-
-  window.VFSound = { play, set, get enabled() { return on; } };
-})();
-</script>
-<script>document.addEventListener('click',function(e){var t=e.target.closest('button,a[href]');if(!t||t.closest('[data-sound],[data-sound-toggle]')||!window.VFSound)return;VFSound.play(/заяв|запис|отправ|принят/i.test(t.textContent)?'stamp':'click')},true)</script>
 </body>
 </html>
