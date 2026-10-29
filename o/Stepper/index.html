@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<title>Пошаговая заявка · оригинал из библиотеки</title>
+<link rel="icon" href="../../kit/icons/favicon.png"><link rel="stylesheet" href="../../kit/fonts/fonts.css">
+<style>
+:root{--bg:#171512;--bg2:#201d19;--line:#36312b;--text:#f2ede4;--muted:#aba395;--acc:#e6c27a;--acc-ink:#1b160d;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 'Golos Text',system-ui,sans-serif;padding-bottom:150px}
+a{color:var(--acc);text-underline-offset:3px}.vf-wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.vf-strip{display:flex;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line);font-size:14px}.vf-strip span{flex:1;text-align:center;color:var(--muted)}
+.vf-badge{display:inline-block;padding:4px 12px;border-radius:999px;border:1px solid var(--acc);color:var(--acc);font-size:13px;font-weight:600;margin:26px 0 10px}
+h1{font:700 clamp(28px,5vw,46px)/1.08 'Onest',sans-serif;margin:0 0 8px;letter-spacing:-.01em}.vf-en{color:var(--muted);margin:0 0 16px}
+.vf-what{font-size:19px;margin:0 0 8px;max-width:64ch}.vf-why{color:var(--muted);margin:0 0 18px;max-width:64ch}.vf-why b{color:var(--text)}
+.vf-meta{display:flex;gap:10px 22px;flex-wrap:wrap;color:var(--muted);font-size:14.5px;margin:0 0 18px}
+.vf-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;background:var(--acc);color:var(--acc-ink);font-weight:600;text-decoration:none;font-size:15px}.vf-btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.vf-stage{margin:18px 0 20px;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative;padding:16px;background:#0b0a10;color:#f4f4f5}
+.vf-hb{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px;justify-items:center}.vf-hb figure{margin:0;text-align:center}.vf-hb figcaption{font-size:12.5px;color:#6b6558}
+details{margin:8px 0}summary{cursor:pointer;color:var(--acc);padding:8px 0}pre{margin:8px 0 0;padding:14px;border-radius:12px;background:#0f0e0c;border:1px solid var(--line);overflow:auto;max-height:480px;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#d8d2c4}
+.vf-note{color:var(--muted);font-size:14px}
+</style></head><body>
+<div class="vf-strip"><a href="../../#biblioteka">← Библиотека возможностей</a><span>Пошаговая заявка</span><a href="../../opros/">Опрос</a></div>
+<div class="vf-wrap">
+  <span class="vf-badge">Оригинал из библиотеки React Bits · без правок</span>
+  <h1>Пошаговая заявка</h1><p class="vf-en">Stepper</p>
+  <p class="vf-what">Форма из шагов с индикатором и кнопками «назад / дальше».</p>
+  <div class="vf-stage"><link rel="stylesheet" href="app.css"><div id="root"></div><script src="app.js"></script></div>
+  <p class="vf-why"><b>Для сайта мастерской:</b> Заявка по одному вопросу на шаг: на телефоне проще, чем длинная форма.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="vf-btn vf-btn--ghost" href="https://github.com/DavidHDev/react-bits/blob/main/src/content/Components/Stepper/Stepper.jsx" target="_blank" rel="noopener">Исходник на GitHub</a></div>
+  <div class="vf-meta" style="margin-top:14px"><span>Лицензия: MIT + Commons Clause</span><span>В составе сайта использовать можно; перепродавать как отдельные компоненты нельзя.</span></div>
+  <p class="vf-note">Цвета и шрифты здесь родные, как задумал автор библиотеки. В нашем сайте элемент возьмёт цвета и шрифты утверждённого дизайна.</p>
+  <details><summary>Исходный код элемента (как в библиотеке)</summary><pre>'use client';
+
+import { Children, isValidElement, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { ArrowLeft01Icon, ArrowRight01Icon, Tick02Icon } from '@hugeicons/core-free-icons';
+
+import './Stepper.css';
+
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
+const THEMES = {
+  dark: {
+    '--stepper-frame': 'rgba(38, 35, 46, 0.66)',
+    '--stepper-frame-edge': 'rgba(255, 255, 255, 0.08)',
+    '--stepper-frame-highlight': 'rgba(255, 255, 255, 0.07)',
+    '--stepper-frame-shadow': '0 22px 44px -20px rgba(0, 0, 0, 0.8), 0 6px 16px -8px rgba(0, 0, 0, 0.5)',
+    '--stepper-tile': 'linear-gradient(180deg, #3a3644 0%, #27242f 100%)',
+    '--stepper-tile-edge': 'rgba(255, 255, 255, 0.07)',
+    '--stepper-tile-highlight': 'rgba(255, 255, 255, 0.12)',
+    '--stepper-tile-shadow': '0 4px 10px -4px rgba(0, 0, 0, 0.7)',
+    '--stepper-well': 'rgba(255, 255, 255, 0.07)',
+    '--stepper-track': 'rgba(255, 255, 255, 0.1)',
+    '--stepper-ink': '#f4f4f5',
+    '--stepper-muted': 'rgba(244, 244, 245, 0.55)',
+    '--stepper-faint': 'rgba(255, 255, 255, 0.22)',
+    '--stepper-ring': 'rgba(244, 244, 245, 0.3)',
+    '--stepper-solid': '#f4f4f5',
+    '--stepper-solid-ink': '#18181b',
+    '--stepper-hover': 'brightness(1.12)',
+    '--stepper-hover-fill': 'rgba(255, 255, 255, 0.04)',
+    '--stepper-solid-hover': 'brightness(0.9)',
+    '--stepper-press': 'brightness(0.85)'
+  },
+  light: {
+    '--stepper-frame': 'rgba(240, 240, 243, 0.8)',
+    '--stepper-frame-edge': 'rgba(24, 24, 27, 0.07)',
+    '--stepper-frame-highlight': 'rgba(255, 255, 255, 0.95)',
+    '--stepper-frame-shadow': '0 22px 44px -22px rgba(24, 24, 27, 0.3), 0 6px 16px -10px rgba(24, 24, 27, 0.16)',
+    '--stepper-tile': 'linear-gradient(180deg, #ffffff 0%, #f6f6f8 100%)',
+    '--stepper-tile-edge': 'rgba(24, 24, 27, 0.08)',
+    '--stepper-tile-highlight': 'rgba(255, 255, 255, 1)',
+    '--stepper-tile-shadow': '0 4px 10px -5px rgba(24, 24, 27, 0.25)',
+    '--stepper-well': 'rgba(24, 24, 27, 0.05)',
+    '--stepper-track': 'rgba(24, 24, 27, 0.08)',
+    '--stepper-ink': '#27272a',
+    '--stepper-muted': 'rgba(39, 39, 42, 0.55)',
+    '--stepper-faint': 'rgba(24, 24, 27, 0.16)',
+    '--stepper-ring': 'rgba(24, 24, 27, 0.28)',
+    '--stepper-solid': '#27272a',
+    '--stepper-solid-ink': '#ffffff',
+    '--stepper-hover': 'brightness(0.97)',
+    '--stepper-hover-fill': 'rgba(24, 24, 27, 0.035)',
+    '--stepper-solid-hover': 'brightness(1.3)',
+    '--stepper-press': 'brightness(0.92)'
+  }
+};
+
+const SPRING =
+  'linear(0, 0.0603, 0.2033, 0.3821, 0.5633, 0.7258, 0.8584, 0.9574, 1.0242, 1.0634, 1.0809, 1.0828, 1.0747, 1.0613, 1.046, 1.0313, 1.0186, 1.0085, 1.0012, 0.9965, 0.994, 0.9931, 0.9933, 0.9941, 0.9953, 0.9966, 0.9978, 0.9988, 1)';
+const SETTLE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+const clamp = (value, min, max) =&gt; Math.min(max, Math.max(min, value));
+const size = value =&gt; (typeof value === 'number' ? `${value}px` : value);
+
+const readableOn = color =&gt; {
+  let hex = String(color || '')
+    .trim()
+    .replace('#', '');
+  if (hex.length === 3) hex = hex.replace(/./g, c =&gt; c + c);
+  if (!/^[0-9a-f]{6}$/i.test(hex)) return '#ffffff';
+  const [r, g, b] = [0, 2, 4].map(index =&gt; {
+    const c = parseInt(hex.slice(index, index + 2), 16) / 255;
+    return c &lt;= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b &gt; 0.4 ? '#18181b' : '#ffffff';
+};
+
+const ease = () =&gt;
+  typeof CSS !== 'undefined' &amp;&amp; CSS.supports?.('transition-timing-function', 'linear(0, 1)')
+    ? SPRING
+    : 'cubic-bezier(0.34, 1.4, 0.64, 1)';
+
+function Check() {
+  const ref = useRef(null);
+
+  useIsomorphicLayoutEffect(() =&gt; {
+    const path = ref.current?.querySelector('path');
+    if (!path || typeof path.animate !== 'function') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    path.style.strokeDasharray = '24';
+    path.animate([{ strokeDashoffset: 24 }, { strokeDashoffset: 0 }], {
+      duration: 360,
+      easing: SETTLE
+    });
+  }, []);
+
+  return (
+    &lt;span ref={ref} className=&quot;stepper__check&quot;&gt;
+      &lt;HugeiconsIcon icon={Tick02Icon} size={16} strokeWidth={2.4} /&gt;
+    &lt;/span&gt;
+  );
+}
+
+export function Step({ children }) {
+  return &lt;div className=&quot;stepper__step&quot;&gt;{children}&lt;/div&gt;;
+}
+
+export default function Stepper({
+  children,
+  step,
+  initialStep = 1,
+  onStepChange = () =&gt; {},
+  onFinalStepCompleted = () =&gt; {},
+  indicator = 'numbers',
+  orientation = 'horizontal',
+  transition = 'slide',
+  linear = false,
+  disableStepIndicators = false,
+  renderStepIndicator,
+  showFooter = true,
+  backButtonText = 'Back',
+  nextButtonText = 'Continue',
+  completeButtonText = 'Complete',
+  backButtonProps = {},
+  nextButtonProps = {},
+  completedContent,
+  theme = 'dark',
+  accentColor,
+  frame = true,
+  radius = 24,
+  width = 440,
+  className = '',
+  stepCircleContainerClassName = '',
+  stepContainerClassName = '',
+  contentClassName = '',
+  footerClassName = '',
+  style,
+  ...rest
+}) {
+  const steps = Children.toArray(children).filter(isValidElement);
+  const total = steps.length;
+  const controlled = typeof step === 'number';
+  const [internal, setInternal] = useState(initialStep);
+  const current = clamp(Math.round(controlled ? step : internal), 1, total + 1);
+  const completed = current &gt; total;
+  const vertical = orientation === 'vertical';
+  const kind = vertical ? 'numbers' : indicator;
+  const labelled = steps.some(entry =&gt; entry.props.title);
+
+  const [compact, setCompact] = useState(false);
+  const [tight, setTight] = useState(false);
+  const rail = vertical &amp;&amp; !compact;
+  const [reached, setReached] = useState(current);
+  if (current &gt; reached) setReached(current);
+
+  const [view, setView] = useState({ step: current, previous: null, direction: 1, id: 0 });
+  if (view.step !== current) {
+    setView({ step: current, previous: view.step, direction: current &gt; view.step ? 1 : -1, id: view.id + 1 });
+  }
+
+  const rootRef = useRef(null);
+  const trackRef = useRef(null);
+  const gliderRef = useRef(null);
+  const markerRefs = useRef([]);
+  const titleRefs = useRef([]);
+  const viewportRef = useRef(null);
+  const paneRef = useRef(null);
+  const leavingRef = useRef(null);
+  const heightRef = useRef(0);
+  const labelWidths = useRef([]);
+  const tightRef = useRef(false);
+  tightRef.current = tight;
+  const placedRef = useRef(false);
+
+  const go = target =&gt; {
+    const next = clamp(target, 1, total + 1);
+    if (next === current) return;
+    if (!controlled) setInternal(next);
+    if (next &gt; total) onFinalStepCompleted();
+    else onStepChange(next);
+  };
+
+  const reachable = number =&gt;
+    !disableStepIndicators &amp;&amp; number !== current &amp;&amp; (!linear || number &lt;= Math.min(reached, total));
+
+  useIsomorphicLayoutEffect(() =&gt; {
+    const root = rootRef.current;
+    if (!root) return;
+    const measure = () =&gt; {
+      const folded = vertical &amp;&amp; root.clientWidth &lt; 520;
+      setCompact(folded);
+      const track = trackRef.current;
+      if (!track || !labelled || (vertical &amp;&amp; !folded)) {
+        setTight(false);
+        return;
+      }
+      const segments = markerRefs.current.slice(0, total);
+      if (!tightRef.current) {
+        segments.forEach((segment, index) =&gt; {
+          const title = titleRefs.current[index];
+          labelWidths.current[index] = title &amp;&amp; segment?.contains(title) ? title.scrollWidth + 8 : 0;
+        });
+      }
+      const badges = segments.reduce(
+        (sum, segment) =&gt; sum + (segment?.firstElementChild?.getBoundingClientRect().width ?? 22) + 20,
+        0
+      );
+      const labels = labelWidths.current.slice(0, total).reduce((sum, value) =&gt; sum + (value || 0), 0);
+      const room = track.clientWidth - 8 - 4 * Math.max(0, total - 1);
+      setTight(badges + labels &gt; room + 0.5);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(root);
+    return () =&gt; observer.disconnect();
+  }, [vertical, labelled, frame, total, kind]);
+
+  useIsomorphicLayoutEffect(() =&gt; {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    heightRef.current = viewport.offsetHeight;
+    const observer = new ResizeObserver(() =&gt; {
+      heightRef.current = viewport.offsetHeight;
+    });
+    observer.observe(viewport);
+    return () =&gt; observer.disconnect();
+  }, []);
+
+  useIsomorphicLayoutEffect(() =&gt; {
+    if (view.id === 0) return;
+    const viewport = viewportRef.current;
+    const pane = paneRef.current;
+    const leaving = leavingRef.current;
+    const id = view.id;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mode = transition === 'none' ? 'none' : reduced ? 'fade' : transition;
+    const finish = () =&gt; setView(state =&gt; (state.id === id ? { ...state, previous: null } : state));
+    if (leaving &amp;&amp; pane &amp;&amp; leaving.contains(document.activeElement)) pane.focus({ preventScroll: true });
+    if (!viewport || typeof viewport.animate !== 'function' || mode === 'none') {
+      finish();
+      return;
+    }
+    for (const element of [viewport, pane, leaving]) element?.getAnimations().forEach(animation =&gt; animation.cancel());
+    const from = heightRef.current;
+    const to = viewport.offsetHeight;
+    const spring = ease();
+    if (Math.abs(from - to) &gt; 0.5) {
+      viewport.animate([{ height: `${from}px` }, { height: `${to}px` }], {
+        duration: reduced ? 200 : 560,
+        easing: reduced ? SETTLE : spring
+      });
+    }
+    const axis = vertical ? 'Y' : 'X';
+    const shift = mode === 'slide' ? 36 : 0;
+    if (pane) {
+      if (shift) {
+        pane.animate([{ transform: `translate${axis}(${view.direction * shift}px)` }, { transform: 'none' }], {
+          duration: 560,
+          easing: spring
+        });
+      }
+      pane.animate([{ opacity: 0 }, { opacity: 0, offset: 0.25 }, { opacity: 1 }], {
+        duration: 420,
+        easing: 'ease-out'
+      });
+    }
+    if (leaving) {
+      leaving.animate([{ opacity: 1 }, { opacity: 0 }], {
+        duration: 140,
+        easing: 'cubic-bezier(0.2, 0, 0.4, 1)',
+        fill: 'forwards'
+      });
+      const exit = leaving.animate(
+        [{ transform: 'none' }, { transform: `translate${axis}(${-view.direction * shift}px)` }],
+        { duration: 200, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' }
+      );
+      exit.onfinish = finish;
+    } else finish();
+  }, [view.id]);
+
+  useIsomorphicLayoutEffect(() =&gt; {
+    const track = trackRef.current;
+    const glider = gliderRef.current;
+    if (!track || !glider) return;
+    const place = animate =&gt; {
+      const segment = markerRefs.current[Math.min(current, total) - 1];
+      if (!segment) return;
+      const spring = ease();
+      glider.style.transition = animate
+        ? `transform 560ms ${spring}, width 560ms ${spring}, height 560ms ${spring}, opacity 200ms ease`
+        : 'opacity 200ms ease';
+      glider.style.transform = `translate3d(${segment.offsetLeft}px, ${segment.offsetTop}px, 0)`;
+      glider.style.width = `${segment.offsetWidth}px`;
+      glider.style.height = `${segment.offsetHeight}px`;
+      glider.style.opacity = completed ? '0' : '1';
+    };
+    place(placedRef.current &amp;&amp; !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    placedRef.current = true;
+    const observer = new ResizeObserver(() =&gt; place(false));
+    observer.observe(track);
+    return () =&gt; observer.disconnect();
+  }, [current, total, completed, kind, labelled, vertical, compact, tight]);
+
+  const paneContent = number =&gt; (number &gt; total ? (completedContent ?? null) : steps[number - 1]);
+  const accentVars = accentColor
+    ? { '--stepper-solid': accentColor, '--stepper-solid-ink': readableOn(accentColor) }
+    : {};
+
+  const badge = (entry, number, status) =&gt; (
+    &lt;span className=&quot;stepper__badge&quot; data-status={status}&gt;
+      {status === 'complete' ? (
+        &lt;Check /&gt;
+      ) : entry.props.icon ? (
+        &lt;span className=&quot;stepper__glyph&quot;&gt;{entry.props.icon}&lt;/span&gt;
+      ) : (
+        number
+      )}
+    &lt;/span&gt;
+  );
+
+  const header = () =&gt; {
+    if (kind === 'dots') {
+      return (
+        &lt;div className=&quot;stepper__dots&quot;&gt;
+          {steps.map((entry, index) =&gt; {
+            const number = index + 1;
+            const status = completed || number &lt; current ? 'complete' : number === current ? 'active' : 'upcoming';
+            return (
+              &lt;button
+                key={number}
+                type=&quot;button&quot;
+                className=&quot;stepper__dot&quot;
+                data-status={status}
+                aria-label={entry.props.title ? `Step ${number}: ${entry.props.title}` : `Step ${number}`}
+                aria-current={number === current ? 'step' : undefined}
+                disabled={!reachable(number)}
+                onClick={() =&gt; go(number)}
+              &gt;
+                &lt;span className=&quot;stepper__dot-mark&quot; data-status={status} /&gt;
+              &lt;/button&gt;
+            );
+          })}
+        &lt;/div&gt;
+      );
+    }
+    if (kind === 'bars') {
+      return (
+        &lt;div className=&quot;stepper__bars&quot;&gt;
+          {steps.map((entry, index) =&gt; {
+            const number = index + 1;
+            const filled = completed || number &lt;= current;
+            return (
+              &lt;button
+                key={number}
+                type=&quot;button&quot;
+                className=&quot;stepper__bar&quot;
+                data-status={completed || number &lt; current ? 'complete' : number === current ? 'active' : 'upcoming'}
+                aria-label={entry.props.title ? `Step ${number}: ${entry.props.title}` : `Step ${number}`}
+                aria-current={number === current ? 'step' : undefined}
+                disabled={!reachable(number)}
+                onClick={() =&gt; go(number)}
+              &gt;
+                &lt;span className=&quot;stepper__bar-track&quot;&gt;
+                  &lt;span className=&quot;stepper__bar-fill&quot; data-filled={filled ? '' : undefined} /&gt;
+                &lt;/span&gt;
+              &lt;/button&gt;
+            );
+          })}
+        &lt;/div&gt;
+      );
+    }
+    return (
+      &lt;div ref={trackRef} className=&quot;stepper__track&quot; data-layout={rail ? 'rail' : 'row'}&gt;
+        &lt;span ref={gliderRef} className=&quot;stepper__glider&quot; aria-hidden=&quot;true&quot; /&gt;
+        {steps.map((entry, index) =&gt; {
+          const number = index + 1;
+          const status = completed || number &lt; current ? 'complete' : number === current ? 'active' : 'upcoming';
+          const title = entry.props.title;
+          const text = title &amp;&amp; !(tight &amp;&amp; !rail) &amp;&amp; (
+            &lt;span className=&quot;stepper__text&quot;&gt;
+              &lt;span
+                ref={element =&gt; {
+                  titleRefs.current[index] = element;
+                }}
+                className=&quot;stepper__title&quot;
+                data-status={status}
+              &gt;
+                {title}
+              &lt;/span&gt;
+              {rail &amp;&amp; entry.props.description &amp;&amp; (
+                &lt;span className=&quot;stepper__description&quot;&gt;{entry.props.description}&lt;/span&gt;
+              )}
+            &lt;/span&gt;
+          );
+          const ref = element =&gt; {
+            markerRefs.current[index] = element;
+          };
+          if (renderStepIndicator) {
+            return (
+              &lt;div key={number} ref={ref} className=&quot;stepper__segment&quot; data-status={status}&gt;
+                {renderStepIndicator({ step: number, currentStep: current, onStepClick: clicked =&gt; go(clicked) })}
+                {text}
+              &lt;/div&gt;
+            );
+          }
+          return (
+            &lt;button
+              key={number}
+              ref={ref}
+              type=&quot;button&quot;
+              className=&quot;stepper__segment&quot;
+              data-status={status}
+              aria-label={typeof title === 'string' ? `Step ${number}: ${title}` : `Step ${number}`}
+              aria-current={number === current ? 'step' : undefined}
+              disabled={!reachable(number)}
+              onClick={() =&gt; go(number)}
+            &gt;
+              {badge(entry, number, status)}
+              {text}
+            &lt;/button&gt;
+          );
+        })}
+      &lt;/div&gt;
+    );
+  };
+
+  const isLast = current === total;
+  const nextLabel = isLast ? completeButtonText : nextButtonText;
+  const { className: backClass = '', onClick: onBackClick, ...backRest } = backButtonProps;
+  const { className: nextClass = '', onClick: onNextClick, ...nextRest } = nextButtonProps;
+
+  return (
+    &lt;div
+      {...rest}
+      ref={rootRef}
+      className={`stepper stepper--${rail ? 'vertical' : 'horizontal'}${frame ? ' stepper--framed' : ''} ${stepCircleContainerClassName} ${className}`
+        .replace(/\s+/g, ' ')
+        .trim()}
+      data-completed={completed ? '' : undefined}
+      style={{
+        ...(THEMES[theme] ?? THEMES.dark),
+        '--stepper-radius': `${Math.max(0, radius)}px`,
+        '--stepper-spring': SPRING,
+        '--stepper-width': size(width),
+        ...accentVars,
+        ...style
+      }}
+    &gt;
+      &lt;div className={`stepper__header stepper__header--${kind} ${stepContainerClassName}`.trim()}&gt;{header()}&lt;/div&gt;
+      &lt;div className=&quot;stepper__body&quot;&gt;
+        &lt;div ref={viewportRef} className={`stepper__viewport ${contentClassName}`.trim()} aria-live=&quot;polite&quot;&gt;
+          {view.previous !== null &amp;&amp; (
+            &lt;div key={view.id - 1} ref={leavingRef} className=&quot;stepper__pane stepper__pane--leaving&quot; aria-hidden=&quot;true&quot;&gt;
+              {paneContent(view.previous)}
+            &lt;/div&gt;
+          )}
+          &lt;div key={view.id} ref={paneRef} className=&quot;stepper__pane&quot; tabIndex={-1}&gt;
+            {paneContent(view.step)}
+          &lt;/div&gt;
+        &lt;/div&gt;
+        {showFooter &amp;&amp; (
+          &lt;div
+            className=&quot;stepper__footer-wrap&quot;
+            data-hidden={completed ? '' : undefined}
+            aria-hidden={completed ? true : undefined}
+          &gt;
+            &lt;div className=&quot;stepper__footer-clip&quot;&gt;
+              &lt;div className={`stepper__footer ${footerClassName}`.trim()}&gt;
+                &lt;button
+                  type=&quot;button&quot;
+                  {...backRest}
+                  className={`stepper__button stepper__button--back ${backClass}`.trim()}
+                  data-hidden={current &lt;= 1 ? '' : undefined}
+                  tabIndex={completed ? -1 : backRest.tabIndex}
+                  onClick={event =&gt; {
+                    onBackClick?.(event);
+                    if (!event.defaultPrevented) go(current - 1);
+                  }}
+                &gt;
+                  &lt;HugeiconsIcon icon={ArrowLeft01Icon} size={16} strokeWidth={2} /&gt;
+                  &lt;span&gt;{backButtonText}&lt;/span&gt;
+                &lt;/button&gt;
+                &lt;button
+                  type=&quot;button&quot;
+                  {...nextRest}
+                  className={`stepper__button stepper__button--next ${nextClass}`.trim()}
+                  tabIndex={completed ? -1 : nextRest.tabIndex}
+                  onClick={event =&gt; {
+                    onNextClick?.(event);
+                    if (!event.defaultPrevented) go(current + 1);
+                  }}
+                &gt;
+                  &lt;span&gt;{nextLabel}&lt;/span&gt;
+                  &lt;HugeiconsIcon icon={isLast ? Tick02Icon : ArrowRight01Icon} size={16} strokeWidth={2} /&gt;
+                &lt;/button&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        )}
+      &lt;/div&gt;
+      {frame &amp;&amp; &lt;span className=&quot;stepper__rim&quot; aria-hidden=&quot;true&quot; /&gt;}
+    &lt;/div&gt;
+  );
+}
+</pre><pre>.stepper {
+  --stepper-pad: 0px;
+  --stepper-inset: 0px;
+  --stepper-bleed: 8px;
+  --stepper-well-radius: max(6px, calc(var(--stepper-radius) - 8px));
+  --stepper-tile-radius: max(4px, calc(var(--stepper-well-radius) - 4px));
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, var(--stepper-width));
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--stepper-radius);
+  color: var(--stepper-ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.stepper--framed {
+  --stepper-pad: 8px;
+  --stepper-inset: 12px;
+  --stepper-bleed: 20px;
+  padding: var(--stepper-pad);
+  background: var(--stepper-frame);
+  box-shadow: var(--stepper-frame-shadow);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+
+.stepper__rim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px var(--stepper-frame-edge),
+    inset 0 1px 0 var(--stepper-frame-highlight);
+  pointer-events: none;
+}
+
+.stepper__header--dots,
+.stepper__header--bars {
+  padding: var(--stepper-inset) var(--stepper-inset) 0;
+}
+
+.stepper__track {
+  position: relative;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--stepper-well-radius);
+  background: var(--stepper-well);
+}
+
+.stepper__glider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--stepper-tile-radius);
+  background: var(--stepper-tile);
+  box-shadow:
+    inset 0 0 0 1px var(--stepper-tile-edge),
+    inset 0 1px 0 var(--stepper-tile-highlight),
+    var(--stepper-tile-shadow);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.stepper__segment {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  height: 40px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: var(--stepper-tile-radius);
+  background: none;
+  color: var(--stepper-muted);
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.stepper__segment:disabled {
+  cursor: default;
+}
+
+.stepper__badge {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--stepper-faint);
+  color: var(--stepper-muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    color 0.15s ease;
+}
+
+.stepper__badge[data-status='active'] {
+  box-shadow: inset 0 0 0 1.5px var(--stepper-ink);
+  color: var(--stepper-ink);
+}
+
+.stepper__badge[data-status='complete'] {
+  background: var(--stepper-solid);
+  box-shadow: none;
+  color: var(--stepper-solid-ink);
+}
+
+.stepper__glyph,
+.stepper__check {
+  display: grid;
+  place-items: center;
+}
+
+.stepper__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+
+.stepper__title {
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--stepper-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.stepper__title:not([data-status='upcoming']) {
+  color: var(--stepper-ink);
+}
+
+.stepper__description {
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--stepper-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stepper__track[data-layout='rail'] {
+  flex: 1;
+  flex-direction: column;
+}
+
+.stepper__track[data-layout='rail'] .stepper__segment {
+  flex: none;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  height: auto;
+  padding: 10px;
+}
+
+.stepper__track[data-layout='rail'] .stepper__text {
+  padding-top: 3px;
+}
+
+.stepper__dots {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.stepper__dot {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+
+.stepper__dot-mark {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--stepper-faint);
+  transition:
+    background-color 0.25s ease,
+    transform 0.45s var(--stepper-spring);
+}
+
+.stepper__dot-mark[data-status='complete'] {
+  background: var(--stepper-muted);
+}
+
+.stepper__dot-mark[data-status='active'] {
+  background: var(--stepper-solid);
+  transform: scale(1.3);
+}
+
+.stepper__bars {
+  display: flex;
+  gap: 6px;
+}
+
+.stepper__bar {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.stepper__bar-track {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--stepper-track);
+}
+
+.stepper__bar-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--stepper-solid);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 560ms var(--stepper-spring);
+}
+
+.stepper__bar-fill[data-filled] {
+  transform: none;
+}
+
+.stepper__dot:disabled,
+.stepper__bar:disabled {
+  cursor: default;
+}
+
+.stepper__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px var(--stepper-inset) var(--stepper-inset);
+}
+
+.stepper__viewport {
+  position: relative;
+  margin: -6px calc(var(--stepper-bleed) * -1);
+  overflow: hidden;
+}
+
+.stepper__pane {
+  box-sizing: border-box;
+  padding: 6px var(--stepper-bleed);
+  outline: none;
+}
+
+.stepper__pane--leaving {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.stepper__step {
+  min-width: 0;
+}
+
+.stepper__footer-wrap {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition:
+    grid-template-rows 480ms var(--stepper-spring),
+    opacity 0.2s ease;
+}
+
+.stepper__footer-wrap[data-hidden] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.stepper__footer-clip {
+  min-height: 0;
+}
+
+.stepper__footer-wrap[data-hidden] .stepper__footer-clip {
+  overflow: hidden;
+}
+
+.stepper__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 20px;
+}
+
+.stepper__button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 14px;
+  border: none;
+  border-radius: max(8px, calc(var(--stepper-radius) * 0.5));
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.stepper__button--back {
+  padding-left: 10px;
+  background: var(--stepper-tile);
+  box-shadow:
+    inset 0 0 0 1px var(--stepper-tile-edge),
+    inset 0 1px 0 var(--stepper-tile-highlight),
+    var(--stepper-tile-shadow);
+  color: var(--stepper-ink);
+}
+
+.stepper__button--back[data-hidden] {
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    visibility 0s 0.2s;
+}
+
+.stepper__button--next {
+  margin-left: auto;
+  padding-right: 11px;
+  background: var(--stepper-solid);
+  box-shadow: 0 4px 12px -6px rgba(0, 0, 0, 0.5);
+  color: var(--stepper-solid-ink);
+}
+
+.stepper__button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.stepper__button:focus-visible,
+.stepper__segment:focus-visible,
+.stepper__dot:focus-visible,
+.stepper__bar:focus-visible {
+  outline: 2px solid var(--stepper-ink);
+  outline-offset: 2px;
+}
+
+.stepper--vertical {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.stepper--vertical .stepper__header {
+  display: flex;
+  flex: none;
+  width: 212px;
+  max-width: 42%;
+}
+
+.stepper--vertical .stepper__body {
+  flex: 1;
+  padding: var(--stepper-inset) var(--stepper-inset) var(--stepper-inset) 20px;
+}
+
+@media (hover: hover) {
+  .stepper__segment:not(:disabled):hover {
+    background: var(--stepper-hover-fill);
+  }
+
+  .stepper__button--back:not(:disabled):hover {
+    filter: var(--stepper-hover);
+  }
+
+  .stepper__button--next:not(:disabled):hover {
+    filter: var(--stepper-solid-hover);
+  }
+
+  .stepper__dot:not(:disabled):hover .stepper__dot-mark {
+    transform: scale(1.3);
+  }
+
+  .stepper__bar:not(:disabled):hover .stepper__bar-track {
+    background: var(--stepper-faint);
+  }
+}
+
+.stepper__button:not(:disabled):active {
+  filter: var(--stepper-press);
+  transform: scale(0.96);
+  transition-duration: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepper__bar-fill,
+  .stepper__dot-mark,
+  .stepper__footer-wrap {
+    transition-duration: 0.01ms;
+  }
+}
+</pre></details>
+</div>
+<style>#vfq{all:initial;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:2147483000;width:min(560px,calc(100vw - 16px));box-sizing:border-box;padding:8px;border-radius:18px;background:rgba(23,21,18,.97);border:1px solid #4a443c;box-shadow:0 10px 30px rgba(0,0,0,.55);font:600 14px/1.2 system-ui,sans-serif;color:#f2ede4}
+#vfq *{box-sizing:border-box;font:inherit}
+#vfq .q{display:grid;grid-template-columns:44px 1.25fr 1fr 1.25fr;gap:6px}
+#vfq button,#vfq a.b{display:flex;align-items:center;justify-content:center;white-space:nowrap;min-height:46px;padding:0 8px;border-radius:12px;border:1px solid #4a443c;background:transparent;color:#f2ede4;text-decoration:none;cursor:pointer}
+#vfq .go{background:#e6c27a;color:#1b160d;border-color:#e6c27a}
+#vfq .like[aria-pressed=true]{background:#e6c27a22;border-color:#e6c27a;color:#e6c27a}
+#vfq .meta{display:flex;justify-content:space-between;padding:8px 4px 0;color:#aba395;font-weight:500;font-size:12.5px}
+#vfq .meta a{color:#e6c27a;text-decoration:none}
+#vfq textarea{display:none;width:100%;margin:0 0 8px;padding:10px 12px;border-radius:12px;border:1px solid #4a443c;background:#201d19;color:#f2ede4;min-height:68px;resize:vertical;font-weight:500}
+#vfq.open textarea{display:block}</style>
+<div id="vfq" role="region" aria-label="Оценка элемента">
+  <textarea placeholder="Что понравилось? Что поменять? Одной фразой — это уйдёт в ответ."></textarea>
+  <div class="q">
+    <a class="b" href="../VariableProximity/" aria-label="Назад">←</a>
+    <button type="button" class="like" aria-pressed="false">♡ Хочу это</button>
+    <button type="button" class="cm">Заметка</button>
+    <a class="b go" href="../OptionWheel/">Дальше →</a>
+  </div>
+  <div class="meta"><span>Приём 6 из 13</span><a href="../../#biblioteka">Вся библиотека</a></div>
+</div>
+<script>(function(){var C={"id":"Stepper","key":"vf-opros-v1","n":13,"i":5,"prev":"../VariableProximity/","next":"../OptionWheel/","last":false,"lift":false};var S;try{S=JSON.parse(localStorage.getItem(C.key)||'{}')}catch(e){S={}}S.e=S.e||{};S.ec=S.ec||{};
+var q=document.getElementById('vfq');var like=q.querySelector('.like'),note=q.querySelector('textarea');
+function save(){try{localStorage.setItem(C.key,JSON.stringify(S))}catch(e){}}
+function paint(){like.setAttribute('aria-pressed',!!S.e[C.id]);like.textContent=S.e[C.id]?'\u2665 Хочу это':'\u2661 Хочу это'}
+note.value=S.ec[C.id]||'';if(note.value)q.classList.add('open');paint();
+like.onclick=function(){S.e[C.id]=!S.e[C.id];save();paint()};
+q.querySelector('.cm').onclick=function(){q.classList.toggle('open');if(q.classList.contains('open'))note.focus()};
+note.oninput=function(){S.ec[C.id]=note.value;save()};
+})();</script>
+</body></html>

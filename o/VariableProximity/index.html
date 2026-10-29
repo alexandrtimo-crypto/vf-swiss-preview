@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<title>Вес букв рядом с курсором · оригинал из библиотеки</title>
+<link rel="icon" href="../../kit/icons/favicon.png"><link rel="stylesheet" href="../../kit/fonts/fonts.css">
+<style>
+:root{--bg:#171512;--bg2:#201d19;--line:#36312b;--text:#f2ede4;--muted:#aba395;--acc:#e6c27a;--acc-ink:#1b160d;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 'Golos Text',system-ui,sans-serif;padding-bottom:150px}
+a{color:var(--acc);text-underline-offset:3px}.vf-wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.vf-strip{display:flex;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line);font-size:14px}.vf-strip span{flex:1;text-align:center;color:var(--muted)}
+.vf-badge{display:inline-block;padding:4px 12px;border-radius:999px;border:1px solid var(--acc);color:var(--acc);font-size:13px;font-weight:600;margin:26px 0 10px}
+h1{font:700 clamp(28px,5vw,46px)/1.08 'Onest',sans-serif;margin:0 0 8px;letter-spacing:-.01em}.vf-en{color:var(--muted);margin:0 0 16px}
+.vf-what{font-size:19px;margin:0 0 8px;max-width:64ch}.vf-why{color:var(--muted);margin:0 0 18px;max-width:64ch}.vf-why b{color:var(--text)}
+.vf-meta{display:flex;gap:10px 22px;flex-wrap:wrap;color:var(--muted);font-size:14.5px;margin:0 0 18px}
+.vf-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;background:var(--acc);color:var(--acc-ink);font-weight:600;text-decoration:none;font-size:15px}.vf-btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.vf-stage{margin:18px 0 20px;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative;padding:16px;background:#0b0a10;color:#f4f4f5}
+.vf-hb{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px;justify-items:center}.vf-hb figure{margin:0;text-align:center}.vf-hb figcaption{font-size:12.5px;color:#6b6558}
+details{margin:8px 0}summary{cursor:pointer;color:var(--acc);padding:8px 0}pre{margin:8px 0 0;padding:14px;border-radius:12px;background:#0f0e0c;border:1px solid var(--line);overflow:auto;max-height:480px;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#d8d2c4}
+.vf-note{color:var(--muted);font-size:14px}
+</style></head><body>
+<div class="vf-strip"><a href="../../#biblioteka">← Библиотека возможностей</a><span>Вес букв рядом с курсором</span><a href="../../opros/">Опрос</a></div>
+<div class="vf-wrap">
+  <span class="vf-badge">Оригинал из библиотеки React Bits · без правок</span>
+  <h1>Вес букв рядом с курсором</h1><p class="vf-en">VariableProximity</p>
+  <p class="vf-what">Каждая буква меняет начертание по мере приближения курсора. Проведите мышью по тексту.</p>
+  <div class="vf-stage"><link rel="stylesheet" href="app.css"><div id="root"></div><script src="app.js"></script></div>
+  <p class="vf-why"><b>Для сайта мастерской:</b> Слоган или короткая фраза, к которой хочется прикоснуться.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="vf-btn vf-btn--ghost" href="https://github.com/DavidHDev/react-bits/blob/main/src/content/TextAnimations/VariableProximity/VariableProximity.jsx" target="_blank" rel="noopener">Исходник на GitHub</a></div>
+  <div class="vf-meta" style="margin-top:14px"><span>Лицензия: MIT + Commons Clause</span><span>В составе сайта использовать можно; перепродавать как отдельные компоненты нельзя.</span></div>
+  <p class="vf-note">Цвета и шрифты здесь родные, как задумал автор библиотеки. В нашем сайте элемент возьмёт цвета и шрифты утверждённого дизайна.</p>
+  <details><summary>Исходный код элемента (как в библиотеке)</summary><pre>'use client';
+
+import { Fragment, forwardRef, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import './VariableProximity.css';
+
+const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+const GAUSSIAN_EDGE = Math.exp(-2);
+const WAVE_PERIOD = 3.2;
+const WAVE_PEAK = 0.7;
+
+const parseSettings = settings =&gt;
+  new Map(
+    settings
+      .split(',')
+      .map(part =&gt; part.trim())
+      .filter(Boolean)
+      .map(part =&gt; {
+        const [name, value] = part.split(/\s+/);
+        return [name.replace(/['&quot;]/g, ''), parseFloat(value)];
+      })
+  );
+
+const strengthAt = (distance, radius, falloff) =&gt; {
+  if (distance &gt;= radius) return 0;
+  const norm = 1 - distance / radius;
+  switch (falloff) {
+    case 'exponential':
+      return norm * norm;
+    case 'gaussian':
+      return (Math.exp(-2 * (distance / radius) ** 2) - GAUSSIAN_EDGE) / (1 - GAUSSIAN_EDGE);
+    case 'linear':
+    default:
+      return norm;
+  }
+};
+
+const VariableProximity = forwardRef((props, ref) =&gt; {
+  const {
+    label = '',
+    fromFontVariationSettings = &quot;'wght' 400, 'opsz' 9&quot;,
+    toFontVariationSettings = &quot;'wght' 1000, 'opsz' 40&quot;,
+    containerRef,
+    radius = 50,
+    falloff = 'linear',
+    smoothing = 0.2,
+    fromColor,
+    toColor,
+    scale = 1,
+    lift = 0,
+    idleWave = false,
+    fontSize,
+    className = '',
+    onClick,
+    style,
+    ...restProps
+  } = props;
+
+  const rootRef = useRef(null);
+  const letterRefs = useRef([]);
+  const stateRef = useRef({ pointer: { x: 0, y: 0, active: false }, levels: [], targets: [] });
+  const [lineStarts, setLineStarts] = useState(null);
+
+  const setRoot = useCallback(
+    node =&gt; {
+      rootRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    },
+    [ref]
+  );
+
+  const axes = useMemo(() =&gt; {
+    const fromSettings = parseSettings(fromFontVariationSettings);
+    const toSettings = parseSettings(toFontVariationSettings);
+    return Array.from(fromSettings.entries()).map(([axis, fromValue]) =&gt; ({
+      axis,
+      fromValue,
+      toValue: toSettings.get(axis) ?? fromValue
+    }));
+  }, [fromFontVariationSettings, toFontVariationSettings]);
+
+  useIsoLayoutEffect(() =&gt; {
+    const root = rootRef.current;
+    if (!root) return;
+    let frame = 0;
+    let live = true;
+    let lastWidth = -1;
+
+    const measure = () =&gt; {
+      frame = 0;
+      if (!live) return;
+      const words = Array.from(root.querySelectorAll('[data-word]'));
+      const breaks = Array.from(root.querySelectorAll('br'));
+      const letters = letterRefs.current.filter(Boolean);
+      const saved = letters.map(letter =&gt; letter.style.fontVariationSettings);
+      const wrap = root.style.whiteSpace;
+      root.style.whiteSpace = 'normal';
+      breaks.forEach(node =&gt; (node.style.display = 'none'));
+      letters.forEach(letter =&gt; (letter.style.fontVariationSettings = fromFontVariationSettings));
+      const starts = [];
+      let lastTop = null;
+      words.forEach((word, index) =&gt; {
+        const top = word.getBoundingClientRect().top;
+        if (lastTop !== null &amp;&amp; top &gt; lastTop + 2) starts.push(index);
+        lastTop = top;
+      });
+      letters.forEach((letter, index) =&gt; (letter.style.fontVariationSettings = saved[index]));
+      breaks.forEach(node =&gt; (node.style.display = ''));
+      root.style.whiteSpace = wrap;
+      const key = starts.join(',');
+      setLineStarts(previous =&gt; (previous === key ? previous : key));
+    };
+
+    const queue = entries =&gt; {
+      const width = entries?.[0]?.contentRect.width;
+      if (width !== undefined) {
+        if (Math.abs(width - lastWidth) &lt; 1) return;
+        lastWidth = width;
+      }
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+
+    measure();
+    const parent = root.parentElement;
+    const observer = parent &amp;&amp; typeof ResizeObserver !== 'undefined' ? new ResizeObserver(queue) : null;
+    if (parent) observer?.observe(parent);
+    document.fonts?.ready.then(() =&gt; queue());
+
+    return () =&gt; {
+      live = false;
+      cancelAnimationFrame(frame);
+      observer?.disconnect();
+    };
+  }, [label, fromFontVariationSettings, fontSize]);
+
+  useEffect(() =&gt; {
+    const { pointer, levels, targets } = stateRef.current;
+    const written = [];
+    const painted = [];
+    const moved = [];
+    const anchors = [];
+    const tinted = Boolean(fromColor || toColor);
+    const restColor = fromColor || 'currentColor';
+    const nearColor = toColor || 'currentColor';
+    const growth = (Number(scale) || 1) - 1;
+    const rise = Number(lift) || 0;
+    const transformed = growth !== 0 || rise !== 0;
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const waving = idleWave &amp;&amp; !reduced;
+    let frame = 0;
+    let lastTime = 0;
+    let dirty = true;
+    let layoutDirty = true;
+    let nearAny = false;
+    let lastNear = -Infinity;
+    let waveMix = 0;
+    let span = 1;
+    let visible = true;
+
+    letterRefs.current.forEach(letter =&gt; {
+      if (!letter) return;
+      if (!tinted) letter.style.color = '';
+      if (!transformed) letter.style.transform = '';
+    });
+
+    const settingsAt = level =&gt;
+      axes.map(({ axis, fromValue, toValue }) =&gt; `'${axis}' ${fromValue + (toValue - fromValue) * level}`).join(', ');
+
+    const measureAnchors = () =&gt; {
+      const letters = letterRefs.current;
+      let left = Infinity;
+      let top = Infinity;
+      let right = -Infinity;
+      letters.forEach((letter, index) =&gt; {
+        if (!letter) return;
+        const rect = letter.getBoundingClientRect();
+        anchors[index] = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+        left = Math.min(left, rect.left);
+        top = Math.min(top, rect.top);
+        right = Math.max(right, rect.right);
+      });
+      anchors.forEach(anchor =&gt; {
+        anchor.x -= left;
+        anchor.y -= top;
+      });
+      span = Math.max(220, (right - left) * 0.85);
+    };
+
+    const measure = () =&gt; {
+      const letters = letterRefs.current;
+      targets.length = letters.length;
+      targets.fill(0);
+      nearAny = false;
+      if (!pointer.active) return;
+
+      const area = containerRef?.current?.getBoundingClientRect();
+      if (area) {
+        const dx = Math.max(area.left - pointer.x, 0, pointer.x - area.right);
+        const dy = Math.max(area.top - pointer.y, 0, pointer.y - area.bottom);
+        if (dx * dx + dy * dy &gt;= radius * radius) return;
+      }
+
+      letters.forEach((letter, index) =&gt; {
+        if (!letter) return;
+        const rect = letter.getBoundingClientRect();
+        const distance = Math.hypot(pointer.x - (rect.left + rect.width / 2), pointer.y - (rect.top + rect.height / 2));
+        targets[index] = strengthAt(distance, radius, falloff);
+        if (targets[index] &gt; 0) nearAny = true;
+      });
+    };
+
+    const waveAt = (index, time) =&gt; {
+      const anchor = anchors[index];
+      if (!anchor) return 0;
+      const phase = ((anchor.x + anchor.y * 0.6) / span - time / WAVE_PERIOD) * Math.PI * 2;
+      return WAVE_PEAK * ((1 + Math.cos(phase)) / 2) ** 2.2;
+    };
+
+    const tick = now =&gt; {
+      frame = 0;
+      const delta = lastTime ? Math.min(now - lastTime, 64) : 16;
+      lastTime = now;
+
+      if (dirty) {
+        measure();
+        dirty = false;
+      }
+      if (waving &amp;&amp; layoutDirty) {
+        measureAnchors();
+        layoutDirty = false;
+      }
+
+      if (nearAny) lastNear = now;
+      const idle = waving &amp;&amp; visible &amp;&amp; !nearAny &amp;&amp; now - lastNear &gt; 500;
+      const goal = idle ? 1 : 0;
+      waveMix += (goal - waveMix) * (1 - Math.exp(-delta / 600));
+      if (Math.abs(goal - waveMix) &lt; 0.002) waveMix = goal;
+
+      const ease = smoothing &gt; 0 ? 1 - Math.exp(-delta / (smoothing * 400)) : 1;
+      const time = now / 1000;
+      let settling = false;
+
+      letterRefs.current.forEach((letter, index) =&gt; {
+        if (!letter) return;
+        let target = targets[index] ?? 0;
+        if (waveMix &gt; 0) target = Math.max(target, waveMix * waveAt(index, time));
+        const current = levels[index] ?? 0;
+        let next = current + (target - current) * ease;
+        if (Math.abs(target - next) &lt; 0.002) {
+          next = target;
+        } else {
+          settling = true;
+        }
+        levels[index] = next;
+
+        const settings = next === 0 ? fromFontVariationSettings : settingsAt(next);
+        if (written[index] !== settings) {
+          written[index] = settings;
+          letter.style.fontVariationSettings = settings;
+        }
+
+        if (tinted) {
+          const paint =
+            next === 0
+              ? fromColor || ''
+              : `color-mix(in oklab, ${restColor} ${((1 - next) * 100).toFixed(1)}%, ${nearColor})`;
+          if (painted[index] !== paint) {
+            painted[index] = paint;
+            letter.style.color = paint;
+          }
+        }
+
+        if (transformed) {
+          const shift =
+            next === 0 ? '' : `translateY(${(-rise * next).toFixed(3)}em) scale(${(1 + growth * next).toFixed(3)})`;
+          if (moved[index] !== shift) {
+            moved[index] = shift;
+            letter.style.transform = shift;
+          }
+        }
+      });
+
+      if (settling || waveMix &gt; 0 || (waving &amp;&amp; visible &amp;&amp; !nearAny)) {
+        frame = requestAnimationFrame(tick);
+      } else {
+        lastTime = 0;
+      }
+    };
+
+    const schedule = () =&gt; {
+      dirty = true;
+      if (!frame) frame = requestAnimationFrame(tick);
+    };
+
+    const relayout = () =&gt; {
+      layoutDirty = true;
+      schedule();
+    };
+
+    const handleMove = (x, y) =&gt; {
+      pointer.x = x;
+      pointer.y = y;
+      pointer.active = true;
+      schedule();
+    };
+
+    const handleMouseMove = event =&gt; handleMove(event.clientX, event.clientY);
+    const handleTouchMove = event =&gt; {
+      const touch = event.touches[0];
+      if (touch) handleMove(touch.clientX, touch.clientY);
+    };
+    const handleLeave = () =&gt; {
+      pointer.active = false;
+      schedule();
+    };
+
+    const root = document.documentElement;
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleLeave);
+    window.addEventListener('touchcancel', handleLeave);
+    window.addEventListener('scroll', schedule, { capture: true, passive: true });
+    window.addEventListener('resize', relayout);
+    root.addEventListener('mouseleave', handleLeave);
+
+    let observer = null;
+    if (waving &amp;&amp; rootRef.current &amp;&amp; 'IntersectionObserver' in window) {
+      observer = new IntersectionObserver(entries =&gt; {
+        visible = entries.some(entry =&gt; entry.isIntersecting);
+        schedule();
+      });
+      observer.observe(rootRef.current);
+    }
+    if (waving) document.fonts?.ready.then(relayout);
+
+    schedule();
+
+    return () =&gt; {
+      cancelAnimationFrame(frame);
+      observer?.disconnect();
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleLeave);
+      window.removeEventListener('touchcancel', handleLeave);
+      window.removeEventListener('scroll', schedule, { capture: true });
+      window.removeEventListener('resize', relayout);
+      root.removeEventListener('mouseleave', handleLeave);
+    };
+  }, [
+    axes,
+    fromFontVariationSettings,
+    containerRef,
+    radius,
+    falloff,
+    smoothing,
+    fromColor,
+    toColor,
+    scale,
+    lift,
+    idleWave,
+    fontSize,
+    label,
+    lineStarts
+  ]);
+
+  const words = label.split(' ');
+  const breakSet = new Set(lineStarts ? lineStarts.split(',').map(Number) : []);
+  let letterIndex = 0;
+
+  return (
+    &lt;span
+      ref={setRoot}
+      className={`${className} variable-proximity`}
+      onClick={onClick}
+      style={{
+        display: 'inline',
+        ...(fontSize !== undefined ? { fontSize: typeof fontSize === 'number' ? `${fontSize}px` : fontSize } : {}),
+        ...(lineStarts !== null ? { whiteSpace: 'nowrap' } : {}),
+        ...style
+      }}
+      {...restProps}
+    &gt;
+      {words.map((word, wordIndex) =&gt; (
+        &lt;Fragment key={wordIndex}&gt;
+          {breakSet.has(wordIndex) &amp;&amp; &lt;br /&gt;}
+          &lt;span data-word=&quot;&quot; style={{ display: 'inline-block', whiteSpace: 'nowrap' }}&gt;
+            {word.split('').map(letter =&gt; {
+              const currentLetterIndex = letterIndex++;
+              return (
+                &lt;span
+                  key={currentLetterIndex}
+                  ref={el =&gt; {
+                    letterRefs.current[currentLetterIndex] = el;
+                  }}
+                  style={{
+                    display: 'inline-block',
+                    fontVariationSettings: fromFontVariationSettings,
+                    color: fromColor || undefined,
+                    transformOrigin: '50% 80%'
+                  }}
+                  aria-hidden=&quot;true&quot;
+                &gt;
+                  {letter}
+                &lt;/span&gt;
+              );
+            })}
+            {wordIndex &lt; words.length - 1 &amp;&amp; &lt;span style={{ display: 'inline-block' }}&gt;&amp;nbsp;&lt;/span&gt;}
+          &lt;/span&gt;
+        &lt;/Fragment&gt;
+      ))}
+      &lt;span className=&quot;sr-only&quot;&gt;{label}&lt;/span&gt;
+    &lt;/span&gt;
+  );
+});
+
+VariableProximity.displayName = 'VariableProximity';
+export default VariableProximity;
+</pre><pre>@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&amp;display=swap');
+
+.variable-proximity {
+  font-family: 'Roboto Flex', sans-serif;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+</pre></details>
+</div>
+<style>#vfq{all:initial;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:2147483000;width:min(560px,calc(100vw - 16px));box-sizing:border-box;padding:8px;border-radius:18px;background:rgba(23,21,18,.97);border:1px solid #4a443c;box-shadow:0 10px 30px rgba(0,0,0,.55);font:600 14px/1.2 system-ui,sans-serif;color:#f2ede4}
+#vfq *{box-sizing:border-box;font:inherit}
+#vfq .q{display:grid;grid-template-columns:44px 1.25fr 1fr 1.25fr;gap:6px}
+#vfq button,#vfq a.b{display:flex;align-items:center;justify-content:center;white-space:nowrap;min-height:46px;padding:0 8px;border-radius:12px;border:1px solid #4a443c;background:transparent;color:#f2ede4;text-decoration:none;cursor:pointer}
+#vfq .go{background:#e6c27a;color:#1b160d;border-color:#e6c27a}
+#vfq .like[aria-pressed=true]{background:#e6c27a22;border-color:#e6c27a;color:#e6c27a}
+#vfq .meta{display:flex;justify-content:space-between;padding:8px 4px 0;color:#aba395;font-weight:500;font-size:12.5px}
+#vfq .meta a{color:#e6c27a;text-decoration:none}
+#vfq textarea{display:none;width:100%;margin:0 0 8px;padding:10px 12px;border-radius:12px;border:1px solid #4a443c;background:#201d19;color:#f2ede4;min-height:68px;resize:vertical;font-weight:500}
+#vfq.open textarea{display:block}</style>
+<div id="vfq" role="region" aria-label="Оценка элемента">
+  <textarea placeholder="Что понравилось? Что поменять? Одной фразой — это уйдёт в ответ."></textarea>
+  <div class="q">
+    <a class="b" href="../TextPressure/" aria-label="Назад">←</a>
+    <button type="button" class="like" aria-pressed="false">♡ Хочу это</button>
+    <button type="button" class="cm">Заметка</button>
+    <a class="b go" href="../Stepper/">Дальше →</a>
+  </div>
+  <div class="meta"><span>Приём 5 из 13</span><a href="../../#biblioteka">Вся библиотека</a></div>
+</div>
+<script>(function(){var C={"id":"VariableProximity","key":"vf-opros-v1","n":13,"i":4,"prev":"../TextPressure/","next":"../Stepper/","last":false,"lift":false};var S;try{S=JSON.parse(localStorage.getItem(C.key)||'{}')}catch(e){S={}}S.e=S.e||{};S.ec=S.ec||{};
+var q=document.getElementById('vfq');var like=q.querySelector('.like'),note=q.querySelector('textarea');
+function save(){try{localStorage.setItem(C.key,JSON.stringify(S))}catch(e){}}
+function paint(){like.setAttribute('aria-pressed',!!S.e[C.id]);like.textContent=S.e[C.id]?'\u2665 Хочу это':'\u2661 Хочу это'}
+note.value=S.ec[C.id]||'';if(note.value)q.classList.add('open');paint();
+like.onclick=function(){S.e[C.id]=!S.e[C.id];save();paint()};
+q.querySelector('.cm').onclick=function(){q.classList.toggle('open');if(q.classList.contains('open'))note.focus()};
+note.oninput=function(){S.ec[C.id]=note.value;save()};
+})();</script>
+</body></html>

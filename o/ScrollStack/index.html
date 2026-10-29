@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<title>Листы стопкой · оригинал из библиотеки</title>
+<link rel="icon" href="../../kit/icons/favicon.png"><link rel="stylesheet" href="../../kit/fonts/fonts.css">
+<style>
+:root{--bg:#171512;--bg2:#201d19;--line:#36312b;--text:#f2ede4;--muted:#aba395;--acc:#e6c27a;--acc-ink:#1b160d;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 'Golos Text',system-ui,sans-serif;padding-bottom:150px}
+a{color:var(--acc);text-underline-offset:3px}.vf-wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.vf-strip{display:flex;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line);font-size:14px}.vf-strip span{flex:1;text-align:center;color:var(--muted)}
+.vf-badge{display:inline-block;padding:4px 12px;border-radius:999px;border:1px solid var(--acc);color:var(--acc);font-size:13px;font-weight:600;margin:26px 0 10px}
+h1{font:700 clamp(28px,5vw,46px)/1.08 'Onest',sans-serif;margin:0 0 8px;letter-spacing:-.01em}.vf-en{color:var(--muted);margin:0 0 16px}
+.vf-what{font-size:19px;margin:0 0 8px;max-width:64ch}.vf-why{color:var(--muted);margin:0 0 18px;max-width:64ch}.vf-why b{color:var(--text)}
+.vf-meta{display:flex;gap:10px 22px;flex-wrap:wrap;color:var(--muted);font-size:14.5px;margin:0 0 18px}
+.vf-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;background:var(--acc);color:var(--acc-ink);font-weight:600;text-decoration:none;font-size:15px}.vf-btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.vf-stage{margin:18px 0 20px;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative;padding:16px;background:#0b0a10;color:#f4f4f5}
+.vf-hb{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px;justify-items:center}.vf-hb figure{margin:0;text-align:center}.vf-hb figcaption{font-size:12.5px;color:#6b6558}
+details{margin:8px 0}summary{cursor:pointer;color:var(--acc);padding:8px 0}pre{margin:8px 0 0;padding:14px;border-radius:12px;background:#0f0e0c;border:1px solid var(--line);overflow:auto;max-height:480px;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#d8d2c4}
+.vf-note{color:var(--muted);font-size:14px}
+</style></head><body>
+<div class="vf-strip"><a href="../../#biblioteka">← Библиотека возможностей</a><span>Листы стопкой</span><a href="../../opros/">Опрос</a></div>
+<div class="vf-wrap">
+  <span class="vf-badge">Оригинал из библиотеки React Bits · без правок</span>
+  <h1>Листы стопкой</h1><p class="vf-en">ScrollStack</p>
+  <p class="vf-what">Карточки при прокрутке ложатся друг на друга стопкой. Прокручивайте внутри рамки.</p>
+  <div class="vf-stage"><link rel="stylesheet" href="app.css"><div id="root"></div><script src="app.js"></script></div>
+  <p class="vf-why"><b>Для сайта мастерской:</b> Порядок работ: приёмка, диагностика, ремонт, выдача. Каждый этап — отдельным листом, видно последовательность.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="vf-btn vf-btn--ghost" href="https://github.com/DavidHDev/react-bits/blob/main/src/content/Components/ScrollStack/ScrollStack.jsx" target="_blank" rel="noopener">Исходник на GitHub</a><a class="vf-btn vf-btn--ghost" href="../../v/lib-on-r3-easy/#lib-process-stack">Как это в нашей сборке: Этапы · листы стопкой</a></div>
+  <div class="vf-meta" style="margin-top:14px"><span>Лицензия: MIT + Commons Clause</span><span>В составе сайта использовать можно; перепродавать как отдельные компоненты нельзя.</span></div>
+  <p class="vf-note">Цвета и шрифты здесь родные, как задумал автор библиотеки. В нашем сайте элемент возьмёт цвета и шрифты утверждённого дизайна.</p>
+  <details><summary>Исходный код элемента (как в библиотеке)</summary><pre>'use client';
+
+import { Children, Fragment, isValidElement, useLayoutEffect, useRef } from 'react';
+import './ScrollStack.css';
+
+const resolveOffset = (value, size) =&gt; {
+  if (typeof value === 'number') return value;
+  const text = String(value).trim();
+  if (text.endsWith('%')) return (parseFloat(text) / 100) * size;
+  return parseFloat(text) || 0;
+};
+
+const toLength = value =&gt; (typeof value === 'number' ? `${value}px` : value);
+
+const scrollsInside = (node, stop, delta) =&gt; {
+  for (let element = node; element &amp;&amp; element !== stop; element = element.parentElement) {
+    if (element.scrollHeight &lt;= element.clientHeight + 1) continue;
+    const overflow = getComputedStyle(element).overflowY;
+    if (overflow !== 'auto' &amp;&amp; overflow !== 'scroll') continue;
+    if (delta &gt; 0 ? element.scrollTop + element.clientHeight &lt; element.scrollHeight - 1 : element.scrollTop &gt; 0) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const ScrollStackItem = ({ children, itemClassName = '', style }) =&gt; (
+  &lt;div className={`scroll-stack-card ${itemClassName}`.trim()} style={style}&gt;
+    {children}
+    &lt;span className=&quot;scroll-stack-card__shade&quot; aria-hidden=&quot;true&quot; /&gt;
+  &lt;/div&gt;
+);
+
+const ScrollStack = ({
+  children,
+  className = '',
+  itemDistance = 100,
+  itemStackDistance = 24,
+  stackPosition = '15%',
+  itemScale = 0.05,
+  baseScale = 0.8,
+  dimAmount = 0.2,
+  blurAmount = 0,
+  tiltAmount = 0,
+  rotationAmount = 0,
+  holdDistance = 200,
+  smoothScroll = true,
+  snap = false,
+  useWindowScroll = false,
+  onStackComplete
+}) =&gt; {
+  const rootRef = useRef(null);
+  const innerRef = useRef(null);
+  const endRef = useRef(null);
+  const settingsRef = useRef(null);
+  const scheduleRef = useRef(null);
+  const items = Children.toArray(children);
+
+  useLayoutEffect(() =&gt; {
+    settingsRef.current = {
+      itemDistance,
+      itemStackDistance,
+      stackPosition,
+      itemScale,
+      baseScale,
+      dimAmount,
+      blurAmount,
+      tiltAmount,
+      rotationAmount,
+      holdDistance,
+      smoothScroll,
+      snap,
+      onStackComplete
+    };
+    scheduleRef.current?.();
+  });
+
+  useLayoutEffect(() =&gt; {
+    const root = rootRef.current;
+    const inner = innerRef.current;
+    const end = endRef.current;
+    if (!root || !inner || !end) return undefined;
+
+    const windowed = useWindowScroll;
+    const target = windowed ? window : root;
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const cache = new Map();
+    let frame = 0;
+    let glide = 0;
+    let rest = 0;
+    let complete = false;
+    let gliding = false;
+    let pressed = false;
+    let current = 0;
+    let goal = 0;
+    let written = 0;
+    let last = 0;
+    let points = [];
+    let reach = 0;
+
+    const readScroll = () =&gt; (windowed ? window.scrollY : root.scrollTop);
+    const maxScroll = () =&gt;
+      windowed ? document.documentElement.scrollHeight - window.innerHeight : root.scrollHeight - root.clientHeight;
+    const writeScroll = value =&gt; {
+      written = value;
+      target.scrollTo({ top: value, behavior: 'instant' });
+    };
+
+    const write = (key, value, apply) =&gt; {
+      if (cache.get(key) === value) return false;
+      cache.set(key, value);
+      apply(value);
+      return true;
+    };
+
+    const update = () =&gt; {
+      frame = 0;
+      const settings = settingsRef.current;
+      const slots = Array.from(inner.children).filter(child =&gt; child.hasAttribute('data-stack-slot'));
+      if (!settings || !slots.length) return;
+
+      const viewHeight = windowed ? window.innerHeight : root.clientHeight;
+      const viewTop = windowed ? 0 : root.getBoundingClientRect().top + root.clientTop;
+      const stackTop = resolveOffset(settings.stackPosition, viewHeight);
+      const offset = settings.itemStackDistance;
+      const heights = slots.map(slot =&gt; slot.offsetHeight);
+      const tops = slots.map(slot =&gt; slot.getBoundingClientRect().top);
+      const lastPin = stackTop + (slots.length - 1) * offset;
+      const padTop = windowed ? 0 : stackTop;
+      const endHeight =
+        settings.holdDistance + (windowed ? 0 : Math.max(0, viewHeight - lastPin - heights[heights.length - 1]));
+
+      let moved = write('padTop', padTop, value =&gt; {
+        inner.style.paddingTop = `${value}px`;
+      });
+      moved =
+        write('endHeight', endHeight, value =&gt; {
+          end.style.height = `${value}px`;
+        }) || moved;
+
+      let flow = inner.getBoundingClientRect().top - viewTop + readScroll() + padTop;
+      points = heights.map((height, i) =&gt; {
+        const point = flow - stackTop - i * offset;
+        flow += height + settings.itemDistance;
+        return point;
+      });
+      reach = Math.max(40, (heights[0] + settings.itemDistance - offset) / 2);
+
+      const depths = slots.map(() =&gt; 0);
+      let lastCover = 0;
+      for (let j = 1; j &lt; slots.length; j++) {
+        const pinBefore = viewTop + stackTop + (j - 1) * offset;
+        const start = pinBefore + heights[j - 1];
+        const span = Math.max(1, start - pinBefore - offset);
+        const cover = Math.min(1, Math.max(0, (start - tops[j]) / span));
+        for (let i = 0; i &lt; j; i++) depths[i] += cover;
+        lastCover = cover;
+      }
+
+      const dimStep = Math.min(Math.max(settings.dimAmount, 0), 1);
+      slots.forEach((slot, i) =&gt; {
+        const card = slot.firstElementChild;
+        if (!card) return;
+        const depth = depths[i];
+        const lean = Math.min(depth, 1);
+        const scale = Math.max(Math.min(settings.baseScale, 1), 1 - depth * settings.itemScale);
+        const tilt = -lean * settings.tiltAmount;
+        const turn = lean * settings.rotationAmount * (i % 2 ? -1 : 1);
+        const blur = depth * settings.blurAmount;
+        const dim = 1 - Math.pow(1 - dimStep, depth);
+        const transform =
+          depth &lt; 0.0005
+            ? ''
+            : `perspective(1200px) rotateX(${tilt.toFixed(2)}deg) rotate(${turn.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
+        write(`transform${i}`, transform, value =&gt; {
+          card.style.transform = value;
+        });
+        write(`filter${i}`, blur &gt; 0.01 ? `blur(${blur.toFixed(2)}px)` : '', value =&gt; {
+          card.style.filter = value;
+        });
+        write(`dim${i}`, dim.toFixed(3), value =&gt; {
+          card.style.setProperty('--scroll-stack-dim', value);
+        });
+      });
+
+      const done = slots.length &gt; 1 &amp;&amp; lastCover &gt;= 0.999;
+      if (done !== complete) {
+        complete = done;
+        if (done) settings.onStackComplete?.();
+      }
+
+      if (moved) schedule();
+    };
+
+    const schedule = () =&gt; {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    const step = now =&gt; {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      if (Math.abs(readScroll() - written) &gt; 2) {
+        gliding = false;
+        glide = 0;
+        settleSoon();
+        return;
+      }
+      current += (goal - current) * (1 - Math.pow(0.9, dt * 60));
+      if (Math.abs(goal - current) &lt; 0.5) current = goal;
+      writeScroll(current);
+      if (current === goal) {
+        gliding = false;
+        glide = 0;
+        settleSoon();
+        return;
+      }
+      glide = requestAnimationFrame(step);
+    };
+
+    const glideTo = value =&gt; {
+      goal = Math.min(Math.max(value, 0), maxScroll());
+      if (motion.matches) {
+        writeScroll(goal);
+        return;
+      }
+      if (gliding) return;
+      gliding = true;
+      current = readScroll();
+      written = current;
+      last = performance.now();
+      glide = requestAnimationFrame(step);
+    };
+
+    const settle = () =&gt; {
+      rest = 0;
+      if (!settingsRef.current?.snap || gliding || pressed || !points.length) return;
+      const now = readScroll();
+      const nearest = points.reduce((best, point) =&gt; (Math.abs(point - now) &lt; Math.abs(best - now) ? point : best));
+      const gap = Math.abs(nearest - now);
+      if (gap &gt; 1 &amp;&amp; gap &lt; reach) glideTo(nearest);
+    };
+
+    const settleSoon = () =&gt; {
+      window.clearTimeout(rest);
+      rest = window.setTimeout(settle, 140);
+    };
+
+    const onScroll = () =&gt; {
+      schedule();
+      if (!gliding) settleSoon();
+    };
+
+    const onWheel = event =&gt; {
+      if (!settingsRef.current?.smoothScroll || motion.matches || event.defaultPrevented || event.ctrlKey) return;
+      if (Math.abs(event.deltaX) &gt; Math.abs(event.deltaY)) return;
+      const page = windowed ? window.innerHeight : root.clientHeight;
+      const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? page : 1);
+      if (!delta || scrollsInside(event.target, windowed ? document.body : root, delta)) return;
+      const base = gliding ? goal : readScroll();
+      if ((delta &lt; 0 &amp;&amp; base &lt;= 0) || (delta &gt; 0 &amp;&amp; base &gt;= maxScroll() - 0.5)) return;
+      event.preventDefault();
+      window.clearTimeout(rest);
+      glideTo(base + delta);
+    };
+
+    const onPress = () =&gt; {
+      pressed = true;
+      window.clearTimeout(rest);
+    };
+
+    const onRelease = () =&gt; {
+      if (!pressed) return;
+      pressed = false;
+      settleSoon();
+    };
+
+    const observer = new ResizeObserver(schedule);
+    observer.observe(root);
+    observer.observe(inner);
+    target.addEventListener('scroll', onScroll, { passive: true });
+    target.addEventListener('wheel', onWheel, { passive: false });
+    target.addEventListener('pointerdown', onPress, { passive: true });
+    window.addEventListener('pointerup', onRelease, { passive: true });
+    window.addEventListener('pointercancel', onRelease, { passive: true });
+    window.addEventListener('resize', schedule);
+    scheduleRef.current = schedule;
+    update();
+
+    return () =&gt; {
+      cancelAnimationFrame(frame);
+      cancelAnimationFrame(glide);
+      window.clearTimeout(rest);
+      observer.disconnect();
+      target.removeEventListener('scroll', onScroll);
+      target.removeEventListener('wheel', onWheel);
+      target.removeEventListener('pointerdown', onPress);
+      window.removeEventListener('pointerup', onRelease);
+      window.removeEventListener('pointercancel', onRelease);
+      window.removeEventListener('resize', schedule);
+      scheduleRef.current = null;
+    };
+  }, [useWindowScroll]);
+
+  return (
+    &lt;div
+      ref={rootRef}
+      className={`scroll-stack ${useWindowScroll ? 'scroll-stack--window' : 'scroll-stack--contained'} ${className}`.trim()}
+    &gt;
+      &lt;div ref={innerRef} className=&quot;scroll-stack__inner&quot;&gt;
+        {items.map((child, index) =&gt; {
+          const gap = itemDistance - (items.length - index) * itemStackDistance;
+          return (
+            &lt;Fragment key={isValidElement(child) ? (child.key ?? index) : index}&gt;
+              {index &gt; 0 &amp;&amp; (
+                &lt;div aria-hidden=&quot;true&quot; style={{ height: Math.max(0, gap), marginTop: Math.min(0, gap) }} /&gt;
+              )}
+              &lt;div
+                data-stack-slot=&quot;&quot;
+                className=&quot;scroll-stack__slot&quot;
+                style={{
+                  top: `calc(${toLength(stackPosition)} + ${index * itemStackDistance}px)`,
+                  marginBottom: (items.length - 1 - index) * itemStackDistance,
+                  zIndex: index + 1
+                }}
+              &gt;
+                {child}
+              &lt;/div&gt;
+            &lt;/Fragment&gt;
+          );
+        })}
+        &lt;div ref={endRef} className=&quot;scroll-stack__end&quot; aria-hidden=&quot;true&quot; /&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default ScrollStack;
+</pre><pre>.scroll-stack {
+  position: relative;
+  width: 100%;
+}
+
+.scroll-stack--contained {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.scroll-stack__inner {
+  position: relative;
+  padding-inline: clamp(1rem, 6%, 5rem);
+}
+
+.scroll-stack__slot {
+  position: sticky;
+}
+
+.scroll-stack-card {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 20rem;
+  padding: 2.5rem;
+  border-radius: 28px;
+  background: light-dark(#ffffff, #18181b);
+  color: light-dark(#18181b, #fafafa);
+  box-shadow:
+    0 0 0 1px light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.08)),
+    0 -12px 40px -16px rgb(0 0 0 / 0.35),
+    0 24px 48px -24px rgb(0 0 0 / 0.4);
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+.scroll-stack-card__shade {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #000;
+  opacity: var(--scroll-stack-dim, 0);
+  pointer-events: none;
+}
+</pre></details>
+</div>
+<style>#vfq{all:initial;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:2147483000;width:min(560px,calc(100vw - 16px));box-sizing:border-box;padding:8px;border-radius:18px;background:rgba(23,21,18,.97);border:1px solid #4a443c;box-shadow:0 10px 30px rgba(0,0,0,.55);font:600 14px/1.2 system-ui,sans-serif;color:#f2ede4}
+#vfq *{box-sizing:border-box;font:inherit}
+#vfq .q{display:grid;grid-template-columns:44px 1.25fr 1fr 1.25fr;gap:6px}
+#vfq button,#vfq a.b{display:flex;align-items:center;justify-content:center;white-space:nowrap;min-height:46px;padding:0 8px;border-radius:12px;border:1px solid #4a443c;background:transparent;color:#f2ede4;text-decoration:none;cursor:pointer}
+#vfq .go{background:#e6c27a;color:#1b160d;border-color:#e6c27a}
+#vfq .like[aria-pressed=true]{background:#e6c27a22;border-color:#e6c27a;color:#e6c27a}
+#vfq .meta{display:flex;justify-content:space-between;padding:8px 4px 0;color:#aba395;font-weight:500;font-size:12.5px}
+#vfq .meta a{color:#e6c27a;text-decoration:none}
+#vfq textarea{display:none;width:100%;margin:0 0 8px;padding:10px 12px;border-radius:12px;border:1px solid #4a443c;background:#201d19;color:#f2ede4;min-height:68px;resize:vertical;font-weight:500}
+#vfq.open textarea{display:block}</style>
+<div id="vfq" role="region" aria-label="Оценка элемента">
+  <textarea placeholder="Что понравилось? Что поменять? Одной фразой — это уйдёт в ответ."></textarea>
+  <div class="q">
+    <a class="b" href="../DomeGallery/" aria-label="Назад">←</a>
+    <button type="button" class="like" aria-pressed="false">♡ Хочу это</button>
+    <button type="button" class="cm">Заметка</button>
+    <a class="b go" href="../SplitFlapText/">Дальше →</a>
+  </div>
+  <div class="meta"><span>Приём 2 из 13</span><a href="../../#biblioteka">Вся библиотека</a></div>
+</div>
+<script>(function(){var C={"id":"ScrollStack","key":"vf-opros-v1","n":13,"i":1,"prev":"../DomeGallery/","next":"../SplitFlapText/","last":false,"lift":false};var S;try{S=JSON.parse(localStorage.getItem(C.key)||'{}')}catch(e){S={}}S.e=S.e||{};S.ec=S.ec||{};
+var q=document.getElementById('vfq');var like=q.querySelector('.like'),note=q.querySelector('textarea');
+function save(){try{localStorage.setItem(C.key,JSON.stringify(S))}catch(e){}}
+function paint(){like.setAttribute('aria-pressed',!!S.e[C.id]);like.textContent=S.e[C.id]?'\u2665 Хочу это':'\u2661 Хочу это'}
+note.value=S.ec[C.id]||'';if(note.value)q.classList.add('open');paint();
+like.onclick=function(){S.e[C.id]=!S.e[C.id];save();paint()};
+q.querySelector('.cm').onclick=function(){q.classList.toggle('open');if(q.classList.contains('open'))note.focus()};
+note.oninput=function(){S.ec[C.id]=note.value;save()};
+})();</script>
+</body></html>

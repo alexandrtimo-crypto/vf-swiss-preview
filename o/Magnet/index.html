@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<title>Притяжение к курсору · оригинал из библиотеки</title>
+<link rel="icon" href="../../kit/icons/favicon.png"><link rel="stylesheet" href="../../kit/fonts/fonts.css">
+<style>
+:root{--bg:#171512;--bg2:#201d19;--line:#36312b;--text:#f2ede4;--muted:#aba395;--acc:#e6c27a;--acc-ink:#1b160d;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 'Golos Text',system-ui,sans-serif;padding-bottom:150px}
+a{color:var(--acc);text-underline-offset:3px}.vf-wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.vf-strip{display:flex;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line);font-size:14px}.vf-strip span{flex:1;text-align:center;color:var(--muted)}
+.vf-badge{display:inline-block;padding:4px 12px;border-radius:999px;border:1px solid var(--acc);color:var(--acc);font-size:13px;font-weight:600;margin:26px 0 10px}
+h1{font:700 clamp(28px,5vw,46px)/1.08 'Onest',sans-serif;margin:0 0 8px;letter-spacing:-.01em}.vf-en{color:var(--muted);margin:0 0 16px}
+.vf-what{font-size:19px;margin:0 0 8px;max-width:64ch}.vf-why{color:var(--muted);margin:0 0 18px;max-width:64ch}.vf-why b{color:var(--text)}
+.vf-meta{display:flex;gap:10px 22px;flex-wrap:wrap;color:var(--muted);font-size:14.5px;margin:0 0 18px}
+.vf-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;background:var(--acc);color:var(--acc-ink);font-weight:600;text-decoration:none;font-size:15px}.vf-btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.vf-stage{margin:18px 0 20px;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative;padding:16px;background:#0b0a10;color:#f4f4f5}
+.vf-hb{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px;justify-items:center}.vf-hb figure{margin:0;text-align:center}.vf-hb figcaption{font-size:12.5px;color:#6b6558}
+details{margin:8px 0}summary{cursor:pointer;color:var(--acc);padding:8px 0}pre{margin:8px 0 0;padding:14px;border-radius:12px;background:#0f0e0c;border:1px solid var(--line);overflow:auto;max-height:480px;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#d8d2c4}
+.vf-note{color:var(--muted);font-size:14px}
+</style></head><body>
+<div class="vf-strip"><a href="../../#biblioteka">← Библиотека возможностей</a><span>Притяжение к курсору</span><a href="../../opros/">Опрос</a></div>
+<div class="vf-wrap">
+  <span class="vf-badge">Оригинал из библиотеки React Bits · без правок</span>
+  <h1>Притяжение к курсору</h1><p class="vf-en">Magnet</p>
+  <p class="vf-what">Элемент слегка тянется к курсору, когда тот рядом. Подведите мышь.</p>
+  <div class="vf-stage"><div id="root"></div><script src="app.js"></script></div>
+  <p class="vf-why"><b>Для сайта мастерской:</b> Главная кнопка «Записаться» живее реагирует на приближение.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="vf-btn vf-btn--ghost" href="https://github.com/DavidHDev/react-bits/blob/main/src/content/Animations/Magnet/Magnet.jsx" target="_blank" rel="noopener">Исходник на GitHub</a></div>
+  <div class="vf-meta" style="margin-top:14px"><span>Лицензия: MIT + Commons Clause</span><span>В составе сайта использовать можно; перепродавать как отдельные компоненты нельзя.</span></div>
+  <p class="vf-note">Цвета и шрифты здесь родные, как задумал автор библиотеки. В нашем сайте элемент возьмёт цвета и шрифты утверждённого дизайна.</p>
+  <details><summary>Исходный код элемента (как в библиотеке)</summary><pre>'use client';
+
+import { useEffect, useRef } from 'react';
+
+const DEFAULT_SPRING = { stiffness: 170, damping: 16, mass: 1 };
+
+const smoothstep = (edge0, edge1, value) =&gt; {
+  const t = Math.min(1, Math.max(0, (value - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
+};
+
+const registry = new Set();
+const field = { pointer: null, owner: null };
+let detach = null;
+
+const reach = (rect, pointer) =&gt; {
+  const dx = pointer.x - (rect.left + rect.width / 2);
+  const dy = pointer.y - (rect.top + rect.height / 2);
+  const outside = Math.hypot(Math.max(0, Math.abs(dx) - rect.width / 2), Math.max(0, Math.abs(dy) - rect.height / 2));
+  return { dx, dy, outside };
+};
+
+const arbitrate = () =&gt; {
+  let winner = null;
+  let nearest = Infinity;
+  let closest = Infinity;
+  for (const entry of registry) {
+    const s = entry.settings.current;
+    let near = null;
+    if (field.pointer &amp;&amp; !s.disabled &amp;&amp; !entry.reduce) {
+      near = reach(entry.wrapper.getBoundingClientRect(), field.pointer);
+      if (near.outside &gt; s.padding) near = null;
+    }
+    if (!s.exclusive) {
+      if (near || entry.active) entry.wake();
+      continue;
+    }
+    if (!near) continue;
+    const center = Math.hypot(near.dx, near.dy);
+    if (near.outside &lt; nearest || (near.outside === nearest &amp;&amp; center &lt; closest)) {
+      winner = entry;
+      nearest = near.outside;
+      closest = center;
+    }
+  }
+  const previous = field.owner;
+  field.owner = winner;
+  if (previous &amp;&amp; previous !== winner) previous.wake();
+  if (winner) winner.wake();
+};
+
+const attach = () =&gt; {
+  const onPointerMove = event =&gt; {
+    if (event.pointerType === 'touch') return;
+    field.pointer = { x: event.clientX, y: event.clientY };
+    arbitrate();
+  };
+  const onLeave = () =&gt; {
+    field.pointer = null;
+    arbitrate();
+  };
+  window.addEventListener('pointermove', onPointerMove, { passive: true });
+  window.addEventListener('scroll', arbitrate, { passive: true, capture: true });
+  document.documentElement.addEventListener('pointerleave', onLeave);
+  window.addEventListener('blur', onLeave);
+  return () =&gt; {
+    window.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('scroll', arbitrate, { capture: true });
+    document.documentElement.removeEventListener('pointerleave', onLeave);
+    window.removeEventListener('blur', onLeave);
+  };
+};
+
+const Magnet = ({
+  children,
+  padding = 100,
+  disabled = false,
+  magnetStrength = 2,
+  maxOffset,
+  exclusive = true,
+  axis = 'both',
+  tilt = 0,
+  scale = 1,
+  spring,
+  onActiveChange,
+  wrapperClassName = '',
+  innerClassName = '',
+  style,
+  ...props
+}) =&gt; {
+  const wrapperRef = useRef(null);
+  const innerRef = useRef(null);
+  const wakeRef = useRef(null);
+  const settings = {
+    padding: Math.max(0, padding),
+    disabled,
+    strength: Math.max(0.1, magnetStrength),
+    maxOffset,
+    exclusive,
+    axis,
+    tilt,
+    scale,
+    stiffness: Math.max(1, spring?.stiffness ?? DEFAULT_SPRING.stiffness),
+    damping: Math.max(0, spring?.damping ?? DEFAULT_SPRING.damping),
+    mass: Math.max(0.01, spring?.mass ?? DEFAULT_SPRING.mass),
+    onActiveChange
+  };
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
+
+  useEffect(() =&gt; {
+    const wrapper = wrapperRef.current;
+    const inner = innerRef.current;
+    if (!wrapper || !inner) return undefined;
+
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const current = { x: 0, y: 0, tiltX: 0, tiltY: 0, scale: 1 };
+    const velocity = { x: 0, y: 0, tiltX: 0, tiltY: 0, scale: 0 };
+    let active = false;
+    let raf = 0;
+    let last = 0;
+
+    const solve = (target, dt) =&gt; {
+      const s = settingsRef.current;
+      let resting = true;
+      Object.keys(current).forEach(key =&gt; {
+        const force = s.stiffness * (target[key] - current[key]) - s.damping * velocity[key];
+        velocity[key] += (force / s.mass) * dt;
+        current[key] += velocity[key] * dt;
+        const epsilon = key === 'scale' ? 0.001 : 0.05;
+        if (Math.abs(target[key] - current[key]) &gt; epsilon || Math.abs(velocity[key]) &gt; epsilon) resting = false;
+      });
+      return resting;
+    };
+
+    const measure = () =&gt; {
+      const s = settingsRef.current;
+      const target = { x: 0, y: 0, tiltX: 0, tiltY: 0, scale: 1 };
+      if (s.disabled || reduce || !field.pointer) return { target, engaged: false };
+      if (s.exclusive &amp;&amp; field.owner !== entry) return { target, engaged: false };
+      const rect = wrapper.getBoundingClientRect();
+      const { dx, dy, outside } = reach(rect, field.pointer);
+      if (outside &gt; s.padding) return { target, engaged: false };
+      const pull = s.padding &gt; 0 ? 1 - smoothstep(s.padding * 0.5, s.padding, outside) : 1;
+      let x = s.axis === 'y' ? 0 : (dx / s.strength) * pull;
+      let y = s.axis === 'x' ? 0 : (dy / s.strength) * pull;
+      if (s.maxOffset !== undefined &amp;&amp; s.maxOffset !== null) {
+        const length = Math.hypot(x, y);
+        if (length &gt; s.maxOffset) {
+          x *= s.maxOffset / length;
+          y *= s.maxOffset / length;
+        }
+      }
+      const nx = Math.max(-1, Math.min(1, dx / Math.max(rect.width / 2, 1)));
+      const ny = Math.max(-1, Math.min(1, dy / Math.max(rect.height / 2, 1)));
+      target.x = x;
+      target.y = y;
+      target.tiltX = -ny * s.tilt * pull;
+      target.tiltY = nx * s.tilt * pull;
+      target.scale = 1 + (s.scale - 1) * pull;
+      return { target, engaged: true };
+    };
+
+    const apply = () =&gt; {
+      const { x, y, tiltX, tiltY, scale } = current;
+      const turned = Math.abs(tiltX) &gt; 0.01 || Math.abs(tiltY) &gt; 0.01;
+      inner.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)${
+        turned ? ` perspective(800px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)` : ''
+      }${Math.abs(scale - 1) &gt; 0.0005 ? ` scale(${scale.toFixed(4)})` : ''}`;
+    };
+
+    const frame = now =&gt; {
+      raf = 0;
+      const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
+      last = now;
+      const { target, engaged } = measure();
+      if (engaged !== active) {
+        active = engaged;
+        entry.active = engaged;
+        if (engaged) wrapper.setAttribute('data-magnet-active', '');
+        else wrapper.removeAttribute('data-magnet-active');
+        settingsRef.current.onActiveChange?.(engaged);
+      }
+      const steps = Math.ceil(dt / (1 / 120));
+      let resting = true;
+      for (let i = 0; i &lt; steps; i++) resting = solve(target, dt / steps);
+      if (resting) {
+        Object.keys(current).forEach(key =&gt; {
+          current[key] = target[key];
+          velocity[key] = 0;
+        });
+      }
+      apply();
+      if (!resting) raf = requestAnimationFrame(frame);
+      else last = 0;
+    };
+
+    function wake() {
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+
+    const entry = { wrapper, settings: settingsRef, reduce, wake, active: false };
+    registry.add(entry);
+    if (!detach) detach = attach();
+    wakeRef.current = () =&gt; {
+      arbitrate();
+      wake();
+    };
+
+    return () =&gt; {
+      cancelAnimationFrame(raf);
+      wakeRef.current = null;
+      registry.delete(entry);
+      if (field.owner === entry) field.owner = null;
+      if (!registry.size &amp;&amp; detach) {
+        detach();
+        detach = null;
+      }
+    };
+  }, []);
+
+  useEffect(() =&gt; {
+    wakeRef.current?.();
+  });
+
+  return (
+    &lt;div
+      ref={wrapperRef}
+      className={wrapperClassName}
+      style={{ position: 'relative', display: 'inline-block', ...style }}
+      {...props}
+    &gt;
+      &lt;div ref={innerRef} className={innerClassName} style={{ willChange: 'transform' }}&gt;
+        {children}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default Magnet;
+</pre></details>
+</div>
+<style>#vfq{all:initial;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:2147483000;width:min(560px,calc(100vw - 16px));box-sizing:border-box;padding:8px;border-radius:18px;background:rgba(23,21,18,.97);border:1px solid #4a443c;box-shadow:0 10px 30px rgba(0,0,0,.55);font:600 14px/1.2 system-ui,sans-serif;color:#f2ede4}
+#vfq *{box-sizing:border-box;font:inherit}
+#vfq .q{display:grid;grid-template-columns:44px 1.25fr 1fr 1.25fr;gap:6px}
+#vfq button,#vfq a.b{display:flex;align-items:center;justify-content:center;white-space:nowrap;min-height:46px;padding:0 8px;border-radius:12px;border:1px solid #4a443c;background:transparent;color:#f2ede4;text-decoration:none;cursor:pointer}
+#vfq .go{background:#e6c27a;color:#1b160d;border-color:#e6c27a}
+#vfq .like[aria-pressed=true]{background:#e6c27a22;border-color:#e6c27a;color:#e6c27a}
+#vfq .meta{display:flex;justify-content:space-between;padding:8px 4px 0;color:#aba395;font-weight:500;font-size:12.5px}
+#vfq .meta a{color:#e6c27a;text-decoration:none}
+#vfq textarea{display:none;width:100%;margin:0 0 8px;padding:10px 12px;border-radius:12px;border:1px solid #4a443c;background:#201d19;color:#f2ede4;min-height:68px;resize:vertical;font-weight:500}
+#vfq.open textarea{display:block}</style>
+<div id="vfq" role="region" aria-label="Оценка элемента">
+  <textarea placeholder="Что понравилось? Что поменять? Одной фразой — это уйдёт в ответ."></textarea>
+  <div class="q">
+    <a class="b" href="../HoldButton/" aria-label="Назад">←</a>
+    <button type="button" class="like" aria-pressed="false">♡ Хочу это</button>
+    <button type="button" class="cm">Заметка</button>
+    <a class="b go" href="../GlareHover/">Дальше →</a>
+  </div>
+  <div class="meta"><span>Приём 11 из 13</span><a href="../../#biblioteka">Вся библиотека</a></div>
+</div>
+<script>(function(){var C={"id":"Magnet","key":"vf-opros-v1","n":13,"i":10,"prev":"../HoldButton/","next":"../GlareHover/","last":false,"lift":false};var S;try{S=JSON.parse(localStorage.getItem(C.key)||'{}')}catch(e){S={}}S.e=S.e||{};S.ec=S.ec||{};
+var q=document.getElementById('vfq');var like=q.querySelector('.like'),note=q.querySelector('textarea');
+function save(){try{localStorage.setItem(C.key,JSON.stringify(S))}catch(e){}}
+function paint(){like.setAttribute('aria-pressed',!!S.e[C.id]);like.textContent=S.e[C.id]?'\u2665 Хочу это':'\u2661 Хочу это'}
+note.value=S.ec[C.id]||'';if(note.value)q.classList.add('open');paint();
+like.onclick=function(){S.e[C.id]=!S.e[C.id];save();paint()};
+q.querySelector('.cm').onclick=function(){q.classList.toggle('open');if(q.classList.contains('open'))note.focus()};
+note.oninput=function(){S.ec[C.id]=note.value;save()};
+})();</script>
+</body></html>

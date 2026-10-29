@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<title>Механическое табло · оригинал из библиотеки</title>
+<link rel="icon" href="../../kit/icons/favicon.png"><link rel="stylesheet" href="../../kit/fonts/fonts.css">
+<style>
+:root{--bg:#171512;--bg2:#201d19;--line:#36312b;--text:#f2ede4;--muted:#aba395;--acc:#e6c27a;--acc-ink:#1b160d;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 'Golos Text',system-ui,sans-serif;padding-bottom:150px}
+a{color:var(--acc);text-underline-offset:3px}.vf-wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.vf-strip{display:flex;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line);font-size:14px}.vf-strip span{flex:1;text-align:center;color:var(--muted)}
+.vf-badge{display:inline-block;padding:4px 12px;border-radius:999px;border:1px solid var(--acc);color:var(--acc);font-size:13px;font-weight:600;margin:26px 0 10px}
+h1{font:700 clamp(28px,5vw,46px)/1.08 'Onest',sans-serif;margin:0 0 8px;letter-spacing:-.01em}.vf-en{color:var(--muted);margin:0 0 16px}
+.vf-what{font-size:19px;margin:0 0 8px;max-width:64ch}.vf-why{color:var(--muted);margin:0 0 18px;max-width:64ch}.vf-why b{color:var(--text)}
+.vf-meta{display:flex;gap:10px 22px;flex-wrap:wrap;color:var(--muted);font-size:14.5px;margin:0 0 18px}
+.vf-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;background:var(--acc);color:var(--acc-ink);font-weight:600;text-decoration:none;font-size:15px}.vf-btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.vf-stage{margin:18px 0 20px;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative;padding:16px;background:#0b0a10;color:#f4f4f5}
+.vf-hb{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px;justify-items:center}.vf-hb figure{margin:0;text-align:center}.vf-hb figcaption{font-size:12.5px;color:#6b6558}
+details{margin:8px 0}summary{cursor:pointer;color:var(--acc);padding:8px 0}pre{margin:8px 0 0;padding:14px;border-radius:12px;background:#0f0e0c;border:1px solid var(--line);overflow:auto;max-height:480px;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#d8d2c4}
+.vf-note{color:var(--muted);font-size:14px}
+</style></head><body>
+<div class="vf-strip"><a href="../../#biblioteka">← Библиотека возможностей</a><span>Механическое табло</span><a href="../../opros/">Опрос</a></div>
+<div class="vf-wrap">
+  <span class="vf-badge">Оригинал из библиотеки React Bits · без правок</span>
+  <h1>Механическое табло</h1><p class="vf-en">SplitFlapText</p>
+  <p class="vf-what">Буквы перещёлкиваются, как на вокзальном табло. Слова меняются сами.</p>
+  <div class="vf-stage"><link rel="stylesheet" href="app.css"><div id="root"></div><script src="app.js"></script></div>
+  <p class="vf-why"><b>Для сайта мастерской:</b> Статус заказа («Принят», «Диагностика», «Готово») и заголовки с характером механики.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="vf-btn vf-btn--ghost" href="https://github.com/DavidHDev/react-bits/blob/main/src/content/TextAnimations/SplitFlapText/SplitFlapText.jsx" target="_blank" rel="noopener">Исходник на GitHub</a><a class="vf-btn vf-btn--ghost" href="../../v/lib-on-r3-easy/#lib-process-board">Как это в нашей сборке: Статус заказа · табло</a></div>
+  <div class="vf-meta" style="margin-top:14px"><span>Лицензия: MIT + Commons Clause</span><span>В составе сайта использовать можно; перепродавать как отдельные компоненты нельзя.</span></div>
+  <p class="vf-note">Цвета и шрифты здесь родные, как задумал автор библиотеки. В нашем сайте элемент возьмёт цвета и шрифты утверждённого дизайна.</p>
+  <details><summary>Исходный код элемента (как в библиотеке)</summary><pre>'use client';
+
+import { useEffect, useMemo, useRef, useState } from 'react';
+import './SplitFlapText.css';
+
+const DEFAULT_WORDS = ['LAUNCH READY', 'SYNC ONLINE', 'SIGNAL LIVE'];
+
+const CHARSETS = {
+  alpha: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  alphanumeric: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+  numeric: '0123456789'
+};
+
+const toCssUnit = value =&gt; (typeof value === 'number' ? `${value}px` : value);
+
+const resolveCharset = charset =&gt; {
+  if (CHARSETS[charset]) return CHARSETS[charset];
+  return typeof charset === 'string' &amp;&amp; charset.length &gt; 0 ? charset : CHARSETS.alphanumeric;
+};
+
+const normalizePhrase = (phrase, width, align = 'left') =&gt; {
+  const safe = String(phrase ?? '').slice(0, width);
+  if (align === 'right') return safe.padStart(width, ' ');
+  if (align === 'center') {
+    return safe.padStart(safe.length + Math.floor((width - safe.length) / 2), ' ').padEnd(width, ' ');
+  }
+  return safe.padEnd(width, ' ');
+};
+
+const createTiles = phrase =&gt;
+  phrase.split('').map(char =&gt; ({
+    current: char,
+    next: char,
+    flipping: false,
+    tick: 0
+  }));
+
+const sampleChar = charset =&gt; charset.charAt(Math.floor(Math.random() * charset.length)) || ' ';
+
+const buildSequence = (target, flips, charset) =&gt; {
+  const steps = [];
+  for (let i = 0; i &lt; flips; i += 1) {
+    steps.push(sampleChar(charset));
+  }
+  steps.push(target);
+  return steps;
+};
+
+const toGlyph = char =&gt; (char === ' ' ? ' ' : char);
+
+const shuffleIndices = count =&gt; {
+  const list = Array.from({ length: count }, (_, index) =&gt; index);
+  for (let i = count - 1; i &gt; 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [list[i], list[j]] = [list[j], list[i]];
+  }
+  return list;
+};
+
+const cascadeStep = (index, width, order, randomOrder) =&gt; {
+  if (order === 'right') return width - 1 - index;
+  if (order === 'center') return Math.floor(Math.abs(index - (width - 1) / 2));
+  if (order === 'random' &amp;&amp; randomOrder) return randomOrder[index];
+  return index;
+};
+
+const clampUnit = value =&gt; Math.min(1, Math.max(0, Number(value) || 0));
+
+const round = value =&gt; Number(value.toFixed(3));
+
+const getReducedMotion = () =&gt;
+  typeof window !== 'undefined' &amp;&amp; Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+
+const usePrefersReducedMotion = () =&gt; {
+  const [prefersReduced, setPrefersReduced] = useState(getReducedMotion);
+
+  useEffect(() =&gt; {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleChange = () =&gt; setPrefersReduced(mediaQuery.matches);
+
+    handleChange();
+    mediaQuery.addEventListener('change', handleChange);
+
+    return () =&gt; mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  return prefersReduced;
+};
+
+const SplitFlapText = ({
+  words = ['LAUNCH READY', 'SYNC ONLINE', 'SIGNAL LIVE'],
+  text,
+  flipDuration = 0.12,
+  stagger = 0.06,
+  cycleDelay = 2400,
+  charset = 'alphanumeric',
+  flipsPerChar = 8,
+  tileColor = '#111827',
+  textColor = '#f8fafc',
+  tileRadius = 8,
+  gap = 6,
+  fontSize = 52,
+  loop = true,
+  padTo = 12,
+  align = 'left',
+  intro = true,
+  glare = 0,
+  depth = 0.5,
+  order = 'left',
+  tileStyle = 'board',
+  className = '',
+  style = {},
+  ...props
+}) =&gt; {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const rafRef = useRef(null);
+  const shownRef = useRef(null);
+  const fromRef = useRef(null);
+  const indexRef = useRef(0);
+  const phrasesRef = useRef(null);
+
+  const sourceWords = Array.isArray(words) &amp;&amp; words.length &gt; 0 ? words : DEFAULT_WORDS;
+  const phrasesKey = typeof text === 'string' ? text : sourceWords.map(word =&gt; String(word ?? '')).join('\u001f');
+  const phrases = useMemo(() =&gt; phrasesKey.split('\u001f'), [phrasesKey]);
+
+  const width = useMemo(() =&gt; {
+    const longest = phrases.reduce((max, phrase) =&gt; Math.max(max, phrase.length), 1);
+    return Math.max(1, Math.ceil(Number(padTo) || 0), longest);
+  }, [padTo, phrases]);
+
+  const normalizedPhrases = useMemo(
+    () =&gt; phrases.map(phrase =&gt; normalizePhrase(phrase, width, align)),
+    [phrases, width, align]
+  );
+
+  const timing = useMemo(
+    () =&gt; ({
+      flipMs: Math.max(40, (Number(flipDuration) || 0.12) * 1000),
+      staggerMs: Math.max(0, (Number(stagger) || 0) * 1000),
+      holdMs: Math.max(400, Number(cycleDelay) || 2400),
+      flips: Math.max(0, Math.floor(Number(flipsPerChar) || 0)),
+      glyphs: resolveCharset(charset),
+      order
+    }),
+    [flipDuration, stagger, cycleDelay, flipsPerChar, charset, order]
+  );
+  const timingRef = useRef(timing);
+
+  const [tiles, setTiles] = useState(() =&gt; createTiles(intro ? ' '.repeat(width) : normalizedPhrases[0]));
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() =&gt; {
+    timingRef.current = timing;
+  }, [timing]);
+
+  useEffect(() =&gt; {
+    let cancelled = false;
+    let timer = 0;
+
+    const stopFrame = () =&gt; {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    };
+
+    const animateTo = target =&gt; {
+      const { flipMs, staggerMs, flips, glyphs, order: cascade } = timingRef.current;
+      const from = normalizePhrase(shownRef.current ?? target, target.length);
+      const randomOrder = cascade === 'random' ? shuffleIndices(target.length) : null;
+
+      stopFrame();
+      shownRef.current = target;
+      fromRef.current = null;
+
+      const plans = [];
+      if (!prefersReducedMotion) {
+        for (let index = 0; index &lt; target.length; index += 1) {
+          if (from[index] === target[index]) continue;
+          plans.push({
+            index,
+            from: from[index],
+            target: target[index],
+            sequence: buildSequence(target[index], flips, glyphs),
+            start: cascadeStep(index, target.length, cascade, randomOrder) * staggerMs,
+            step: -1,
+            done: false
+          });
+        }
+      }
+
+      if (!plans.length) {
+        setTiles(createTiles(target));
+        return 0;
+      }
+
+      fromRef.current = from;
+      setTiles(createTiles(from));
+
+      const totalDuration = plans.reduce((max, plan) =&gt; Math.max(max, plan.start + plan.sequence.length * flipMs), 0);
+      const startedAt = performance.now();
+
+      const tick = now =&gt; {
+        if (cancelled) return;
+
+        const elapsed = now - startedAt;
+        const updates = [];
+        let running = false;
+
+        plans.forEach(plan =&gt; {
+          const localElapsed = elapsed - plan.start;
+
+          if (localElapsed &lt; 0) {
+            running = true;
+            return;
+          }
+
+          const step = Math.floor(localElapsed / flipMs);
+
+          if (step &lt; plan.sequence.length) {
+            running = true;
+
+            if (step !== plan.step) {
+              plan.step = step;
+              updates.push({
+                index: plan.index,
+                current: step === 0 ? plan.from : plan.sequence[step - 1],
+                next: plan.sequence[step],
+                done: false
+              });
+            }
+          } else if (!plan.done) {
+            plan.done = true;
+            updates.push({
+              index: plan.index,
+              current: plan.target,
+              next: plan.target,
+              done: true
+            });
+          }
+        });
+
+        if (updates.length &gt; 0) {
+          setTiles(previous =&gt; {
+            const nextTiles = [...previous];
+            updates.forEach(update =&gt; {
+              const tile = nextTiles[update.index];
+              if (!tile) return;
+
+              nextTiles[update.index] = {
+                current: update.current,
+                next: update.next,
+                flipping: !update.done,
+                tick: tile.tick + 1
+              };
+            });
+            return nextTiles;
+          });
+        }
+
+        if (running) {
+          rafRef.current = requestAnimationFrame(tick);
+        } else {
+          rafRef.current = null;
+          fromRef.current = null;
+        }
+      };
+
+      rafRef.current = requestAnimationFrame(tick);
+      return totalDuration;
+    };
+
+    const show = index =&gt; {
+      indexRef.current = index;
+      setActiveIndex(index);
+      return animateTo(normalizedPhrases[index]);
+    };
+
+    const scheduleNext = delay =&gt; {
+      timer = window.setTimeout(() =&gt; {
+        if (cancelled) return;
+
+        if (document.hidden) {
+          scheduleNext(timingRef.current.holdMs);
+          return;
+        }
+
+        const nextIndex = indexRef.current + 1;
+        if (nextIndex &gt;= normalizedPhrases.length &amp;&amp; !loop) return;
+
+        const duration = show(nextIndex % normalizedPhrases.length);
+        scheduleNext(timingRef.current.holdMs + duration);
+      }, delay);
+    };
+
+    const samePhrases = phrasesRef.current === normalizedPhrases;
+    phrasesRef.current = normalizedPhrases;
+
+    if (shownRef.current === null) {
+      shownRef.current = intro ? ' '.repeat(width) : normalizedPhrases[0];
+    }
+
+    if (!samePhrases || indexRef.current &gt;= normalizedPhrases.length) {
+      indexRef.current = 0;
+    } else if (fromRef.current !== null) {
+      shownRef.current = fromRef.current;
+    }
+
+    let startDuration = 0;
+    if (shownRef.current === normalizedPhrases[indexRef.current]) {
+      stopFrame();
+      fromRef.current = null;
+      setActiveIndex(indexRef.current);
+      setTiles(createTiles(shownRef.current));
+    } else {
+      startDuration = show(indexRef.current);
+    }
+
+    if (normalizedPhrases.length &gt; 1) {
+      scheduleNext(timingRef.current.holdMs + startDuration);
+    }
+
+    return () =&gt; {
+      cancelled = true;
+      window.clearTimeout(timer);
+      stopFrame();
+    };
+  }, [normalizedPhrases, width, loop, intro, prefersReducedMotion]);
+
+  const label = String(phrases[activeIndex] ?? phrases[0] ?? '').trim();
+  const minimal = tileStyle === 'minimal';
+  const level = clampUnit(depth);
+  const flat = Math.min(1, level * 2);
+  const deep = Math.max(0, level - 0.5) * 2;
+  const sheen = minimal ? 0 : clampUnit(glare);
+  const shaded = !minimal &amp;&amp; deep &gt; 0;
+  const rootClass = [
+    'split-flap-text',
+    minimal &amp;&amp; 'split-flap-text--minimal',
+    sheen &gt; 0 &amp;&amp; 'split-flap-text--glare',
+    className
+  ]
+    .filter(Boolean)
+    .join(' ');
+  const componentStyle = {
+    '--split-flap-tile-color': tileColor,
+    '--split-flap-text-color': textColor,
+    '--split-flap-radius': toCssUnit(tileRadius),
+    '--split-flap-gap': toCssUnit(gap),
+    '--split-flap-font-size': toCssUnit(fontSize),
+    '--split-flap-flip-duration': `${Math.max(0.04, Number(flipDuration) || 0.12)}s`,
+    '--split-flap-front-from': round(1 + 0.08 * flat),
+    '--split-flap-front-to': round(1 - 0.48 * flat - 0.3 * deep),
+    '--split-flap-back-from': round(1 - 0.42 * flat - 0.3 * deep),
+    '--split-flap-hinge': `calc(1px + ${round(deep * 0.05)}em)`,
+    '--split-flap-hinge-shade': round(0.25 + 0.39 * flat + 0.21 * deep),
+    '--split-flap-drop': round(0.28 * flat + 0.2 * deep),
+    '--split-flap-lift': round(0.4 + 0.6 * flat + 0.7 * deep),
+    '--split-flap-cast': round(deep * 0.62),
+    '--split-flap-edge': `${round(deep * 0.035)}em`,
+    '--split-flap-split': `${round(0.015 + level * 0.06)}em`,
+    '--split-flap-glare': round(sheen * 0.55),
+    ...style
+  };
+
+  return (
+    &lt;div className={rootClass} style={componentStyle} {...props}&gt;
+      &lt;span className=&quot;split-flap-text__sr&quot;&gt;{label}&lt;/span&gt;
+      {tiles.map((tile, index) =&gt; (
+        &lt;span
+          className={`split-flap-text__tile${tile.flipping ? ' is-flipping' : ''}`}
+          aria-hidden=&quot;true&quot;
+          key={`${index}-${tiles.length}`}
+        &gt;
+          &lt;span className=&quot;split-flap-text__half split-flap-text__half--top&quot; key={minimal ? `top-${tile.tick}` : 'top'}&gt;
+            &lt;span className=&quot;split-flap-text__char&quot;&gt;{toGlyph(tile.flipping ? tile.next : tile.current)}&lt;/span&gt;
+          &lt;/span&gt;
+          &lt;span
+            className=&quot;split-flap-text__half split-flap-text__half--bottom&quot;
+            key={minimal ? `bottom-${tile.tick}` : 'bottom'}
+          &gt;
+            &lt;span className=&quot;split-flap-text__char&quot;&gt;{toGlyph(tile.current)}&lt;/span&gt;
+          &lt;/span&gt;
+
+          {tile.flipping &amp;&amp; (
+            &lt;&gt;
+              {shaded &amp;&amp; (
+                &lt;&gt;
+                  &lt;span className=&quot;split-flap-text__shade split-flap-text__shade--top&quot; key={`shade-top-${tile.tick}`} /&gt;
+                  &lt;span
+                    className=&quot;split-flap-text__shade split-flap-text__shade--bottom&quot;
+                    key={`shade-bottom-${tile.tick}`}
+                  /&gt;
+                &lt;/&gt;
+              )}
+              &lt;span className=&quot;split-flap-text__flap split-flap-text__flap--front&quot; key={`front-${index}-${tile.tick}`}&gt;
+                &lt;span className=&quot;split-flap-text__char&quot;&gt;{toGlyph(tile.current)}&lt;/span&gt;
+              &lt;/span&gt;
+              &lt;span className=&quot;split-flap-text__flap split-flap-text__flap--back&quot; key={`back-${index}-${tile.tick}`}&gt;
+                &lt;span className=&quot;split-flap-text__char&quot;&gt;{toGlyph(tile.next)}&lt;/span&gt;
+              &lt;/span&gt;
+            &lt;/&gt;
+          )}
+        &lt;/span&gt;
+      ))}
+    &lt;/div&gt;
+  );
+};
+
+export default SplitFlapText;
+</pre><pre>.split-flap-text {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--split-flap-gap, 6px);
+  color: var(--split-flap-text-color, #f8fafc);
+  font-family: 'SFMono-Regular', 'Roboto Mono', 'Cascadia Code', 'Liberation Mono', Menlo, monospace;
+  font-size: var(--split-flap-font-size, 52px);
+  font-weight: 760;
+  line-height: 1;
+  letter-spacing: 0.035em;
+  white-space: pre;
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.split-flap-text__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.split-flap-text__tile {
+  position: relative;
+  flex: none;
+  width: 0.78em;
+  height: 1.08em;
+  overflow: hidden;
+  border-radius: var(--split-flap-radius, 8px);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.16), transparent 44%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--split-flap-tile-color, #111827) 82%, white),
+      var(--split-flap-tile-color, #111827)
+    );
+  box-shadow:
+    0 0.035em 0.08em rgba(255, 255, 255, 0.08) inset,
+    0 -0.05em 0.1em rgba(0, 0, 0, 0.38) inset,
+    0 calc(0.16em * var(--split-flap-lift, 1)) calc(0.38em * var(--split-flap-lift, 1))
+      rgba(0, 0, 0, var(--split-flap-drop, 0.28));
+  perspective: 10em;
+  transform-style: preserve-3d;
+  isolation: isolate;
+}
+
+.split-flap-text__tile::before {
+  content: '';
+  position: absolute;
+  z-index: 8;
+  top: calc(50% - var(--split-flap-hinge, 1px) / 2);
+  left: 0;
+  width: 100%;
+  height: var(--split-flap-hinge, 1px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18) 18%,
+    rgba(0, 0, 0, var(--split-flap-hinge-shade, 0.64)) 50%,
+    rgba(255, 255, 255, 0.14) 82%,
+    transparent
+  );
+  box-shadow:
+    0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 0 rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.split-flap-text__tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: inherit;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2) inset;
+  pointer-events: none;
+}
+
+.split-flap-text__half,
+.split-flap-text__flap {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 34%), var(--split-flap-tile-color, #111827);
+  backface-visibility: hidden;
+}
+
+.split-flap-text__half--top,
+.split-flap-text__flap--front {
+  top: 0;
+}
+
+.split-flap-text__half--bottom,
+.split-flap-text__flap--back {
+  bottom: 0;
+}
+
+.split-flap-text__half--bottom,
+.split-flap-text__flap--back {
+  background:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.06), transparent 38%),
+    color-mix(in srgb, var(--split-flap-tile-color, #111827) 92%, black);
+}
+
+.split-flap-text__char {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--split-flap-text-color, #f8fafc);
+  text-shadow:
+    0 0.025em 0 rgba(255, 255, 255, 0.16),
+    0 0.09em 0.16em rgba(0, 0, 0, 0.42);
+}
+
+.split-flap-text__half--top .split-flap-text__char,
+.split-flap-text__flap--front .split-flap-text__char {
+  top: 0;
+}
+
+.split-flap-text__half--bottom .split-flap-text__char,
+.split-flap-text__flap--back .split-flap-text__char {
+  bottom: 0;
+}
+
+.split-flap-text__flap {
+  z-index: 6;
+  will-change: transform, filter;
+  transform-style: preserve-3d;
+}
+
+.split-flap-text__flap--front {
+  transform-origin: center bottom;
+  box-shadow: inset 0 var(--split-flap-edge, 0em) 0 rgba(255, 255, 255, 0.16);
+  animation: split-flap-front var(--split-flap-flip-duration, 0.12s) linear both;
+}
+
+.split-flap-text__flap--back {
+  transform-origin: center top;
+  transform: rotateX(90deg);
+  box-shadow: inset 0 calc(var(--split-flap-edge, 0em) * -1) 0 rgba(0, 0, 0, 0.4);
+  animation: split-flap-back var(--split-flap-flip-duration, 0.12s) linear both;
+}
+
+.split-flap-text__shade {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  pointer-events: none;
+  animation: split-flap-shade-top var(--split-flap-flip-duration, 0.12s) linear both;
+}
+
+.split-flap-text__shade--top {
+  top: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, var(--split-flap-cast, 0)), transparent 85%);
+}
+
+.split-flap-text__shade--bottom {
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, var(--split-flap-cast, 0)), transparent 90%);
+  animation-name: split-flap-shade-bottom;
+}
+
+.split-flap-text--glare .split-flap-text__flap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+      180deg,
+      transparent 32%,
+      rgba(255, 255, 255, var(--split-flap-glare, 0)) 50%,
+      transparent 68%
+    )
+    0 100% / 100% 300% no-repeat;
+  animation: split-flap-glare-front var(--split-flap-flip-duration, 0.12s) linear both;
+}
+
+.split-flap-text--glare .split-flap-text__flap--back::after {
+  animation-name: split-flap-glare-back;
+}
+
+.split-flap-text--minimal .split-flap-text__tile {
+  background: none;
+  box-shadow: none;
+  -webkit-mask:
+    linear-gradient(#000 0 0) top / 100% calc(50% - var(--split-flap-split, 0.045em) / 2) no-repeat,
+    linear-gradient(#000 0 0) bottom / 100% calc(50% - var(--split-flap-split, 0.045em) / 2) no-repeat;
+  mask:
+    linear-gradient(#000 0 0) top / 100% calc(50% - var(--split-flap-split, 0.045em) / 2) no-repeat,
+    linear-gradient(#000 0 0) bottom / 100% calc(50% - var(--split-flap-split, 0.045em) / 2) no-repeat;
+}
+
+.split-flap-text--minimal .split-flap-text__tile::before,
+.split-flap-text--minimal .split-flap-text__tile::after,
+.split-flap-text--minimal .split-flap-text__flap::after {
+  display: none;
+}
+
+.split-flap-text--minimal .split-flap-text__half,
+.split-flap-text--minimal .split-flap-text__flap {
+  background: none;
+  box-shadow: none;
+}
+
+.split-flap-text--minimal .split-flap-text__char {
+  text-shadow: none;
+}
+
+.split-flap-text--minimal .split-flap-text__tile.is-flipping .split-flap-text__half--top {
+  animation: split-flap-reveal var(--split-flap-flip-duration, 0.12s) linear both;
+}
+
+.split-flap-text--minimal .split-flap-text__tile.is-flipping .split-flap-text__half--bottom {
+  animation: split-flap-cover var(--split-flap-flip-duration, 0.12s) linear both;
+}
+
+@keyframes split-flap-front {
+  0% {
+    transform: rotateX(0deg);
+    filter: brightness(var(--split-flap-front-from, 1.08));
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+
+  50%,
+  100% {
+    transform: rotateX(-90deg);
+    filter: brightness(var(--split-flap-front-to, 0.52));
+  }
+}
+
+@keyframes split-flap-back {
+  0%,
+  50% {
+    transform: rotateX(90deg);
+    filter: brightness(var(--split-flap-back-from, 0.58));
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  100% {
+    transform: rotateX(0deg);
+    filter: brightness(1);
+  }
+}
+
+@keyframes split-flap-shade-top {
+  0%,
+  32% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes split-flap-shade-bottom {
+  0% {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes split-flap-glare-front {
+  0% {
+    background-position: 0 100%;
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    background-position: 0 0%;
+    opacity: 0.75;
+  }
+}
+
+@keyframes split-flap-glare-back {
+  0%,
+  50% {
+    background-position: 0 100%;
+    opacity: 0.75;
+  }
+
+  100% {
+    background-position: 0 0%;
+    opacity: 0;
+  }
+}
+
+@keyframes split-flap-reveal {
+  0% {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  23.14% {
+    clip-path: inset(0 0 99.21% 0);
+  }
+
+  29.67% {
+    clip-path: inset(0 0 95.55% 0);
+  }
+
+  33.95% {
+    clip-path: inset(0 0 89.09% 0);
+  }
+
+  37.41% {
+    clip-path: inset(0 0 79.46% 0);
+  }
+
+  40.56% {
+    clip-path: inset(0 0 66.05% 0);
+  }
+
+  43.73% {
+    clip-path: inset(0 0 47.69% 0);
+  }
+
+  47.38% {
+    clip-path: inset(0 0 21.22% 0);
+  }
+
+  50%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes split-flap-cover {
+  0%,
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+
+  54.42% {
+    clip-path: inset(35.75% 0 0 0);
+  }
+
+  57.44% {
+    clip-path: inset(55.86% 0 0 0);
+  }
+
+  60.39% {
+    clip-path: inset(70.63% 0 0 0);
+  }
+
+  63.65% {
+    clip-path: inset(81.86% 0 0 0);
+  }
+
+  67.65% {
+    clip-path: inset(90.23% 0 0 0);
+  }
+
+  73.17% {
+    clip-path: inset(96% 0 0 0);
+  }
+
+  82.62% {
+    clip-path: inset(99.25% 0 0 0);
+  }
+
+  100% {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .split-flap-text__flap,
+  .split-flap-text__flap::after,
+  .split-flap-text__shade,
+  .split-flap-text__half {
+    animation: none !important;
+  }
+}
+</pre></details>
+</div>
+<style>#vfq{all:initial;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:2147483000;width:min(560px,calc(100vw - 16px));box-sizing:border-box;padding:8px;border-radius:18px;background:rgba(23,21,18,.97);border:1px solid #4a443c;box-shadow:0 10px 30px rgba(0,0,0,.55);font:600 14px/1.2 system-ui,sans-serif;color:#f2ede4}
+#vfq *{box-sizing:border-box;font:inherit}
+#vfq .q{display:grid;grid-template-columns:44px 1.25fr 1fr 1.25fr;gap:6px}
+#vfq button,#vfq a.b{display:flex;align-items:center;justify-content:center;white-space:nowrap;min-height:46px;padding:0 8px;border-radius:12px;border:1px solid #4a443c;background:transparent;color:#f2ede4;text-decoration:none;cursor:pointer}
+#vfq .go{background:#e6c27a;color:#1b160d;border-color:#e6c27a}
+#vfq .like[aria-pressed=true]{background:#e6c27a22;border-color:#e6c27a;color:#e6c27a}
+#vfq .meta{display:flex;justify-content:space-between;padding:8px 4px 0;color:#aba395;font-weight:500;font-size:12.5px}
+#vfq .meta a{color:#e6c27a;text-decoration:none}
+#vfq textarea{display:none;width:100%;margin:0 0 8px;padding:10px 12px;border-radius:12px;border:1px solid #4a443c;background:#201d19;color:#f2ede4;min-height:68px;resize:vertical;font-weight:500}
+#vfq.open textarea{display:block}</style>
+<div id="vfq" role="region" aria-label="Оценка элемента">
+  <textarea placeholder="Что понравилось? Что поменять? Одной фразой — это уйдёт в ответ."></textarea>
+  <div class="q">
+    <a class="b" href="../ScrollStack/" aria-label="Назад">←</a>
+    <button type="button" class="like" aria-pressed="false">♡ Хочу это</button>
+    <button type="button" class="cm">Заметка</button>
+    <a class="b go" href="../TextPressure/">Дальше →</a>
+  </div>
+  <div class="meta"><span>Приём 3 из 13</span><a href="../../#biblioteka">Вся библиотека</a></div>
+</div>
+<script>(function(){var C={"id":"SplitFlapText","key":"vf-opros-v1","n":13,"i":2,"prev":"../ScrollStack/","next":"../TextPressure/","last":false,"lift":false};var S;try{S=JSON.parse(localStorage.getItem(C.key)||'{}')}catch(e){S={}}S.e=S.e||{};S.ec=S.ec||{};
+var q=document.getElementById('vfq');var like=q.querySelector('.like'),note=q.querySelector('textarea');
+function save(){try{localStorage.setItem(C.key,JSON.stringify(S))}catch(e){}}
+function paint(){like.setAttribute('aria-pressed',!!S.e[C.id]);like.textContent=S.e[C.id]?'\u2665 Хочу это':'\u2661 Хочу это'}
+note.value=S.ec[C.id]||'';if(note.value)q.classList.add('open');paint();
+like.onclick=function(){S.e[C.id]=!S.e[C.id];save();paint()};
+q.querySelector('.cm').onclick=function(){q.classList.toggle('open');if(q.classList.contains('open'))note.focus()};
+note.oninput=function(){S.ec[C.id]=note.value;save()};
+})();</script>
+</body></html>

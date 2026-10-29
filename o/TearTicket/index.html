@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<title>Отрывной талон · оригинал из библиотеки</title>
+<link rel="icon" href="../../kit/icons/favicon.png"><link rel="stylesheet" href="../../kit/fonts/fonts.css">
+<style>
+:root{--bg:#171512;--bg2:#201d19;--line:#36312b;--text:#f2ede4;--muted:#aba395;--acc:#e6c27a;--acc-ink:#1b160d;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 'Golos Text',system-ui,sans-serif;padding-bottom:150px}
+a{color:var(--acc);text-underline-offset:3px}.vf-wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.vf-strip{display:flex;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line);font-size:14px}.vf-strip span{flex:1;text-align:center;color:var(--muted)}
+.vf-badge{display:inline-block;padding:4px 12px;border-radius:999px;border:1px solid var(--acc);color:var(--acc);font-size:13px;font-weight:600;margin:26px 0 10px}
+h1{font:700 clamp(28px,5vw,46px)/1.08 'Onest',sans-serif;margin:0 0 8px;letter-spacing:-.01em}.vf-en{color:var(--muted);margin:0 0 16px}
+.vf-what{font-size:19px;margin:0 0 8px;max-width:64ch}.vf-why{color:var(--muted);margin:0 0 18px;max-width:64ch}.vf-why b{color:var(--text)}
+.vf-meta{display:flex;gap:10px 22px;flex-wrap:wrap;color:var(--muted);font-size:14.5px;margin:0 0 18px}
+.vf-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;background:var(--acc);color:var(--acc-ink);font-weight:600;text-decoration:none;font-size:15px}.vf-btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.vf-stage{margin:18px 0 20px;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative;padding:16px;background:#0b0a10;color:#f4f4f5}
+.vf-hb{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px;justify-items:center}.vf-hb figure{margin:0;text-align:center}.vf-hb figcaption{font-size:12.5px;color:#6b6558}
+details{margin:8px 0}summary{cursor:pointer;color:var(--acc);padding:8px 0}pre{margin:8px 0 0;padding:14px;border-radius:12px;background:#0f0e0c;border:1px solid var(--line);overflow:auto;max-height:480px;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#d8d2c4}
+.vf-note{color:var(--muted);font-size:14px}
+</style></head><body>
+<div class="vf-strip"><a href="../../#biblioteka">← Библиотека возможностей</a><span>Отрывной талон</span><a href="../../opros/">Опрос</a></div>
+<div class="vf-wrap">
+  <span class="vf-badge">Оригинал из библиотеки React Bits · без правок</span>
+  <h1>Отрывной талон</h1><p class="vf-en">TearTicket</p>
+  <p class="vf-what">Корешок талона можно оторвать жестом: потяните его вниз.</p>
+  <div class="vf-stage"><link rel="stylesheet" href="app.css"><div id="root"></div><script src="app.js"></script></div>
+  <p class="vf-why"><b>Для сайта мастерской:</b> Финал заявки: клиент «отрывает» свой номер заказа — запоминающийся момент.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="vf-btn vf-btn--ghost" href="https://github.com/DavidHDev/react-bits/blob/main/src/content/Micro/TearTicket/TearTicket.jsx" target="_blank" rel="noopener">Исходник на GitHub</a></div>
+  <div class="vf-meta" style="margin-top:14px"><span>Лицензия: MIT + Commons Clause</span><span>В составе сайта использовать можно; перепродавать как отдельные компоненты нельзя.</span></div>
+  <p class="vf-note">Цвета и шрифты здесь родные, как задумал автор библиотеки. В нашем сайте элемент возьмёт цвета и шрифты утверждённого дизайна.</p>
+  <details><summary>Исходный код элемента (как в библиотеке)</summary><pre>'use client';
+
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { motion, useMotionTemplate, useReducedMotion, useSpring, useTransform } from 'motion/react';
+
+import './TearTicket.css';
+
+const TILT_SPRING = { stiffness: 220, damping: 24, mass: 0.6 };
+const GRAVITY = 2400;
+const ART_INSET = 8;
+const ART_SPAN = 0.78;
+const RETRACT = 0.17;
+
+const clamp = (v, lo, hi) =&gt; Math.min(hi, Math.max(lo, v));
+const rad = deg =&gt; (deg * Math.PI) / 180;
+const wrap = a =&gt; Math.atan2(Math.sin(a), Math.cos(a));
+const noise = seed =&gt; {
+  let s = seed | 0;
+  return () =&gt; {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s &gt;&gt;&gt; 15), 1 | s);
+    t = (t + Math.imul(t ^ (t &gt;&gt;&gt; 7), 61 | t)) ^ t;
+    return ((t ^ (t &gt;&gt;&gt; 14)) &gt;&gt;&gt; 0) / 4294967296;
+  };
+};
+const f = n =&gt; n.toFixed(2);
+
+const buildGeometry = (W, H, S, R, holes, hole, notch, rough, vertical) =&gt; {
+  const main = vertical ? H : W;
+  const cross = vertical ? W : H;
+  const x = main - S;
+  const hr = hole / 2;
+  const n = Math.max(1, Math.round(holes));
+  const span = cross - 2 * notch;
+  const bridge = Math.max(2, (span - n * hole) / (n + 1));
+  const random = noise(n * 7919 + Math.round(cross));
+  const at = (u, v) =&gt; (vertical ? { x: v, y: u } : { x: u, y: v });
+  const pt = (u, v) =&gt; (vertical ? `${f(v)},${f(u)}` : `${f(u)},${f(v)}`);
+  const arc = (r, sweep, u, v) =&gt; `A${f(r)},${f(r)} 0 0 ${vertical ? 1 - sweep : sweep} ${pt(u, v)}`;
+  const bridges = [];
+  for (let i = 0; i &lt;= n; i += 1) {
+    const y0 = notch + i * (bridge + hole);
+    const y1 = y0 + bridge;
+    const steps = Math.max(2, Math.round(bridge / 2.2));
+    const pts = [];
+    for (let k = 1; k &lt; steps; k += 1) pts.push([x + (random() - 0.5) * 2 * rough, y0 + (bridge * k) / steps]);
+    bridges.push({ y0, y1, mid: (y0 + y1) / 2, pts, ...at(x, (y0 + y1) / 2) });
+  }
+  let body = `M${pt(R, 0)}L${pt(x - notch, 0)}${arc(notch, 0, x, notch)}`;
+  bridges.forEach((b, i) =&gt; {
+    b.pts.forEach(p =&gt; {
+      body += `L${pt(p[0], p[1])}`;
+    });
+    body += `L${pt(x, b.y1)}`;
+    if (i &lt; n) body += arc(hr, 0, x, b.y1 + hole);
+  });
+  body += `${arc(notch, 0, x - notch, cross)}L${pt(R, cross)}${arc(R, 1, 0, cross - R)}L${pt(0, R)}${arc(R, 1, R, 0)}Z`;
+  let stub = `M${pt(x + notch, 0)}L${pt(main - R, 0)}${arc(R, 1, main, R)}L${pt(main, cross - R)}${arc(R, 1, main - R, cross)}L${pt(x + notch, cross)}${arc(notch, 0, x, cross - notch)}`;
+  for (let i = n; i &gt;= 0; i -= 1) {
+    const b = bridges[i];
+    for (let k = b.pts.length - 1; k &gt;= 0; k -= 1) stub += `L${pt(b.pts[k][0], b.pts[k][1])}`;
+    stub += `L${pt(x, b.y0)}`;
+    if (i &gt; 0) stub += arc(hr, 0, x, b.y0 - hole);
+  }
+  stub += `${arc(notch, 0, x + notch, 0)}Z`;
+  const ends = [
+    { ...at(x, notch), v: notch },
+    { ...at(x, cross - notch), v: cross - notch }
+  ];
+  const bodyOutline = `M${pt(x, cross - notch)}${arc(notch, 0, x - notch, cross)}L${pt(R, cross)}${arc(R, 1, 0, cross - R)}L${pt(0, R)}${arc(R, 1, R, 0)}L${pt(x - notch, 0)}${arc(notch, 0, x, notch)}`;
+  const stubOutline = `M${pt(x, notch)}${arc(notch, 0, x + notch, 0)}L${pt(main - R, 0)}${arc(R, 1, main, R)}L${pt(main, cross - R)}${arc(R, 1, main - R, cross)}L${pt(x + notch, cross)}${arc(notch, 0, x, cross - notch)}`;
+  return { vertical, cross, body, stub, bridges, ends, bodyOutline, stubOutline };
+};
+
+export default function TearTicket({
+  children = null,
+  stub = null,
+  image = '',
+  imageAlt = '',
+  scrim = true,
+  imageRadius = 8,
+  orientation = 'horizontal',
+  torn,
+  defaultTorn = false,
+  onTear,
+  width = 460,
+  height = 250,
+  stubSize = 150,
+  radius = 16,
+  holes = 12,
+  holeSize = 6,
+  notch = 3,
+  roughness = 0,
+  tearAngle = 30,
+  stretch = 30,
+  resistance = 0.45,
+  rotate = 4,
+  tilt = true,
+  tiltMax = 9,
+  tiltReach = 260,
+  parallax = 6,
+  perspective = 1000,
+  background = '#27272a',
+  color = '#f5f5f5',
+  border = true,
+  borderColor = '',
+  borderWidth = 1,
+  stubBackground = '',
+  recenter = true,
+  disabled = false,
+  ariaLabel = 'Tear off the stub',
+  className = ''
+}) {
+  const reduce = useReducedMotion();
+  const controlled = torn !== undefined;
+  const [inner, setInner] = useState(defaultTorn);
+  const used = controlled ? torn : inner;
+  const [grabbing, setGrabbing] = useState(false);
+  const [instant, setInstant] = useState(used);
+  const [fit, setFit] = useState(1);
+  const rootRef = useRef(null);
+  const stageRef = useRef(null);
+  const bodyRef = useRef(null);
+  const stubRef = useRef(null);
+  const fibres = useRef([]);
+  const vertical = orientation === 'vertical';
+  const geo = useMemo(
+    () =&gt; buildGeometry(width, height, stubSize, radius, holes, holeSize, notch, roughness, vertical),
+    [width, height, stubSize, radius, holes, holeSize, notch, roughness, vertical]
+  );
+  const cfg = useRef({});
+  cfg.current = { geo, tearAngle, stretch, resistance, height, notch, reduce, onTear, controlled };
+  const sim = useRef({
+    raf: 0,
+    last: 0,
+    phase: 'idle',
+    id: null,
+    sign: 1,
+    hinge: { x: 0, y: 0 },
+    hingeV: 0,
+    grab: { x: 0, y: 0 },
+    start: { x: 0, y: 0 },
+    point: { x: 0, y: 0 },
+    a0: 0,
+    theta: 0,
+    thetaV: 0,
+    sx: 0,
+    sy: 0,
+    vx: 0,
+    vy: 0,
+    spin: 0,
+    pvx: 0,
+    pvy: 0,
+    pt: 0,
+    fade: 1,
+    age: 0,
+    bx: 0,
+    bv: 0,
+    snapped: [],
+    snapAt: [],
+    span: []
+  });
+
+  const tiltX = useSpring(0, TILT_SPRING);
+  const tiltY = useSpring(0, TILT_SPRING);
+  const plane = useMotionTemplate`perspective(${perspective}px) rotate(${rotate}deg) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  const depth = tiltMax &gt; 0 ? parallax / tiltMax : 0;
+  const artX = useTransform(tiltY, v =&gt; -v * depth);
+  const artY = useTransform(tiltX, v =&gt; v * depth);
+  const art = useMotionTemplate`translate(${artX}px, ${artY}px)`;
+  const inkX = useTransform(tiltY, v =&gt; v * depth * 0.22);
+  const inkY = useTransform(tiltX, v =&gt; -v * depth * 0.22);
+  const ink = useMotionTemplate`translate(${inkX}px, ${inkY}px)`;
+
+  useLayoutEffect(() =&gt; {
+    const el = rootRef.current;
+    if (!el) return undefined;
+    const measure = () =&gt; setFit(Math.min(1, el.clientWidth / width) || 1);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () =&gt; ro.disconnect();
+  }, [width]);
+
+  const paint = now =&gt; {
+    const s = sim.current;
+    const c = cfg.current;
+    const stubEl = stubRef.current;
+    const bodyEl = bodyRef.current;
+    if (stubEl) {
+      stubEl.style.transform = `translate(${s.sx.toFixed(2)}px, ${s.sy.toFixed(2)}px) rotate(${((s.theta * s.sign * 180) / Math.PI).toFixed(3)}deg)`;
+      stubEl.style.opacity = s.fade.toFixed(3);
+    }
+    const up = c.geo.vertical;
+    if (bodyEl) bodyEl.style.transform = `translate${up ? 'Y' : 'X'}(${s.bx.toFixed(2)}px)`;
+    const cos = Math.cos(s.theta * s.sign);
+    const sin = Math.sin(s.theta * s.sign);
+    const lx = up ? 1.6 : 0;
+    const ly = up ? 0 : 1.6;
+    let busy = false;
+    c.geo.bridges.forEach((b, i) =&gt; {
+      const dx = b.x - s.hinge.x;
+      const dy = b.y - s.hinge.y;
+      const tx = s.hinge.x + dx * cos - dy * sin + s.sx;
+      const ty = s.hinge.y + dx * sin + dy * cos + s.sy;
+      const ox = b.x + (up ? 0 : s.bx);
+      const oy = b.y + (up ? s.bx : 0);
+      const gx = tx - ox;
+      const gy = ty - oy;
+      const gap = Math.hypot(gx, gy);
+      const near = fibres.current[i * 2];
+      const far = fibres.current[i * 2 + 1];
+      if (!near || !far) return;
+      const live = s.phase !== 'idle' &amp;&amp; !c.reduce;
+      if (!s.snapped[i]) {
+        if (!live || gap &lt; 0.35) {
+          near.style.opacity = '0';
+          far.style.opacity = '0';
+          return;
+        }
+        const k = clamp(gap / c.stretch, 0, 1);
+        const sag = gap * 0.18;
+        const w = (1.7 - 1.15 * k).toFixed(2);
+        const sx = (up ? sag : 0) + gx / 2;
+        const sy = (up ? 0 : sag) + gy / 2;
+        near.setAttribute(
+          'd',
+          `M${f(ox - lx)},${f(oy - ly)}Q${f(ox - lx + sx)},${f(oy - ly + sy)} ${f(tx - lx)},${f(ty - ly)}`
+        );
+        far.setAttribute(
+          'd',
+          `M${f(ox + lx)},${f(oy + ly)}Q${f(ox + lx + gx - sx)},${f(oy + ly + gy - sy)} ${f(tx + lx)},${f(ty + ly)}`
+        );
+        near.style.strokeWidth = w;
+        far.style.strokeWidth = w;
+        near.style.opacity = '1';
+        far.style.opacity = '1';
+        s.span[i] = gap;
+        return;
+      }
+      const t = (now - s.snapAt[i]) / 1000 / RETRACT;
+      if (!live || t &gt;= 1 || !s.snapAt[i]) {
+        near.style.opacity = '0';
+        far.style.opacity = '0';
+        return;
+      }
+      busy = true;
+      const left = (1 - t) * (1 - t);
+      const len = (s.span[i] || c.stretch) * 0.5 * left;
+      const ux = gap &gt; 0.01 ? gx / gap : 1;
+      const uy = gap &gt; 0.01 ? gy / gap : 0;
+      near.setAttribute('d', `M${f(ox)},${f(oy)}L${f(ox + ux * len)},${f(oy + uy * len)}`);
+      far.setAttribute('d', `M${f(tx)},${f(ty)}L${f(tx - ux * len)},${f(ty - uy * len)}`);
+      near.style.strokeWidth = '0.9';
+      far.style.strokeWidth = '0.9';
+      near.style.opacity = left.toFixed(2);
+      far.style.opacity = left.toFixed(2);
+    });
+    return busy;
+  };
+
+  const finish = () =&gt; {
+    const c = cfg.current;
+    if (stubRef.current) stubRef.current.style.visibility = 'hidden';
+    if (!c.controlled) setInner(true);
+    c.onTear?.();
+  };
+
+  const step = now =&gt; {
+    const s = sim.current;
+    const c = cfg.current;
+    const dt = clamp((now - s.last) / 1000, 0.001, 0.034);
+    s.last = now;
+    const limit = rad(c.tearAngle);
+    if (s.phase === 'held') {
+      const count = c.geo.bridges.length;
+      let intact = 0;
+      for (let i = 0; i &lt; count; i += 1) if (!s.snapped[i]) intact += 1;
+      const hold = count ? intact / count : 0;
+      const follow = 0.92 * (1 - clamp(c.resistance, 0, 0.95) * hold);
+      const a = Math.atan2(s.point.y - s.hinge.y, s.point.x - s.hinge.x);
+      const want = clamp(wrap(a - s.a0) * s.sign * follow, 0, limit + 0.1);
+      s.theta += (want - s.theta) * (1 - Math.exp(-dt / 0.035));
+      const up = c.geo.vertical;
+      const away = clamp(((up ? s.point.y - s.start.y : s.point.x - s.start.x) || 0) * 0.05, -2, 4);
+      const side = clamp(((up ? s.point.x - s.start.x : s.point.y - s.start.y) || 0) * 0.05, -3, 3);
+      const px = up ? side : away;
+      const py = up ? away : side;
+      s.sx += (px - s.sx) * (1 - Math.exp(-dt / 0.05));
+      s.sy += (py - s.sy) * (1 - Math.exp(-dt / 0.05));
+      const slack = Math.hypot(s.sx, s.sy);
+      let left = 0;
+      c.geo.bridges.forEach((b, i) =&gt; {
+        if (s.snapped[i]) return;
+        const d = Math.abs(b.mid - s.hingeV);
+        if (2 * d * Math.sin(s.theta / 2) + slack &gt; c.stretch || s.theta &gt;= limit) {
+          s.snapped[i] = true;
+          s.snapAt[i] = now;
+          s.bv -= 560 / c.geo.bridges.length;
+        } else left += 1;
+      });
+      if (left === 0) {
+        s.phase = 'free';
+        s.bv -= 150;
+      }
+    } else if (s.phase === 'free') {
+      const cos = Math.cos(s.theta * s.sign);
+      const sin = Math.sin(s.theta * s.sign);
+      const gx = s.grab.x - s.hinge.x;
+      const gy = s.grab.y - s.hinge.y;
+      const wx = s.point.x - s.hinge.x - (gx * cos - gy * sin);
+      const wy = s.point.y - s.hinge.y - (gx * sin + gy * cos);
+      s.sx += (wx - s.sx) * (1 - Math.exp(-dt / 0.045));
+      s.sy += (wy - s.sy) * (1 - Math.exp(-dt / 0.045));
+      const hang = limit * 0.55 + clamp(s.pvx * 0.0009 * s.sign, -0.3, 0.3);
+      s.theta += (hang - s.theta) * (1 - Math.exp(-dt / 0.12));
+    } else if (s.phase === 'drop') {
+      s.age += dt;
+      s.vy += GRAVITY * dt;
+      s.sx += s.vx * dt;
+      s.sy += s.vy * dt;
+      s.theta += s.spin * dt;
+      if (s.age &gt; 0.16) s.fade = clamp(1 - (s.age - 0.16) / 0.42, 0, 1);
+      if (s.fade &lt;= 0) {
+        s.phase = 'idle';
+        finish();
+      }
+    } else if (s.phase === 'return') {
+      s.thetaV += (-300 * s.theta - 24 * s.thetaV) * dt;
+      s.theta += s.thetaV * dt;
+      s.sx += (0 - s.sx) * (1 - Math.exp(-dt / 0.07));
+      s.sy += (0 - s.sy) * (1 - Math.exp(-dt / 0.07));
+      if (Math.abs(s.theta) &lt; 0.0008 &amp;&amp; Math.abs(s.thetaV) &lt; 0.01 &amp;&amp; Math.hypot(s.sx, s.sy) &lt; 0.05) {
+        s.theta = 0;
+        s.thetaV = 0;
+        s.sx = 0;
+        s.sy = 0;
+        s.phase = 'idle';
+      }
+    }
+    s.bv += (-520 * s.bx - 30 * s.bv) * dt;
+    s.bx += s.bv * dt;
+    const busy = paint(now);
+    const moving = Math.abs(s.bx) &gt; 0.02 || Math.abs(s.bv) &gt; 0.5;
+    if (s.phase !== 'idle' || moving || busy) s.raf = requestAnimationFrame(step);
+    else {
+      s.bx = 0;
+      s.bv = 0;
+      paint(now);
+      s.raf = 0;
+    }
+  };
+  const run = () =&gt; {
+    const s = sim.current;
+    if (s.raf) return;
+    s.last = performance.now();
+    s.raf = requestAnimationFrame(step);
+  };
+
+  const reset = () =&gt; {
+    const s = sim.current;
+    cancelAnimationFrame(s.raf);
+    Object.assign(s, {
+      raf: 0,
+      phase: 'idle',
+      id: null,
+      theta: 0,
+      thetaV: 0,
+      sx: 0,
+      sy: 0,
+      fade: 1,
+      age: 0,
+      bx: 0,
+      bv: 0
+    });
+    s.snapped = [];
+    s.snapAt = [];
+    s.span = [];
+    if (stubRef.current) stubRef.current.style.visibility = '';
+    paint(performance.now());
+  };
+
+  useEffect(() =&gt; {
+    if (used) {
+      const s = sim.current;
+      if (s.phase === 'idle' &amp;&amp; stubRef.current) stubRef.current.style.visibility = 'hidden';
+      return;
+    }
+    setInstant(false);
+    reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [used]);
+  useEffect(() =&gt; {
+    reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [geo]);
+  useEffect(() =&gt; {
+    const s = sim.current;
+    return () =&gt; cancelAnimationFrame(s.raf);
+  }, []);
+
+  const local = e =&gt; {
+    const r = stageRef.current.getBoundingClientRect();
+    const k = r.width / width || 1;
+    return { x: (e.clientX - r.left) / k, y: (e.clientY - r.top) / k };
+  };
+  const tearNow = () =&gt; {
+    const s = sim.current;
+    cancelAnimationFrame(s.raf);
+    s.raf = 0;
+    s.phase = 'idle';
+    setInstant(true);
+    finish();
+  };
+  const onStubDown = e =&gt; {
+    const s = sim.current;
+    if (disabled || used || e.button !== 0 || s.id !== null || s.phase === 'drop') return;
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+    const p = local(e);
+    s.id = e.pointerId;
+    s.start = p;
+    s.point = p;
+    s.pt = performance.now();
+    s.pvx = 0;
+    s.pvy = 0;
+    if (s.theta &lt; 0.01) {
+      const far = (geo.vertical ? p.x : p.y) &lt; geo.cross / 2;
+      const end = geo.ends[far ? 1 : 0];
+      s.sign = (far ? 1 : -1) * (geo.vertical ? -1 : 1);
+      s.hinge = { x: end.x, y: end.y };
+      s.hingeV = end.v;
+      if (stubRef.current) stubRef.current.style.transformOrigin = `${s.hinge.x}px ${s.hinge.y}px`;
+    }
+    const cos = Math.cos(-s.theta * s.sign);
+    const sin = Math.sin(-s.theta * s.sign);
+    const ux = p.x - s.sx - s.hinge.x;
+    const uy = p.y - s.sy - s.hinge.y;
+    s.grab = { x: s.hinge.x + ux * cos - uy * sin, y: s.hinge.y + ux * sin + uy * cos };
+    s.a0 = Math.atan2(s.grab.y - s.hinge.y, s.grab.x - s.hinge.x) - (s.theta * s.sign) / 0.92;
+    s.phase = 'held';
+    s.thetaV = 0;
+    tiltX.set(0);
+    tiltY.set(0);
+    setGrabbing(true);
+    run();
+  };
+  const onStubMove = e =&gt; {
+    const s = sim.current;
+    if (s.id !== e.pointerId) return;
+    const p = local(e);
+    const now = performance.now();
+    const dt = Math.max(0.004, (now - s.pt) / 1000);
+    s.pvx += ((p.x - s.point.x) / dt - s.pvx) * 0.35;
+    s.pvy += ((p.y - s.point.y) / dt - s.pvy) * 0.35;
+    s.pt = now;
+    s.point = p;
+    if (cfg.current.reduce &amp;&amp; Math.hypot(p.x - s.start.x, p.y - s.start.y) &gt; 28) {
+      s.id = null;
+      setGrabbing(false);
+      tearNow();
+    }
+  };
+  const onStubUp = e =&gt; {
+    const s = sim.current;
+    if (s.id !== e.pointerId) return;
+    s.id = null;
+    try {
+      if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {}
+    setGrabbing(false);
+    if (s.phase === 'free') {
+      const still = performance.now() - s.pt &gt; 80;
+      s.vx = still ? 0 : clamp(s.pvx, -1600, 1600);
+      s.vy = still ? 0 : clamp(s.pvy, -1600, 1200);
+      s.spin = clamp(s.vx * 0.004, -6, 6) + 1.2 * s.sign;
+      s.age = 0;
+      s.phase = 'drop';
+    } else if (s.phase === 'held') {
+      s.phase = 'return';
+    }
+    run();
+  };
+  const onStubKey = e =&gt; {
+    if (disabled || used || (e.key !== 'Enter' &amp;&amp; e.key !== ' ')) return;
+    e.preventDefault();
+    if (!e.repeat) tearNow();
+  };
+
+  useEffect(() =&gt; {
+    if (!tilt || reduce || disabled) return undefined;
+    const move = e =&gt; {
+      const el = rootRef.current;
+      if (!el || e.pointerType === 'touch' || sim.current.id !== null) return;
+      const r = el.getBoundingClientRect();
+      const nx = clamp((e.clientX - (r.left + r.width / 2)) / (r.width / 2 + tiltReach), -1, 1);
+      const ny = clamp((e.clientY - (r.top + r.height / 2)) / (r.height / 2 + tiltReach), -1, 1);
+      tiltY.set(nx * tiltMax);
+      tiltX.set(-ny * tiltMax);
+    };
+    window.addEventListener('pointermove', move);
+    return () =&gt; window.removeEventListener('pointermove', move);
+  }, [tilt, reduce, disabled, tiltMax, tiltReach, tiltX, tiltY]);
+
+  return (
+    &lt;div
+      ref={rootRef}
+      className={`tear-ticket${className ? ` ${className}` : ''}`}
+      data-used={used ? '' : undefined}
+      data-orientation={orientation}
+      data-shift={used &amp;&amp; recenter ? (vertical ? 'y' : 'x') : undefined}
+      data-instant={instant ? '' : undefined}
+      data-grabbing={grabbing ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
+      style={{
+        '--tt-w': `${width}px`,
+        '--tt-h': `${height}px`,
+        '--tt-stub': `${stubSize}px`,
+        '--tt-bg': background,
+        '--tt-stub-bg': stubBackground || background,
+        '--tt-ink': color,
+        '--tt-edge': borderColor || `color-mix(in srgb, ${color} 16%, transparent)`,
+        '--tt-edge-w': borderWidth,
+        '--tt-parallax': `${parallax}px`,
+        '--tt-body-w': `${vertical ? width : width - stubSize}px`,
+        '--tt-body-h': `${vertical ? height - stubSize : height}px`,
+        '--tt-inset': `${ART_INSET}px`,
+        '--tt-span': ART_SPAN,
+        '--tt-art-radius': `${imageRadius}px`,
+        '--tt-fit': fit,
+        height: `${height * fit}px`
+      }}
+    &gt;
+      &lt;div ref={stageRef} className=&quot;tear-ticket__stage&quot;&gt;
+        &lt;motion.div className=&quot;tear-ticket__plane&quot; style={{ transform: plane }}&gt;
+          &lt;div ref={bodyRef} className=&quot;tear-ticket__piece&quot;&gt;
+            {border ? (
+              &lt;svg className=&quot;tear-ticket__edge&quot; viewBox={`0 0 ${width} ${height}`} aria-hidden=&quot;true&quot;&gt;
+                &lt;path d={geo.bodyOutline} /&gt;
+              &lt;/svg&gt;
+            ) : null}
+            &lt;div className=&quot;tear-ticket__paper&quot; style={{ clipPath: `path('${geo.body}')` }}&gt;
+              {image ? (
+                &lt;div className=&quot;tear-ticket__art&quot;&gt;
+                  &lt;motion.img
+                    className=&quot;tear-ticket__image&quot;
+                    src={image}
+                    alt={imageAlt}
+                    draggable={false}
+                    style={reduce ? undefined : { transform: art }}
+                  /&gt;
+                  {scrim ? &lt;div className=&quot;tear-ticket__scrim&quot; /&gt; : null}
+                &lt;/div&gt;
+              ) : null}
+              &lt;motion.div className=&quot;tear-ticket__content&quot; style={reduce ? undefined : { transform: ink }}&gt;
+                {children}
+              &lt;/motion.div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;svg className=&quot;tear-ticket__fibres&quot; aria-hidden=&quot;true&quot;&gt;
+            {geo.bridges.map((b, i) =&gt; (
+              &lt;g key={i}&gt;
+                &lt;path
+                  ref={el =&gt; {
+                    fibres.current[i * 2] = el;
+                  }}
+                /&gt;
+                &lt;path
+                  ref={el =&gt; {
+                    fibres.current[i * 2 + 1] = el;
+                  }}
+                /&gt;
+              &lt;/g&gt;
+            ))}
+          &lt;/svg&gt;
+          &lt;div
+            ref={stubRef}
+            className=&quot;tear-ticket__piece tear-ticket__piece--stub&quot;
+            role=&quot;button&quot;
+            tabIndex={disabled || used ? -1 : 0}
+            aria-label={ariaLabel}
+            aria-hidden={used || undefined}
+            aria-disabled={disabled || undefined}
+            onPointerDown={onStubDown}
+            onPointerMove={onStubMove}
+            onPointerUp={onStubUp}
+            onPointerCancel={onStubUp}
+            onLostPointerCapture={onStubUp}
+            onKeyDown={onStubKey}
+            onDragStart={e =&gt; e.preventDefault()}
+          &gt;
+            {border ? (
+              &lt;svg className=&quot;tear-ticket__edge&quot; viewBox={`0 0 ${width} ${height}`} aria-hidden=&quot;true&quot;&gt;
+                &lt;path d={geo.stubOutline} /&gt;
+              &lt;/svg&gt;
+            ) : null}
+            &lt;div className=&quot;tear-ticket__paper tear-ticket__paper--stub&quot; style={{ clipPath: `path('${geo.stub}')` }}&gt;
+              &lt;div className=&quot;tear-ticket__stub&quot;&gt;{stub}&lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/motion.div&gt;
+      &lt;/div&gt;
+      &lt;span className=&quot;tear-ticket__sr&quot; role=&quot;status&quot;&gt;
+        {used ? 'Used' : ''}
+      &lt;/span&gt;
+    &lt;/div&gt;
+  );
+}
+</pre><pre>.tear-ticket {
+  --tt-w: 460px;
+  --tt-h: 250px;
+  --tt-stub: 150px;
+  --tt-bg: #27272a;
+  --tt-stub-bg: #27272a;
+  --tt-ink: #f5f5f5;
+  --tt-edge: transparent;
+  --tt-edge-w: 1;
+  --tt-parallax: 6px;
+  --tt-body-w: 310px;
+  --tt-body-h: 250px;
+  --tt-inset: 8px;
+  --tt-span: 0.78;
+  --tt-art-radius: 8px;
+  --tt-fit: 1;
+
+  position: relative;
+  width: min(var(--tt-w), 100%);
+  color: var(--tt-ink);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tear-ticket[data-disabled] {
+  opacity: 0.6;
+}
+
+.tear-ticket__stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--tt-w);
+  height: var(--tt-h);
+  transform: scale(var(--tt-fit));
+  transform-origin: top left;
+  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tear-ticket[data-shift='x'] .tear-ticket__stage {
+  transform: translateX(calc(var(--tt-stub) * var(--tt-fit) / 2)) scale(var(--tt-fit));
+}
+
+.tear-ticket[data-shift='y'] .tear-ticket__stage {
+  transform: translateY(calc(var(--tt-stub) * var(--tt-fit) / 2)) scale(var(--tt-fit));
+}
+
+.tear-ticket__plane {
+  position: absolute;
+  inset: 0;
+}
+
+.tear-ticket__piece {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tear-ticket__piece--stub {
+  outline: none;
+  will-change: transform;
+}
+
+.tear-ticket__edge {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.tear-ticket__edge path {
+  fill: none;
+  stroke: var(--tt-edge);
+  stroke-width: var(--tt-edge-w);
+}
+
+.tear-ticket__paper {
+  position: absolute;
+  inset: 0;
+  background: var(--tt-bg);
+  pointer-events: auto;
+}
+
+.tear-ticket__paper--stub {
+  background: var(--tt-stub-bg);
+  cursor: grab;
+  touch-action: none;
+}
+
+.tear-ticket[data-grabbing] .tear-ticket__paper--stub {
+  cursor: grabbing;
+}
+
+.tear-ticket[data-disabled] .tear-ticket__paper--stub {
+  cursor: default;
+}
+
+.tear-ticket__art {
+  position: absolute;
+  top: var(--tt-inset);
+  left: var(--tt-inset);
+  width: calc(var(--tt-body-w) - var(--tt-inset) * 2);
+  height: calc(var(--tt-body-h) * var(--tt-span) - var(--tt-inset) * 2);
+  border-radius: var(--tt-art-radius);
+  overflow: hidden;
+}
+
+.tear-ticket__image {
+  position: absolute;
+  top: calc(var(--tt-parallax) * -1);
+  left: calc(var(--tt-parallax) * -1);
+  width: calc(100% + var(--tt-parallax) * 2);
+  max-width: none;
+  height: calc(100% + var(--tt-parallax) * 2);
+  object-fit: cover;
+  -webkit-user-drag: none;
+  transition: filter 700ms ease;
+}
+
+.tear-ticket[data-used] .tear-ticket__image {
+  filter: grayscale(1) brightness(0.75);
+}
+
+.tear-ticket__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--tt-bg) 0%,
+    color-mix(in srgb, var(--tt-bg) 72%, transparent) 30%,
+    color-mix(in srgb, var(--tt-bg) 18%, transparent) 58%,
+    transparent 80%
+  );
+}
+
+.tear-ticket__content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: calc(var(--tt-w) - var(--tt-stub));
+  transition: opacity 500ms ease;
+}
+
+.tear-ticket[data-used] .tear-ticket__content {
+  opacity: 0.55;
+}
+
+.tear-ticket__stub {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--tt-stub);
+}
+
+.tear-ticket[data-orientation='vertical'] .tear-ticket__content {
+  bottom: auto;
+  width: 100%;
+  height: calc(var(--tt-h) - var(--tt-stub));
+}
+
+.tear-ticket[data-orientation='vertical'] .tear-ticket__stub {
+  top: auto;
+  left: 0;
+  width: auto;
+  height: var(--tt-stub);
+}
+
+.tear-ticket[data-instant] .tear-ticket__stage,
+.tear-ticket[data-instant] .tear-ticket__content,
+.tear-ticket[data-instant] .tear-ticket__image {
+  transition-duration: 0ms;
+}
+
+.tear-ticket__fibres {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.tear-ticket__fibres path {
+  fill: none;
+  stroke: var(--tt-bg);
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+.tear-ticket__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tear-ticket__stage {
+    transition: none;
+  }
+}
+</pre></details>
+</div>
+<style>#vfq{all:initial;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:2147483000;width:min(560px,calc(100vw - 16px));box-sizing:border-box;padding:8px;border-radius:18px;background:rgba(23,21,18,.97);border:1px solid #4a443c;box-shadow:0 10px 30px rgba(0,0,0,.55);font:600 14px/1.2 system-ui,sans-serif;color:#f2ede4}
+#vfq *{box-sizing:border-box;font:inherit}
+#vfq .q{display:grid;grid-template-columns:44px 1.25fr 1fr 1.25fr;gap:6px}
+#vfq button,#vfq a.b{display:flex;align-items:center;justify-content:center;white-space:nowrap;min-height:46px;padding:0 8px;border-radius:12px;border:1px solid #4a443c;background:transparent;color:#f2ede4;text-decoration:none;cursor:pointer}
+#vfq .go{background:#e6c27a;color:#1b160d;border-color:#e6c27a}
+#vfq .like[aria-pressed=true]{background:#e6c27a22;border-color:#e6c27a;color:#e6c27a}
+#vfq .meta{display:flex;justify-content:space-between;padding:8px 4px 0;color:#aba395;font-weight:500;font-size:12.5px}
+#vfq .meta a{color:#e6c27a;text-decoration:none}
+#vfq textarea{display:none;width:100%;margin:0 0 8px;padding:10px 12px;border-radius:12px;border:1px solid #4a443c;background:#201d19;color:#f2ede4;min-height:68px;resize:vertical;font-weight:500}
+#vfq.open textarea{display:block}</style>
+<div id="vfq" role="region" aria-label="Оценка элемента">
+  <textarea placeholder="Что понравилось? Что поменять? Одной фразой — это уйдёт в ответ."></textarea>
+  <div class="q">
+    <a class="b" href="../OptionWheel/" aria-label="Назад">←</a>
+    <button type="button" class="like" aria-pressed="false">♡ Хочу это</button>
+    <button type="button" class="cm">Заметка</button>
+    <a class="b go" href="../SlideCommit/">Дальше →</a>
+  </div>
+  <div class="meta"><span>Приём 8 из 13</span><a href="../../#biblioteka">Вся библиотека</a></div>
+</div>
+<script>(function(){var C={"id":"TearTicket","key":"vf-opros-v1","n":13,"i":7,"prev":"../OptionWheel/","next":"../SlideCommit/","last":false,"lift":false};var S;try{S=JSON.parse(localStorage.getItem(C.key)||'{}')}catch(e){S={}}S.e=S.e||{};S.ec=S.ec||{};
+var q=document.getElementById('vfq');var like=q.querySelector('.like'),note=q.querySelector('textarea');
+function save(){try{localStorage.setItem(C.key,JSON.stringify(S))}catch(e){}}
+function paint(){like.setAttribute('aria-pressed',!!S.e[C.id]);like.textContent=S.e[C.id]?'\u2665 Хочу это':'\u2661 Хочу это'}
+note.value=S.ec[C.id]||'';if(note.value)q.classList.add('open');paint();
+like.onclick=function(){S.e[C.id]=!S.e[C.id];save();paint()};
+q.querySelector('.cm').onclick=function(){q.classList.toggle('open');if(q.classList.contains('open'))note.focus()};
+note.oninput=function(){S.ec[C.id]=note.value;save()};
+})();</script>
+</body></html>

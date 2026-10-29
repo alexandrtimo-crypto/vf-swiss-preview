@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<title>Блик по поверхности · оригинал из библиотеки</title>
+<link rel="icon" href="../../kit/icons/favicon.png"><link rel="stylesheet" href="../../kit/fonts/fonts.css">
+<style>
+:root{--bg:#171512;--bg2:#201d19;--line:#36312b;--text:#f2ede4;--muted:#aba395;--acc:#e6c27a;--acc-ink:#1b160d;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 'Golos Text',system-ui,sans-serif;padding-bottom:150px}
+a{color:var(--acc);text-underline-offset:3px}.vf-wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.vf-strip{display:flex;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line);font-size:14px}.vf-strip span{flex:1;text-align:center;color:var(--muted)}
+.vf-badge{display:inline-block;padding:4px 12px;border-radius:999px;border:1px solid var(--acc);color:var(--acc);font-size:13px;font-weight:600;margin:26px 0 10px}
+h1{font:700 clamp(28px,5vw,46px)/1.08 'Onest',sans-serif;margin:0 0 8px;letter-spacing:-.01em}.vf-en{color:var(--muted);margin:0 0 16px}
+.vf-what{font-size:19px;margin:0 0 8px;max-width:64ch}.vf-why{color:var(--muted);margin:0 0 18px;max-width:64ch}.vf-why b{color:var(--text)}
+.vf-meta{display:flex;gap:10px 22px;flex-wrap:wrap;color:var(--muted);font-size:14.5px;margin:0 0 18px}
+.vf-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;background:var(--acc);color:var(--acc-ink);font-weight:600;text-decoration:none;font-size:15px}.vf-btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.vf-stage{margin:18px 0 20px;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative;padding:16px;background:#0b0a10;color:#f4f4f5}
+.vf-hb{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:18px;justify-items:center}.vf-hb figure{margin:0;text-align:center}.vf-hb figcaption{font-size:12.5px;color:#6b6558}
+details{margin:8px 0}summary{cursor:pointer;color:var(--acc);padding:8px 0}pre{margin:8px 0 0;padding:14px;border-radius:12px;background:#0f0e0c;border:1px solid var(--line);overflow:auto;max-height:480px;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#d8d2c4}
+.vf-note{color:var(--muted);font-size:14px}
+</style></head><body>
+<div class="vf-strip"><a href="../../#biblioteka">← Библиотека возможностей</a><span>Блик по поверхности</span><a href="../../opros/">Опрос</a></div>
+<div class="vf-wrap">
+  <span class="vf-badge">Оригинал из библиотеки React Bits · без правок</span>
+  <h1>Блик по поверхности</h1><p class="vf-en">GlareHover</p>
+  <p class="vf-what">Блик скользит по карточке при наведении. Подведите мышь.</p>
+  <div class="vf-stage"><link rel="stylesheet" href="app.css"><div id="root"></div><script src="app.js"></script></div>
+  <p class="vf-why"><b>Для сайта мастерской:</b> Ощущение металла и стекла: карточки услуг, гарантийный талон.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="vf-btn vf-btn--ghost" href="https://github.com/DavidHDev/react-bits/blob/main/src/content/Animations/GlareHover/GlareHover.jsx" target="_blank" rel="noopener">Исходник на GitHub</a></div>
+  <div class="vf-meta" style="margin-top:14px"><span>Лицензия: MIT + Commons Clause</span><span>В составе сайта использовать можно; перепродавать как отдельные компоненты нельзя.</span></div>
+  <p class="vf-note">Цвета и шрифты здесь родные, как задумал автор библиотеки. В нашем сайте элемент возьмёт цвета и шрифты утверждённого дизайна.</p>
+  <details><summary>Исходный код элемента (как в библиотеке)</summary><pre>'use client';
+
+import { useEffect, useRef } from 'react';
+
+import './GlareHover.css';
+
+const smootherstep = t =&gt; t * t * t * (t * (t * 6 - 15) + 10);
+
+const bump = (t, center, half) =&gt; {
+  const distance = Math.abs(t - center);
+  return distance &gt;= half ? 0 : smootherstep(1 - distance / half);
+};
+
+const PROFILES = {
+  streak: (t, softness) =&gt; bump(t, 0.5, 0.06 + 0.16 * softness) + 0.32 * bump(t, 0.5, 0.5),
+  twin: (t, softness) =&gt;
+    bump(t, 0.36, 0.08 + 0.18 * softness) + 0.85 * bump(t, 0.7, 0.03 + 0.06 * softness) + 0.26 * bump(t, 0.5, 0.5),
+  sheen: (t, softness) =&gt; 0.55 * bump(t, 0.5, 0.25 + 0.25 * softness) + 0.3 * bump(t, 0.5, 0.5)
+};
+
+const gradient = (color, opacity, variant, softness) =&gt; {
+  const profile = PROFILES[variant] ?? PROFILES.streak;
+  const stops = Array.from({ length: 33 }, (_, index) =&gt; {
+    const t = index / 32;
+    const alpha = Math.round(Math.min(1, profile(t, softness) * opacity) * 1000) / 10;
+    return `color-mix(in srgb, ${color} ${alpha}%, transparent) ${(t * 100).toFixed(1)}%`;
+  });
+  return `linear-gradient(90deg, ${stops.join(', ')})`;
+};
+
+const ease = t =&gt; (1 - Math.cos(Math.PI * t)) / 2;
+
+const GlareHover = ({
+  width = 'auto',
+  height = 'auto',
+  background = 'transparent',
+  borderRadius = '10px',
+  borderColor = 'transparent',
+  children,
+  glareColor = '#ffffff',
+  glareOpacity = 0.5,
+  glareAngle = -45,
+  glareSize = 30,
+  softness = 0.6,
+  variant = 'streak',
+  blendMode = 'screen',
+  rimGlint = true,
+  mode = 'hover',
+  transitionDuration = 650,
+  interval = 3,
+  playOnce = false,
+  intro = false,
+  className = '',
+  style = {}
+}) =&gt; {
+  const rootRef = useRef(null);
+  const glareRef = useRef(null);
+  const bandRef = useRef(null);
+  const rimRef = useRef(null);
+  const engineRef = useRef(null);
+  const introRef = useRef(false);
+  const settings = { glareAngle, glareSize, transitionDuration, interval, playOnce, intro };
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
+
+  useEffect(() =&gt; {
+    const root = rootRef.current;
+    const glare = glareRef.current;
+    if (!root || !glare) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const geometry = { band: 0, reach: 0, ux: 0, uy: -1, angle: 0 };
+    const state = { pos: 0, velocity: 0, target: 0, presence: 0, presenceTarget: 0, sweep: null, visible: true };
+    let raf = 0;
+    let last = 0;
+    let timer = 0;
+
+    const bands = () =&gt; [bandRef.current, rimRef.current].filter(Boolean);
+
+    const write = () =&gt; {
+      const transform = `translate(-50%, -50%) rotate(${geometry.angle - 90}deg) translateX(${state.pos.toFixed(2)}px)`;
+      for (const band of bands()) band.style.transform = transform;
+      glare.style.opacity = state.presence.toFixed(3);
+    };
+
+    const measure = () =&gt; {
+      const { glareAngle: angle, glareSize: size } = settingsRef.current;
+      const width = root.clientWidth;
+      const height = root.clientHeight;
+      const radians = (angle * Math.PI) / 180;
+      const ux = Math.sin(radians);
+      const uy = -Math.cos(radians);
+      const diagonal = Math.hypot(width, height);
+      const band = Math.max(8, (diagonal * size) / 100);
+      const reach = (Math.abs(width * ux) + Math.abs(height * uy)) / 2 + band / 2 + 2;
+      const resting = !state.sweep &amp;&amp; mode !== 'follow';
+      Object.assign(geometry, { band, reach, ux, uy, angle });
+      for (const element of bands()) {
+        element.style.width = `${band}px`;
+        element.style.height = `${diagonal + band}px`;
+      }
+      if (resting) state.pos = state.pos &gt; 0 ? reach : -reach;
+      write();
+    };
+
+    const frame = now =&gt; {
+      const dt = Math.min(0.05, (now - last) / 1000 || 0);
+      last = now;
+      let moving = false;
+      if (state.sweep) {
+        const sweep = state.sweep;
+        const t = Math.min(1, (now - sweep.start) / sweep.duration);
+        state.pos = sweep.from + (sweep.to - sweep.from) * ease(t);
+        if (t &lt; 1) moving = true;
+        else state.sweep = null;
+      } else if (mode === 'follow') {
+        const steps = Math.max(1, Math.ceil(dt / (1 / 120)));
+        const h = dt / steps;
+        for (let i = 0; i &lt; steps; i++) {
+          state.velocity += (170 * (state.target - state.pos) - 24 * state.velocity) * h;
+          state.pos += state.velocity * h;
+        }
+        const tau = state.presenceTarget &gt; state.presence ? 0.18 : 0.4;
+        state.presence += (state.presenceTarget - state.presence) * (1 - Math.exp(-dt / tau));
+        moving =
+          Math.abs(state.target - state.pos) &gt; 0.05 ||
+          Math.abs(state.velocity) &gt; 0.05 ||
+          Math.abs(state.presenceTarget - state.presence) &gt; 0.002;
+        if (!moving) state.presence = state.presenceTarget;
+      }
+      write();
+      raf = moving ? requestAnimationFrame(frame) : 0;
+    };
+
+    const wake = () =&gt; {
+      if (raf) return;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    };
+
+    const sweep = sign =&gt; {
+      if (reduced || !geometry.reach) return;
+      const end = sign * geometry.reach;
+      const from = state.sweep || Math.abs(state.pos) &lt; geometry.reach ? state.pos : -end;
+      if (from === end) return;
+      const share = Math.abs(end - from) / (2 * geometry.reach);
+      state.sweep = {
+        from,
+        to: end,
+        start: performance.now(),
+        duration: Math.max(120, settingsRef.current.transitionDuration * share)
+      };
+      wake();
+    };
+
+    const along = event =&gt; {
+      const rect = root.getBoundingClientRect();
+      const dx = event.clientX - (rect.left + rect.width / 2);
+      const dy = event.clientY - (rect.top + rect.height / 2);
+      return dx * geometry.ux + dy * geometry.uy;
+    };
+
+    const follow = event =&gt; {
+      state.target = Math.max(-geometry.reach, Math.min(geometry.reach, along(event)));
+      wake();
+    };
+
+    const onEnter = event =&gt; {
+      if (mode === 'hover') sweep(along(event) &gt; 0 ? -1 : 1);
+      if (mode === 'follow') {
+        if (state.presence &lt; 0.02) {
+          state.pos = Math.max(-geometry.reach, Math.min(geometry.reach, along(event)));
+          state.velocity = 0;
+        }
+        state.presenceTarget = reduced ? 0 : 1;
+        follow(event);
+      }
+    };
+
+    const onMove = event =&gt; {
+      if (mode === 'follow') follow(event);
+    };
+
+    const onLeave = event =&gt; {
+      if (mode === 'hover' &amp;&amp; !settingsRef.current.playOnce) sweep(along(event) &gt; 0 ? 1 : -1);
+      if (mode === 'follow') {
+        state.presenceTarget = 0;
+        wake();
+      }
+    };
+
+    const onDown = event =&gt; {
+      if (mode === 'click') sweep(along(event) &gt; 0 ? -1 : 1);
+    };
+
+    const onFocus = event =&gt; {
+      if (mode !== 'follow' &amp;&amp; event.target.matches?.(':focus-visible')) sweep(1);
+    };
+
+    const schedule = () =&gt; {
+      window.clearTimeout(timer);
+      if (mode !== 'loop' || reduced) return;
+      timer = window.setTimeout(
+        () =&gt; {
+          if (state.visible &amp;&amp; !document.hidden) sweep(1);
+          schedule();
+        },
+        Math.max(0.5, settingsRef.current.interval) * 1000
+      );
+    };
+
+    root.addEventListener('pointerenter', onEnter);
+    root.addEventListener('pointermove', onMove);
+    root.addEventListener('pointerleave', onLeave);
+    root.addEventListener('pointerdown', onDown);
+    root.addEventListener('focusin', onFocus);
+
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(root);
+
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) =&gt; {
+        state.visible = entry.isIntersecting;
+        if (entry.isIntersecting &amp;&amp; settingsRef.current.intro &amp;&amp; !introRef.current) {
+          introRef.current = true;
+          sweep(1);
+        }
+      },
+      { threshold: 0.4 }
+    );
+    visibilityObserver.observe(root);
+
+    state.presence = mode === 'follow' ? 0 : 1;
+    state.presenceTarget = state.presence;
+    state.pos = -1e4;
+    measure();
+    schedule();
+    engineRef.current = { measure };
+
+    return () =&gt; {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(timer);
+      resizeObserver.disconnect();
+      visibilityObserver.disconnect();
+      root.removeEventListener('pointerenter', onEnter);
+      root.removeEventListener('pointermove', onMove);
+      root.removeEventListener('pointerleave', onLeave);
+      root.removeEventListener('pointerdown', onDown);
+      root.removeEventListener('focusin', onFocus);
+      engineRef.current = null;
+    };
+  }, [mode]);
+
+  useEffect(() =&gt; {
+    engineRef.current?.measure();
+  }, [glareAngle, glareSize, rimGlint]);
+
+  const glare = gradient(glareColor, glareOpacity, variant, softness);
+  const rim = gradient(glareColor, Math.min(1, glareOpacity * 1.8), variant, softness);
+
+  return (
+    &lt;div
+      ref={rootRef}
+      className={`glare-hover ${className}`.trim()}
+      style={{
+        '--gh-width': width,
+        '--gh-height': height,
+        '--gh-bg': background,
+        '--gh-br': borderRadius,
+        '--gh-border': borderColor,
+        '--gh-glare': glare,
+        '--gh-rim': rim,
+        '--gh-blend': blendMode,
+        ...style
+      }}
+    &gt;
+      {children}
+      &lt;span ref={glareRef} className=&quot;glare-hover__glare&quot; aria-hidden=&quot;true&quot;&gt;
+        &lt;span ref={bandRef} className=&quot;glare-hover__band&quot; /&gt;
+        {rimGlint &amp;&amp; (
+          &lt;span className=&quot;glare-hover__rim&quot;&gt;
+            &lt;span ref={rimRef} className=&quot;glare-hover__band glare-hover__band--rim&quot; /&gt;
+          &lt;/span&gt;
+        )}
+      &lt;/span&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default GlareHover;
+</pre><pre>.glare-hover {
+  position: relative;
+  display: inline-grid;
+  vertical-align: top;
+  place-items: center;
+  width: var(--gh-width);
+  height: var(--gh-height);
+  background: var(--gh-bg);
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-br);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.glare-hover__glare {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  opacity: 0;
+  mix-blend-mode: var(--gh-blend);
+  pointer-events: none;
+}
+
+.glare-hover__band {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: var(--gh-glare);
+  will-change: transform;
+}
+
+.glare-hover__rim {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  -webkit-mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  -webkit-mask-clip: content-box, border-box;
+  -webkit-mask-composite: xor;
+  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  mask-clip: content-box, border-box;
+  mask-composite: exclude;
+}
+
+.glare-hover__band--rim {
+  background: var(--gh-rim);
+}
+</pre></details>
+</div>
+<style>#vfq{all:initial;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:2147483000;width:min(560px,calc(100vw - 16px));box-sizing:border-box;padding:8px;border-radius:18px;background:rgba(23,21,18,.97);border:1px solid #4a443c;box-shadow:0 10px 30px rgba(0,0,0,.55);font:600 14px/1.2 system-ui,sans-serif;color:#f2ede4}
+#vfq *{box-sizing:border-box;font:inherit}
+#vfq .q{display:grid;grid-template-columns:44px 1.25fr 1fr 1.25fr;gap:6px}
+#vfq button,#vfq a.b{display:flex;align-items:center;justify-content:center;white-space:nowrap;min-height:46px;padding:0 8px;border-radius:12px;border:1px solid #4a443c;background:transparent;color:#f2ede4;text-decoration:none;cursor:pointer}
+#vfq .go{background:#e6c27a;color:#1b160d;border-color:#e6c27a}
+#vfq .like[aria-pressed=true]{background:#e6c27a22;border-color:#e6c27a;color:#e6c27a}
+#vfq .meta{display:flex;justify-content:space-between;padding:8px 4px 0;color:#aba395;font-weight:500;font-size:12.5px}
+#vfq .meta a{color:#e6c27a;text-decoration:none}
+#vfq textarea{display:none;width:100%;margin:0 0 8px;padding:10px 12px;border-radius:12px;border:1px solid #4a443c;background:#201d19;color:#f2ede4;min-height:68px;resize:vertical;font-weight:500}
+#vfq.open textarea{display:block}</style>
+<div id="vfq" role="region" aria-label="Оценка элемента">
+  <textarea placeholder="Что понравилось? Что поменять? Одной фразой — это уйдёт в ответ."></textarea>
+  <div class="q">
+    <a class="b" href="../Magnet/" aria-label="Назад">←</a>
+    <button type="button" class="like" aria-pressed="false">♡ Хочу это</button>
+    <button type="button" class="cm">Заметка</button>
+    <a class="b go" href="../hamburgers/">Дальше →</a>
+  </div>
+  <div class="meta"><span>Приём 12 из 13</span><a href="../../#biblioteka">Вся библиотека</a></div>
+</div>
+<script>(function(){var C={"id":"GlareHover","key":"vf-opros-v1","n":13,"i":11,"prev":"../Magnet/","next":"../hamburgers/","last":false,"lift":false};var S;try{S=JSON.parse(localStorage.getItem(C.key)||'{}')}catch(e){S={}}S.e=S.e||{};S.ec=S.ec||{};
+var q=document.getElementById('vfq');var like=q.querySelector('.like'),note=q.querySelector('textarea');
+function save(){try{localStorage.setItem(C.key,JSON.stringify(S))}catch(e){}}
+function paint(){like.setAttribute('aria-pressed',!!S.e[C.id]);like.textContent=S.e[C.id]?'\u2665 Хочу это':'\u2661 Хочу это'}
+note.value=S.ec[C.id]||'';if(note.value)q.classList.add('open');paint();
+like.onclick=function(){S.e[C.id]=!S.e[C.id];save();paint()};
+q.querySelector('.cm').onclick=function(){q.classList.toggle('open');if(q.classList.contains('open'))note.focus()};
+note.oninput=function(){S.ec[C.id]=note.value;save()};
+})();</script>
+</body></html>
