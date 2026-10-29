@@ -234,7 +234,11 @@ window.Docs = (() => {
   function mountQr(root) {
     root.querySelectorAll('[data-qr]').forEach(el => {
       el.innerHTML = '';
-      if (window.QRCode) new QRCode(el, { text: el.dataset.qr, width: 256, height: 256, correctLevel: QRCode.CorrectLevel.M, colorDark: '#000', colorLight: '#fff' });
+      if (!window.QRCode) return;
+      new QRCode(el, { text: el.dataset.qr, width: 256, height: 256, correctLevel: QRCode.CorrectLevel.M, colorDark: '#000', colorLight: '#fff' });
+      // qrcodejs подставляет <img> позже и пустым: на медленном телефоне PDF мог уйти без QR. Заменяем холст готовой картинкой сразу
+      const c = el.querySelector('canvas');
+      if (c) { const im = new Image(); im.alt = ''; im.src = c.toDataURL('image/png'); el.replaceChildren(im); }
     });
   }
 

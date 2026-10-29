@@ -174,3 +174,16 @@ h2 { font: 400 26px/1.2 Forum, serif; letter-spacing: .03em; margin: 8px 0 14px;
 .demo-bar a { color: #e8c98a; text-decoration: none; white-space: nowrap; }
 .demo-bar button { background: none; border: 1px solid #6b5a40; color: #e9dcc4; border-radius: 6px; padding: 4px 10px; font: inherit; cursor: pointer; }
 @media print { .demo-bar { display: none; } }
+
+/* Карточка «PDF готов»: настоящие ссылки, которые срабатывают по касанию */
+.ready { display: grid; gap: 10px; }
+.ready__st { font-weight: 600; overflow-wrap: anywhere; }
+.ready[data-state="busy"] .ready__st::after { content: ""; display: inline-block; width: 11px; height: 11px; margin-left: 9px; border-radius: 50%; border: 2px solid var(--gold); border-right-color: transparent; vertical-align: -1px; animation: rspin .8s linear infinite; }
+.ready[data-state="err"] { border-color: var(--danger); }
+.ready[data-state="ok"] .ready__st { color: var(--ok); }
+.ready__row { display: flex; gap: 8px; flex-wrap: wrap; }
+.ready__row .btn { flex: 1 1 110px; text-align: center; text-decoration: none; }
+.ready .hint { margin: 0; font-size: 13.5px; line-height: 1.45; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--gold-2); text-decoration: underline; font: inherit; cursor: pointer; }
+@keyframes rspin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ready[data-state="busy"] .ready__st::after { animation: none; } }

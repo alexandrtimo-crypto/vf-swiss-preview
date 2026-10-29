@@ -287,15 +287,23 @@
         <div class="f"><span>Печать</span><div class="seg" id="mode"><button data-v="color">Цветная</button><button data-v="bw">Чёрно-белая</button></div></div>
         <div class="f"><span>Экземпляры</span><div class="seg" id="copies"><button data-v="1">Один лист</button><button data-v="2">Два: клиенту и нам</button></div></div>
       </div>
+      <section class="card ready" id="ready" aria-live="polite">
+        <b class="ready__st">Готовлю PDF…</b>
+        <div class="ready__row" id="rbtns" hidden>
+          <a class="btn btn--gold" id="ropen" target="_blank" rel="noopener">Открыть</a>
+          <a class="btn" id="rsave">Сохранить</a>
+          <button class="btn" id="rshare" type="button" hidden>Отправить</button>
+        </div>
+        <p class="hint" id="rhint"></p>
+      </section>
       <div class="preview" id="preview"></div>
       <nav class="dock">
         <button class="btn" id="print">Печать</button>
-        <button class="btn" id="share" hidden>Отправить</button>
         <button class="btn btn--gold" id="pdf">Скачать PDF</button>
       </nav>`;
 
     const preview = view.querySelector('#preview');
-    const draw = () => {
+    let draw = () => {
       preview.className = `preview docs docs--${mode}`;
       preview.innerHTML = Docs.render(type, order, settings, copies, mode);
       Docs.mountQr(preview);
@@ -316,23 +324,78 @@
 
     const fileName = () => `${t.file}_${order.num}${order.client.name ? '_' + order.client.name.split(' ')[0] : ''}${mode === 'bw' ? '_чб' : ''}.pdf`;
     const opts = () => ({ type, mode, copies });
-    view.querySelector('#pdf').onclick = () => withBusy('#pdf', async () => {
-      const blob = await makePdf(opts());
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob); a.download = fileName(); a.click();
-      setTimeout(() => URL.revokeObjectURL(a.href), 30000);
-      toast('PDF готов');
-    });
+
+    // PDF готовится заранее, пока человек смотрит лист: телефоны разрешают скачивание и «Поделиться» только сразу после касания,
+    // поэтому к моменту нажатия файл уже должен лежать в памяти
+    const ready = view.querySelector('#ready');
+    const rst = ready.querySelector('.ready__st');
+    const hintBox = view.querySelector('#rhint');
+    let built = null, seq = 0, timer = 0, chain = Promise.resolve();
+    const app = inAppBrowser();
+    const kb = n => (n > 1048576 ? (n / 1048576).toFixed(1) + ' МБ' : Math.round(n / 1024) + ' КБ');
+    const paintHint = () => {
+      hintBox.innerHTML = app
+        ? `<b>Вы открыли страницу внутри приложения (${esc(app)}).</b> Скачивание файлов там часто не работает. Откройте эту страницу в Chrome или Safari: меню ⋮ → «Открыть в браузере». <button class="linkbtn" id="copylink" type="button">Скопировать ссылку</button>`
+        : 'Файл не открылся? Нажмите «Сохранить» и откройте его из загрузок, либо «Печать» → «Сохранить как PDF».';
+      hintBox.querySelector('#copylink')?.addEventListener('click', async () => { try { await navigator.clipboard.writeText(location.href); toast('Ссылка скопирована'); } catch { toast('Скопируйте адрес из строки браузера'); } });
+    };
+    paintHint();
+    function paintReady() {
+      ready.dataset.state = 'ok';
+      rst.textContent = `PDF готов · ${built.name} · ${kb(built.blob.size)}`;
+      const open = view.querySelector('#ropen'), save = view.querySelector('#rsave'), sh = view.querySelector('#rshare');
+      open.href = built.url; save.href = built.url; save.download = built.name;
+      view.querySelector('#rbtns').hidden = false;
+      const file = new File([built.blob], built.name, { type: 'application/pdf' });
+      sh.hidden = !navigator.canShare?.({ files: [file] });
+      sh.onclick = () => navigator.share({ files: [file], title: built.name }).catch(() => {});  // вызывается прямо по касанию, без ожидания
+    }
+    function rebuild(now) {
+      clearTimeout(timer);
+      const my = ++seq;
+      ready.dataset.state = 'busy'; rst.textContent = 'Готовлю PDF…'; view.querySelector('#rbtns').hidden = true;
+      timer = setTimeout(() => {
+        chain = chain.then(async () => {
+          if (my !== seq) return;
+          try {
+            const blob = await makePdf(opts());
+            if (my !== seq) return;
+            if (built?.url) URL.revokeObjectURL(built.url);
+            built = { blob, url: URL.createObjectURL(blob), name: fileName() };
+            paintReady();
+          } catch (err) {
+            console.error(err);
+            if (my !== seq) return;
+            built = null; ready.dataset.state = 'err';
+            rst.innerHTML = `Не получилось подготовить PDF: ${esc(err.message || err)}. <button class="linkbtn" id="retry" type="button">Повторить</button>`;
+            rst.querySelector('#retry').onclick = () => rebuild(true);
+          }
+        });
+      }, now ? 0 : 450);
+    }
+    // перерисовка листа (режим печати, число экземпляров) заново готовит файл
+    const draw0 = draw;
+    draw = () => { draw0(); rebuild(); };
+    rebuild();
+
+    view.querySelector('#pdf').onclick = () => {
+      if (!built) { toast('PDF ещё готовится, через пару секунд появятся кнопки'); return; }
+      const a = document.createElement('a'); a.href = built.url; a.download = built.name; document.body.append(a); a.click(); a.remove();
+      toast('PDF готов — если файл не появился, нажмите «Сохранить» выше');
+    };
     view.querySelector('#print').onclick = () => printDoc(opts());
 
-    const share = view.querySelector('#share');
-    if (navigator.canShare?.({ files: [new File([''], 'x.pdf', { type: 'application/pdf' })] })) {
-      share.hidden = false;
-      share.onclick = () => withBusy('#share', async () => {
-        const file = new File([await makePdf(opts())], fileName(), { type: 'application/pdf' });
-        await navigator.share({ files: [file], title: file.name }).catch(() => {});
-      });
-    }
+  }
+
+  // Встроенные браузеры приложений (Telegram, Instagram и др.) часто не умеют сохранять файлы
+  function inAppBrowser() {
+    const ua = navigator.userAgent;
+    if (/Telegram/i.test(ua)) return 'Telegram';
+    if (/Instagram/i.test(ua)) return 'Instagram';
+    if (/FBAN|FBAV/i.test(ua)) return 'Facebook';
+    if (/VKClient|VK\//i.test(ua)) return 'VK';
+    if (/; wv\)/.test(ua)) return 'встроенный браузер';
+    return '';
   }
 
   async function withBusy(sel, fn) {
@@ -351,7 +414,6 @@
     Docs.mountQr(el);
     await document.fonts.ready;
     await Promise.all([...el.querySelectorAll('img')].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
-    await new Promise(r => setTimeout(r, 60)); // qrcodejs подставляет <img> асинхронно
     return el;
   }
 
@@ -378,7 +440,7 @@
 
   async function scanQr() {
     if (!navigator.mediaDevices?.getUserMedia) throw new Error('Камера недоступна в этом браузере — введите номер карточки');
-    if (!window.jsQR) await loadScript('https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js');
+    if (!window.jsQR) await loadScript(new URL('vendor/jsQR.js', document.baseURI).href);
     const dlg = document.createElement('dialog');
     dlg.className = 'scan';
     dlg.innerHTML = '<div class="scan__frame"><video playsinline muted></video><i></i></div><p>Наведите камеру на QR карточки клиента</p><button class="btn btn--wide" type="button">Отмена</button>';

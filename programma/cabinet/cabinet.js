@@ -64,7 +64,6 @@
     Docs.mountQr(el);
     await document.fonts.ready;
     await Promise.all([...el.querySelectorAll('img')].map(i => (i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))));
-    await new Promise(r => setTimeout(r, 60));
     try {
       return await html2pdf().set({ margin: 0, image: { type: 'jpeg', quality: 0.94 }, html2canvas: { scale: 2.4, useCORS: true, backgroundColor: '#ffffff', logging: false }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } })
         .from(el.querySelector('.sheet')).output('blob');
@@ -100,13 +99,16 @@
       b.disabled = true; b.textContent = 'Готовлю…';
       try {
         const blob = await pdf(b.dataset.doc, o, s);
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `${Docs.TYPES[b.dataset.doc].file}_${o.num}.pdf`;
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(a.href), 30000);
+        const name = `${Docs.TYPES[b.dataset.doc].file}_${o.num}.pdf`;
+        const url = URL.createObjectURL(blob);
+        // Скачивание после долгого ожидания телефоны часто блокируют, поэтому даём настоящие ссылки: касание по ним срабатывает всегда
+        const box = document.createElement('div'); box.className = 'docs-row'; box.style.marginTop = '8px';
+        box.innerHTML = `<a class="btn btn--gold" href="${url}" target="_blank" rel="noopener">Открыть PDF</a><a class="btn" href="${url}" download="${esc(name)}">Сохранить</a>`;
+        b.after(box); b.remove();
+        toast('PDF готов');
+        return;
       } catch (err) { toast('Не получилось: ' + err.message); }
-      finally { b.disabled = false; b.textContent = label; }
+      b.disabled = false; b.textContent = label;
     });
   }
 
