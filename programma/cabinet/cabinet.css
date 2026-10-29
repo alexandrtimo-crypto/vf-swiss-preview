@@ -1,0 +1,28 @@
+/* Личный кабинет клиента: поверх стилей приложения мастера */
+.cab-badge { font: 400 18px/1 Forum, serif; letter-spacing: .1em; color: var(--gold-2); border: 1px solid var(--gold); border-radius: 99px; padding: 8px 14px; }
+.hello { font: 400 34px/1.1 Forum, serif; margin: 10px 0 6px; }
+.watch { padding: 18px; border-radius: 20px; margin-bottom: 16px; background: rgba(25, 22, 18, .94); border: 1px solid var(--line); }
+.watch__top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.watch__name { font: 400 26px/1.15 Forum, serif; }
+.watch__num { color: var(--muted); font-size: 13px; letter-spacing: .06em; }
+.track { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); margin: 22px 0 8px; }
+.track::before { content: ''; position: absolute; left: 12.5%; right: 12.5%; top: 11px; height: 2px; background: var(--line); }
+.track__fill { position: absolute; left: 12.5%; top: 11px; height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold-2)); transition: width .8s ease; }
+.track__step { position: relative; text-align: center; font-size: 12px; color: var(--muted); }
+.track__step::before { content: ''; display: block; width: 24px; height: 24px; margin: 0 auto 8px; border-radius: 50%; background: var(--panel); border: 2px solid var(--line); box-sizing: border-box; }
+.track__step.is-past { color: var(--gold); }
+.track__step.is-past::before { background: var(--gold); border-color: var(--gold); }
+.track__step.is-now { color: var(--gold-2); font-weight: 600; }
+.track__step.is-now::before { background: var(--bg); border: 7px solid var(--gold-2); box-shadow: 0 0 0 6px rgba(240, 213, 143, .15); }
+.state { margin: 14px 0 0; font-size: 15px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.facts span { padding: 6px 12px; border-radius: 99px; background: var(--panel-2); font-size: 13px; color: var(--muted); }
+.facts b { color: var(--text); font-weight: 600; }
+.warranty { margin-top: 14px; padding: 14px; border-radius: 14px; border: 1px solid var(--gold); background: linear-gradient(135deg, rgba(214, 180, 106, .14), transparent); }
+.warranty b { font: 400 22px/1.1 Forum, serif; color: var(--gold-2); }
+.warranty__bar { height: 6px; border-radius: 6px; background: var(--line); margin-top: 10px; overflow: hidden; }
+.warranty__bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-2)); }
+.docs-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.docs-row .btn { flex: 1 1 140px; }
+.inactive { text-align: center; padding: 28px 18px; }
+.inactive img { width: 160px; height: auto; margin: 0 auto 10px; display: block; }

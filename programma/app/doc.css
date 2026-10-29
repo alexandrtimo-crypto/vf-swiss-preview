@@ -1,0 +1,140 @@
+/* Документ A4. Режимы: .docs--color (кожа и золото) и .is-bw (экономичная ч/б печать) */
+.sheet {
+  --ink: #1d1a15;
+  --muted: #6b6457;
+  --gold: #a17a33;
+  --gold-hi: #d9bb72;
+  --rule: #d8c9a6;
+  width: 210mm;
+  height: 297mm;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  color: var(--ink);
+  font: 400 9pt/1.42 Montserrat, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 14mm;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.sheet * { box-sizing: border-box; }
+.sheet h1, .sheet h3 { margin: 0; font-weight: 600; }
+
+/* Шапка */
+.d-head {
+  display: grid;
+  grid-template-columns: 33mm 1fr auto 22mm;
+  gap: 0 6mm;
+  align-items: center;
+  padding: 6mm 14mm;
+  min-height: 45mm;
+  color: #eadfc6;
+  background: #15110d url(assets/leather.jpg) center / cover;
+  border-bottom: .7mm solid var(--gold-hi);
+}
+.d-emblem img { display: block; width: 33mm; height: auto; }
+.d-emblem .for-bw { display: none; }
+.d-kicker { font: 600 6.2pt/1.2 Montserrat, sans-serif; letter-spacing: .22em; white-space: nowrap; text-transform: uppercase; color: var(--gold-hi); }
+.d-name { font: 600 21pt/1.05 Cinzel, Georgia, serif; letter-spacing: .06em; color: #f1e3bf; margin: 2mm 0 1.6mm; }
+.d-tag { font: 500 6.2pt/1.2 Montserrat, sans-serif; letter-spacing: .18em; white-space: nowrap; text-transform: uppercase; color: #cdbb93; }
+.d-contacts { font-size: 7.6pt; line-height: 1.6; text-align: right; color: #eadfc6; }
+.d-qr { width: 22mm; height: 22mm; padding: 1.4mm; background: #fff; border-radius: 1.6mm; }
+.d-qr img, .d-qr canvas { width: 100% !important; height: 100% !important; display: block; }
+
+/* Заголовок документа */
+.d-title { position: relative; text-align: center; padding: 6mm 14mm 3mm; }
+.d-title h1 { font: 400 17pt/1.2 Forum, Georgia, serif; letter-spacing: .1em; text-transform: uppercase; }
+.d-title p { margin: 1.4mm 0 0; color: var(--muted); font-size: 8.6pt; }
+.d-title::after { content: ''; display: block; width: 46mm; height: 2.4mm; margin: 2.6mm auto 0;
+  background:
+    linear-gradient(var(--gold), var(--gold)) left center / 20mm .3mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) right center / 20mm .3mm no-repeat,
+    linear-gradient(45deg, transparent 42%, var(--gold) 42% 58%, transparent 58%) center / 2.4mm 2.4mm no-repeat,
+    linear-gradient(-45deg, transparent 42%, var(--gold) 42% 58%, transparent 58%) center / 2.4mm 2.4mm no-repeat; }
+.d-copy { position: absolute; right: 14mm; top: 2mm; font-size: 6.6pt; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); border: .25mm solid var(--gold); padding: .8mm 2mm; border-radius: 1mm; }
+
+/* Блоки */
+.sheet h3 { font: 600 6.8pt/1.2 Montserrat, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.6mm; }
+.d-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; padding: 3mm 14mm; }
+.d-parties p { margin: 0; line-height: 1.55; }
+.d-sec { padding: 2.6mm 14mm; }
+.d-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.2mm 6mm; }
+.d-grid--2 { grid-template-columns: 1fr 1fr; margin-top: 2.6mm; }
+.d-f { border-bottom: .25mm solid var(--rule); padding-bottom: 1mm; min-width: 0; }
+.d-f span { display: block; font-size: 6.4pt; color: var(--muted); letter-spacing: .04em; }
+.d-f b { display: block; font-weight: 500; overflow-wrap: anywhere; }
+.d-f--wide { grid-column: 1 / -1; }
+.d-dash { color: #b9b1a1; font-style: normal; }
+.d-text { margin: 0; }
+.d-blank { display: inline-block; border-bottom: .25mm solid #9d9585; height: 3.6mm; vertical-align: bottom; }
+.d-blank--full { width: 100%; height: 10mm; }
+
+.d-works { width: 100%; border-collapse: collapse; font-size: 8.4pt; }
+.d-works th { font: 600 6.4pt/1.2 Montserrat, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 1.4mm 1.6mm; border-bottom: .4mm solid var(--gold); }
+.d-works td { padding: 1.5mm 1.6mm; border-bottom: .2mm solid var(--rule); vertical-align: top; }
+.d-works td:first-child, .d-works th:first-child { width: 8mm; color: var(--muted); }
+.d-works td:nth-child(n+3), .d-works th:nth-child(n+3) { text-align: right; white-space: nowrap; width: 22mm; }
+.d-works td:nth-child(3), .d-works th:nth-child(3) { width: 16mm; }
+.d-works i { font-style: normal; font-size: 6.4pt; color: var(--gold); border: .2mm solid var(--gold); border-radius: .8mm; padding: 0 1mm; margin-left: 1mm; }
+.d-empty { text-align: center !important; color: var(--muted); }
+.d-total { display: flex; justify-content: flex-end; align-items: baseline; gap: 6mm; margin-top: 2.4mm; }
+.d-total span { font-size: 7pt; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.d-total b { font: 400 16pt/1 Forum, Georgia, serif; }
+.d-words { text-align: right; margin: 1mm 0 0; font-size: 7.6pt; color: var(--muted); }
+
+.d-warranty { display: grid; grid-template-columns: 24mm 1fr; gap: 5mm; align-items: center; margin: 3mm 14mm; padding: 3.4mm 5mm; border: .3mm solid var(--gold); border-radius: 2mm; background: #fbf7ee; }
+.d-warranty h3 { color: var(--ink); font-size: 7.6pt; }
+.d-warranty p { margin: 0; font-size: 7.6pt; line-height: 1.45; color: #3e392f; }
+.d-warranty__badge { width: 22mm; height: 22mm; border-radius: 50%; display: grid; place-content: center; text-align: center;
+  position: relative; background: #15110d url(assets/leather.jpg) center / 90mm auto; color: var(--gold-hi); border: .5mm solid var(--gold-hi); }
+.d-warranty__badge::after { content: ''; position: absolute; inset: .8mm; border-radius: 50%; border: .2mm solid var(--gold-hi); opacity: .6; }
+.d-warranty__badge b { font: 400 18pt/1 Forum, Georgia, serif; }
+.d-warranty__badge span { font-size: 5.6pt; line-height: 1.2; letter-spacing: .08em; text-transform: uppercase; }
+
+.d-note { padding: 2.6mm 14mm; }
+.d-note p { margin: 0; font-size: 7.8pt; color: #3e392f; }
+.d-confirm { margin: 2mm 14mm 0; font-size: 7.8pt; color: #3e392f; }
+
+.d-signs { display: grid; grid-template-columns: 1fr 1fr; gap: 12mm; padding: 0 14mm; margin-top: auto; }
+.d-signs > div { position: relative; padding-top: 14mm; }
+.d-line { display: block; border-bottom: .3mm solid var(--ink); }
+.d-signs small { display: block; margin-top: 1.2mm; font-size: 6.8pt; color: var(--muted); }
+.d-signs em { position: absolute; right: 0; top: 3mm; font-style: normal; font-size: 6.6pt; color: #b9b1a1; width: 18mm; height: 18mm; border: .25mm dashed #cfc6b3; border-radius: 50%; display: grid; place-content: center; }
+
+.d-foot { position: absolute; left: 0; right: 0; bottom: 5mm; text-align: center; font: 500 6.4pt/1 Montserrat, sans-serif; letter-spacing: .4em; text-transform: uppercase; color: var(--gold); }
+.d-foot::before, .d-foot::after { content: ''; display: inline-block; vertical-align: middle; width: 30mm; height: .25mm; background: var(--gold); margin: 0 4mm; }
+
+/* Режим задаётся классом на самом листе: html2pdf копирует лист без родителей */
+.sheet.is-pdf { height: 294mm; } /* запас против лишней пустой страницы */
+/* Ч/б: без заливок, логотип в оттенках серого, всё в чёрном */
+.sheet.is-bw { --gold: #1d1a15; --gold-hi: #1d1a15; --rule: #c4c4c4; --muted: #555; }
+.is-bw .d-head { background: #fff; color: var(--ink); border-bottom: .5mm solid #000; box-shadow: 0 .9mm 0 -.6mm #000; }
+.is-bw .d-emblem .for-color { display: none; }
+.is-bw .d-emblem .for-bw { display: block; }
+.is-bw .d-name, .is-bw .d-tag, .is-bw .d-contacts, .is-bw .d-kicker { color: #000; }
+.is-bw .d-qr { padding: 0; }
+.is-bw .d-warranty { background: #fff; }
+.is-bw .d-warranty__badge { background: #fff; color: #000; border-color: #000; }
+.d-photos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; }
+.d-photos img { width: 100%; height: 30mm; object-fit: cover; border-radius: 1.2mm; border: .25mm solid var(--rule); }
+.is-bw .d-photos img { filter: grayscale(1); }
+
+/* QR личного кабинета в квитанции и акте */
+.d-cab { display: grid; grid-template-columns: 19mm 1fr; gap: 4mm; align-items: center; margin: 3mm 14mm 0; padding: 2.4mm 4mm; border: .25mm dashed var(--gold); border-radius: 2mm; }
+.d-cab p { margin: 0; font-size: 7.4pt; color: #3e392f; }
+.d-qr--cab { width: 19mm; height: 19mm; padding: 0; border-radius: 0; }
+
+/* Карточки-кабинеты: 2×5 визиток 90×50 мм, линии реза пунктиром */
+.sheet--cards { display: grid; grid-template-columns: repeat(2, 90mm); grid-auto-rows: 50mm; justify-content: center; align-content: center; padding: 0; }
+.vcard { position: relative; display: grid; grid-template-columns: 25mm 1fr 23mm; gap: 3mm; align-items: center; padding: 0 4mm; color: #eadfc6;
+  background: #15110d url(assets/leather.jpg) center / 120mm auto; outline: .15mm dashed #9a9a9a; outline-offset: -.075mm; overflow: hidden; }
+.vcard::after { content: ''; position: absolute; inset: 2.2mm; border: .2mm solid rgba(217, 187, 114, .55); border-radius: 1mm; pointer-events: none; }
+.vcard__logo { width: 25mm; height: auto; display: block; }
+.vcard__kicker { font: 600 5.4pt/1.2 Montserrat, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: #d9bb72; }
+.vcard__name { font: 600 13pt/1.1 Cinzel, Georgia, serif; letter-spacing: .06em; color: #f1e3bf; margin: 1.2mm 0 .8mm; }
+.vcard__sub { font-size: 5.4pt; letter-spacing: .06em; color: #cdbb93; }
+.vcard__code { margin-top: 2.4mm; font: 400 12pt/1 Forum, Georgia, serif; letter-spacing: .12em; color: #d9bb72; }
+.vcard__qr { width: 23mm; height: 23mm; padding: 1.4mm; background: #fff; border-radius: 1.2mm; }
+.vcard__qr img, .vcard__qr canvas { width: 100% !important; height: 100% !important; display: block; }

@@ -4,312 +4,306 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>VF swiss · промежуточные результаты</title>
+<title>VF swiss · программа и стенд сайта</title>
 <link rel="icon" href="kit/icons/favicon.png">
 <link rel="stylesheet" href="kit/fonts/fonts.css">
 <link rel="stylesheet" href="kit/elements/icons/lucide.css">
 <style>
-  :root { --bg: #171512; --bg2: #1f1c18; --line: #36312b; --text: #f2ede4; --muted: #aba395; --acc: #e6c27a; --acc-ink: #1b160d; color-scheme: dark; }
+  :root { --bg: #171512; --bg2: #201d19; --line: #36312b; --text: #f2ede4; --muted: #aba395; --acc: #e6c27a; --acc-ink: #1b160d; color-scheme: dark; }
   * { box-sizing: border-box; }
-  html { scrollbar-color: #4a443c var(--bg); }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.55 'Golos Text', system-ui, sans-serif; padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
+  html { scrollbar-color: #4a443c var(--bg); scroll-padding-top: 76px; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.55 'Golos Text', system-ui, sans-serif; }
   ::selection { background: var(--acc); color: var(--acc-ink); }
   a { color: var(--acc); text-underline-offset: 3px; }
   :focus-visible { outline: 2px solid var(--acc); outline-offset: 3px; border-radius: 6px; }
   .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
-  .top { display: flex; align-items: center; gap: 12px; padding: 18px 0; }
-  .top img { width: 44px; height: 44px; border-radius: 50%; }
-  .top b { font: 600 18px/1 'Onest', sans-serif; letter-spacing: .02em; }
-  .intro { padding: 36px 0 28px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: end; }
-  h1 { font: 700 clamp(34px, 6vw, 68px)/1.02 'Onest', sans-serif; letter-spacing: -0.02em; margin: 0 0 18px; text-wrap: balance; }
-  .intro p { color: var(--muted); max-width: 56ch; margin: 0; }
-  .how { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
-  .how li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; }
-  .how span { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--acc); color: var(--acc-ink); font-weight: 700; }
-  .path { margin: 10px 0 8px; padding: 26px 0 30px; border-top: 1px solid var(--line); }
-  .path h2, .group h2 { font: 700 clamp(24px, 3.4vw, 36px)/1.1 'Onest', sans-serif; margin: 0 0 10px; letter-spacing: -0.01em; }
-  .path p.lead, .group p.lead { color: var(--muted); max-width: 70ch; margin: 0 0 22px; }
-  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
-  .steps::before { content: ''; position: absolute; left: 6%; right: 6%; top: 11px; height: 2px; background: linear-gradient(90deg, var(--line), var(--acc)); }
-  .steps div { position: relative; padding: 32px 14px 0 0; }
-  .steps div::before { content: ''; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 2px solid var(--acc); }
-  .steps b { display: block; font: 600 17px/1.25 'Onest', sans-serif; margin-bottom: 4px; }
-  .steps small { color: var(--muted); font-size: 15px; line-height: 1.45; display: block; }
-  .group { padding: 42px 0 10px; border-top: 1px solid var(--line); }
-  .v { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: center; padding: 34px 0; }
+  .nav { position: sticky; top: 0; z-index: 10; background: rgba(23,21,18,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; gap: 6px; height: 60px; }
+  .nav__brand { display: flex; align-items: center; gap: 10px; margin-right: auto; color: var(--text); text-decoration: none; font: 600 17px/1 'Onest', sans-serif; letter-spacing: .02em; white-space: nowrap; }
+  .nav__brand img { width: 34px; height: 34px; border-radius: 50%; }
+  .nav a.nav__i { color: var(--text); text-decoration: none; padding: 9px 14px; border-radius: 10px; font-size: 15px; font-weight: 500; white-space: nowrap; }
+  .nav a.nav__i:hover { background: var(--bg2); }
+  .nav a.nav__i.is-on { background: var(--bg2); color: var(--acc); }
+  .nav a.nav__cta { background: var(--acc); color: var(--acc-ink); }
+  .nav a.nav__cta:hover { background: var(--acc); filter: brightness(1.06); }
+  .intro { padding: 44px 0 34px; }
+  h1 { font: 700 clamp(34px, 6vw, 64px)/1.03 'Onest', sans-serif; letter-spacing: -0.02em; margin: 0 0 16px; text-wrap: balance; max-width: 18ch; }
+  .intro > p { color: var(--muted); max-width: 64ch; margin: 0 0 28px; }
+  .doors { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .door { display: grid; grid-template-columns: 1fr 120px; gap: 18px; align-items: center; padding: 22px; border-radius: 18px; background: var(--bg2); border: 1px solid var(--line); color: var(--text); text-decoration: none; transition: border-color .2s; }
+  .door:hover { border-color: var(--acc); }
+  .door b { display: block; font: 700 22px/1.15 'Onest', sans-serif; margin-bottom: 6px; }
+  .door span { color: var(--muted); font-size: 15.5px; }
+  .door img { width: 120px; height: 120px; object-fit: cover; object-position: top; border-radius: 12px; }
+  .blk { padding: 46px 0 36px; border-top: 1px solid var(--line); }
+  .blk > h2 { font: 700 clamp(28px, 4.4vw, 46px)/1.05 'Onest', sans-serif; margin: 0 0 12px; letter-spacing: -0.015em; }
+  .blk > .lead { color: var(--muted); max-width: 68ch; margin: 0 0 26px; }
+  .enter { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .enter a { display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; background: var(--bg2); border: 1px solid var(--line); color: var(--text); text-decoration: none; transition: border-color .2s, transform .2s; }
+  .enter a:hover { border-color: var(--acc); transform: translateY(-2px); }
+  .enter img { width: 100%; height: 250px; object-fit: cover; object-position: top; display: block; background: #0d0c0b; }
+  .enter div { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .enter b { font: 700 21px/1.15 'Onest', sans-serif; }
+  .enter span { color: var(--muted); font-size: 15.5px; flex: 1; }
+  .enter em { font-style: normal; color: var(--acc); font-weight: 600; margin-top: 8px; display: inline-flex; align-items: center; gap: 8px; }
+  .try { margin: 30px 0 0; display: grid; grid-template-columns: 1fr 1.15fr; gap: 34px; align-items: start; }
+  .try h3 { font: 700 22px/1.2 'Onest', sans-serif; margin: 0 0 14px; }
+  .try ol { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 12px; }
+  .try li { counter-increment: s; display: grid; grid-template-columns: 30px 1fr; gap: 12px; }
+  .try li::before { content: counter(s); width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--acc); color: var(--acc-ink); font-weight: 700; font-size: 15px; }
+  .try figure { margin: 0; }
+  .try figure img { width: 100%; border-radius: 12px; display: block; box-shadow: 0 14px 34px rgba(0,0,0,.45); }
+  .try figcaption { color: var(--muted); font-size: 14.5px; margin-top: 10px; }
+  .need { margin: 26px 0 0; padding: 16px 20px; border-radius: 14px; border: 1px dashed #5d5244; color: var(--muted); font-size: 16px; }
+  .need b { color: var(--text); }
+  .cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px 26px; margin: 0 0 18px; }
+  .cat h3 { font: 600 18px/1.2 'Onest', sans-serif; margin: 0 0 12px; }
+  .cat__list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { display: inline-flex; flex-direction: column; gap: 2px; padding: 9px 13px; border-radius: 12px; background: var(--bg2); border: 1px solid var(--line); color: var(--text); text-decoration: none; font-size: 15px; line-height: 1.3; transition: border-color .2s; }
+  .chip small { color: var(--acc); font-size: 12.5px; }
+  .chip:hover { border-color: var(--acc); }
+  .group { padding: 30px 0 6px; }
+  .group h2 { font: 700 clamp(22px, 3vw, 30px)/1.1 'Onest', sans-serif; margin: 0 0 8px; }
+  .group p.lead { color: var(--muted); max-width: 70ch; margin: 0 0 8px; }
+  details.group > summary { cursor: pointer; list-style: none; }
+  details.group > summary::-webkit-details-marker { display: none; }
+  details.group > summary h2::after { content: ' +'; color: var(--acc); }
+  details.group[open] > summary h2::after { content: ' −'; }
+  .v { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: center; padding: 30px 0; }
   .v--flip .v__media { order: 2; }
-  .v__media { position: relative; min-height: 340px; }
+  .v__media { position: relative; min-height: 320px; }
   .v__desk { width: 88%; border-radius: 10px; display: block; box-shadow: 0 18px 40px rgba(0,0,0,.45); }
   .v__phone { position: absolute; right: 0; bottom: -18px; width: 31%; border-radius: 26px; padding: 7px; background: #0d0c0b; box-shadow: 0 16px 34px rgba(0,0,0,.55); }
   .v__phone img { width: 100%; display: block; border-radius: 20px; }
   .v--flip .v__desk { margin-left: auto; }
   .v--flip .v__phone { right: auto; left: 0; }
-  .v h3 { font: 700 clamp(26px, 3.6vw, 40px)/1.05 'Onest', sans-serif; margin: 0 0 12px; letter-spacing: -0.01em; }
-  .v__idea { font-size: 19px; margin: 0 0 10px; }
-  .v__world { color: var(--muted); margin: 0 0 14px; font-size: 16px; }
-  .v__feat { list-style: none; padding: 0; margin: 0 0 14px; display: grid; gap: 8px; }
+  .v h3 { font: 700 clamp(24px, 3.2vw, 34px)/1.05 'Onest', sans-serif; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .v__idea { margin: 0 0 12px; color: var(--muted); }
+  .v__k { font-weight: 600; margin: 0 0 8px; }
+  .v__feat { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 8px; }
   .v__feat li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; font-size: 16px; }
   .v__feat .vf-i { color: var(--acc); font-size: 18px; margin-top: 3px; }
-  .v__method { font-size: 14px; color: var(--muted); margin: 0 0 18px; }
   .v__draft { color: #e8a86b; font-size: 14px; margin: -6px 0 10px; }
-  .v__act { display: flex; gap: 10px; flex-wrap: wrap; }
-  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px; border-radius: 12px; background: var(--acc); color: var(--acc-ink); font-weight: 600; text-decoration: none; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px; border-radius: 12px; background: var(--acc); color: var(--acc-ink); font-weight: 600; text-decoration: none; border: 0; font: 600 16px/1.2 'Golos Text', sans-serif; }
   .btn:hover { filter: brightness(1.06); }
-  .like { display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--line); cursor: pointer; color: var(--muted); }
-  .like input { width: 18px; height: 18px; accent-color: var(--acc); margin: 0; }
-  .like:has(input:checked) { color: var(--text); border-color: var(--acc); }
-  .appblk { padding: 34px 0 30px; border-top: 1px solid var(--line); }
-  .appblk h2 { font: 700 clamp(26px, 4vw, 40px)/1.08 'Onest', sans-serif; margin: 0 0 10px; letter-spacing: -0.01em; }
-  .appblk .lead { color: var(--muted); max-width: 70ch; margin: 0 0 22px; }
-  .appgrid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.4fr; gap: 16px; align-items: start; }
-  .appgrid figure { margin: 0; }
-  .appgrid img { width: 100%; display: block; border-radius: 12px; background: #0d0c0b; box-shadow: 0 12px 30px rgba(0,0,0,.4); max-height: 520px; object-fit: cover; object-position: top; }
-  .appgrid figcaption { color: var(--muted); font-size: 14px; margin-top: 8px; }
-  .applinks { margin: 18px 0 0; font-size: 16px; }
-  @media (max-width: 860px) { .appgrid { grid-template-columns: 1fr 1fr; } .appgrid figure:first-child { grid-column: 1 / -1; } }
-  .extra { padding: 40px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-  .extra h3 { font: 600 19px/1.2 'Onest', sans-serif; margin: 0 0 8px; }
-  .extra p { color: var(--muted); margin: 0 0 8px; font-size: 16px; }
+  .btn--ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  .tools { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 26px; }
+  .tools div { padding: 20px; border-radius: 16px; border: 1px solid var(--line); }
+  .tools h3 { font: 600 19px/1.2 'Onest', sans-serif; margin: 0 0 8px; }
+  .tools p { color: var(--muted); margin: 0 0 10px; font-size: 16px; }
+  .opros { display: grid; grid-template-columns: 1.4fr auto; gap: 24px; align-items: center; padding: 28px; border-radius: 20px; background: var(--bg2); border: 1px solid var(--acc); margin: 0 0 40px; }
+  .opros h2 { font: 700 clamp(24px, 3.4vw, 34px)/1.1 'Onest', sans-serif; margin: 0 0 8px; }
+  .opros p { color: var(--muted); margin: 0; }
   .note { color: var(--muted); font-size: 14px; padding: 0 0 30px; }
-  .send { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); background: rgba(23,21,18,.94); backdrop-filter: blur(6px); border-top: 1px solid var(--line); display: flex; justify-content: center; gap: 14px; align-items: center; }
-  .send a { padding: 13px 22px; border-radius: 12px; background: #2aabee; color: #fff; text-decoration: none; font-weight: 600; display: inline-flex; gap: 8px; align-items: center; }
-  .send span { color: var(--muted); font-size: 15px; }
-  .send a.send__opros { background: var(--acc); color: var(--acc-ink); }
-  @media (max-width: 860px) {
-    .intro, .v, .extra { grid-template-columns: 1fr; }
+  @media (max-width: 900px) {
+    .doors, .enter, .try, .cats, .tools, .v, .opros { grid-template-columns: 1fr; }
+    .enter img { height: 200px; }
     .v--flip .v__media { order: 0; }
     .v__media { min-height: 0; margin-bottom: 22px; }
-    .steps { grid-template-columns: 1fr 1fr; row-gap: 22px; }
-    .steps::before { display: none; }
   }
-  @media (max-width: 520px) { .send span { display: none; } .send a { flex: 1; justify-content: center; } }
-  @media (prefers-reduced-motion: no-preference) { .btn, .like { transition: filter .2s, border-color .2s, color .2s; } }
+  @media (max-width: 560px) {
+    .nav__brand span, .nav a.nav__i.nav__opt { display: none; }
+    .nav a.nav__i { padding: 8px 10px; font-size: 14.5px; }
+    .door { grid-template-columns: 1fr 84px; padding: 18px; }
+    .door img { width: 84px; height: 84px; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top"><img src="kit/icons/favicon.png" alt=""><b>VF swiss</b></div>
+<nav class="nav" aria-label="Разделы"><div class="wrap">
+  <a class="nav__brand" href="#top"><img src="kit/icons/favicon.png" alt=""><span>VF swiss</span></a>
+  <a class="nav__i" href="#programma">Программа</a>
+  <a class="nav__i" href="#stend">Стенд сайта</a>
+  <a class="nav__i nav__cta" href="opros/">Опрос</a>
+</div></nav>
+<div class="wrap" id="top">
   <section class="intro">
-    <div>
-      <h1>Влад, привет! Вот что уже готово</h1>
-      <p>Это промежуточные результаты. Сначала — то, что ты просил: акт выполненных работ, он уже работает и даже больше. Ниже — варианты нового сайта: это черновики на твоих реальных фото и видео, их можно листать и нажимать. Заявки в них никуда не уходят, цены и часы работы — заглушки. Мне важно понять, что тебе откликается, — для этого внизу опрос.</p>
-    </div>
-    <ol class="how">
-      <li><span>1</span><div>Глянь акт и приложение — это уже можно пробовать в работе.</div></li>
-      <li><span>2</span><div>Полистай варианты сайта с телефона и отметь «Нравится» у тех, что зацепили.</div></li>
-      <li><span>3</span><div>Пройди <a href="opros/">короткий опрос</a> — отметь, что нравится из элементов, и напиши пару слов. Ответ придёт мне в Telegram.</div></li>
-    </ol>
-  </section>
-
-  <section class="appblk" id="akt">
-    <h2>Акт выполненных работ — готов</h2>
-    <p class="lead">Сделал не просто шаблон в Word, а приложение: открываешь с телефона или компьютера, заполняешь карточку заказа — и получаешь красивый PDF в стиле твоей визитки, цветной или чёрно-белый, на A4. Заодно оно ведёт заказ от приёмки до выдачи и выдаёт квитанцию о приёме.</p>
-    <div class="appgrid">
-      <figure><img src="app/akt.jpg" alt="Акт выполненных работ: цветной и чёрно-белый" loading="lazy"><figcaption>Акт: цветной и ч/б (два экземпляра — тебе и клиенту). Гарантия до двух лет считается сама, сумма — цифрами и прописью.</figcaption></figure>
-      <figure><img src="app/zakaz.jpg" alt="Карточка заказа на телефоне" loading="lazy"><figcaption>Карточка заказа с телефона: клиент, часы, фото при приёмке, работы и цены.</figcaption></figure>
-      <figure><img src="app/kabinet.jpg" alt="Личный кабинет клиента" loading="lazy"><figcaption>Личный кабинет клиента по QR: статус ремонта, документы, гарантия.</figcaption></figure>
-      <figure><img src="app/kartochki.jpg" alt="Карточки клиентов с QR" loading="lazy"><figcaption>500 карточек-визиток с QR в твоём стиле — клиент сканирует и видит свой ремонт.</figcaption></figure>
-    </div>
-    <p class="applinks">Образцы: <a href="app/akt-cvetnoy.pdf">акт, цветной PDF</a> · <a href="app/akt-chb.pdf">акт, ч/б PDF</a> · <a href="app/kartochki-obrazec.pdf">карточки, 20 штук</a>. Нужно от тебя: реквизиты (ИП/ООО, ИНН, ОГРН), номер для QR и проверка текста гарантии — и можно запускать.</p>
-  </section>
-
-  <section class="path">
-    <h2>Как мы искали</h2>
-    <p class="lead">Сначала сделали несколько вариантов «как обычно» — получилось красиво, но похоже на тысячи других сайтов. Тогда сменили подход.</p>
-    <div class="steps">
-      <div><b>Первые варианты</b><small>Три стиля: «дорого», «технологично», «легко». Хорошая режиссура, но узнаваемые шаблонные приёмы.</small></div>
-      <div><b>Новая методика</b><small>Каждый вариант строится из жизни клиента: бирка ремонта, ангар техобслуживания, ценная бумага.</small></div>
-      <div><b>Сравнение методик</b><small>Тот же вариант по другим популярным подходам — чтобы выбрать лучший честно.</small></div>
-      <div><b>Конструктор</b><small>Все варианты разобраны на элементы: шрифты, иконки, звуки, сцены можно смешивать.</small></div>
+    <h1>Влад, привет! Здесь две вещи</h1>
+    <p>Это промежуточные результаты. Первое — программа мастерской: акт, квитанция, карточки клиентов и их кабинеты. Её можно потрогать прямо сейчас. Второе — стенд возможностей сайта: не готовый дизайн, а витрина приёмов — разделов, анимаций, интерактива. Что понравится — перенесём в наш сайт в утверждённом стиле.</p>
+    <div class="doors">
+      <a class="door" href="#programma"><div><b>Программа мастерской</b><span>Принять часы, заполнить документы, побывать в кабинете клиента и в панели карточек.</span></div><img src="app/zakaz.jpg" alt=""></a>
+      <a class="door" href="#stend"><div><b>Стенд возможностей сайта</b><span>Первые экраны, подача работ, этапы ремонта, заявки, анимации — что можно сделать на сайте.</span></div><img src="previews/lib-on-r3-easy-m.jpg" alt=""></a>
     </div>
   </section>
 
+  <section class="blk" id="programma">
+    <h2>Программа мастерской — попробуй сам</h2>
+    <p class="lead">Это рабочая демо-версия: всё нажимается по-настоящему, PDF скачиваются. Данные хранятся только в твоём браузере, другим не видны; кнопка «Сбросить» сверху вернёт всё к началу. Уже заведены три заказа и двое клиентов.</p>
+    <div class="enter">
+      <a href="programma/app/"><img src="app/spisok.jpg" alt="" loading="lazy"><div><b>Панель мастера</b><span>Заказы, карточка заказа, квитанция и акт в PDF — цветной и ч/б.</span><em>Открыть <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></em></div></a>
+      <a href="programma/cabinet/?t=demo0001"><img src="app/kabinet.jpg" alt="" loading="lazy"><div><b>Кабинет клиента</b><span>Так клиент видит ремонт по QR: этап, срок, документы, гарантия.</span><em>Открыть как клиент <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></em></div></a>
+      <a href="programma/app/#/cabinets"><img src="app/kartochki.jpg" alt="" loading="lazy"><div><b>Карточки клиентов</b><span>500 карточек с QR: кому выданы, сколько заказов, печать листов A4.</span><em>Управлять карточками <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></em></div></a>
+    </div>
+    <div class="try">
+      <div>
+        <h3>Сценарий на пять минут</h3>
+        <ol>
+          <li><div>В <a href="programma/app/">панели мастера</a> нажми «Принять часы», заполни клиента и часы — с телефона можно сразу сфотографировать.</div></li>
+          <li><div>Внизу карточки — «Квитанция»: посмотри и скачай PDF.</div></li>
+          <li><div>В блоке «Кабинет клиента» введи номер карточки, например <b>5</b>, и нажми «Привязать».</div></li>
+          <li><div>Добавь работы с ценами, переведи этап на «Выдача» и открой «Акт работ» — цветной или ч/б, один или два экземпляра.</div></li>
+          <li><div>Нажми «Открыть кабинет» — так ремонт увидит клиент. Всё, что меняешь в панели, сразу видно в кабинете.</div></li>
+        </ol>
+      </div>
+      <figure><img src="app/akt.jpg" alt="Акт выполненных работ: цветной и чёрно-белый" loading="lazy"><figcaption>Акт в стиле визитки: гарантия считается сама, сумма — цифрами и прописью. Готовые образцы: <a href="app/akt-cvetnoy.pdf">цветной PDF</a> · <a href="app/akt-chb.pdf">ч/б PDF</a> · <a href="app/kartochki-obrazec.pdf">лист карточек</a>.</figcaption></figure>
+    </div>
+    <p class="need"><b>Чтобы запустить в работу:</b> реквизиты (ИП/ООО, ИНН, ОГРН), номер для QR, проверка текста гарантии. Рабочая версия будет на сервере мастерской, с паролем и одной базой для телефона и компьютера.</p>
+  </section>
 
-  <section class="group" aria-labelledby="g-main">
-    <h2 id="g-main">Три основных варианта</h2>
-    <p class="lead">Три разных мира — «легко», «технологично», «дорого». Каждый построен из жизни клиента, а не из привычных «часовых» шаблонов, и на каждом заявка доступна прямо с первого экрана.</p>
+  <section class="blk" id="stend">
+    <h2>Стенд возможностей сайта</h2>
+    <p class="lead">Это не «выбери один дизайн». Каждый стенд — набор приёмов: каким может быть первый экран, как показать работы и этапы ремонта, какие бывают анимации и интерактив. Цвета и шрифты здесь условные. Понравившиеся элементы перенесём в сайт с утверждённым дизайном. Ниже — все приёмы по разделам сайта, нажми — откроется стенд, где это есть.</p>
+    <div class="cats">
+      <div class="cat"><h3>Первый экран</h3><div class="cat__list"><a class="chip" href="v/r3-easy/">Заявка-бирка прямо на первом экране<small>Бирка ремонта</small></a><a class="chip" href="v/r3-tech/">Лючок на винтах с видео с верстака<small>Ангар</small></a><a class="chip" href="v/r3-lux/">Медальон с часами и гравюра, которая проявляется<small>Ценная бумага</small></a><a class="chip" href="v/lux/">Видео на весь экран сжимается в арку<small>Кино-бутик</small></a><a class="chip" href="v/tech/">Механизм, нарисованный кодом, тикает<small>Живой механизм</small></a><a class="chip" href="v/easy/">«Что с часами?» — выбрать проблему<small>Помощник «Что с часами?»</small></a></div></div>
+      <div class="cat"><h3>Работы и доказательства</h3><div class="cat__list"><a class="chip" href="v/lib-on-r3-easy/">Купол из фото работ — крутится пальцем<small>Бирка + элементы библиотек</small></a><a class="chip" href="v/r3-tech/">Разборка часов с подписями деталей<small>Ангар</small></a><a class="chip" href="v/lux/">Лента работ, листается вбок<small>Кино-бутик</small></a><a class="chip" href="v/tech/">Механизм раскладывается на слои при прокрутке<small>Живой механизм</small></a></div></div>
+      <div class="cat"><h3>Как идёт ремонт</h3><div class="cat__list"><a class="chip" href="v/lib-on-r3-easy/">Этапы — листы, ложатся стопкой при прокрутке<small>Бирка + элементы библиотек</small></a><a class="chip" href="v/lib-on-r3-easy/">Механическое табло статуса<small>Бирка + элементы библиотек</small></a><a class="chip" href="v/r3-easy/">Путь часов на обороте бирки<small>Бирка ремонта</small></a><a class="chip" href="v/r3-easy/">Карточка клиента с QR — связка с программой<small>Бирка ремонта</small></a></div></div>
+      <div class="cat"><h3>Услуги и гарантия</h3><div class="cat__list"><a class="chip" href="v/lux/">Выбор услуги стрелкой на циферблате<small>Кино-бутик</small></a><a class="chip" href="v/r3-tech/">Услуги — маркировка на обшивке<small>Ангар</small></a><a class="chip" href="v/tech/">Услуги мини-виджетами<small>Живой механизм</small></a><a class="chip" href="v/r3-lux/">Гарантия на «эмалевом» поле<small>Ценная бумага</small></a></div></div>
+      <div class="cat"><h3>Заявка и связь</h3><div class="cat__list"><a class="chip" href="v/r3-lux/">Бланк с номером и печатью «Принято»<small>Ценная бумага</small></a><a class="chip" href="v/easy/">Запись через чат с мастером<small>Помощник «Что с часами?»</small></a><a class="chip" href="v/r3-tech/">Нижняя панель «Позвонить / Telegram / Заявка» на телефоне<small>Ангар</small></a></div></div>
+      <div class="cat"><h3>Ощущение</h3><div class="cat__list"><a class="chip" href="v/lib-on-r3-easy/">Звуки интерфейса (включает сам посетитель)<small>Бирка + элементы библиотек</small></a><a class="chip" href="v/r3-lux/">Анимации при прокрутке<small>Ценная бумага</small></a><a class="chip" href="kit/specimen/">Шрифты с кириллицей и наборы иконок<small>Образцы</small></a></div></div>
+    </div>
+<section class="group" aria-labelledby="g-main"><h2 id="g-main">Основные стенды</h2><p class="lead">Три стенда, каждый со своим набором приёмов: первый экран, подача работ, этапы ремонта, заявка.</p>
     
   <article class="v " id="r3-easy">
     <div class="v__media">
       <img class="v__desk" src="previews/r3-easy-d.jpg" alt="" loading="lazy">
-      <div class="v__phone"><img src="previews/r3-easy-m.jpg" alt="Вариант «Бирка ремонта» на телефоне" loading="lazy"></div>
+      <div class="v__phone"><img src="previews/r3-easy-m.jpg" alt="Стенд «Бирка ремонта» на телефоне" loading="lazy"></div>
     </div>
     <div class="v__text">
       <h3>Бирка ремонта</h3>
       
       <p class="v__idea">Сдать часы — как сдать вещь под номер: вся страница построена вокруг ремонтной бирки, которую заполняешь одним полем.</p>
-      <p class="v__world">Синий антистатический коврик верстака, манильские бирки на нитке, красная типографская печать, перфорация с корешком, белая карточка клиента с QR.</p>
-      <ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Заявка — это бирка прямо на первом экране: телефон и «Жду звонка»</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Путь часов от приёмки до выдачи напечатан на обороте бирки</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Карточка клиента K-0128 с QR — та же система личных кабинетов, что в приложении мастерской</li></ul>
-      <p class="v__method">Методика Impeccable: мир из жизни клиента, а не из «часовой» категории</p>
-      <div class="v__act"><a class="btn" href="v/r3-easy/">Открыть вариант <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a>
-        <label class="like"><input type="checkbox" value="Бирка ремонта"> Нравится</label></div>
+      <p class="v__k">Что посмотреть</p><ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Заявка — это бирка прямо на первом экране: телефон и «Жду звонка»</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Путь часов от приёмки до выдачи напечатан на обороте бирки</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Карточка клиента K-0128 с QR — та же система личных кабинетов, что в приложении мастерской</li></ul>
+      <div class="v__act"><a class="btn" href="v/r3-easy/">Открыть стенд <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a></div>
     </div>
   </article>
   <article class="v v--flip" id="r3-tech">
     <div class="v__media">
       <img class="v__desk" src="previews/r3-tech-d.jpg" alt="" loading="lazy">
-      <div class="v__phone"><img src="previews/r3-tech-m.jpg" alt="Вариант «Ангар» на телефоне" loading="lazy"></div>
+      <div class="v__phone"><img src="previews/r3-tech-m.jpg" alt="Стенд «Ангар» на телефоне" loading="lazy"></div>
     </div>
     <div class="v__text">
       <h3>Ангар</h3>
       
       <p class="v__idea">Часы приходят на полное техобслуживание, как самолёт в ангар: сайт — обшивка с лючком на винтах, за которым настоящий механизм.</p>
-      <p class="v__world">Светлый алюминий обшивки, ряды заклёпок вместо линий, жёлто-зелёный грунт целыми разделами, узкая трафаретная маркировка, красная бирка — только у действия.</p>
-      <ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Первый экран — лючок на 16 винтах с видео с верстака и карта-наряд поверх</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Разборка часов клиента с выносками деталей</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Услуги — маркировка на обшивке, гарантия — на грунте</li></ul>
-      <p class="v__method">Методика Impeccable; ориентир по духу — сайт Richard Mille, который прислал Влад</p>
-      <div class="v__act"><a class="btn" href="v/r3-tech/">Открыть вариант <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a>
-        <label class="like"><input type="checkbox" value="Ангар"> Нравится</label></div>
+      <p class="v__k">Что посмотреть</p><ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Первый экран — лючок на 16 винтах с видео с верстака и карта-наряд поверх</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Разборка часов клиента с выносками деталей</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Услуги — маркировка на обшивке, гарантия — на грунте</li></ul>
+      <div class="v__act"><a class="btn" href="v/r3-tech/">Открыть стенд <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a></div>
     </div>
   </article>
   <article class="v " id="r3-lux">
     <div class="v__media">
       <img class="v__desk" src="previews/r3-lux-d.jpg" alt="" loading="lazy">
-      <div class="v__phone"><img src="previews/r3-lux-m.jpg" alt="Вариант «Ценная бумага» на телефоне" loading="lazy"></div>
+      <div class="v__phone"><img src="previews/r3-lux-m.jpg" alt="Стенд «Ценная бумага» на телефоне" loading="lazy"></div>
     </div>
     <div class="v__text">
       <h3>Ценная бумага</h3>
       
       <p class="v__idea">Часы — это ценность, и сайт оформлен как ценная бумага: гравированная розетка, медальон с часами, номер и печать.</p>
-      <p class="v__world">Бледная защитная бумага с сеткой, гильоше из сотен тонких линий (то же ремесло, что на циферблатах), банкнотный зелёный и бордо, без золота.</p>
-      <ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Часы клиента в овальном медальоне, вокруг «вытравливается» гравюра</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Бланк записи с микротекстом; после заявки — номер и печать «Принято»</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Гарантия — на глубоком зелёном «эмалевом» поле</li></ul>
-      <p class="v__method">Методика Impeccable: направление написано вручную, сборка по контракту</p>
-      <div class="v__act"><a class="btn" href="v/r3-lux/">Открыть вариант <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a>
-        <label class="like"><input type="checkbox" value="Ценная бумага"> Нравится</label></div>
+      <p class="v__k">Что посмотреть</p><ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Часы клиента в овальном медальоне, вокруг «вытравливается» гравюра</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Бланк записи с микротекстом; после заявки — номер и печать «Принято»</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Гарантия — на глубоком зелёном «эмалевом» поле</li></ul>
+      <div class="v__act"><a class="btn" href="v/r3-lux/">Открыть стенд <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a></div>
     </div>
-  </article>
-  </section>
-  <section class="group" aria-labelledby="g-mix">
-    <h2 id="g-mix">Смешанный вариант</h2>
-    <p class="lead">Варианты собраны из отдельных элементов, поэтому их можно смешивать: взять первый экран из одного, галерею из другого.</p>
+  </article></section>
+<section class="group" aria-labelledby="g-mix"><h2 id="g-mix">Стенд с интерактивом из библиотек</h2><p class="lead">Сцены заменены живыми элементами из открытых библиотек — так проверяем, что элементы переносятся между стилями.</p>
     
   <article class="v v--flip" id="lib-on-r3-easy">
     <div class="v__media">
       <img class="v__desk" src="previews/lib-on-r3-easy-d.jpg" alt="" loading="lazy">
-      <div class="v__phone"><img src="previews/lib-on-r3-easy-m.jpg" alt="Вариант «Бирка + элементы библиотек» на телефоне" loading="lazy"></div>
+      <div class="v__phone"><img src="previews/lib-on-r3-easy-m.jpg" alt="Стенд «Бирка + элементы библиотек» на телефоне" loading="lazy"></div>
     </div>
     <div class="v__text">
       <h3>Бирка + элементы библиотек</h3>
       
       <p class="v__idea">Та же «бирка», но часть сцен заменена интерактивными элементами из открытых библиотек — пример того, как варианты смешиваются.</p>
-      <p class="v__world">Мир «Бирки ремонта»; элементы сами перенимают его цвета и шрифты.</p>
-      <ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Работы мастерской — купол из фото, вращается пальцем</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Этапы ремонта — листы, которые ложатся стопкой при прокрутке</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Статус заказа — механическое табло с перещёлкивающимися буквами</li></ul>
-      <p class="v__method">Библиотеки React Bits, Anime.js (переписаны без React), звуки UI SFX</p>
-      <div class="v__act"><a class="btn" href="v/lib-on-r3-easy/">Открыть вариант <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a>
-        <label class="like"><input type="checkbox" value="Бирка + элементы библиотек"> Нравится</label></div>
+      <p class="v__k">Что посмотреть</p><ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Работы мастерской — купол из фото, вращается пальцем</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Этапы ремонта — листы, которые ложатся стопкой при прокрутке</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Статус заказа — механическое табло с перещёлкивающимися буквами</li></ul>
+      <div class="v__act"><a class="btn" href="v/lib-on-r3-easy/">Открыть стенд <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a></div>
     </div>
-  </article>
-  </section>
-  <section class="group" aria-labelledby="g-test">
-    <h2 id="g-test">Испытания методик</h2>
-    <p class="lead">Тот же вариант «дорого», сделанный по другим популярным методикам дизайна, — для честного сравнения.</p>
+  </article></section>
+<details class="group"><summary><h2 id="g-test">Контрольные стенды</h2><p class="lead">Те же задачи по другим популярным методикам — для сравнения.</p></summary>
     
   <article class="v " id="fd-lux">
     <div class="v__media">
       <img class="v__desk" src="previews/fd-lux-d.jpg" alt="" loading="lazy">
-      <div class="v__phone"><img src="previews/fd-lux-m.jpg" alt="Вариант «Классика · официальный скилл» на телефоне" loading="lazy"></div>
+      <div class="v__phone"><img src="previews/fd-lux-m.jpg" alt="Стенд «Классика · официальный скилл» на телефоне" loading="lazy"></div>
     </div>
     <div class="v__text">
       <h3>Классика · официальный скилл</h3>
       
       <p class="v__idea">Контрольный вариант «дорого» по базовому скиллу Anthropic — для сравнения методик.</p>
-      <p class="v__world">Светлый фон, синяя антиква, фото механизма в круглом медальоне.</p>
-      <ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Аккуратно и понятно</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Но устроено как типовой сайт: текст слева, фото справа</li></ul>
-      <p class="v__method">frontend-design (Anthropic)</p>
-      <div class="v__act"><a class="btn" href="v/fd-lux/">Открыть вариант <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a>
-        <label class="like"><input type="checkbox" value="Классика · официальный скилл"> Нравится</label></div>
+      <p class="v__k">Что посмотреть</p><ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Аккуратно и понятно</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Но устроено как типовой сайт: текст слева, фото справа</li></ul>
+      <div class="v__act"><a class="btn" href="v/fd-lux/">Открыть стенд <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a></div>
     </div>
   </article>
   <article class="v v--flip" id="pm-lux">
     <div class="v__media">
       <img class="v__desk" src="previews/pm-lux-d.jpg" alt="" loading="lazy">
-      <div class="v__phone"><img src="previews/pm-lux-m.jpg" alt="Вариант «Каталог стилей · UI UX Pro Max» на телефоне" loading="lazy"></div>
+      <div class="v__phone"><img src="previews/pm-lux-m.jpg" alt="Стенд «Каталог стилей · UI UX Pro Max» на телефоне" loading="lazy"></div>
     </div>
     <div class="v__text">
       <h3>Каталог стилей · UI UX Pro Max</h3>
       
       <p class="v__idea">Вариант «дорого», где стиль, палитра и шрифты подобраны из базы скилла UI UX Pro Max.</p>
-      <p class="v__world">Белый лист, антиква Cormorant с золотым курсивом, главы римскими цифрами — «редакционный люкс» из каталога стилей.</p>
-      <ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Сдержанно и читаемо</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Но собран из самых частых приёмов: текст слева — фото справа, полоса из трёх фактов, золотой курсив</li></ul>
-      <p class="v__method">UI UX Pro Max</p>
-      <div class="v__act"><a class="btn" href="v/pm-lux/">Открыть вариант <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a>
-        <label class="like"><input type="checkbox" value="Каталог стилей · UI UX Pro Max"> Нравится</label></div>
+      <p class="v__k">Что посмотреть</p><ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Сдержанно и читаемо</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Но собран из самых частых приёмов: текст слева — фото справа, полоса из трёх фактов, золотой курсив</li></ul>
+      <div class="v__act"><a class="btn" href="v/pm-lux/">Открыть стенд <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a></div>
     </div>
-  </article>
-  </section>
-  <section class="group" aria-labelledby="g-r2">
-    <h2 id="g-r2">Промежуточные варианты</h2>
-    <p class="lead">Ранний раунд. Оставлены, чтобы было видно, откуда мы ушли и почему.</p>
+  </article></details>
+<details class="group"><summary><h2 id="g-r2">Ранние стенды</h2><p class="lead">Первый раунд: в них тоже есть приёмы, которые можно взять.</p></summary>
     
   <article class="v " id="lux">
     <div class="v__media">
       <img class="v__desk" src="previews/lux-d.jpg" alt="" loading="lazy">
-      <div class="v__phone"><img src="previews/lux-m.jpg" alt="Вариант «Кино-бутик» на телефоне" loading="lazy"></div>
+      <div class="v__phone"><img src="previews/lux-m.jpg" alt="Стенд «Кино-бутик» на телефоне" loading="lazy"></div>
     </div>
     <div class="v__text">
       <h3>Кино-бутик</h3>
       
       <p class="v__idea">Видео на весь экран сжимается в арочное окно, ателье листается лентой вбок, услуги выбираются стрелкой на циферблате.</p>
-      <p class="v__world">Тёмный фон, антиква, медленное кино.</p>
-      <ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Сильная режиссура прокрутки</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Но палитра «тёмное + антиква» — типичная для AI-сайтов</li></ul>
-      <p class="v__method">Промежуточный раунд</p>
-      <div class="v__act"><a class="btn" href="v/lux/">Открыть вариант <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a>
-        <label class="like"><input type="checkbox" value="Кино-бутик"> Нравится</label></div>
+      <p class="v__k">Что посмотреть</p><ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Сильная режиссура прокрутки</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Но палитра «тёмное + антиква» — типичная для AI-сайтов</li></ul>
+      <div class="v__act"><a class="btn" href="v/lux/">Открыть стенд <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a></div>
     </div>
   </article>
   <article class="v v--flip" id="tech">
     <div class="v__media">
       <img class="v__desk" src="previews/tech-d.jpg" alt="" loading="lazy">
-      <div class="v__phone"><img src="previews/tech-m.jpg" alt="Вариант «Живой механизм» на телефоне" loading="lazy"></div>
+      <div class="v__phone"><img src="previews/tech-m.jpg" alt="Стенд «Живой механизм» на телефоне" loading="lazy"></div>
     </div>
     <div class="v__text">
       <h3>Живой механизм</h3>
       
       <p class="v__idea">Механизм нарисован кодом и тикает, при прокрутке раскладывается на слои; услуги — мини-виджеты.</p>
-      <p class="v__world">Почти чёрный фон, светящийся акцент.</p>
-      <ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Эффектная инженерная анимация</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Но доказательство — нарисованный механизм, а не реальные кадры</li></ul>
-      <p class="v__method">Промежуточный раунд</p>
-      <div class="v__act"><a class="btn" href="v/tech/">Открыть вариант <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a>
-        <label class="like"><input type="checkbox" value="Живой механизм"> Нравится</label></div>
+      <p class="v__k">Что посмотреть</p><ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Эффектная инженерная анимация</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Но доказательство — нарисованный механизм, а не реальные кадры</li></ul>
+      <div class="v__act"><a class="btn" href="v/tech/">Открыть стенд <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a></div>
     </div>
   </article>
   <article class="v " id="easy">
     <div class="v__media">
       <img class="v__desk" src="previews/easy-d.jpg" alt="" loading="lazy">
-      <div class="v__phone"><img src="previews/easy-m.jpg" alt="Вариант «Помощник «Что с часами?»» на телефоне" loading="lazy"></div>
+      <div class="v__phone"><img src="previews/easy-m.jpg" alt="Стенд «Помощник «Что с часами?»» на телефоне" loading="lazy"></div>
     </div>
     <div class="v__text">
       <h3>Помощник «Что с часами?»</h3>
       
       <p class="v__idea">Нажимаешь, что случилось, — открывается чат с мастером, запись прямо в чате.</p>
-      <p class="v__world">Яркие плитки-наклейки, мультяшные иконки.</p>
-      <ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Самый быстрый путь к заявке</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Но слишком игрушечно для дорогих часов</li></ul>
-      <p class="v__method">Промежуточный раунд</p>
-      <div class="v__act"><a class="btn" href="v/easy/">Открыть вариант <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a>
-        <label class="like"><input type="checkbox" value="Помощник «Что с часами?»"> Нравится</label></div>
+      <p class="v__k">Что посмотреть</p><ul class="v__feat"><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Самый быстрый путь к заявке</li><li><i class="vf-i vf-i--check" aria-hidden="true"></i>Но слишком игрушечно для дорогих часов</li></ul>
+      <div class="v__act"><a class="btn" href="v/easy/">Открыть стенд <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a></div>
     </div>
-  </article>
+  </article></details>
+    <div class="tools">
+      <div><h3>Конструктор</h3><p>Все стенды разобраны на элементы: можно собрать страницу из сцен разных стендов, сменить тему, иконки, звуки. Удобнее с компьютера.</p><a href="kit/konstruktor/">Открыть конструктор</a></div>
+      <div><h3>Шрифты и иконки</h3><p>Шрифты с правильной кириллицей, свободные для коммерции; три набора иконок.</p><a href="kit/specimen/">Посмотреть образцы</a></div>
+    </div>
   </section>
 
-  <section class="extra">
-    <div><h3>Конструктор</h3><p>Соберите свой вариант из элементов разных: тема, кнопки, иконки, звуки, каждая сцена отдельно. Удобнее с компьютера.</p><a href="kit/konstruktor/">Открыть конструктор</a></div>
-    <div><h3>Шрифты и иконки</h3><p>Все шрифты — с правильной кириллицей, свободные для коммерции; три набора иконок.</p><a href="kit/specimen/">Посмотреть</a></div>
-    <div><h3>Приложение приёмки</h3><p>Акт и квитанция в PDF, карточки и кабинеты — <a href="#akt">выше</a>. Чтобы пользоваться, его нужно поставить на сервер мастерской — это следующий шаг после реквизитов.</p></div>
+  <section class="opros" id="opros">
+    <div><h2>Опрос: что берём</h2><p>Минут пять: что удобно в программе и что со стенда подтянуть в наш сайт. Ответ придёт мне в Telegram.</p></div>
+    <a class="btn" href="opros/">Пройти опрос <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a>
   </section>
   <p class="note">Прототипы для обсуждения. Шрифты — SIL OFL, иконки — Lucide/Tabler/Gravity UI, звуки — UI SFX (CC0).</p>
 </div>
-<div class="send"><span id="cnt">Ничего не отмечено</span><a class="send__opros" href="opros/">Опрос</a><a id="tg" href="#"><i class="vf-i vf-i--telegram" aria-hidden="true"></i>Отправить выбор</a></div>
 <script>
-  const KEY = 'vf-likes';
-  const boxes = [...document.querySelectorAll('.like input')];
-  try { const saved = JSON.parse(localStorage.getItem(KEY) || '[]'); boxes.forEach(b => { b.checked = saved.includes(b.value); }); } catch {}
-  const update = () => {
-    const liked = boxes.filter(b => b.checked).map(b => b.value);
-    try { localStorage.setItem(KEY, JSON.stringify(liked)); } catch {}
-    document.getElementById('cnt').textContent = liked.length ? 'Отмечено: ' + liked.length : 'Ничего не отмечено';
-    const text = liked.length ? 'Сайт VF swiss — мне нравятся варианты: ' + liked.join(', ') : 'Сайт VF swiss — посмотрел варианты';
-    document.getElementById('tg').href = 'https://t.me/share/url?url=' + encodeURIComponent(location.href) + '&text=' + encodeURIComponent(text);
-  };
-  boxes.forEach(b => b.addEventListener('change', update)); update();
+  // Подсветка пункта меню текущего раздела
+  const links = [...document.querySelectorAll('.nav a.nav__i[href^="#"]')];
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle('is-on', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
+  ['programma', 'stend'].forEach(id => io.observe(document.getElementById(id)));
 </script>
 </body>
 </html>
