@@ -289,7 +289,8 @@
     // Фото: сжимаем до 1000 px, чтобы карточки не раздувались
     view.querySelector('#photoIn').addEventListener('change', async e => {
       for (const file of [...e.target.files].slice(0, 4 - order.photos.length)) order.photos.push(await shrink(file));
-      scheduleSave(); renderOrder(order.id);
+      // сначала сохраняем: экран перерисуется из сохранённого заказа, иначе фото и недавние правки пропадут
+      clearTimeout(saveTimer); await Store.saveOrder(order); renderOrder(order.id);
     });
     view.querySelector('#photos').addEventListener('click', e => {
       const b = e.target.closest('[data-ph]'); if (!b) return;
@@ -549,9 +550,10 @@
     const list = view.querySelector('#cabs');
     const draw = q => {
       q = (q || '').toLowerCase().trim();
+      const seenAt = v => { const d = new Date(typeof v === 'string' && !/Z|\+/.test(v) ? v + 'Z' : v); return isNaN(d) ? '' : `${Docs.dmy(d)} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
       const STATE_TXT = { active: 'клиент вошёл в кабинет', reset: 'доступ сброшен, ждёт нового пароля', new: 'клиент ещё не активировал' };
-      list.innerHTML = cabs.filter(c => !q || c.code.toLowerCase().includes(q) || (c.client?.name || '').toLowerCase().includes(q) || (c.display_name || '').toLowerCase().includes(q)).map(c => c.bound_at || c.state !== 'new'
-        ? `<div class="cab-tile is-bound" data-state="${c.state}"><a href="${esc(cabinetUrl(c.token))}" target="_blank" rel="noopener"><b>${c.code}</b><span>${esc(c.client?.name || c.display_name || 'без имени')}</span>${c.display_name ? `<small>обращаться: ${esc(c.display_name)}</small>` : ''}<small>${c.orders} зак. · ${STATE_TXT[c.state]}</small></a>${c.state === 'new' ? '' : `<button class="cab-reset" type="button" data-reset="${c.code}">Сбросить доступ</button>`}</div>`
+      list.innerHTML = cabs.slice().sort((x, y) => (y.bound_at ? 1 : 0) - (x.bound_at ? 1 : 0) || x.code.localeCompare(y.code)).filter(c => !q || c.code.toLowerCase().includes(q) || (c.client?.name || '').toLowerCase().includes(q) || (c.display_name || '').toLowerCase().includes(q)).map(c => c.bound_at || c.state !== 'new'
+        ? `<div class="cab-tile is-bound" data-state="${c.state}"><a href="${esc(cabinetUrl(c.token))}" target="_blank" rel="noopener"><b>${c.code}</b><span>${esc(c.client?.name || c.display_name || 'без имени')}</span>${c.display_name ? `<small>обращаться: ${esc(c.display_name)}</small>` : ''}<small>${c.orders} зак. · ${STATE_TXT[c.state]}</small>${c.last_seen ? `<small>заходил ${esc(seenAt(c.last_seen))}</small>` : ''}</a>${c.state === 'new' ? '' : `<button class="cab-reset" type="button" data-reset="${c.code}">Сбросить доступ</button>`}</div>`
         : `<div class="cab-tile"><b>${c.code}</b><span>свободна</span></div>`).join('');
     };
     draw();

@@ -23,7 +23,8 @@ window.Store = (() => {
   const getSettings = async () => ({ ...DEFAULT_SETTINGS, ...(await api('GET', 'settings')) });
   const saveSettings = s => api('PUT', 'settings', s);
 
-  const listOrders = () => api('GET', 'orders');
+  const listOrders = () => api('GET', 'orders-light');        // без фото, для списка
+  const listOrdersFull = () => api('GET', 'orders');           // с фото, для резервной копии
   const getOrder = id => api('GET', 'orders/' + encodeURIComponent(id)).catch(e => (e.status === 404 ? null : Promise.reject(e)));
   const saveOrder = o => api('PUT', 'orders/' + encodeURIComponent(o.id), o);
   const deleteOrder = id => api('DELETE', 'orders/' + encodeURIComponent(id));
@@ -61,7 +62,7 @@ window.Store = (() => {
   const resetCabinet = code => api('POST', 'cabinets/reset', { code });
 
   async function exportAll() {
-    return { app: 'vf-docs', version: 2, exported: new Date().toISOString(), settings: await getSettings(), orders: await listOrders() };
+    return { app: 'vf-docs', version: 2, exported: new Date().toISOString(), settings: await getSettings(), orders: await listOrdersFull() };
   }
 
   async function importAll(data) {
