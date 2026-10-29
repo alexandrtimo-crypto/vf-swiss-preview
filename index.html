@@ -30,7 +30,21 @@
   .intro { padding: 44px 0 34px; }
   h1 { font: 700 clamp(34px, 6vw, 64px)/1.03 'Onest', sans-serif; letter-spacing: -0.02em; margin: 0 0 16px; text-wrap: balance; max-width: 18ch; }
   .intro > p { color: var(--muted); max-width: 64ch; margin: 0 0 28px; }
-  .doors { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .todo { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; max-width: 900px; }
+  .todo li { display: grid; grid-template-columns: 44px 1fr auto; gap: 16px; align-items: center; padding: 18px 20px; border-radius: 16px; background: var(--bg2); border: 1px solid var(--line); }
+  .todo__n { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--acc); color: var(--acc-ink); font: 700 20px/1 'Onest', sans-serif; }
+  .todo b { font: 600 18px/1.25 'Onest', sans-serif; display: block; }
+  .todo em { font-style: normal; color: var(--acc); font-weight: 500; font-size: 14px; margin-left: 6px; }
+  .todo p { margin: 4px 0 0; color: var(--muted); font-size: 15.5px; }
+  .el { position: relative; display: flex; flex-direction: column; gap: 3px; padding: 8px 8px 12px; border-radius: 14px; background: var(--bg2); border: 1px solid var(--line); color: var(--text); text-decoration: none; transition: border-color .2s, transform .2s; }
+  .el:hover { border-color: var(--acc); transform: translateY(-2px); }
+  .el__img { display: block; aspect-ratio: 16 / 10; border-radius: 9px; background: #2a2620 center top / cover no-repeat; margin-bottom: 6px; }
+  .el__t { font-size: 15px; line-height: 1.3; padding: 0 4px; }
+  .el small { color: var(--acc); font-size: 12.5px; padding: 0 4px; }
+  .el__ok { display: none; position: absolute; top: 14px; right: 14px; width: 28px; height: 28px; border-radius: 50%; background: var(--acc); color: var(--acc-ink); font-style: normal; place-items: center; font-size: 14px; }
+  .el.is-want .el__ok { display: grid; }
+  .el.is-want { border-color: var(--acc); }
+  .cat { margin-bottom: 26px; }
   .door { display: grid; grid-template-columns: 1fr 120px; gap: 18px; align-items: center; padding: 22px; border-radius: 18px; background: var(--bg2); border: 1px solid var(--line); color: var(--text); text-decoration: none; transition: border-color .2s; }
   .door:hover { border-color: var(--acc); }
   .door b { display: block; font: 700 22px/1.15 'Onest', sans-serif; margin-bottom: 6px; }
@@ -57,9 +71,10 @@
   .try figcaption { color: var(--muted); font-size: 14.5px; margin-top: 10px; }
   .need { margin: 26px 0 0; padding: 16px 20px; border-radius: 14px; border: 1px dashed #5d5244; color: var(--muted); font-size: 16px; }
   .need b { color: var(--text); }
-  .cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px 26px; margin: 0 0 18px; }
+  .cats { margin: 0 0 18px; }
   .cat h3 { font: 600 18px/1.2 'Onest', sans-serif; margin: 0 0 12px; }
-  .cat__list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cat__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+  .cat__list--txt { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip { display: inline-flex; flex-direction: column; gap: 2px; padding: 9px 13px; border-radius: 12px; background: var(--bg2); border: 1px solid var(--line); color: var(--text); text-decoration: none; font-size: 15px; line-height: 1.3; transition: border-color .2s; }
   .chip small { color: var(--acc); font-size: 12.5px; }
   .chip:hover { border-color: var(--acc); }
@@ -97,7 +112,8 @@
   .opros p { color: var(--muted); margin: 0; }
   .note { color: var(--muted); font-size: 14px; padding: 0 0 30px; }
   @media (max-width: 900px) {
-    .doors, .enter, .try, .cats, .tools, .v, .opros { grid-template-columns: 1fr; }
+    .enter, .try, .tools, .v, .opros { grid-template-columns: 1fr; }
+    .todo li { grid-template-columns: 44px 1fr; } .todo li .btn { grid-column: 1 / -1; justify-content: center; }
     .enter img { height: 200px; }
     .v--flip .v__media { order: 0; }
     .v__media { min-height: 0; margin-bottom: 22px; }
@@ -105,8 +121,8 @@
   @media (max-width: 560px) {
     .nav__brand span, .nav a.nav__i.nav__opt { display: none; }
     .nav a.nav__i { padding: 8px 10px; font-size: 14.5px; }
-    .door { grid-template-columns: 1fr 84px; padding: 18px; }
-    .door img { width: 84px; height: 84px; }
+    .cat__list { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .el__t { font-size: 14px; }
   }
 </style>
 </head>
@@ -115,16 +131,17 @@
   <a class="nav__brand" href="#top"><img src="kit/icons/favicon.png" alt=""><span>VF swiss</span></a>
   <a class="nav__i" href="#programma">Программа</a>
   <a class="nav__i" href="#stend">Стенд сайта</a>
-  <a class="nav__i nav__cta" href="opros/">Опрос</a>
+  <a class="nav__i nav__cta" href="opros/">Опрос<span id="navcnt"></span></a>
 </div></nav>
 <div class="wrap" id="top">
   <section class="intro">
-    <h1>Влад, привет! Здесь две вещи</h1>
-    <p>Это промежуточные результаты. Первое — программа мастерской: акт, квитанция, карточки клиентов и их кабинеты. Её можно потрогать прямо сейчас. Второе — стенд возможностей сайта: не готовый дизайн, а витрина приёмов — разделов, анимаций, интерактива. Что понравится — перенесём в наш сайт в утверждённом стиле.</p>
-    <div class="doors">
-      <a class="door" href="#programma"><div><b>Программа мастерской</b><span>Принять часы, заполнить документы, побывать в кабинете клиента и в панели карточек.</span></div><img src="app/zakaz.jpg" alt=""></a>
-      <a class="door" href="#stend"><div><b>Стенд возможностей сайта</b><span>Первые экраны, подача работ, этапы ремонта, заявки, анимации — что можно сделать на сайте.</span></div><img src="previews/lib-on-r3-easy-m.jpg" alt=""></a>
-    </div>
+    <h1>Влад, привет! Нужна твоя оценка</h1>
+    <p>Это промежуточные результаты. Писать много не нужно: попробуй, нажимай «Хочу это» там, где нравится, и отправь ответ одной кнопкой. Всё займёт минут 15, можно с телефона и по частям — отметки сохраняются.</p>
+    <ol class="todo">
+      <li><span class="todo__n">1</span><div><b>Попробуй программу мастерской <em>5 мин</em></b><p>Прими «часы», сделай квитанцию и акт, загляни в кабинет клиента. Ответь в опросе: удобно ли, чего не хватает.</p></div><a class="btn" href="#programma">Попробовать</a></li>
+      <li><span class="todo__n">2</span><div><b>Пройди по приёмам для сайта <em>10 мин</em></b><p>35 приёмов: первый экран, работы, этапы ремонта, заявка. Это не готовый дизайн: цвета условные, важен сам приём. У каждого — «Хочу это» и «Дальше».</p></div><a class="btn" href="e/r3-easy-hero-tag/">Начать обзор</a></li>
+      <li><span class="todo__n">3</span><div><b>Отправь ответ <em>1 мин</em></b><p>В опросе уже будет всё, что ты отметил. Допиши пару слов — и одна кнопка отправит ответ мне в Telegram. <span id="todocnt"></span></p></div><a class="btn btn--ghost" href="opros/">К опросу</a></li>
+    </ol>
   </section>
 
   <section class="blk" id="programma">
@@ -153,7 +170,8 @@
 
   <section class="blk" id="stend">
     <h2>Стенд возможностей сайта</h2>
-    <p class="lead">Это не «выбери один дизайн». Каждый стенд — набор приёмов: каким может быть первый экран, как показать работы и этапы ремонта, какие бывают анимации и интерактив. Цвета и шрифты здесь условные. Понравившиеся элементы перенесём в сайт с утверждённым дизайном. Ниже — приёмы по разделам сайта: нажми — откроется только этот элемент, а оттуда можно перейти к нему в составе стенда.</p>
+    <p class="lead">Это не «выбери один дизайн». Каждый стенд — набор приёмов: каким может быть первый экран, как показать работы и этапы ремонта, какие бывают анимации и интерактив. Цвета и шрифты здесь условные. Понравившиеся элементы перенесём в сайт с утверждённым дизайном. Ниже — приёмы по разделам сайта. В каждом разделе рядом лежат решения из разных стендов, так видно, как одна задача выглядит в разных стилях. Нажми карточку — откроется только этот элемент; внизу экрана «Хочу это» и «Дальше».</p>
+    <p><a class="btn" href="e/r3-easy-hero-tag/">Пройти по порядку <i class="vf-i vf-i--arrow-right" aria-hidden="true"></i></a></p>
     <article class="v cur" id="current">
       <div class="v__media">
         <img class="v__desk" src="previews/current-d.jpg" alt="" loading="lazy">
@@ -166,13 +184,83 @@
       </div>
     </article>
     <div class="cats">
-      <div class="cat"><h3>Первый экран</h3><div class="cat__list"><a class="chip" href="e/r3-easy-hero-tag/">Заявка-бирка прямо на первом экране<small>Бирка ремонта</small></a><a class="chip" href="e/r3-tech-hero-panel/">Лючок на винтах с видео с верстака<small>Ангар</small></a><a class="chip" href="e/r3-lux-medallion/">Медальон с часами и гравюра, которая проявляется<small>Ценная бумага</small></a><a class="chip" href="e/lux-hero/">Видео на весь экран сжимается в арку<small>Кино-бутик</small></a><a class="chip" href="e/tech-hero/">Механизм, нарисованный кодом, следит за курсором<small>Живой механизм</small></a><a class="chip" href="e/easy-hero/">«Что с часами?» — плитки проблем и чат<small>Помощник «Что с часами?»</small></a></div></div>
-      <div class="cat"><h3>Работы и доказательства</h3><div class="cat__list"><a class="chip" href="e/lib-works-dome/">Купол из фото работ — крутится пальцем<small>Бирка + элементы библиотек</small></a><a class="chip" href="e/r3-tech-teardown/">Разборка часов с выносками деталей<small>Ангар</small></a><a class="chip" href="e/tech-story-explode/">Механизм разлетается на слои при прокрутке<small>Живой механизм</small></a><a class="chip" href="e/tech-works-loupe/">Снимки под лупой на световом столе<small>Живой механизм</small></a><a class="chip" href="e/lux-story/">Лента кадров ателье вбок<small>Кино-бутик</small></a><a class="chip" href="e/easy-works/">Кружки-сторис и окно с верстака<small>Помощник «Что с часами?»</small></a><a class="chip" href="e/r3-tech-works/">Тёмный ангар: фото и видео верстака<small>Ангар</small></a></div></div>
-      <div class="cat"><h3>Как идёт ремонт</h3><div class="cat__list"><a class="chip" href="e/lib-process-stack/">Этапы — листы, ложатся стопкой<small>Бирка + элементы библиотек</small></a><a class="chip" href="e/lib-process-board/">Механическое табло статуса заказа<small>Бирка + элементы библиотек</small></a><a class="chip" href="e/r3-easy-process-card/">Путь часов на обороте бирки<small>Бирка ремонта</small></a><a class="chip" href="e/tech-process-dial/">Циферблат: стрелка идёт по этапам<small>Живой механизм</small></a><a class="chip" href="e/r3-tech-process/">Лента лючков едет вбок<small>Ангар</small></a><a class="chip" href="e/easy-process/">Колода карточек — смахнуть пальцем<small>Помощник «Что с часами?»</small></a></div></div>
-      <div class="cat"><h3>Услуги и гарантия</h3><div class="cat__list"><a class="chip" href="e/lux-services/">Услуги на циферблате, стрелка к выбранной<small>Кино-бутик</small></a><a class="chip" href="e/r3-easy-services-rail/">Бирки услуг на рейке<small>Бирка ремонта</small></a><a class="chip" href="e/tech-services-bento/">Услуги мини-виджетами<small>Живой механизм</small></a><a class="chip" href="e/r3-lux-denominations/">Гравированные купоны разного достоинства<small>Ценная бумага</small></a><a class="chip" href="e/r3-lux-enamel/">Гарантия на «эмалевом» поле<small>Ценная бумага</small></a><a class="chip" href="e/lux-warranty/">Сертификат гарантии как предмет<small>Кино-бутик</small></a></div></div>
-      <div class="cat"><h3>Заявка и связь</h3><div class="cat__list"><a class="chip" href="e/r3-lux-form/">Бланк с номером и печатью «Принято»<small>Ценная бумага</small></a><a class="chip" href="e/r3-tech-booking/">Карта-наряд с быстрыми вариантами<small>Ангар</small></a><a class="chip" href="e/tech-booking-form/">Заявка по шагам с кольцом прогресса<small>Живой механизм</small></a><a class="chip" href="e/lux-booking/">Карточка-приглашение «Меня зовут ___»<small>Кино-бутик</small></a><a class="chip" href="e/easy-contacts/">Нарисованная карта «Как нас найти»<small>Помощник «Что с часами?»</small></a><a class="chip" href="e/r3-tech-dock/">Нижняя панель «Позвонить / Telegram / Заявка»<small>Ангар</small></a></div></div>
-      <div class="cat"><h3>Шапки, марки, подвалы</h3><div class="cat__list"><a class="chip" href="e/tech-header/">Шапка с живыми часами МСК<small>Живой механизм</small></a><a class="chip" href="e/lux-brands/">Марки бегущей строкой с бликом<small>Кино-бутик</small></a><a class="chip" href="e/r3-easy-footer/">Подвал с линией отрыва<small>Бирка ремонта</small></a><a class="chip" href="e/lux-footer/">Огромный тиснёный знак в подвале<small>Кино-бутик</small></a></div></div>
-      <div class="cat"><h3>Ощущение</h3><div class="cat__list"><a class="chip" href="v/lib-on-r3-easy/">Звуки интерфейса — включает посетитель<small>кнопка звука на стенде</small></a><a class="chip" href="kit/specimen/">Шрифты с кириллицей и иконки<small>образцы</small></a></div></div>
+      <div class="cat"><h3>Первый экран</h3><div class="cat__list"><a class="el" href="e/r3-easy-hero-tag/" data-el="r3-easy-hero-tag">
+        <span class="el__img" style="background-image:url('kit/components/hero/r3-easy-hero-tag/thumb.jpg')"></span>
+        <span class="el__t">Заявка-бирка прямо на первом экране</span><small>Бирка ремонта</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-tech-hero-panel/" data-el="r3-tech-hero-panel">
+        <span class="el__img" style="background-image:url('kit/components/hero/r3-tech-hero-panel/thumb.jpg')"></span>
+        <span class="el__t">Лючок на винтах с видео с верстака</span><small>Ангар</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-lux-medallion/" data-el="r3-lux-medallion">
+        <span class="el__img" style="background-image:url('kit/components/hero/r3-lux-medallion/thumb.jpg')"></span>
+        <span class="el__t">Медальон с часами и гравюра, которая проявляется</span><small>Ценная бумага</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/lux-hero/" data-el="lux-hero">
+        <span class="el__img" style="background-image:url('kit/components/hero/lux-hero/thumb.jpg')"></span>
+        <span class="el__t">Видео на весь экран сжимается в арку</span><small>Кино-бутик</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/tech-hero/" data-el="tech-hero">
+        <span class="el__img" style="background-image:url('kit/components/hero/tech-hero/thumb.jpg')"></span>
+        <span class="el__t">Механизм, нарисованный кодом, следит за курсором</span><small>Живой механизм</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/easy-hero/" data-el="easy-hero">
+        <span class="el__img" style="background-image:url('kit/components/hero/easy-hero/thumb.jpg')"></span>
+        <span class="el__t">«Что с часами?» — плитки проблем и чат</span><small>Помощник «Что с часами?»</small><i class="el__ok" aria-hidden="true">♥</i></a></div></div>
+      <div class="cat"><h3>Работы и доказательства</h3><div class="cat__list"><a class="el" href="e/lib-works-dome/" data-el="lib-works-dome">
+        <span class="el__img" style="background-image:url('kit/components/works/lib-works-dome/thumb.jpg')"></span>
+        <span class="el__t">Купол из фото работ — крутится пальцем</span><small>Бирка + элементы библиотек</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-tech-teardown/" data-el="r3-tech-teardown">
+        <span class="el__img" style="background-image:url('kit/components/story/r3-tech-teardown/thumb.jpg')"></span>
+        <span class="el__t">Разборка часов с выносками деталей</span><small>Ангар</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/tech-story-explode/" data-el="tech-story-explode">
+        <span class="el__img" style="background-image:url('kit/components/story/tech-story-explode/thumb.jpg')"></span>
+        <span class="el__t">Механизм разлетается на слои при прокрутке</span><small>Живой механизм</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/tech-works-loupe/" data-el="tech-works-loupe">
+        <span class="el__img" style="background-image:url('kit/components/works/tech-works-loupe/thumb.jpg')"></span>
+        <span class="el__t">Снимки под лупой на световом столе</span><small>Живой механизм</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/lux-story/" data-el="lux-story">
+        <span class="el__img" style="background-image:url('kit/components/story/lux-story/thumb.jpg')"></span>
+        <span class="el__t">Лента кадров ателье вбок</span><small>Кино-бутик</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/easy-works/" data-el="easy-works">
+        <span class="el__img" style="background-image:url('kit/components/works/easy-works/thumb.jpg')"></span>
+        <span class="el__t">Кружки-сторис и окно с верстака</span><small>Помощник «Что с часами?»</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-tech-works/" data-el="r3-tech-works">
+        <span class="el__img" style="background-image:url('kit/components/works/r3-tech-works/thumb.jpg')"></span>
+        <span class="el__t">Тёмный ангар: фото и видео верстака</span><small>Ангар</small><i class="el__ok" aria-hidden="true">♥</i></a></div></div>
+      <div class="cat"><h3>Как идёт ремонт</h3><div class="cat__list"><a class="el" href="e/lib-process-stack/" data-el="lib-process-stack">
+        <span class="el__img" style="background-image:url('kit/components/process/lib-process-stack/thumb.jpg')"></span>
+        <span class="el__t">Этапы — листы, ложатся стопкой</span><small>Бирка + элементы библиотек</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/lib-process-board/" data-el="lib-process-board">
+        <span class="el__img" style="background-image:url('kit/components/process/lib-process-board/thumb.jpg')"></span>
+        <span class="el__t">Механическое табло статуса заказа</span><small>Бирка + элементы библиотек</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-easy-process-card/" data-el="r3-easy-process-card">
+        <span class="el__img" style="background-image:url('kit/components/process/r3-easy-process-card/thumb.jpg')"></span>
+        <span class="el__t">Путь часов на обороте бирки</span><small>Бирка ремонта</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/tech-process-dial/" data-el="tech-process-dial">
+        <span class="el__img" style="background-image:url('kit/components/process/tech-process-dial/thumb.jpg')"></span>
+        <span class="el__t">Циферблат: стрелка идёт по этапам</span><small>Живой механизм</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-tech-process/" data-el="r3-tech-process">
+        <span class="el__img" style="background-image:url('kit/components/process/r3-tech-process/thumb.jpg')"></span>
+        <span class="el__t">Лента лючков едет вбок</span><small>Ангар</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/easy-process/" data-el="easy-process">
+        <span class="el__img" style="background-image:url('kit/components/process/easy-process/thumb.jpg')"></span>
+        <span class="el__t">Колода карточек — смахнуть пальцем</span><small>Помощник «Что с часами?»</small><i class="el__ok" aria-hidden="true">♥</i></a></div></div>
+      <div class="cat"><h3>Услуги и гарантия</h3><div class="cat__list"><a class="el" href="e/lux-services/" data-el="lux-services">
+        <span class="el__img" style="background-image:url('kit/components/services/lux-services/thumb.jpg')"></span>
+        <span class="el__t">Услуги на циферблате, стрелка к выбранной</span><small>Кино-бутик</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-easy-services-rail/" data-el="r3-easy-services-rail">
+        <span class="el__img" style="background-image:url('kit/components/services/r3-easy-services-rail/thumb.jpg')"></span>
+        <span class="el__t">Бирки услуг на рейке</span><small>Бирка ремонта</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/tech-services-bento/" data-el="tech-services-bento">
+        <span class="el__img" style="background-image:url('kit/components/services/tech-services-bento/thumb.jpg')"></span>
+        <span class="el__t">Услуги мини-виджетами</span><small>Живой механизм</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-lux-denominations/" data-el="r3-lux-denominations">
+        <span class="el__img" style="background-image:url('kit/components/services/r3-lux-denominations/thumb.jpg')"></span>
+        <span class="el__t">Гравированные купоны разного достоинства</span><small>Ценная бумага</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-lux-enamel/" data-el="r3-lux-enamel">
+        <span class="el__img" style="background-image:url('kit/components/warranty/r3-lux-enamel/thumb.jpg')"></span>
+        <span class="el__t">Гарантия на «эмалевом» поле</span><small>Ценная бумага</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/lux-warranty/" data-el="lux-warranty">
+        <span class="el__img" style="background-image:url('kit/components/warranty/lux-warranty/thumb.jpg')"></span>
+        <span class="el__t">Сертификат гарантии как предмет</span><small>Кино-бутик</small><i class="el__ok" aria-hidden="true">♥</i></a></div></div>
+      <div class="cat"><h3>Заявка и связь</h3><div class="cat__list"><a class="el" href="e/r3-lux-form/" data-el="r3-lux-form">
+        <span class="el__img" style="background-image:url('kit/components/booking/r3-lux-form/thumb.jpg')"></span>
+        <span class="el__t">Бланк с номером и печатью «Принято»</span><small>Ценная бумага</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-tech-booking/" data-el="r3-tech-booking">
+        <span class="el__img" style="background-image:url('kit/components/booking/r3-tech-booking/thumb.jpg')"></span>
+        <span class="el__t">Карта-наряд с быстрыми вариантами</span><small>Ангар</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/tech-booking-form/" data-el="tech-booking-form">
+        <span class="el__img" style="background-image:url('kit/components/booking/tech-booking-form/thumb.jpg')"></span>
+        <span class="el__t">Заявка по шагам с кольцом прогресса</span><small>Живой механизм</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/lux-booking/" data-el="lux-booking">
+        <span class="el__img" style="background-image:url('kit/components/booking/lux-booking/thumb.jpg')"></span>
+        <span class="el__t">Карточка-приглашение «Меня зовут ___»</span><small>Кино-бутик</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/easy-contacts/" data-el="easy-contacts">
+        <span class="el__img" style="background-image:url('kit/components/contacts/easy-contacts/thumb.jpg')"></span>
+        <span class="el__t">Нарисованная карта «Как нас найти»</span><small>Помощник «Что с часами?»</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-tech-dock/" data-el="r3-tech-dock">
+        <span class="el__img" style=""></span>
+        <span class="el__t">Нижняя панель «Позвонить / Telegram / Заявка»</span><small>Ангар</small><i class="el__ok" aria-hidden="true">♥</i></a></div></div>
+      <div class="cat"><h3>Шапки, марки, подвалы</h3><div class="cat__list"><a class="el" href="e/tech-header/" data-el="tech-header">
+        <span class="el__img" style="background-image:url('kit/components/header/tech-header/thumb.jpg')"></span>
+        <span class="el__t">Шапка с живыми часами МСК</span><small>Живой механизм</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/lux-brands/" data-el="lux-brands">
+        <span class="el__img" style="background-image:url('kit/components/brands/lux-brands/thumb.jpg')"></span>
+        <span class="el__t">Марки бегущей строкой с бликом</span><small>Кино-бутик</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/r3-easy-footer/" data-el="r3-easy-footer">
+        <span class="el__img" style="background-image:url('kit/components/footer/r3-easy-footer/thumb.jpg')"></span>
+        <span class="el__t">Подвал с линией отрыва</span><small>Бирка ремонта</small><i class="el__ok" aria-hidden="true">♥</i></a><a class="el" href="e/lux-footer/" data-el="lux-footer">
+        <span class="el__img" style="background-image:url('kit/components/footer/lux-footer/thumb.jpg')"></span>
+        <span class="el__t">Огромный тиснёный знак в подвале</span><small>Кино-бутик</small><i class="el__ok" aria-hidden="true">♥</i></a></div></div>
+      <div class="cat"><h3>Ощущение</h3><div class="cat__list cat__list--txt"><a class="chip" href="v/lib-on-r3-easy/">Звуки интерфейса — включает посетитель<small>кнопка звука на стенде</small></a><a class="chip" href="kit/specimen/">Шрифты с кириллицей и иконки<small>образцы</small></a></div></div>
     </div>
 <section class="group" aria-labelledby="g-main"><h2 id="g-main">Основные стенды</h2><p class="lead">Три стенда, каждый со своим набором приёмов: первый экран, подача работ, этапы ремонта, заявка.</p>
     
@@ -316,6 +404,14 @@
   const links = [...document.querySelectorAll('.nav a.nav__i[href^="#"]')];
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle('is-on', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
   ['programma', 'stend'].forEach(id => io.observe(document.getElementById(id)));
+  // Что уже отмечено в обзоре и опросе (общий localStorage с опросом)
+  try {
+    const S = JSON.parse(localStorage.getItem('vf-opros-v1') || '{}');
+    const want = Object.keys(S.e || {}).filter(k => S.e[k]);
+    document.querySelectorAll('.el').forEach(a => a.classList.toggle('is-want', want.includes(a.dataset.el)));
+    const n = want.length + (S.a || []).length + (S.f || []).length + Object.values(S.v || {}).filter(Boolean).length;
+    if (n) { document.getElementById('navcnt').textContent = ' · ' + n; document.getElementById('todocnt').textContent = 'Уже отмечено: ' + n + '.'; }
+  } catch {}
 </script>
 </body>
 </html>
