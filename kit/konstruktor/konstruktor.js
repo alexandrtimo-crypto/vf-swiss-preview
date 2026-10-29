@@ -45,7 +45,7 @@ async function render() {
   const out = await assemble(recipe, index, read, { media: ROOT.href + 'media', shared: ROOT.href + 'shared' });
   $('warn').hidden = !out.missing.length;
   $('warn').textContent = out.missing.length ? 'Нет элементов: ' + out.missing.join(', ') : '';
-  $('preview').srcdoc = out.html;
+  $('preview').srcdoc = abs(out.html);
   $('info').textContent = `${recipe.parts.length} элементов · ${Math.round(out.html.length / 1024)} КБ · ${Math.round(performance.now() - t0)} мс`;
   fit();
 }
@@ -91,7 +91,7 @@ function bind() {
   $('dlRecipe').onclick = () => download(`${recipe.name || 'recipe'}.json`, JSON.stringify(recipe, null, 2), 'application/json');
   $('dlHtml').onclick = async () => {
     const out = await assemble(recipe, index, read, { media: ROOT.href + 'media', shared: ROOT.href + 'shared' });
-    download(`${recipe.name || 'vf-site'}.html`, out.html, 'text/html');
+    download(`${recipe.name || 'vf-site'}.html`, abs(out.html), 'text/html');
   };
   $('copyCmd').onclick = async () => {
     const cmd = `cat > kit/recipes/${recipe.name}.json <<'EOF'\n${JSON.stringify(recipe, null, 2)}\nEOF\nnode kit/build.mjs kit/recipes/${recipe.name}.json`;

@@ -31,7 +31,7 @@ for (const [set, cfg] of Object.entries(SETS)) {
     const hit = (alts[set] || []).find(a => svgs.has(a));
     if (!hit) { missing.push(name); continue; }
     copyFileSync(svgs.get(hit), join(out, `${name}.svg`));
-    css.push(`.vf-i--${name} { --vf-i: url("/kit/icons/${set}/${name}.svg"); }`);
+    css.push(`.vf-i--${name} { --vf-i: url("../../icons/${set}/${name}.svg"); }`); // относительно kit/elements/icons/ — работает и через <link>, и в подпапке хостинга
   }
   writeFileSync(join(KIT, 'elements/icons', `${set}.css`), css.join('\n') + '\n');
   console.log(`${set}: ${Object.keys(names).length - missing.length}/${Object.keys(names).length}${missing.length ? ' · нет: ' + missing.join(', ') : ''}`);

@@ -20,7 +20,8 @@ export async function assemble(recipe, index, read, { media = '/media', shared =
     recipe.tokens && await read(`kit/tokens/${recipe.tokens}.css`),
     recipe.buttons && await read(`kit/elements/buttons/${recipe.buttons}.css`),
     recipe.fields && await read(`kit/elements/fields/${recipe.fields}.css`),
-    recipe.icons && await read(`kit/elements/icons/${recipe.icons}.css`),
+    // В файле пути относительные (для <link>), при вставке в страницу — от корня v2
+    recipe.icons && (await read(`kit/elements/icons/${recipe.icons}.css`))?.replace(/url\("\.\.\/\.\.\/icons\//g, 'url("/kit/icons/'),
     // В файле пути относительные (для <link>), при вставке в страницу — от корня v2
     (await read('kit/fonts/fonts.css'))?.replace(/url\('(?!\/|https?:)/g, "url('/kit/fonts/"),
   ].filter(Boolean).join('\n');
