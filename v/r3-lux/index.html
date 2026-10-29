@@ -961,11 +961,11 @@ window.VFMotion = window.VFMotion || (() => {
   // Promise с глобальным anime (v4: anime.animate, anime.createTimeline, anime.spring…)
   const anime = () => animeP || (animeP = window.anime && window.anime.animate
     ? Promise.resolve(window.anime)
-    : load('https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js').then(() => window.anime));
+    : load('../../kit/lib/vendor/anime.umd.min.js').then(() => window.anime));
   // Вешает AutoAnimate на контейнер; возвращает Promise (ошибка загрузки не ломает страницу)
   const autoAnimate = (el, opts) => {
     if (reduced()) return Promise.resolve(null);
-    autoP = autoP || import('https://cdn.jsdelivr.net/npm/@formkit/auto-animate@0.10.0/index.mjs');
+    autoP = autoP || import('../../kit/lib/vendor/auto-animate.mjs');
     return autoP.then(m => m.default(el, opts || { duration: 240, easing: 'ease-out' })).catch(() => null);
   };
 
